@@ -7,6 +7,11 @@
     --accent-emerald: #064E3B;
   }
 
+  /* Keep viewport width constant when modals lock scroll (eliminates 15px layout reflow) */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   body {
     background-color: var(--bg-alabaster);
     color: var(--text-obsidian);
