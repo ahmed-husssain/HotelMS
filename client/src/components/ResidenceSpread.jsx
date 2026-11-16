@@ -6,17 +6,42 @@ import RollingTextButton from './RollingTextButton'
 
 gsap.registerPlugin(ScrollTrigger)
 
+/**
+ * CasaMomoSlideArrow
+ * Exact arrow geometry extracted from casamomo.at (ParallaxImage.B0Hj84BA.mjs)
+ */
+function CasaMomoSlideArrow({ left = false }) {
+  return (
+    <svg
+      width="14"
+      height="12"
+      viewBox="0 0 14 12"
+      fill="none"
+      aria-hidden="true"
+      className={`text-[#FFF0CA] block transition-transform duration-200 ${
+        left ? 'rotate-180' : ''
+      }`}
+    >
+      <path
+        d="M14,6l-4.9,4.9-.7-.7,2.1-2.1c.6-.6.2-1.6-.7-1.6H0v-1h9.8c.8,0,1.3-1,.7-1.6l-2.1-2.1.7-.7,4.9,4.9Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
 export default function ResidenceSpread({ residence, index, onReserve }) {
   const containerRef = useRef(null)
   const insetImgRef = useRef(null)
 
   const isReversed = index % 2 !== 0
 
-  // Embla Carousel Setup with touch/mouse inertia
+  // 1. Ultra-Premium Embla Carousel Engine
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    duration: 25,
+    duration: 35, // Smooth, cinematic transition duration matching luxury editorial sites
     skipSnaps: false,
+    dragFree: false,
   })
 
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -32,11 +57,23 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
     onSelect()
   }, [emblaApi, onSelect])
 
-  const scrollTo = (idx) => {
-    if (emblaApi) emblaApi.scrollTo(idx)
-  }
+  const scrollPrev = useCallback(
+    (e) => {
+      e.stopPropagation()
+      if (emblaApi) emblaApi.scrollPrev()
+    },
+    [emblaApi]
+  )
 
-  // GSAP Dual-Layer Parallax for Floating Inset Photo
+  const scrollNext = useCallback(
+    (e) => {
+      e.stopPropagation()
+      if (emblaApi) emblaApi.scrollNext()
+    },
+    [emblaApi]
+  )
+
+  // 2. GSAP Dual-Layer Parallax for Inset Photo
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (insetImgRef.current) {
@@ -56,9 +93,11 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
     return () => ctx.revert()
   }, [])
 
-  const gallery = residence.gallery || [
-    { title: residence.name, tag: 'OVERVIEW', url: residence.mainImage },
-  ]
+  const gallery = residence.gallery && residence.gallery.length > 0
+    ? residence.gallery
+    : [{ title: residence.name, tag: 'OVERVIEW', url: residence.mainImage }]
+
+  const activeSlide = gallery[selectedIndex] || gallery[0]
 
   return (
     <div
@@ -67,12 +106,13 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
         isReversed ? 'lg:grid-flow-dense' : ''
       }`}
     >
-      {/* Visual Photography Column with Embla Carousel (7 cols) */}
+      {/* Visual Photography Column (7 cols) with Premium Embla Carousel */}
       <div className={`relative ${isReversed ? 'lg:col-start-6 lg:col-span-7' : 'lg:col-span-7'}`}>
         {/* Main Architectural Carousel Frame */}
         <div
-          data-cursor-text="DRAG ↔"
-          className="relative aspect-[16/10] overflow-hidden bg-slate-100 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-xs cursor-grab active:cursor-grabbing select-none"
+          onClick={() => onReserve(residence)}
+          data-cursor="Apartment Details"
+          className="relative aspect-[16/10] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-xs select-none cursor-pointer"
         >
           {/* Embla Viewport */}
           <div ref={emblaRef} className="overflow-hidden w-full h-full">
@@ -85,23 +125,55 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
                   <img
                     src={photo.url}
                     alt={`${residence.name} - ${photo.title}`}
-                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.03]"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025]"
                   />
-                  {/* Floating Perspective Tag Overlay */}
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="px-2.5 py-1 bg-white/90 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-slate-900 uppercase border border-slate-200/80 shadow-xs">
-                      {photo.tag}
-                    </span>
-                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Hairline 1px Progress Track */}
-          <div className="absolute bottom-0 inset-x-0 h-1 bg-black/20 z-10">
+          {/* Top Floating Telemetry & Perspective Indicator */}
+          <div className="absolute top-4 inset-x-4 flex items-center justify-between pointer-events-none z-20">
+            {/* Room Number Emblem */}
+            <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-sm shadow-xs">
+              RESIDENCE {residence.roomNumber}
+            </span>
+
+            {/* Current Perspective Tag & Slide Counter */}
+            <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-medium text-[#FFF0CA] uppercase border border-white/10 rounded-sm shadow-xs flex items-center gap-2">
+              <span>0{selectedIndex + 1} / 0{gallery.length}</span>
+              <span className="w-1 h-1 rounded-full bg-[#FFF0CA]/50" />
+              <span>{activeSlide.tag}</span>
+            </span>
+          </div>
+
+          {/* Casa Momo Frosted Glass Slide Navigation Arrows (Reveals smoothly on hover) */}
+          <div className="absolute inset-y-0 inset-x-3 flex items-center justify-between pointer-events-none z-20">
+            {/* Previous Photo Button */}
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Previous photo"
+              className="pointer-events-auto opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 grid place-items-center bg-[#0E1201]/40 hover:bg-[#0E1201]/80 backdrop-blur-md border border-white/15 rounded-xs text-[#FFF0CA] active:scale-95 shadow-lg"
+            >
+              <CasaMomoSlideArrow left />
+            </button>
+
+            {/* Next Photo Button */}
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Next photo"
+              className="pointer-events-auto opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 grid place-items-center bg-[#0E1201]/40 hover:bg-[#0E1201]/80 backdrop-blur-md border border-white/15 rounded-xs text-[#FFF0CA] active:scale-95 shadow-lg"
+            >
+              <CasaMomoSlideArrow />
+            </button>
+          </div>
+
+          {/* Minimal 1px Hairline Progress Track */}
+          <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/15 z-20">
             <div
-              className="h-full bg-white transition-all duration-300 ease-out"
+              className="h-full bg-[#FFF0CA] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)]"
               style={{
                 width: `${((selectedIndex + 1) / gallery.length) * 100}%`,
               }}
@@ -109,35 +181,12 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
           </div>
         </div>
 
-        {/* Perspective Selector Pills & Counter */}
-        <div className="mt-3 flex items-center justify-between gap-2 overflow-x-auto pb-1 text-slate-500">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {gallery.map((photo, idx) => (
-              <button
-                key={idx}
-                onClick={() => scrollTo(idx)}
-                className={`px-2.5 py-1 text-[9px] font-mono tracking-[0.18em] uppercase transition-all duration-200 rounded-xs border ${
-                  selectedIndex === idx
-                    ? 'bg-slate-900 text-white border-slate-900 font-bold shadow-xs'
-                    : 'bg-white hover:bg-slate-100 text-slate-600 border-slate-200'
-                }`}
-              >
-                0{idx + 1} {photo.tag}
-              </button>
-            ))}
-          </div>
-
-          <span className="text-[10px] font-mono font-bold text-slate-400 shrink-0">
-            0{selectedIndex + 1} / 0{gallery.length}
-          </span>
-        </div>
-
-        {/* Floating Detail Inset (Dual-layer Parallax Scrub) */}
+        {/* Floating Detail Inset Photo (Dual-layer Parallax) */}
         <div
           ref={insetImgRef}
           className={`hidden sm:block absolute -bottom-10 ${
             isReversed ? '-left-6' : '-right-6'
-          } w-48 md:w-56 aspect-[4/3] bg-white p-1.5 shadow-2xl border border-slate-200 z-20 group-hover/card:translate-y-[-2px] transition-transform duration-300`}
+          } w-48 md:w-56 aspect-[4/3] bg-white p-1.5 shadow-2xl border border-slate-200 z-20 group-hover/card:translate-y-[-2px] transition-transform duration-300 pointer-events-none`}
         >
           <img
             src={residence.detailImage}
@@ -188,7 +237,7 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
           ))}
         </ul>
 
-        {/* Pricing & Rolling Text CTA Button */}
+        {/* Pricing & Signature Rolling-Text CTA Button */}
         <div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-baseline gap-1.5">
@@ -203,9 +252,8 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
             </span>
           </div>
 
-          {/* Signature Rolling-Text Reveal Button */}
           <RollingTextButton
-            text="Reserve Sanctuary"
+            text="Apartment Details"
             onClick={() => onReserve(residence)}
           />
         </div>

@@ -50,6 +50,26 @@ html.lenis, html.lenis body {
   transition: transform 100ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Card hover cursor suppression (Hides native OS pointer over [data-cursor] cards so custom pill is primary) */
+@media (hover: hover) and (pointer: fine) {
+  [data-cursor] {
+    cursor: none !important;
+  }
+  [data-cursor] * {
+    cursor: none !important;
+  }
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Hairline scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
