@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import BrandLogo from './BrandLogo'
 
 /**
  * LuxuryStay Minimalist Navigation
@@ -115,25 +116,20 @@ export default function Navbar({ onOpenDrawer }) {
             className="group flex items-center gap-2 h-8 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100 ease-[cubic-bezier(0.16,1,0.3,1)]"
           >
             <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
-            <span className="relative inline-flex items-center overflow-hidden h-8 w-[130px] sm:w-[164px]">
+            <span className="relative inline-flex items-center overflow-hidden h-8 w-[130px] sm:w-[175px]">
               <span className="absolute inset-0 flex items-center whitespace-nowrap transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-x-[115%] will-change-transform leading-none text-slate-900 font-normal">
-                Kyoto Sanctuaries
+                Sindh Coast Sanctuaries
               </span>
               <span className="absolute inset-0 flex items-center whitespace-nowrap font-medium text-slate-900 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] translate-x-[115%] group-hover:translate-x-0 will-change-transform leading-none">
-                LuxuryStay &middot; 2026
+                The Haven &middot; 2026
               </span>
             </span>
           </Link>
         </div>
 
-        {/* Center: Aman-Style Quiet Wordmark */}
+        {/* Center: The Haven Monolithic Emblem & Wordmark */}
         <div className="pointer-events-auto hidden md:flex items-center">
-          <Link
-            to="/"
-            className="font-serif-grand text-xl sm:text-2xl tracking-[0.28em] uppercase text-slate-900 font-normal hover:opacity-75 transition-opacity"
-          >
-            LUXURYSTAY
-          </Link>
+          <BrandLogo variant="full" theme="dark" size="md" />
         </div>
 
         {/* Right: Desktop Links + Reserve CTA + Three-Pill Menu Trigger */}
@@ -320,7 +316,7 @@ export default function Navbar({ onOpenDrawer }) {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
               <span className="text-slate-900 font-semibold">// NAVIGATION</span>
               <span className="text-slate-300 hidden sm:inline">&middot;</span>
-              <span className="text-slate-500 hidden sm:inline text-[10px]">KYOTO</span>
+              <span className="text-slate-500 hidden sm:inline text-[10px]">THE HAVEN &bull; SINDH COAST</span>
             </div>
 
             {/* Dedicated Accessible Close Button */}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BookingDrawer from '../components/BookingDrawer'
+import Footer from '../components/Footer'
 import HeroParallax from '../components/HeroParallax'
 import Navbar from '../components/Navbar'
 import ResidenceSpread from '../components/ResidenceSpread'
@@ -101,25 +102,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Minimalist Editorial Footer */}
-      <footer className="max-w-7xl mx-auto px-6 py-16 flex flex-col md:flex-row items-center justify-between gap-6 text-slate-500 text-xs">
-        <div className="flex flex-col">
-          <span className="font-cinzel text-sm tracking-[0.28em] font-bold text-slate-900">
-            LUXURYSTAY
-          </span>
-          <span className="text-[10px] text-slate-400 tracking-[0.2em] mt-0.5">
-            AN APTECH LUXURY HOSPITALITY CURRICULUM SYSTEM
-          </span>
-        </div>
-
-        <div className="flex gap-8 text-[11px] tracking-[0.18em] font-semibold text-slate-600">
-          <span>SINDH COAST, PK</span>
-          <span>EST. 2026</span>
-          <a href="/pms" className="text-emerald-900 hover:underline">
-            STAFF PORTAL &rarr;
-          </a>
-        </div>
-      </footer>
+      {/* Architectural Luxury Footer */}
+      <Footer />
 
       {/* Reservation Drawer with Live 5-Minute Pessimistic Lock */}
       <BookingDrawer
