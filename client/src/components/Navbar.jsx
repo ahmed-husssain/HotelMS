@@ -411,11 +411,11 @@ export default function Navbar({ onOpenDrawer }) {
               <span className="font-semibold">{fullDateLabel}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span>LAT: 33&deg;41'N &middot; THERMAL: 41.5&deg;C</span>
-              <span className="text-emerald-700 font-semibold uppercase">● 4 Units Ready</span>
+              <span>LAT: 24&deg;48&apos;N &middot; THERMAL: 41.5&deg;C</span>
+              <span className="text-emerald-700 font-semibold uppercase">● 3 Sanctuaries Ready</span>
             </div>
             <div className="text-slate-400 pt-1 text-[9px] uppercase tracking-wider">
-              Zero-Trust Pricing &middot; Safepay Sandbox &middot; 5-Min Atomic Lock
+              The Haven &middot; Safepay 30% Advance &middot; 5-Min Atomic Lock
             </div>
           </div>
 
