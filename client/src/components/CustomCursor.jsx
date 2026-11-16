@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 
 /**
  * CasaMomoArrow
- * Exact SVG geometry extracted from casamomo.at production bundle
+ * Exact SVG vector extracted from casamomo.at production bundle
  */
 function CasaMomoArrow() {
   return (
-    <svg width="11" height="11" viewBox="0 0 12 12" fill="none" className="text-[#FFF0CA]">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-[#FFF0CA]">
       <path
         d="M4 1V2H6.98C7.83 2 8.26 3.03 7.66 3.63L1 10.29L1.71 11L8.37 4.34C8.97 3.74 10 4.16 10 5.02V8H11V1H4Z"
         fill="currentColor"
@@ -18,14 +18,17 @@ function CasaMomoArrow() {
 /**
  * CharacterRoll
  * Exact Casa Momo character staggered wave-roll (ScrollRadius.CU3IUbFx.mjs)
- * Duration: 0.7s, Easing: cubic-bezier(0.52, 0, 0, 1), Stagger: 12ms per char
+ * Duration: 0.70s, Easing: cubic-bezier(0.52, 0, 0, 1), Stagger: 10ms per char
+ * Instant reset with transition: 'none' when rolled is false
  */
 function CharacterRoll({ char, index, isRolled }) {
-  const delay = `${index * 12}ms`
-  const transition = `transform 0.68s cubic-bezier(0.52, 0, 0, 1) ${delay}`
+  const delay = `${index * 10}ms`
+  const transition = isRolled
+    ? `transform 0.7s cubic-bezier(0.52, 0, 0, 1) ${delay}`
+    : 'none'
 
   return (
-    <span className="inline-block relative overflow-hidden align-top select-none" style={{ height: '1.25em' }}>
+    <span className="inline-block relative overflow-hidden align-top select-none" style={{ height: '1.2em' }}>
       {/* Sizer to hold font metrics */}
       <span className="invisible">{char === ' ' ? '\u00A0' : char}</span>
 
@@ -41,7 +44,7 @@ function CharacterRoll({ char, index, isRolled }) {
         {char === ' ' ? '\u00A0' : char}
       </span>
 
-      {/* Duplicate character (enters from 100% to 0% on roll) */}
+      {/* Secondary character (enters from 100% to 0% on roll) */}
       <span
         aria-hidden="true"
         className="absolute top-0 left-0 inline-block will-change-transform select-none"
@@ -61,13 +64,16 @@ function CharacterRoll({ char, index, isRolled }) {
  * Exact Casa Momo dual-arrow diagonal kinetic translation
  * Arrow 1: (0, 0) -> (11px, -11px)
  * Arrow 2: (-11px, 11px) -> (0, 0)
+ * Duration: 0.70s, Easing: cubic-bezier(0.52, 0, 0, 1)
  */
 function ArrowRoll({ isRolled, charCount }) {
-  const delay = `${charCount * 12 + 30}ms`
-  const transition = `transform 0.68s cubic-bezier(0.52, 0, 0, 1) ${delay}`
+  const delay = `${charCount * 10 + 20}ms`
+  const transition = isRolled
+    ? `transform 0.7s cubic-bezier(0.52, 0, 0, 1) ${delay}`
+    : 'none'
 
   return (
-    <span className="relative block overflow-hidden w-[11px] h-[11px] shrink-0">
+    <span className="relative block overflow-hidden w-[12px] h-[12px] shrink-0">
       {/* Primary arrow exiting to top-right */}
       <span
         aria-hidden="true"
@@ -138,11 +144,21 @@ export default function CustomCursor() {
     }
     animId = requestAnimationFrame(loop)
 
-    // Element checker
+    // Element checker with interactive button exclusion for smooth transitions
     const checkTarget = (target) => {
       if (!target) return
-      const card = target.closest('[data-cursor]')
 
+      // If hovering over an interactive control (carousel arrow button, link, close button):
+      // Smoothly collapse and hide the floating pill so the button can be interacted with cleanly!
+      const buttonOrAction = target.closest('button, a, [role="button"], [data-cursor-hide], [data-no-cursor]')
+      if (buttonOrAction) {
+        coords.activeCard = null
+        setActive(false)
+        setIsRolled(false)
+        return
+      }
+
+      const card = target.closest('[data-cursor]')
       if (card) {
         const text = card.getAttribute('data-cursor') || 'Apartment Details'
         if (coords.activeCard !== card) {
@@ -217,23 +233,24 @@ export default function CustomCursor() {
       className="fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform select-none"
       style={{ left: 0, top: 0 }}
     >
-      {/* 1. Default Resting Dot (Empty canvas) */}
+      {/* 1. Default Resting Dot (Empty canvas) with mix-blend difference */}
       <div
-        className={`w-2.5 h-2.5 rounded-full bg-[#0E1201] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          active ? 'opacity-0 scale-0' : 'opacity-70 scale-100 shadow-xs'
+        className={`w-2.5 h-2.5 rounded-full bg-[#FFF0CA] transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] ${
+          active ? 'opacity-0 scale-0' : 'opacity-85 scale-100 shadow-xs'
         }`}
+        style={{ mixBlendMode: 'difference' }}
       />
 
-      {/* 2. Expanded Floating Pill Capsule (Over [data-cursor] cards) */}
+      {/* 2. Expanded Floating Pill Capsule (Exact Casa Momo 2px border radius) */}
       <div
-        className={`absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-2 bg-[#0E1201] text-[#FFF0CA] rounded-full shadow-2xl border border-white/10 backdrop-blur-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 flex items-center px-[10px] py-[7px] bg-[#0E1201] text-[#FFF0CA] rounded-[2px] shadow-2xl border border-white/10 backdrop-blur-md transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] ${
           active
-            ? 'opacity-100 scale-100 translate-y-0'
-            : 'opacity-0 scale-50 pointer-events-none'
+            ? 'opacity-100 scale-100 translate-y-0 pointer-events-none'
+            : 'opacity-0 scale-75 pointer-events-none'
         }`}
       >
         {/* Kinetic Staggered Wave-Roll Typography */}
-        <div className="flex items-center text-[12px] font-medium tracking-tight whitespace-nowrap leading-none font-sans-clean text-[#FFF0CA]">
+        <div className="flex items-center text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap leading-[1.2em] font-sans-clean text-[#FFF0CA]">
           {Array.from(label).map((char, index) => (
             <CharacterRoll
               key={index}
@@ -245,7 +262,7 @@ export default function CustomCursor() {
         </div>
 
         {/* Casa Momo Diagonal Arrow Glyph Roll */}
-        <div className="ml-1 flex items-center justify-center">
+        <div className="ml-[6px] flex items-center justify-center">
           <ArrowRoll
             isRolled={isRolled}
             charCount={label.length}
