@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import BrandLogo from '../components/BrandLogo'
 
 export default function BookingConfirmation() {
   const location = useLocation()
@@ -20,11 +21,11 @@ export default function BookingConfirmation() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans-clean flex flex-col justify-between py-12 px-6">
       <div className="max-w-xl mx-auto w-full space-y-8">
-        {/* Brand */}
-        <div className="text-center space-y-1">
-          <Link to="/" className="font-cinzel text-xl tracking-[0.25em] font-bold text-slate-900">
-            LUXURYSTAY
-          </Link>
+        {/* Brand Header */}
+        <div className="text-center space-y-2">
+          <div className="flex justify-center">
+            <BrandLogo variant="full" theme="dark" size="md" />
+          </div>
           <span className="block text-[9px] tracking-[0.3em] text-emerald-800 font-semibold uppercase">
             RESERVATION GUARANTEED &bull; SAFEPAY VERIFIED
           </span>
@@ -108,7 +109,7 @@ export default function BookingConfirmation() {
       </div>
 
       <footer className="text-center text-[10px] text-slate-400 tracking-[0.2em] uppercase">
-        LuxuryStay Resort &bull; Aptech eProject Submission
+        The Haven &bull; An Aptech Luxury Hospitality Curriculum System &bull; LuxuryStay HMS
       </footer>
     </div>
   )

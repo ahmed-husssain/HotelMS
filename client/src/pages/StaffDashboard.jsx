@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import BrandLogo from '../components/BrandLogo'
 
 const INITIAL_ROOMS = [
   { roomNumber: '301', type: 'Presidential Penthouse', rate: 110000, status: 'OCCUPIED', guest: 'Dr. Tariq Khan', folio: 497200, balance: 348040 },
@@ -43,9 +44,8 @@ export default function StaffDashboard() {
       {/* Staff Top Nav */}
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/" className="font-cinzel text-base tracking-[0.2em] font-bold text-slate-900">
-            LUXURYSTAY PMS
-          </Link>
+          <BrandLogo variant="full" theme="dark" size="sm" />
+          <span className="hidden sm:inline text-slate-300">|</span>
           <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[10px] tracking-[0.18em] font-bold rounded">
             FRONT-DESK TERMINAL #01
           </span>
