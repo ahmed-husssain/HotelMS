@@ -11,11 +11,13 @@ You are an expert Principal Full-Stack Engineer and System Architect building th
    * [`docs/PRD.md`](PRD.md) — For business requirements and user flows.
    * [`docs/TRD.md`](TRD.md) — For exact schemas, types, and API contracts.
    * [`docs/architecture.md`](architecture.md) — For component flows and sequence diagrams.
-   * [`docs/security_and_rules.md`](security_and_rules.md) — For security, permissions, and zero-trust calculation rules.
-2. **Zero-Trust Pricing:** Never allow frontend code to calculate or dictate prices, taxes, advance splits, or balances. Calculations occur strictly on the backend inside `pricingService.js`.
-3. **Pessimistic Concurrency:** Availability queries and temporary 5-minute holds must execute atomically to prevent double bookings.
-4. **Idempotency & Accounting:** Payments must be written to an independent `payments` collection. Webhook retries must be handled idempotently.
-5. **No Blind Changes:** Ask for user alignment or approval before making radical structural pivots.
+   * [`docs/Security and rules.md`](Security%20and%20rules.md) — For security, permissions, zero-trust calculation, and developer rules.
+2. **Mandatory User Approval Gate:** NEVER write, modify, or refactor code without explaining the change in simple plain English and receiving user approval first.
+3. **Minimalist, Readable & Explainable Code:** Keep code simple, clean, and minimal. Avoid over-engineering and unnecessary abstractions. Add clear, plain-English comments so the student can easily explain every line to their teacher during project viva and defense.
+4. **Clean In-Place Replacement (Zero Dead/Zombie Code):** When modifying or refactoring code, always update it directly in-place. Never leave old, commented-out, deprecated, or duplicate functions sitting in the files.
+5. **Zero-Trust Pricing:** Never allow frontend code to calculate or dictate prices, taxes, advance splits, or balances. Calculations occur strictly on the backend inside `pricingService.js`.
+6. **Pessimistic Concurrency:** Availability queries and temporary 5-minute holds must execute atomically to prevent double bookings.
+7. **Idempotency & Accounting:** Payments must be written to an independent `payments` collection. Webhook retries must be handled idempotently.
 
 ---
 
@@ -117,11 +119,34 @@ Implement the 9 Mongoose schemas strictly conforming to [`docs/TRD.md`](TRD.md):
 
 ---
 
-## 4. Quality Checklist for Every Pull Request / Code Change
+## 4. Adversarial Testing Mandate (Unit & Integration Tests)
+
+Every module, service, and controller must be accompanied by rigorous, non-trivial tests:
+1. **Tooling:** Jest / Mocha + Supertest for API integration testing.
+2. **Zero "Easy" Tests:** Tests must specifically probe boundary exploits, concurrency race conditions, tampered inputs, unauthorized role attempts, duplicate webhooks, and float rounding errors.
+3. **Continuous Execution:** A feature is only deemed "Complete" when its test suite passes 100% via `npm test`.
+
+---
+
+## 5. Specialized Skills & Proactive Research Protocol
+
+The agent must proactively leverage and recommend the following skills based on the task:
+* **Code Simplification & Minimal Design:** Use `/ponytail` and `/ponytail-review` to enforce standard library solutions, eliminate speculative bloat, and ensure code is concise and explainable.
+* **Security & Vulnerability Auditing:** Use `/security-audit` to inspect authentication, input sanitization, and payment webhook logic.
+* **Frontend Excellence & Motion:** Use `/ui-ux-pro-max`, `/apple-design`, `/animate`, and `/generative-ui` when designing luxury UI components, countdown timers, and booking cards.
+* **Proactive Suggestion:** Before writing complex code, research verified patterns and suggest the best skill or approach to the user for approval.
+
+---
+
+## 6. Quality Checklist for Every Pull Request / Code Change
+- [ ] Explicit user approval obtained prior to file changes.
+- [ ] Code is minimal, simple, and self-documenting (Ponytail compliant).
+- [ ] No dead, duplicate, or commented-out code remains.
 - [ ] No hardcoded credentials or API keys.
-- [ ] No client-side price math.
+- [ ] Zero-trust pricing enforced: all calculations occur on the backend.
 - [ ] All database mutations use appropriate Mongoose validation.
 - [ ] Endpoints return standardized JSON `{ success: true, data: ... }`.
 - [ ] Sensitive operations log an entry to `ActivityLog`.
 - [ ] Double-booking prevented via atomic availability check.
+- [ ] Adversarial Unit and Integration tests written and passing 100%.
 
