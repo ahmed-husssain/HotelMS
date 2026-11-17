@@ -95,7 +95,7 @@ export default function SplashScreen({ onComplete }) {
           <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
           <span className="text-slate-400 font-semibold">HABITAS</span>
           <span className="text-slate-600">//</span>
-          <span className="text-slate-400">SANCTUARY</span>
+          <span className="text-slate-400">LUXURY RESORT</span>
         </div>
         <span>SINDH COAST &bull; 24&deg;48&apos;N</span>
       </div>
@@ -197,7 +197,7 @@ export default function SplashScreen({ onComplete }) {
               HABITAS
             </div>
             <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.35em] text-amber-500 uppercase mt-1">
-              RESIDENCES &bull; SANCTUARY
+              LUXURY SUITES &bull; SINDH COAST
             </div>
           </div>
         </div>
