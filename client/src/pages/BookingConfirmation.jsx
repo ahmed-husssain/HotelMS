@@ -87,7 +87,7 @@ export default function BookingConfirmation() {
           {/* Instructions */}
           <div className="text-[11px] text-slate-500 leading-relaxed space-y-1">
             <p>&bull; An automated SMS and Email confirmation voucher has been dispatched.</p>
-            <p>&bull; Subterranean valet arrival instructions will be unlocked 24 hours prior to check-in.</p>
+            <p>&bull; Private parking and check-in instructions will be sent 24 hours prior to your arrival.</p>
           </div>
 
           {/* Action Links */}
