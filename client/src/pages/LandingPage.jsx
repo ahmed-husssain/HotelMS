@@ -45,8 +45,8 @@ export default function LandingPage() {
       <HeroParallax onQuickReserve={() => handleOpenReservation(RESIDENCES[0])} />
 
       {/* Architectural Residences Showcase */}
-      <main id="residences" className="max-w-7xl mx-auto px-6 py-24 space-y-28">
-        <div className="border-b border-slate-200/80 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <main id="residences" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 space-y-16 sm:space-y-20 lg:space-y-28 overflow-x-clip">
+        <div className="border-b border-slate-200/80 pb-5 sm:pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="text-[10px] tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
               OUR LUXURY SUITES &amp; VILLAS
@@ -72,8 +72,8 @@ export default function LandingPage() {
       </main>
 
       {/* Wellness / Estate Brief Section */}
-      <section id="experience" className="bg-white border-y border-slate-200/80 py-24">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-slate-600">
+      <section id="experience" className="bg-white border-y border-slate-200/80 py-14 sm:py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 text-slate-600">
           <div className="space-y-3">
             <span className="text-[10px] tracking-[0.25em] font-bold text-slate-400 uppercase">
               01 &bull; TOTAL RELAXATION
