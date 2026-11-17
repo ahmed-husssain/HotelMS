@@ -8,6 +8,10 @@ export const RESIDENCES = [
     roomNumber: '301',
     name: 'The Horizon Penthouse',
     tier: 'PRESIDENTIAL PENTHOUSE',
+    category: 'penthouse',
+    categoryLabel: 'Penthouse',
+    maxGuests: 4,
+    features: ['pool', 'butler', 'helipad', 'spa_bath'],
     nightlyRate: 110000,
     gallery: [
       {
@@ -51,6 +55,10 @@ export const RESIDENCES = [
     roomNumber: '204',
     name: 'The Courtyard Villa',
     tier: 'PRIVATE GARDEN VILLA',
+    category: 'villa',
+    categoryLabel: 'Garden Villa',
+    maxGuests: 2,
+    features: ['cedar_tub', 'zen_garden', 'chef', 'tea_master'],
     nightlyRate: 75000,
     gallery: [
       {
@@ -94,6 +102,10 @@ export const RESIDENCES = [
     roomNumber: '102',
     name: 'The Ocean Pavilion',
     tier: 'OVERWATER VILLA',
+    category: 'overwater',
+    categoryLabel: 'Overwater Villa',
+    maxGuests: 3,
+    features: ['lagoon_access', 'rain_shower', 'snorkeling', 'sundeck'],
     nightlyRate: 95000,
     gallery: [
       {

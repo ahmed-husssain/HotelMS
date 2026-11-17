@@ -7,6 +7,7 @@ import LandingPage from './pages/LandingPage'
 import MyStayPage from './pages/MyStayPage'
 import ReservationPage from './pages/ReservationPage'
 import StaffDashboard from './pages/StaffDashboard'
+import SuitesPage from './pages/SuitesPage'
 
 function AppRoutes() {
   // Enterprise-grade 120 FPS momentum scroll authority
@@ -20,6 +21,10 @@ function AppRoutes() {
       <Routes>
         {/* Guest Public Luxury Experience */}
         <Route path="/" element={<LandingPage />} />
+
+        {/* Dedicated Suites & Residences Catalog */}
+        <Route path="/suites" element={<SuitesPage />} />
+        <Route path="/residences" element={<SuitesPage />} />
 
         {/* Dedicated 2-Column Luxury Reservation Flow */}
         <Route path="/reserve" element={<ReservationPage />} />

@@ -74,7 +74,8 @@ export default function Navbar({ onOpenDrawer }) {
     {
       num: '01',
       label: 'Residences',
-      href: '#residences',
+      href: '/suites',
+      isRouter: true,
       desc: 'Luxury Ocean Suites & Villas',
       preview: {
         tag: 'SUITE 301',
@@ -188,12 +189,12 @@ export default function Navbar({ onOpenDrawer }) {
         <div className="pointer-events-auto flex items-center h-10 shrink-0">
           {/* Desktop Left Nav Links (Option 2 Symmetrical Split) */}
           <nav className="hidden lg:flex items-center gap-7 text-xs font-mono uppercase tracking-wider text-slate-700" aria-label="Primary Left Navigation">
-            <a
-              href="#residences"
+            <Link
+              to="/suites"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
               <StaggeredWaveText text="Residences" />
-            </a>
+            </Link>
 
             <a
               href="#experience"

@@ -3,15 +3,16 @@ import { Link } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 
 /**
- * Editorial Luxury Footer for The Haven
- *
- * Implements:
- * - Live Estate Time telemetry (PKT / UTC+5)
- * - The Guest Ledger (Discreet email inquiry dispatch)
- * - Architecture, Sanctuaries, and Wellness directories
- * - Aptech LuxuryStay HMS curriculum and PMS staff portal gateway
- * - Michelin Keys / Architectural accolades
- * - Smooth "Return to Summit" (Back to Top)
+ * Polished Minimal Luxury Footer for Habitas
+ * 
+ * Features:
+ * - Reduced vertical height with zero empty dead space
+ * - Warm alabaster palette (#FAF8F5) matching the rest of the site
+ * - Simple, plain-English wording
+ * - Live Estate Telemetry (PKT Asia/Karachi UTC+5)
+ * - Three suites with exact nightly rates and direct reserve links
+ * - Experiences, Guest Portal, Staff PMS Terminal, and direct Concierge contacts
+ * - Accolades and smooth Back to Top action
  */
 export default function Footer() {
   const [estateTime, setEstateTime] = useState('')
@@ -22,7 +23,6 @@ export default function Footer() {
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
-      // Format as 24-hr time with seconds: e.g. 23:45:12 PKT
       const timeStr = now.toLocaleTimeString('en-US', {
         timeZone: 'Asia/Karachi',
         hour12: false,
@@ -45,7 +45,7 @@ export default function Footer() {
     setTimeout(() => {
       setIsSubmitted(false)
       setInquiryEmail('')
-    }, 4000)
+    }, 4500)
   }
 
   const scrollToTop = () => {
@@ -53,264 +53,258 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#0B1120] text-slate-300 border-t border-slate-800/80 font-sans-clean selection:bg-emerald-900 selection:text-emerald-100">
+    <footer className="w-full bg-[#FAF8F5] text-[#121619] border-t border-[#E5DFD5] font-sans-clean">
       {/* ============================================================== */}
-      {/* 1. THE GUEST LEDGER (PRIVATE INQUIRIES DISPATCH) */}
+      {/* 1. NEWSLETTER & GUEST INVITATION BAR (COMPACT HEIGHT) */}
       {/* ============================================================== */}
-      <div className="border-b border-slate-800/60">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-            <div className="lg:col-span-7 space-y-3">
-              <span className="text-[10px] tracking-[0.35em] font-bold text-amber-500 uppercase">
-                PRIVATE GUEST INVITATIONS
+      <div className="border-b border-[#E5DFD5] py-7 px-6 sm:px-10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-700"></span>
+              <span className="text-[10px] font-mono tracking-[0.25em] font-bold uppercase text-emerald-950">
+                STAY CONNECTED
               </span>
-              <h2 className="font-serif-grand text-3xl sm:text-4xl text-[#FAF8F5] font-light tracking-tight leading-tight">
-                Exclusive Offers &amp; Seasonal Openings.
-              </h2>
-              <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
-                Join our private guest list to receive seasonal suite openings, boat and helicopter transfer updates, and exclusive invitations directly from the concierge desk.
-              </p>
             </div>
+            <h3 className="font-cinzel text-xl sm:text-2xl font-semibold text-[#121619] tracking-tight">
+              Join Our Private Guest List
+            </h3>
+            <p className="text-xs text-[#5C646A] leading-relaxed">
+              Seasonal suite openings, private dining invitations, and exclusive updates directly from the concierge.
+            </p>
+          </div>
 
-            <div className="lg:col-span-5 w-full">
-              {isSubmitted ? (
-                <div className="p-4 rounded border border-emerald-500/40 bg-emerald-950/40 text-emerald-300 text-xs flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Thank you. You have been added to our private guest list.
-                </div>
-              ) : (
-                <form onSubmit={handleInquirySubmit} className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="email"
-                    required
-                    value={inquiryEmail}
-                    onChange={(e) => setInquiryEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="flex-1 bg-slate-900/90 border border-slate-700/80 text-xs text-slate-200 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors placeholder:text-slate-500 rounded-none"
-                  />
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-[#FAF8F5] text-slate-950 text-xs font-mono uppercase tracking-[0.2em] font-semibold hover:bg-amber-400 transition-colors active:scale-[0.98] cursor-pointer whitespace-nowrap"
-                  >
-                    Request Access
-                  </button>
-                </form>
-              )}
-              <span className="block text-[10px] text-slate-500 mt-2 tracking-wider">
-                Your privacy is respected. No spam, ever. Unsubscribe anytime.
-              </span>
-            </div>
+          <div className="w-full md:w-auto">
+            {isSubmitted ? (
+              <div className="p-2.5 px-4 bg-emerald-50 border border-emerald-300 rounded-[2px] text-xs font-mono text-emerald-950 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                <span>Thank you. You have been added to our private guest list.</span>
+              </div>
+            ) : (
+              <form onSubmit={handleInquirySubmit} className="flex gap-2 w-full md:w-80 lg:w-96">
+                <input
+                  type="email"
+                  required
+                  value={inquiryEmail}
+                  onChange={(e) => setInquiryEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  className="flex-1 bg-white border border-[#DDD7CE] px-3.5 py-2 text-xs text-[#121619] placeholder:text-[#8E877C] rounded-[2px] focus:outline-none focus:border-[#121619] focus:ring-1 focus:ring-[#121619] transition-all font-mono"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#121619] hover:bg-[#252B30] text-[#FFF0CA] font-mono text-xs font-semibold uppercase tracking-wider rounded-[2px] transition-all cursor-pointer shrink-0 active:scale-95 shadow-xs flex items-center gap-1.5"
+                >
+                  <span>Join</span>
+                  <span className="text-xs">&rarr;</span>
+                </button>
+              </form>
+            )}
+            <span className="block text-[10px] text-[#8E877C] font-mono mt-1.5">
+              Zero spam. Unsubscribe at any time.
+            </span>
           </div>
         </div>
       </div>
 
       {/* ============================================================== */}
-      {/* 2. MAIN DIRECTORY & ESTATE TELEMETRY */}
+      {/* 2. MAIN 4-COLUMN BALANCED DIRECTORY (COMPACT HEIGHT) */}
       {/* ============================================================== */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 sm:gap-10">
-          {/* Brand & Coordinates (Col 1-4) */}
-          <div className="lg:col-span-4 space-y-6">
-            <BrandLogo variant="full" theme="light" size="md" />
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-9 sm:py-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
+          
+          {/* Column 1: Brand, About & Live Estate Clock (4 cols) */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="flex items-center gap-3">
+              <BrandLogo variant="full" theme="dark" size="sm" to="/" />
+            </div>
 
-            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              A luxury oceanfront resort built along the coastal cliffs. Three private suites and villas designed for complete privacy, ocean views, and uninterrupted relaxation.
+            <p className="text-xs text-[#5C646A] leading-relaxed max-w-sm">
+              A private coastal retreat built along the Sindh cliffs. Just three secluded residences designed for quiet luxury, open ocean horizons, and attentive personal service.
             </p>
 
             {/* Live Estate Telemetry Card */}
-            <div className="p-4 rounded-none border border-slate-800 bg-slate-900/60 space-y-2.5 font-mono text-xs">
-              <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-2">
-                <span className="text-[10px] tracking-widest text-slate-500 uppercase">ESTATE TIME</span>
-                <span className="text-[#FAF8F5] font-semibold flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  {estateTime || '23:00:00 PKT'}
+            <div className="p-3 bg-white border border-[#E5DFD5] rounded-[2px] space-y-1.5 font-mono text-xs text-[#5C646A] max-w-sm shadow-2xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-[#8E877C] uppercase tracking-wider font-semibold">ESTATE TIME:</span>
+                <span className="font-bold text-[#121619] flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                  <span>{estateTime || '15:45:00 PKT'}</span>
                 </span>
               </div>
-              <div className="flex items-center justify-between text-slate-400">
-                <span className="text-[10px] tracking-widest text-slate-500 uppercase">COORDINATES</span>
-                <span className="text-slate-300 text-[11px]">24°48&apos;36&quot; N &bull; 67°01&apos;12&quot; E</span>
+              <div className="flex items-center justify-between text-[11px] text-[#5C646A] pt-1.5 border-t border-[#F0EBE3]">
+                <span>Sindh Coast &bull; 24°48'N, 67°01'E</span>
+                <span className="text-amber-800 font-semibold">24°C &bull; Calm</span>
               </div>
-              <div className="flex items-center justify-between text-slate-400">
-                <span className="text-[10px] tracking-widest text-slate-500 uppercase">LOCATION</span>
-                <span className="text-slate-300 text-[11px]">Sindh Coast, Arabian Sea</span>
-              </div>
-              <div className="flex items-center justify-between text-slate-400">
-                <span className="text-[10px] tracking-widest text-slate-500 uppercase">ATMOSPHERE</span>
-                <span className="text-amber-400/90 text-[11px]">23&deg;C &bull; Calm Tides &bull; Secluded</span>
+              <div className="flex items-center justify-between text-[10px] text-[#8E877C] pt-0.5">
+                <span>Check-in: 15:00</span>
+                <span>Check-out: 12:00</span>
               </div>
             </div>
           </div>
 
-          {/* Directory Column 1: The Sanctuaries (Col 5-6) */}
-          <div className="lg:col-span-3 space-y-4">
-            <h3 className="font-mono text-xs font-bold text-[#FAF8F5] tracking-[0.25em] uppercase border-b border-slate-800 pb-2">
-              OUR SUITES &amp; VILLAS
-            </h3>
-            <ul className="space-y-2.5 text-xs text-slate-400">
+          {/* Column 2: Residences & Rates (3 cols) */}
+          <div className="lg:col-span-3 space-y-2.5">
+            <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-[#121619] uppercase block pb-1.5 border-b border-[#E5DFD5]">
+              01 &bull; OUR SUITES
+            </span>
+            <ul className="space-y-2.5 text-xs">
               <li>
-                <a href="#residences" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">The Horizon Penthouse</span>
-                  <span className="text-[11px] text-slate-500">Suite 301 &bull; 210 m² &bull; 20M Infinity Pool</span>
-                </a>
+                <Link to="/reserve?room=301" className="block group transition-transform duration-200 hover:translate-x-1">
+                  <span className="font-semibold text-[#121619] group-hover:text-amber-800 transition-colors block">
+                    The Horizon Penthouse
+                  </span>
+                  <span className="text-[11px] text-[#5C646A] font-mono block">
+                    Suite 301 &bull; 210 m² &bull; PKR 110,000 / night
+                  </span>
+                </Link>
               </li>
               <li>
-                <a href="#residences" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">The Courtyard Villa</span>
-                  <span className="text-[11px] text-slate-500">Villa 204 &bull; 165 m² &bull; Private Courtyard &amp; Hot Tub</span>
-                </a>
+                <Link to="/reserve?room=204" className="block group transition-transform duration-200 hover:translate-x-1">
+                  <span className="font-semibold text-[#121619] group-hover:text-amber-800 transition-colors block">
+                    The Courtyard Villa
+                  </span>
+                  <span className="text-[11px] text-[#5C646A] font-mono block">
+                    Villa 204 &bull; 165 m² &bull; PKR 75,000 / night
+                  </span>
+                </Link>
               </li>
               <li>
-                <a href="#residences" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">The Ocean Pavilion</span>
-                  <span className="text-[11px] text-slate-500">Pavilion 102 &bull; 185 m² &bull; Overwater Sunset Deck</span>
-                </a>
+                <Link to="/reserve?room=102" className="block group transition-transform duration-200 hover:translate-x-1">
+                  <span className="font-semibold text-[#121619] group-hover:text-amber-800 transition-colors block">
+                    The Ocean Pavilion
+                  </span>
+                  <span className="text-[11px] text-[#5C646A] font-mono block">
+                    Pavilion 102 &bull; 185 m² &bull; PKR 95,000 / night
+                  </span>
+                </Link>
               </li>
-              <li>
-                <span className="text-[11px] text-amber-500/90 tracking-wider uppercase block pt-1">
-                  &bull; 100% Uninterrupted Seclusion
-                </span>
+              <li className="pt-1.5 border-t border-[#F0EBE3]">
+                <Link to="/reserve?room=102" className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#121619] hover:text-amber-800 transition-colors">
+                  <span>View Live Room Calendar</span>
+                  <span>&rarr;</span>
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Directory Column 2: Experiences & Amenities (Col 7-9) */}
-          <div className="lg:col-span-3 space-y-4">
-            <h3 className="font-mono text-xs font-bold text-[#FAF8F5] tracking-[0.25em] uppercase border-b border-slate-800 pb-2">
-              EXPERIENCES
-            </h3>
-            <ul className="space-y-2.5 text-xs text-slate-400">
+          {/* Column 3: Resort Experiences (2 cols) */}
+          <div className="lg:col-span-2 space-y-2.5">
+            <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-[#121619] uppercase block pb-1.5 border-b border-[#E5DFD5]">
+              02 &bull; EXPERIENCES
+            </span>
+            <ul className="space-y-2 text-xs text-[#5C646A]">
               <li>
-                <a href="#experience" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">Cedar Spa &amp; Hot Springs</span>
-                  <span className="text-[11px] text-slate-500">Warm cedar mineral baths above the tide</span>
+                <a href="#experience" className="block group transition-transform duration-200 hover:translate-x-1">
+                  <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors block">
+                    Cedar Spa &amp; Baths
+                  </span>
+                  <span className="text-[11px] text-[#8E877C] block">Saltwater soaking tubs</span>
                 </a>
               </li>
               <li>
-                <a href="#experience" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">The Harvest Pavilion</span>
-                  <span className="text-[11px] text-slate-500">Fresh farm-to-table coastal dining</span>
+                <a href="#experience" className="block group transition-transform duration-200 hover:translate-x-1">
+                  <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors block">
+                    Harvest Pavilion
+                  </span>
+                  <span className="text-[11px] text-[#8E877C] block">Fresh coastal dining</span>
                 </a>
               </li>
               <li>
-                <a href="#experience" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">Private Underground Valet</span>
-                  <span className="text-[11px] text-slate-500">Private garage arrival with direct suite elevator</span>
+                <a href="#experience" className="block group transition-transform duration-200 hover:translate-x-1">
+                  <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors block">
+                    Underground Valet
+                  </span>
+                  <span className="text-[11px] text-[#8E877C] block">Private elevator access</span>
                 </a>
               </li>
               <li>
-                <span className="hover:text-slate-300 transition-colors block cursor-default">
-                  <span className="text-[#FAF8F5] block font-medium">Boat &amp; Helipad Transfers</span>
-                  <span className="text-[11px] text-slate-500">Direct arrivals via private on-site helipad</span>
-                </span>
+                <div className="block">
+                  <span className="font-medium text-[#121619] block">Helicopter Transfers</span>
+                  <span className="text-[11px] text-[#8E877C] block">Direct on-site pad</span>
+                </div>
               </li>
             </ul>
           </div>
 
-          {/* Directory Column 3: Portals & HMS Architecture (Col 10-12) */}
-          <div className="lg:col-span-2 space-y-4">
-            <h3 className="font-mono text-xs font-bold text-[#FAF8F5] tracking-[0.25em] uppercase border-b border-slate-800 pb-2">
-              SYSTEM &amp; STAFF
-            </h3>
-            <ul className="space-y-2.5 text-xs text-slate-400">
-              <li>
-                <Link
-                  to="/my-stay"
-                  className="inline-flex items-center gap-1.5 text-slate-300 hover:text-amber-400 font-semibold transition-colors"
-                >
-                  <span>Guest Portal (My Stay)</span>
-                  <span>&rarr;</span>
-                </Link>
-                <span className="text-[10px] text-slate-500 block">Digital Key, Room Service &amp; Reviews</span>
-              </li>
-              <li>
-                <Link
-                  to="/pms"
-                  className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 font-semibold transition-colors"
-                >
-                  <span>Staff PMS Terminal</span>
-                  <span>&rarr;</span>
-                </Link>
-                <span className="text-[10px] text-slate-500 block">Front Desk, Billing &amp; Shift Report</span>
-              </li>
-              <li className="pt-2 border-t border-slate-800/80">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">
-                  Curriculum Engine
+          {/* Column 4: Portals & Direct Concierge (3 cols) */}
+          <div className="lg:col-span-3 space-y-2.5">
+            <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-[#121619] uppercase block pb-1.5 border-b border-[#E5DFD5]">
+              03 &bull; PORTALS &amp; CONTACT
+            </span>
+            <div className="space-y-2">
+              {/* Guest Portal */}
+              <Link
+                to="/my-stay"
+                className="flex items-center justify-between p-2.5 rounded-[2px] bg-white border border-[#E5DFD5] hover:border-[#121619] hover:shadow-2xs transition-all group"
+              >
+                <div>
+                  <span className="font-bold text-xs text-[#121619] block">Guest Portal (My Stay)</span>
+                  <span className="text-[10px] text-[#8E877C] font-mono">Digital Key &bull; Room Service</span>
+                </div>
+                <span className="text-xs text-[#8E877C] group-hover:text-[#121619] group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+              </Link>
+
+              {/* Staff PMS */}
+              <Link
+                to="/pms"
+                className="flex items-center justify-between p-2.5 rounded-[2px] bg-white border border-[#E5DFD5] hover:border-[#121619] hover:shadow-2xs transition-all group"
+              >
+                <div>
+                  <span className="font-bold text-xs text-[#121619] block">Staff PMS Terminal</span>
+                  <span className="text-[10px] text-[#8E877C] font-mono">Front Desk &bull; Shift Reports</span>
+                </div>
+                <span className="text-xs text-[#8E877C] group-hover:text-[#121619] group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+              </Link>
+              
+              {/* Direct Contact Box */}
+              <div className="pt-2 border-t border-[#F0EBE3] space-y-1 font-mono text-xs">
+                <span className="text-[9px] text-[#8E877C] uppercase tracking-wider block font-bold">
+                  DIRECT CONCIERGE DESK
                 </span>
-                <span className="text-[11px] text-slate-400 block mt-0.5">
-                  Aptech LuxuryStay HMS
-                </span>
-              </li>
-              <li>
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">
-                  Payments Architecture
-                </span>
-                <span className="text-[11px] text-slate-400 block mt-0.5">
-                  Safepay 30% Advance + Folio
-                </span>
-              </li>
-              <li>
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">
-                  Concurrency Control
-                </span>
-                <span className="text-[11px] text-slate-400 block mt-0.5">
-                  5-Min Temporary Hold
-                </span>
-              </li>
-            </ul>
+                <div>
+                  <a href="tel:+922138900000" className="font-bold text-[#121619] hover:text-amber-800 transition-colors inline-block">
+                    +92 21 3890 0000
+                  </a>
+                </div>
+                <div>
+                  <a href="mailto:concierge@habitas.pk" className="text-[#5C646A] hover:text-[#121619] transition-colors inline-block">
+                    concierge@habitas.pk
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
 
       {/* ============================================================== */}
-      {/* 3. LUXURY ACCOLADES & ARCHITECTURAL BADGES */}
+      {/* 3. BOTTOM HAIRLINE BAR: ACCOLADES, LEGAL, BACK TO TOP */}
       {/* ============================================================== */}
-      <div className="border-t border-slate-800/80 bg-slate-950/60 py-6">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 flex flex-wrap items-center justify-between gap-6 text-[11px] text-slate-400 font-mono tracking-wider">
-          <div className="flex flex-wrap items-center gap-6 sm:gap-10">
-            <span className="flex items-center gap-2">
-              <span className="text-amber-400">&#9733;&#9733;&#9733;</span>
-              <span>THREE MICHELIN KEYS (PREVIEW)</span>
-            </span>
-            <span className="hidden sm:inline text-slate-700">&bull;</span>
-            <span>ARCHITECTURAL DIGEST BEST RESORT 2026</span>
-            <span className="hidden sm:inline text-slate-700">&bull;</span>
-            <span>100% CARBON NEUTRAL OPERATION</span>
+      <div className="border-t border-[#E5DFD5] bg-white/70 px-6 sm:px-10 py-3.5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#5C646A]">
+          
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-center md:text-left justify-center md:justify-start">
+            <span className="font-bold text-[#121619]">&copy; 2026 Habitas Resort</span>
+            <span>&bull;</span>
+            <span>Aptech LuxuryStay Hotel Management System</span>
+            <span className="hidden sm:inline">&bull;</span>
+            <span className="hidden sm:inline text-amber-800 font-semibold">&starf;&starf;&starf; Three Michelin Keys (Preview)</span>
           </div>
 
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="flex items-center gap-2 text-slate-400 hover:text-[#FAF8F5] transition-colors uppercase tracking-[0.2em] font-semibold text-[10px] cursor-pointer"
-            aria-label="Return to top of page"
-          >
-            <span>Back to Top</span>
-            <span className="text-amber-400">&uarr;</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ============================================================== */}
-      {/* 4. SUB-FOOTER LEGAL & ACADEMIC CREDITS */}
-      {/* ============================================================== */}
-      <div className="border-t border-slate-900 bg-[#070B14] py-8">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
-            <span className="font-cinzel text-xs font-semibold tracking-[0.2em] text-[#FAF8F5]">
-              HABITAS
-            </span>
-            <span className="hidden sm:inline text-slate-600">&bull;</span>
-            <span className="text-[11px] text-slate-400">
-              An Aptech Luxury Hospitality Curriculum System &bull; LuxuryStay MERN Implementation
-            </span>
+          <div className="flex items-center gap-5">
+            <span className="hidden lg:inline text-[#8E877C]">Sindh Coast, PK</span>
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="text-[#121619] hover:text-amber-800 font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1 active:scale-95 transition-transform group py-0.5"
+              aria-label="Back to top of page"
+            >
+              <span>Back to Top</span>
+              <span className="group-hover:-translate-y-0.5 transition-transform text-xs font-bold">&uarr;</span>
+            </button>
           </div>
 
-          <div className="flex items-center gap-6 text-[11px] text-slate-400 tracking-wider">
-            <span>Sindh Coast, PK</span>
-            <span>&copy; 2026</span>
-            <Link to="/pms" className="text-amber-400/90 hover:text-amber-300 transition-colors">
-              Staff Portal &rarr;
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
