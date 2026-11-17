@@ -31,12 +31,12 @@ const CONCIERGE_ADDONS = [
   },
   {
     id: 'onsen_spa',
-    title: 'Hinoki Cedar Overwater Hydrotherapy Soak',
+    title: 'Private Cedar Hot Tub & Spa Experience',
     price: 18000,
   },
   {
     id: 'tasting_menu',
-    title: 'Zero-Kilometer Line-Catch Gastronomy Menu',
+    title: "Chef's Fresh Seafood & Farm-to-Table Dinner",
     price: 15000,
   },
 ]
@@ -152,7 +152,7 @@ export default function ReservationPage() {
           className="group inline-flex items-center gap-2 text-xs font-mono tracking-wider text-slate-600 hover:text-slate-950 uppercase transition-colors"
         >
           <span className="transition-transform group-hover:-translate-x-1">&larr;</span>
-          <span>Return to Sanctuaries</span>
+          <span>Return to Suites</span>
         </Link>
 
         {/* Center Brand Wordmark */}
@@ -278,7 +278,7 @@ export default function ReservationPage() {
             <section className="space-y-6">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
                 <span className="text-xs font-mono font-bold tracking-[0.2em] text-slate-900 uppercase">
-                  02 &bull; Guest Dossier
+                  02 &bull; Guest Information
                 </span>
                 <span className="text-[10px] font-mono text-slate-400 uppercase">
                   Direct Check-in Registration
@@ -361,10 +361,10 @@ export default function ReservationPage() {
             <section className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
                 <span className="text-xs font-mono font-bold tracking-[0.2em] text-slate-900 uppercase">
-                  03 &bull; Bespoke Enhancements
+                  03 &bull; Optional Add-Ons &amp; Experiences
                 </span>
                 <span className="text-[10px] font-mono text-slate-400 uppercase">
-                  Live Folio Accrual
+                  Added to Guest Bill
                 </span>
               </div>
 
@@ -436,7 +436,7 @@ export default function ReservationPage() {
 
                 {addonTotal > 0 && (
                   <div className="flex justify-between text-slate-900">
-                    <span>Curated Enhancements ({selectedAddons.length})</span>
+                    <span>Selected Add-Ons ({selectedAddons.length})</span>
                     <span className="font-mono font-medium">
                       + PKR {addonTotal.toLocaleString()}
                     </span>
@@ -451,7 +451,7 @@ export default function ReservationPage() {
                 </div>
 
                 <div className="flex justify-between text-base font-bold text-slate-900 pt-3 border-t border-slate-200/80">
-                  <span>Total Stay Valuation</span>
+                  <span>Total Stay Amount</span>
                   <span className="font-mono">PKR {totalValuation.toLocaleString()}</span>
                 </div>
 

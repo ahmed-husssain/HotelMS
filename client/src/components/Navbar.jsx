@@ -75,10 +75,10 @@ export default function Navbar({ onOpenDrawer }) {
       num: '01',
       label: 'Residences',
       href: '#residences',
-      desc: 'Private Monolithic Sanctuaries',
+      desc: 'Luxury Ocean Suites & Villas',
       preview: {
-        tag: 'SANCTUARY I',
-        title: 'The Cliff Sanctuary',
+        tag: 'SUITE 301',
+        title: 'The Cliffside Suite',
         subtitle: 'Suspended above the Arabian Sea with private infinity plunge pool and basalt stone courtyard.',
         image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1400&q=85',
       },
@@ -87,11 +87,11 @@ export default function Navbar({ onOpenDrawer }) {
       num: '02',
       label: 'The Estate',
       href: '#experience',
-      desc: 'Thermal Hydrotherapy & Private Dunes',
+      desc: 'Mineral Hot Springs & Dining',
       preview: {
-        tag: 'SANCTUARY WELLNESS',
+        tag: 'SPA & DINING',
         title: 'Thermal Springs & Dining',
-        subtitle: 'Subterranean mineral baths at 41.5°C and zero-kilometer coastal tasting menus.',
+        subtitle: 'Natural mineral hot tubs and fresh organic coastal dining.',
         image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=85',
       },
     },
@@ -100,11 +100,11 @@ export default function Navbar({ onOpenDrawer }) {
       label: 'Staff PMS',
       href: '/pms',
       isRouter: true,
-      desc: 'Front Desk Operations & Folio Console',
+      desc: 'Front Desk & Guest Billing',
       preview: {
-        tag: 'OPERATIONAL FOLIO',
+        tag: 'STAFF TERMINAL',
         title: 'Property Management Console',
-        subtitle: 'Real-time room status, 5-minute pessimistic hold manager, and Safepay ledger.',
+        subtitle: 'Real-time room status, 5-minute temporary room hold, and guest billing.',
         image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85',
       },
     },
@@ -405,7 +405,7 @@ export default function Navbar({ onOpenDrawer }) {
                 }}
                 className="w-full py-4 px-6 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.25em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98] shadow-md"
               >
-                <span>Reserve Sanctuary (30% Online)</span>
+                <span>Reserve a Suite (30% Deposit)</span>
                 <span>&rarr;</span>
               </button>
             </div>
@@ -419,10 +419,10 @@ export default function Navbar({ onOpenDrawer }) {
             </div>
             <div className="flex justify-between items-center">
               <span>LAT: 24&deg;48&apos;N &middot; THERMAL: 41.5&deg;C</span>
-              <span className="text-emerald-700 font-semibold uppercase">● 3 Sanctuaries Ready</span>
+              <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
             </div>
             <div className="text-slate-400 pt-1 text-[9px] uppercase tracking-wider">
-              Habitas &middot; Safepay 30% Advance &middot; 5-Min Atomic Lock
+              Habitas &middot; Safepay 30% Advance &middot; 5-Min Reservation Hold
             </div>
           </div>
 

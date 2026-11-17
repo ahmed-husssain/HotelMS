@@ -49,14 +49,14 @@ export default function LandingPage() {
         <div className="border-b border-slate-200/80 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="text-[10px] tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
-              PORTFOLIO OF SANCTUARIES
+              OUR LUXURY SUITES &amp; VILLAS
             </span>
             <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light mt-1">
-              Architectural Residences
+              Featured Suites &amp; Villas
             </h2>
           </div>
           <span className="text-xs text-slate-500 tracking-[0.15em] uppercase font-medium">
-            3 Private Units &bull; 100% Uninterrupted Seclusion
+            3 Private Suites &bull; Complete Seclusion &amp; Ocean Views
           </span>
         </div>
 
@@ -76,37 +76,37 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-slate-600">
           <div className="space-y-3">
             <span className="text-[10px] tracking-[0.25em] font-bold text-slate-400 uppercase">
-              01 &bull; TOTAL RETREAT
+              01 &bull; TOTAL RELAXATION
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
-              Hinoki Cedar Wellness
+              Cedar Spa &amp; Hot Springs
             </h3>
             <p className="text-xs leading-relaxed">
-              Thermal hydrotherapy baths crafted from 300-year-old sustainably sourced Kyoto cedar, positioned above tide level.
+              Warm mineral hot tubs and outdoor cedar baths positioned right above the ocean tides.
             </p>
           </div>
 
           <div className="space-y-3">
             <span className="text-[10px] tracking-[0.25em] font-bold text-slate-400 uppercase">
-              02 &bull; GASTRONOMY
+              02 &bull; DINING
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
               The Harvest Pavilion
             </h3>
             <p className="text-xs leading-relaxed">
-              Zero-kilometer organic tasting menus harvested daily from the estate gardens and coastal line-catch fishers.
+              Fresh farm-to-table dining prepared daily with organic vegetables from our garden and fresh local seafood.
             </p>
           </div>
 
           <div className="space-y-3">
             <span className="text-[10px] tracking-[0.25em] font-bold text-slate-400 uppercase">
-              03 &bull; DISCRETION
+              03 &bull; PRIVACY
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
-              Subterranean Valet
+              Private Underground Valet
             </h3>
             <p className="text-xs leading-relaxed">
-              Soundless in-residence arrivals via private subterranean access tunnels. Zero corridors, zero shared lobbies.
+              Quiet, private arrivals through underground parking with private elevator access directly to your suite. No shared corridors or busy lobbies.
             </p>
           </div>
         </div>

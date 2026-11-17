@@ -51,7 +51,7 @@ export default function HeroParallax({ onQuickReserve }) {
         <img
           ref={imageRef}
           src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2400&q=90"
-          alt="Luxury Architecture Sanctuary"
+          alt="Luxury Oceanfront Resort"
           className="w-full h-full object-cover object-center scale-110 origin-center filter brightness-[0.98]"
         />
         {/* Soft Alabaster Editorial Mist: Balances dusk photography with obsidian typography */}
@@ -62,7 +62,7 @@ export default function HeroParallax({ onQuickReserve }) {
       <div ref={titleRef} className="relative z-10 max-w-7xl mx-auto px-6 pt-16 w-full text-center">
         <div className="inline-flex items-center gap-2.5 px-3.5 py-1 mb-6 rounded-full bg-white/95 backdrop-blur-md border border-slate-300/80 text-slate-800 text-[10px] tracking-[0.28em] font-semibold uppercase shadow-xs">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-          Autumn Residency Openings
+          Winter 2026 Bookings Open
         </div>
 
         <h1 className="font-serif-grand text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-slate-900 leading-[1.08] max-w-4xl mx-auto">
@@ -70,7 +70,7 @@ export default function HeroParallax({ onQuickReserve }) {
         </h1>
 
         <p className="mt-4 text-xs sm:text-sm tracking-[0.25em] text-slate-800 uppercase font-medium">
-          Privileged Sanctuaries &bull; Ocean Horizon &bull; Complete Privacy
+          Luxury Suites & Villas &bull; Ocean Views &bull; Complete Privacy
         </p>
       </div>
 
@@ -97,7 +97,7 @@ export default function HeroParallax({ onQuickReserve }) {
 
           <div className="px-3 border-r border-slate-100">
             <span className="block text-[9px] tracking-[0.25em] text-slate-400 font-bold uppercase">
-              SANCTUARY
+              SUITE SELECTION
             </span>
             <span className="text-xs font-semibold text-slate-800 truncate block">
               2 Guests &bull; 1 Suite

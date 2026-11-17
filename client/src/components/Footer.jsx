@@ -62,13 +62,13 @@ export default function Footer() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
             <div className="lg:col-span-7 space-y-3">
               <span className="text-[10px] tracking-[0.35em] font-bold text-amber-500 uppercase">
-                PRIVATE GUEST LEDGER
+                PRIVATE GUEST INVITATIONS
               </span>
               <h2 className="font-serif-grand text-3xl sm:text-4xl text-[#FAF8F5] font-light tracking-tight leading-tight">
-                Discreet Dispatches &amp; Unlisted Openings.
+                Exclusive Offers &amp; Seasonal Openings.
               </h2>
               <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
-                Join our private guest roll to receive unlisted seasonal residency openings, private marine transfer updates, and architectural monographs directly from the estate concierge.
+                Join our private guest list to receive seasonal suite openings, boat and helicopter transfer updates, and exclusive invitations directly from the concierge desk.
               </p>
             </div>
 
@@ -76,7 +76,7 @@ export default function Footer() {
               {isSubmitted ? (
                 <div className="p-4 rounded border border-emerald-500/40 bg-emerald-950/40 text-emerald-300 text-xs flex items-center gap-3">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Your correspondence has been received by the private concierge desk.
+                  Thank you. You have been added to our private guest list.
                 </div>
               ) : (
                 <form onSubmit={handleInquirySubmit} className="flex flex-col sm:flex-row gap-2">
@@ -85,7 +85,7 @@ export default function Footer() {
                     required
                     value={inquiryEmail}
                     onChange={(e) => setInquiryEmail(e.target.value)}
-                    placeholder="Enter your private email address"
+                    placeholder="Enter your email address"
                     className="flex-1 bg-slate-900/90 border border-slate-700/80 text-xs text-slate-200 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors placeholder:text-slate-500 rounded-none"
                   />
                   <button
@@ -97,7 +97,7 @@ export default function Footer() {
                 </form>
               )}
               <span className="block text-[10px] text-slate-500 mt-2 tracking-wider">
-                Strict discretion observed. Zero marketing spam. Encrypted dispatch.
+                Your privacy is respected. No spam, ever. Unsubscribe anytime.
               </span>
             </div>
           </div>

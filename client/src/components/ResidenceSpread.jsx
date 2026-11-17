@@ -111,7 +111,7 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
         {/* Main Architectural Carousel Frame */}
         <div
           onClick={() => onReserve(residence)}
-          data-cursor="Apartment Details"
+          data-cursor="Suite Details"
           className="relative aspect-[16/10] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none cursor-pointer"
         >
           {/* Embla Viewport */}
@@ -136,7 +136,7 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
           <div className="absolute top-4 inset-x-4 flex items-center justify-between pointer-events-none z-20">
             {/* Room Number Emblem */}
               <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs">
-                RESIDENCE {residence.roomNumber}
+                SUITE {residence.roomNumber}
               </span>
 
               {/* Current Perspective Tag & Slide Counter */}
@@ -256,7 +256,7 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
                   </div>
 
                   <RollingTextButton
-                    text="Apartment Details"
+                    text="Suite Details"
                     onClick={() => onReserve(residence)}
                   />
                 </div>
