@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BookingDrawer from '../components/BookingDrawer'
 import Footer from '../components/Footer'
 import HeroParallax from '../components/HeroParallax'
 import Navbar from '../components/Navbar'
@@ -24,22 +23,14 @@ export default function LandingPage() {
     return true
   })
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [selectedResidence, setSelectedResidence] = useState(RESIDENCES[0])
-
   const handleSplashComplete = () => {
     sessionStorage.setItem('habitas_splash_seen', 'true')
     setShowSplash(false)
   }
 
-  const handleOpenDrawer = (residence = RESIDENCES[0]) => {
-    setSelectedResidence(residence)
-    setIsDrawerOpen(true)
-  }
-
-  const handleConfirmBooking = (bookingData) => {
-    setIsDrawerOpen(false)
-    navigate('/confirmation', { state: { booking: bookingData } })
+  // Navigate to Dedicated Luxury Reservation Flow (/reserve)
+  const handleOpenReservation = (residence = RESIDENCES[0]) => {
+    navigate(`/reserve?room=${residence.roomNumber}`)
   }
 
   return (
@@ -48,10 +39,10 @@ export default function LandingPage() {
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
 
       {/* Floating Header */}
-      <Navbar onOpenDrawer={() => handleOpenDrawer(RESIDENCES[0])} />
+      <Navbar onOpenDrawer={() => handleOpenReservation(RESIDENCES[0])} />
 
       {/* Parallax Hero Section */}
-      <HeroParallax onQuickReserve={() => handleOpenDrawer(RESIDENCES[0])} />
+      <HeroParallax onQuickReserve={() => handleOpenReservation(RESIDENCES[0])} />
 
       {/* Architectural Residences Showcase */}
       <main id="residences" className="max-w-7xl mx-auto px-6 py-24 space-y-28">
@@ -69,13 +60,13 @@ export default function LandingPage() {
           </span>
         </div>
 
-        {/* Render Residences */}
+        {/* Render Residences with Embla Carousel & Casa Momo Kinetic Hover */}
         {RESIDENCES.map((residence, idx) => (
           <ResidenceSpread
             key={residence.id}
             residence={residence}
             index={idx}
-            onReserve={(res) => handleOpenDrawer(res)}
+            onReserve={(res) => handleOpenReservation(res)}
           />
         ))}
       </main>
@@ -123,14 +114,6 @@ export default function LandingPage() {
 
       {/* Architectural Luxury Footer */}
       <Footer />
-
-      {/* Reservation Drawer with Live 5-Minute Pessimistic Lock */}
-      <BookingDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        residence={selectedResidence}
-        onConfirmBooking={handleConfirmBooking}
-      />
     </div>
   )
 }
