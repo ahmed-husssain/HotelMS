@@ -407,28 +407,29 @@ export default function ReservationPage() {
 
           {/* ============================================================ */}
           {/* RIGHT COLUMN: MONOLITHIC EDITORIAL FOLIO (5 cols) */}
+          {/* Designed with vertical height budgeting so the CTA is NEVER cut off on laptops */}
           {/* ============================================================ */}
-          <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-6">
+          <div className="lg:col-span-5 lg:sticky lg:top-20 space-y-6">
             
             {/* The Monograph Folio Card */}
-            <div className="bg-white rounded-[2px] border border-slate-200/90 shadow-lg overflow-hidden">
+            <div className="bg-white rounded-[2px] border border-slate-200/90 shadow-lg overflow-hidden flex flex-col lg:max-h-[calc(100dvh-5.5rem)]">
               
               {/* Suite Photography Hero */}
-              <div className="relative aspect-[16/10] overflow-hidden bg-slate-900">
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] max-h-48 sm:max-h-52 lg:max-h-44 overflow-hidden bg-slate-900 shrink-0">
                 <img
                   src={selectedResidence.mainImage || selectedResidence.gallery[0]?.url}
                   alt={selectedResidence.name}
                   className="w-full h-full object-cover object-center"
                 />
-                <div className="absolute top-4 left-4">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
                   <span className="px-2.5 py-1 bg-[#0E1201]/70 backdrop-blur-md text-[9px] font-mono tracking-widest text-[#FFF0CA] uppercase rounded-[2px] border border-white/10 font-bold">
                     SUITE {selectedResidence.roomNumber}
                   </span>
                 </div>
               </div>
 
-              {/* Ledger Breakdown */}
-              <div className="p-7 space-y-3.5 text-xs text-slate-600">
+              {/* Ledger Breakdown (Scrolls internally if laptop viewport is compact) */}
+              <div className="p-5 sm:p-6 space-y-3 text-xs text-slate-600 overflow-y-auto flex-1">
                 <div className="flex justify-between">
                   <span>{nights} Nights &times; PKR {selectedResidence.nightlyRate.toLocaleString()}</span>
                   <span className="font-mono font-medium text-slate-900">
@@ -452,7 +453,7 @@ export default function ReservationPage() {
                   </span>
                 </div>
 
-                <div className="flex justify-between text-base font-bold text-slate-900 pt-3 border-t border-slate-200/80">
+                <div className="flex justify-between text-sm sm:text-base font-bold text-slate-900 pt-3 border-t border-slate-200/80">
                   <span>Total Stay Amount</span>
                   <span className="font-mono">PKR {totalValuation.toLocaleString()}</span>
                 </div>
@@ -467,18 +468,18 @@ export default function ReservationPage() {
                       Remaining 70% (PKR {remainingBalance.toLocaleString()}) settled at front desk
                     </span>
                   </div>
-                  <span className="font-mono text-base font-extrabold text-emerald-950">
+                  <span className="font-mono text-sm sm:text-base font-extrabold text-emerald-950">
                     PKR {advanceDeposit.toLocaleString()}
                   </span>
                 </div>
               </div>
 
-              {/* Action Button & Timer Strip */}
-              <div className="p-6 bg-slate-50/70 border-t border-slate-200/80 space-y-2.5">
+              {/* Action Button & Timer Strip (Anchored at bottom) */}
+              <div className="p-4 sm:p-5 bg-slate-50/80 border-t border-slate-200/80 space-y-2 shrink-0">
                 <button
                   type="submit"
                   disabled={isProcessing || secondsLeft === 0}
-                  className="w-full py-4 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] shadow-md transition-all duration-300 flex items-center justify-center gap-2 disabled:bg-slate-300 cursor-pointer active:scale-[0.98]"
+                  className="w-full py-3.5 sm:py-4 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] shadow-md transition-all duration-300 flex items-center justify-center gap-2 disabled:bg-slate-300 cursor-pointer active:scale-[0.98]"
                 >
                   {isProcessing ? (
                     <>
@@ -504,6 +505,107 @@ export default function ReservationPage() {
           </div>
         </form>
       </main>
+
+      {/* ============================================================== */}
+      {/* 3. MOBILE STICKY CHECKOUT BAR (< 1024px) */}
+      {/* Provides instant 1-tap confirmation from anywhere on mobile/tablet */}
+      {/* ============================================================== */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-2xl px-4 py-3 flex items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => setShowMobileFolio(!showMobileFolio)}
+          className="text-left cursor-pointer select-none focus:outline-none"
+        >
+          <div className="flex items-center gap-1.5">
+            <span className="font-mono text-xs font-extrabold text-slate-900">
+              PKR {advanceDeposit.toLocaleString()}
+            </span>
+            <span className="text-[10px] text-emerald-800 font-bold uppercase">(30% ADV)</span>
+            <span className="text-[10px] text-slate-400">{showMobileFolio ? '▲' : '▼'}</span>
+          </div>
+          <span className="text-[9px] text-slate-400 font-mono block">
+            Total PKR {totalValuation.toLocaleString()} &bull; {nights}N
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleConfirmReservation}
+          disabled={isProcessing || secondsLeft === 0}
+          className="px-4 sm:px-6 py-2.5 bg-[#0E1201] text-[#FFF0CA] font-mono text-[11px] font-bold uppercase tracking-wider rounded-[2px] shadow-md active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer disabled:bg-slate-300 shrink-0"
+        >
+          {isProcessing ? 'PROCESSING...' : `CONFIRM & DEPOSIT`}
+        </button>
+      </div>
+
+      {/* Mobile Collapsible Folio Overlay Modal */}
+      {showMobileFolio && (
+        <div 
+          className="lg:hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex flex-col justify-end"
+          onClick={() => setShowMobileFolio(false)}
+        >
+          <div 
+            className="bg-white rounded-t-lg border-t border-slate-200 p-5 sm:p-6 space-y-4 max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <span className="text-xs font-mono font-bold tracking-wider text-slate-900 uppercase">
+                Reservation Folio &bull; Suite {selectedResidence.roomNumber}
+              </span>
+              <button 
+                type="button" 
+                onClick={() => setShowMobileFolio(false)}
+                className="text-xs font-mono text-slate-500 hover:text-slate-900 p-1 cursor-pointer"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            <div className="space-y-2.5 text-xs text-slate-600">
+              <div className="flex justify-between">
+                <span>{nights} Nights &times; PKR {selectedResidence.nightlyRate.toLocaleString()}</span>
+                <span className="font-mono font-medium text-slate-900">PKR {suiteSubtotal.toLocaleString()}</span>
+              </div>
+              {addonTotal > 0 && (
+                <div className="flex justify-between text-slate-900">
+                  <span>Selected Add-Ons ({selectedAddons.length})</span>
+                  <span className="font-mono font-medium">+ PKR {addonTotal.toLocaleString()}</span>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span>Sindh Sales Tax (13%)</span>
+                <span className="font-mono font-medium text-slate-900">PKR {sindhTax.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm font-bold text-slate-900 pt-2 border-t border-slate-200">
+                <span>Total Stay Amount</span>
+                <span className="font-mono">PKR {totalValuation.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-xs font-bold text-emerald-950 pt-1">
+                <span>30% Online Advance Due Today</span>
+                <span className="font-mono">PKR {advanceDeposit.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-[11px] text-slate-500">
+                <span>70% Balance at Front Desk</span>
+                <span className="font-mono">PKR {remainingBalance.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  setShowMobileFolio(false)
+                  handleConfirmReservation(e)
+                }}
+                disabled={isProcessing || secondsLeft === 0}
+                className="w-full py-3 bg-[#0E1201] text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] cursor-pointer active:scale-98"
+              >
+                CONFIRM & DEPOSIT PKR {advanceDeposit.toLocaleString()}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

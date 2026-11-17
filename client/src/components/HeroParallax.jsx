@@ -44,7 +44,7 @@ export default function HeroParallax({ onQuickReserve }) {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-[95vh] pt-28 flex flex-col justify-between overflow-hidden bg-[#FAF8F5]"
+      className="relative min-h-[92dvh] sm:min-h-[95vh] pt-24 sm:pt-28 flex flex-col justify-between overflow-hidden bg-[#FAF8F5]"
     >
       {/* Background Hero Image with Hardware Scale */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -74,10 +74,10 @@ export default function HeroParallax({ onQuickReserve }) {
         </p>
       </div>
 
-      {/* Floating 1-Line Check-In Dock */}
-      <div className="relative z-20 max-w-5xl mx-auto px-6 w-full pb-14">
-        <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl p-3 sm:p-4 rounded-sm grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
-          <div className="px-3 border-r border-slate-100">
+      {/* Floating 1-Line Check-In Dock (Harmonious on Mobile, Tablet & Desktop) */}
+      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 w-full pb-8 sm:pb-14">
+        <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl p-3 sm:p-4 rounded-[2px] grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
+          <div className="px-2 sm:px-3 border-r border-slate-200/80">
             <span className="block text-[9px] tracking-[0.25em] text-slate-400 font-bold uppercase">
               CHECK-IN
             </span>
@@ -86,16 +86,16 @@ export default function HeroParallax({ onQuickReserve }) {
             </span>
           </div>
 
-          <div className="px-3 border-r border-slate-100">
+          <div className="px-2 sm:px-3 md:border-r md:border-slate-200/80">
             <span className="block text-[9px] tracking-[0.25em] text-slate-400 font-bold uppercase">
               CHECK-OUT
             </span>
             <span className="text-xs font-semibold text-slate-800">
-              Nov 28, 2026 (4 Nights)
+              Nov 28 (4N)
             </span>
           </div>
 
-          <div className="px-3 border-r border-slate-100">
+          <div className="col-span-2 md:col-span-1 px-2 sm:px-3 border-t md:border-t-0 md:border-r border-slate-200/80 pt-2 md:pt-0">
             <span className="block text-[9px] tracking-[0.25em] text-slate-400 font-bold uppercase">
               SUITE SELECTION
             </span>
@@ -106,7 +106,7 @@ export default function HeroParallax({ onQuickReserve }) {
 
           <button
             onClick={onQuickReserve}
-            className="tactile col-span-2 md:col-span-1 w-full py-3 bg-emerald-950 hover:bg-slate-900 text-white text-[10px] tracking-[0.22em] font-bold uppercase transition-colors"
+            className="tactile col-span-2 md:col-span-1 w-full py-3 bg-emerald-950 hover:bg-slate-900 text-white text-[10px] tracking-[0.22em] font-bold uppercase transition-colors rounded-[2px] cursor-pointer"
           >
             CHECK AVAILABILITY
           </button>
