@@ -18,6 +18,7 @@ You are an expert Principal Full-Stack Engineer and System Architect building th
 5. **Zero-Trust Pricing:** Never allow frontend code to calculate or dictate prices, taxes, advance splits, or balances. Calculations occur strictly on the backend inside `pricingService.js`.
 6. **Pessimistic Concurrency:** Availability queries and temporary 5-minute holds must execute atomically to prevent double bookings.
 7. **Idempotency & Accounting:** Payments must be written to an independent `payments` collection. Webhook retries must be handled idempotently.
+8. **Zero-Secret Leakage Protocol:** Private API keys, webhook secrets, database connection URIs, and tokens must NEVER be placed in client code, frontend `.env` files, or committed to GitHub. All external third-party services (Safepay, MongoDB, SMTP) must be proxied exclusively through server-side controller endpoints. Inspect `git status -u` before every commit to ensure no secret or `.env` files are tracked.
 
 ---
 

@@ -147,15 +147,15 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
                 </span>
               </div>
 
-              {/* Casa Momo Frosted Glass Slide Navigation Arrows (Smooth Hover Transition) */}
-              <div className="absolute inset-y-0 inset-x-3 flex items-center justify-between pointer-events-none z-20">
+              {/* Casa Momo Frosted Glass Slide Navigation Arrows (Touch friendly on mobile/tablet) */}
+              <div className="absolute inset-y-0 inset-x-2 sm:inset-x-3 flex items-center justify-between pointer-events-none z-20">
                 {/* Previous Photo Button */}
                 <button
                   type="button"
                   onClick={scrollPrev}
                   data-cursor-hide="true"
                   aria-label="Previous photo"
-                  className="pointer-events-auto opacity-0 group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-11 h-11 grid place-items-center bg-[#0E1201]/40 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer"
+                  className="pointer-events-auto opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-11 sm:h-11 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer"
                 >
                   <CasaMomoSlideArrow left />
                 </button>
@@ -166,7 +166,7 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
                   onClick={scrollNext}
                   data-cursor-hide="true"
                   aria-label="Next photo"
-                  className="pointer-events-auto opacity-0 group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-11 h-11 grid place-items-center bg-[#0E1201]/40 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer"
+                  className="pointer-events-auto opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-11 sm:h-11 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer"
                 >
                   <CasaMomoSlideArrow />
                 </button>
@@ -183,11 +183,11 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
               </div>
           </div>
 
-          {/* Floating Detail Inset Photo (Dual-layer Parallax) */}
+          {/* Floating Detail Inset Photo (Dual-layer Parallax, contained on tablet) */}
           <div
             ref={insetImgRef}
-            className={`hidden sm:block absolute -bottom-10 ${isReversed ? '-left-6' : '-right-6'
-              } w-48 md:w-56 aspect-[4/3] bg-white p-1.5 shadow-2xl border border-slate-200 z-20 group-hover/card:translate-y-[-2px] transition-transform duration-300 pointer-events-none`}
+            className={`hidden sm:block absolute -bottom-8 ${isReversed ? 'sm:left-2 lg:-left-6' : 'sm:right-2 lg:-right-6'
+              } w-44 sm:w-48 lg:w-56 aspect-[4/3] bg-white p-1.5 shadow-xl border border-slate-200 z-20 group-hover/card:translate-y-[-2px] transition-transform duration-300 pointer-events-none`}
           >
             <img
               src={residence.detailImage}

@@ -6,26 +6,34 @@ oO9o33tAxiUzwcS4-MERN-Hotel_Management_System
 docs/draft.md
 draft.md
 
-
 # ============================================
-# Environment Variables & Secrets
+# Environment Variables & Secrets (Universal Exclusion)
 # ============================================
-.env
-.env.local
-.env.*.local
-*.pem
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key
+**/*.cert
+**/*credentials*.json
+**/serviceAccountKey*.json
+**/firebase-adminsdk*.json
+id_rsa*
 
 # ============================================
 # Dependencies
 # ============================================
 node_modules/
+**/node_modules/
 package-lock.json.bak
 
 # ============================================
 # Build Outputs
 # ============================================
 dist/
+**/dist/
 build/
+**/build/
 *.tsbuildinfo
 
 # ============================================
@@ -40,6 +48,7 @@ yarn-error.log*
 # Firebase Cache & Deploy
 # ============================================
 .firebase/
+.firebase/*
 
 # ============================================
 # OS & Editor Files
@@ -48,4 +57,3 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
-

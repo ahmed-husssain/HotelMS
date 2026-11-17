@@ -119,11 +119,13 @@ function CasaMomoArrow() {
           const [active, setActive] = useState(false)
           const [label, setLabel] = useState('Apartment Details')
           const [isRolled, setIsRolled] = useState(false)
+          const [isFinePointer, setIsFinePointer] = useState(false)
 
   useEffect(() => {
     // Mobile / Touch guard
-    const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
-          if (!isFinePointer) return
+    const isFine = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    setIsFinePointer(isFine)
+    if (!isFine) return
 
           const cursorEl = cursorRef.current
           if (!cursorEl) return
@@ -227,12 +229,14 @@ function CasaMomoArrow() {
     }
   }, [])
 
-          return (
-          <div
-            ref={cursorRef}
-            className="fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform select-none"
-            style={{ left: 0, top: 0 }}
-          >
+  if (!isFinePointer) return null
+
+  return (
+    <div
+      ref={cursorRef}
+      className="custom-cursor-root fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform select-none hidden md:block"
+      style={{ left: 0, top: 0 }}
+    >
             {/* 1. Default Resting Dot (Empty canvas) with mix-blend difference */}
             <div
         className={`w-2.5 h-2.5 rounded-full bg-[#FFF0CA] transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] ${active ? 'opacity-0 scale-0' : 'opacity-85 scale-100 shadow-xs'

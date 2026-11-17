@@ -139,3 +139,41 @@ The developer and agents must proactively utilize and recommend specialized skil
 ### 4. Proactive Skill Suggestion Protocol
 * **Rule:** Before starting any significant task or feature, the agent must research best practices and suggest the exact skill or GitHub design pattern that best solves that particular problem.
 
+---
+
+## Part 5: Secrets Hygiene & Zero-Leakage Protocol
+
+This protocol governs the handling of all credentials, API keys, webhook secrets, database connection strings, and tokens across the repository.
+
+### 1. The Zero-Frontend-Secrets Standard
+* **Absolute Ban:** Private API keys, payment gateway secrets (Safepay Secret Key), database connection strings (`MONGO_URI`), and JWT signing keys (`JWT_SECRET`) must **NEVER** exist in the `client/` codebase under any circumstances.
+* **No Hardcoding:** Hardcoding tokens or secrets into `.jsx`, `.js`, or `.html` files is strictly prohibited.
+* **Vite `VITE_` Namespace Protection:**
+  * In Vite, any variable prefixed with `VITE_*` is statically baked into client JavaScript bundles at build time.
+  * Never prefix sensitive credentials with `VITE_` (e.g., `VITE_SAFEPAY_SECRET` is forbidden).
+  * The frontend is only permitted non-sensitive public configuration (e.g., `VITE_API_URL=http://localhost:5000`).
+
+### 2. Mandatory Backend Proxy (BFF Pattern)
+* The client browser is an untrusted environment and must **never** communicate directly with third-party payment gateways, database clusters, or external APIs.
+* All external interactions must flow through Express backend controller endpoints:
+  * Guest Booking $\rightarrow$ `POST /api/payments/checkout-session` $\rightarrow$ Backend contacts Safepay API $\rightarrow$ Returns hosted checkout URL to client.
+  * Webhook updates $\rightarrow$ Safepay sends HMAC signed webhook to `POST /api/payments/webhook` $\rightarrow$ Server verifies HMAC before database mutation.
+
+### 3. Zero Cross-Boundary Module Imports
+* Client files (`client/src/**`) must never import files from the backend (`server/src/**`).
+* Bundling server files into the frontend causes Rollup to embed server environment access into client distribution bundles.
+
+### 4. Database Response Sanitization
+* All Mongoose models containing sensitive credentials (e.g., `User.password`, payment gateway tokens) must set `{ select: false }` on those schema fields.
+* API controllers must never return raw database documents containing hash salts, webhook secrets, or internal administrative tokens to the client.
+
+### 5. Multi-Tier Git Exclusion Rules
+* All `.env` and `.env.*` files across root, `client/`, and `server/` must be ignored in `.gitignore`.
+* Only `.env.example` containing empty dummy placeholders is allowed in version control.
+* Certificate keys (`*.pem`, `*.key`), credentials files (`*credentials*.json`), and service account keys (`serviceAccountKey*.json`) are universally excluded.
+
+### 6. Pre-Commit Verification Gate
+* Developers and AI agents must run `git status -u` prior to every commit or push to verify that no untracked secrets, `.env` files, or staging keys are staged.
+* If any credential file appears in `git status`, committing must be immediately aborted and `.gitignore` updated.
+
+

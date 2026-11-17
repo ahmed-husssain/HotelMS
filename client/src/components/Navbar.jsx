@@ -190,17 +190,15 @@ export default function Navbar({ onOpenDrawer }) {
             </a>
           </nav>
 
-          {/* Mobile/Tablet Fallback Left Anchor */}
+          {/* Mobile/Tablet Fallback Left Anchor (Compact on narrow screens) */}
           <div className="lg:hidden flex items-center h-10">
             <Link
               to="/"
-              className="group flex items-center gap-2 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="group flex items-center gap-1.5 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100"
             >
               <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
-              <span className="relative inline-flex items-center overflow-hidden h-10 w-[140px]">
-                <span className="absolute inset-0 flex items-center whitespace-nowrap leading-none text-slate-900 font-normal">
-                  Habitas &middot; 2026
-                </span>
+              <span className="whitespace-nowrap leading-none text-slate-900 font-normal">
+                <span className="hidden sm:inline">Habitas &middot; </span>2026
               </span>
             </Link>
           </div>

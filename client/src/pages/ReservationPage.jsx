@@ -69,6 +69,7 @@ export default function ReservationPage() {
   // 4. Atomic 5-Minute Inventory Hold (300 seconds)
   const [secondsLeft, setSecondsLeft] = useState(300)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [showMobileFolio, setShowMobileFolio] = useState(false)
 
   useEffect(() => {
     setSecondsLeft(300)
