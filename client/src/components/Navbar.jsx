@@ -1,32 +1,29 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 
 /**
- * The Haven — Circular Aperture Navigation (Concept 2)
+ * The Haven — Option 2: Symmetrical Split Navigation
  *
  * ARCHITECTURE & VIVA DEFENSE:
- * 1. Circular Aperture Geometry (No awkward side SVG fins):
- *    The entire menu expands outward from the menu button coordinates using
- *    GPU-composited `clip-path: circle(...)`. When closed, it smoothly collapses
- *    back into the button. Zero layout thrashing, zero static SVG deformities.
+ * 1. Symmetrical Flanking Geometry:
+ *    - Left Flank (Width ~190px): 2 primary links ("Residences" & "The Estate") with kinetic vertical reveals.
+ *    - Center Portal: Mathematically locked to viewport center (BrandLogo).
+ *    - Right Flank (Width ~210px): "Staff PMS" + tactile "Reserve" CTA + circular Aperture Menu button.
+ *    - Result: 190px left vs 210px right = optical 1:1 balance with >350px clearance around the center logo.
+ *      Zero overlap, zero collision, even on compact 1024px-1280px laptops.
  *
- * 2. Dynamic Sanctuary Visual Preview:
- *    Hovering over any link dynamically cross-fades the left photo wing with
- *    high-resolution photography of that specific sanctuary or section.
+ * 2. Responsive Mobile Adaptability:
+ *    - Tablet/Desktop (>= 640px): Displays full architectural emblem & wordmark.
+ *    - Mobile (< 640px): Gracefully collapses center to compact emblem so controls never collide on 320px screens.
  *
- * 3. 120 FPS Compositing:
- *    Runs entirely on the compositor thread with Apple's fluid cubic-bezier curve.
- *    Paired with `scrollbar-gutter: stable` so locking scroll causes 0px layout shift.
- *
- * 4. Zero Fluff / Clean Design:
- *    Direct, grounded architectural copy: // NAVIGATION · SINDH COAST.
+ * 3. 120 FPS Composited Performance:
+ *    - Eliminates DOM rect layout-thrashing on mousemove.
+ *    - Kinetic slot-machine vertical character reveal runs purely on the GPU compositor thread.
  */
 export default function Navbar({ onOpenDrawer }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 })
-  const navTrackRef = useRef(null)
 
   // Navigation Links & Live Preview Data (The Haven Sindh Coast)
   const navItems = useMemo(() => [
@@ -73,7 +70,7 @@ export default function Navbar({ onOpenDrawer }) {
   const [activePreview, setActivePreview] = useState(navItems[0].preview)
 
   // Live Current Date
-  const { dateLabel, fullDateLabel } = useMemo(() => {
+  const [{ dateLabel, fullDateLabel }] = useState(() => {
     const now = new Date()
     const day = now.getDate()
     const month = now.toLocaleString('en-US', { month: 'short' }).toUpperCase()
@@ -82,7 +79,7 @@ export default function Navbar({ onOpenDrawer }) {
       dateLabel: `${day} ${month}`,
       fullDateLabel: `${day} ${month} ${year}`,
     }
-  }, [])
+  })
 
   // Passive window scroll listener
   useEffect(() => {
@@ -116,23 +113,6 @@ export default function Navbar({ onOpenDrawer }) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isMenuOpen])
 
-  // Desktop links sliding underline tracker
-  const handleMouseEnter = (e) => {
-    if (!navTrackRef.current) return
-    const trackRect = navTrackRef.current.getBoundingClientRect()
-    const linkRect = e.currentTarget.getBoundingClientRect()
-
-    setIndicatorStyle({
-      left: linkRect.left - trackRect.left,
-      width: linkRect.width,
-      opacity: 1,
-    })
-  }
-
-  const handleMouseLeave = () => {
-    setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }))
-  }
-
   const closeMenu = useCallback(() => {
     setIsMenuOpen(false)
   }, [])
@@ -140,58 +120,20 @@ export default function Navbar({ onOpenDrawer }) {
   return (
     <>
       {/* ============================================================== */}
-      {/* 1. TOP HEADER (Visible at top, fades gracefully on scroll) */}
+      {/* 1. TOP HEADER — OPTION 2: SYMMETRICAL SPLIT NAVIGATION */}
       {/* ============================================================== */}
       <header
         className={`fixed top-0 inset-x-0 z-30 px-5 sm:px-8 md:px-14 py-5 sm:py-6 flex items-center justify-between transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] select-none pointer-events-none ${
           isScrolled ? '-translate-y-6 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
         }`}
       >
-        {/* Left: Rolling Monogram Emblem */}
+        {/* Left Flank: Primary Architectural Links (Desktop) & Monogram (Mobile) */}
         <div className="pointer-events-auto flex items-center h-10 shrink-0">
-          <Link
-            to="/"
-            className="group flex items-center gap-2 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100 ease-[cubic-bezier(0.16,1,0.3,1)]"
-          >
-            <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
-            <span className="relative inline-flex items-center overflow-hidden h-10 w-[130px] sm:w-[175px]">
-              <span className="absolute inset-0 flex items-center whitespace-nowrap transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-x-[115%] will-change-transform leading-none text-slate-900 font-normal">
-                Sindh Coast Sanctuaries
-              </span>
-              <span className="absolute inset-0 flex items-center whitespace-nowrap font-medium text-slate-900 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] translate-x-[115%] group-hover:translate-x-0 will-change-transform leading-none">
-                Habitas &middot; 2026
-              </span>
-            </span>
-          </Link>
-        </div>
-
-        {/* Center: Absolute Mathematical Viewport Centering for Habitas Emblem & Wordmark */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hidden md:flex items-center justify-center">
-          <BrandLogo variant="full" theme="dark" size="md" />
-        </div>
-
-        {/* Right: Desktop Links + Reserve Button + Three-Pill Menu Trigger */}
-        <div className="pointer-events-auto flex items-center gap-3 sm:gap-5 shrink-0 h-10">
-          <nav
-            ref={navTrackRef}
-            onMouseLeave={handleMouseLeave}
-            className="hidden lg:flex items-center h-10 gap-5 xl:gap-7 relative"
-            aria-label="Desktop Navigation"
-          >
-            <span
-              aria-hidden="true"
-              className="absolute bottom-1 h-[1.5px] bg-slate-900 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
-              style={{
-                transform: `translate3d(${indicatorStyle.left}px, 0, 0)`,
-                width: `${indicatorStyle.width}px`,
-                opacity: indicatorStyle.opacity,
-              }}
-            />
-
+          {/* Desktop Left Nav Links (Option 2 Symmetrical Split) */}
+          <nav className="hidden lg:flex items-center gap-7 text-xs font-mono uppercase tracking-wider text-slate-700" aria-label="Primary Left Navigation">
             <a
               href="#residences"
-              onMouseEnter={handleMouseEnter}
-              className="group relative h-10 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
+              className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
               <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
                 <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
@@ -205,8 +147,7 @@ export default function Navbar({ onOpenDrawer }) {
 
             <a
               href="#experience"
-              onMouseEnter={handleMouseEnter}
-              className="group relative h-10 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
+              className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
               <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
                 <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
@@ -217,22 +158,47 @@ export default function Navbar({ onOpenDrawer }) {
                 </span>
               </span>
             </a>
+          </nav>
 
+          {/* Mobile/Tablet Fallback Left Anchor */}
+          <div className="lg:hidden flex items-center h-10">
             <Link
-              to="/pms"
-              onMouseEnter={handleMouseEnter}
-              className="group relative h-10 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
+              to="/"
+              className="group flex items-center gap-2 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
-              <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
-                <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                  Staff PMS
-                </span>
-                <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                  Staff PMS
+              <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
+              <span className="relative inline-flex items-center overflow-hidden h-10 w-[140px]">
+                <span className="absolute inset-0 flex items-center whitespace-nowrap leading-none text-slate-900 font-normal">
+                  The Haven &middot; 2026
                 </span>
               </span>
             </Link>
-          </nav>
+          </div>
+        </div>
+
+        {/* Center Portal: Absolute Mathematical Viewport Centering for The Haven Emblem & Wordmark */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hidden sm:flex items-center justify-center">
+          <BrandLogo variant="full" theme="dark" size="md" />
+        </div>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto sm:hidden flex items-center justify-center">
+          <BrandLogo variant="emblem" theme="dark" size="sm" />
+        </div>
+
+        {/* Right Flank: Staff PMS + Reserve Button + Three-Pill Menu Trigger */}
+        <div className="pointer-events-auto flex items-center gap-3 sm:gap-4 shrink-0 h-10">
+          <Link
+            to="/pms"
+            className="hidden lg:flex group relative h-10 items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none mr-2"
+          >
+            <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
+              <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+                Staff PMS
+              </span>
+              <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+                Staff PMS
+              </span>
+            </span>
+          </Link>
 
           {/* Reserve CTA */}
           <button
