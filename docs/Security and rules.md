@@ -30,6 +30,54 @@ This document outlines the **Security Standards** and the **Strict Rules of Enga
   * Good: `checkInDate`, `totalNights`, `calculateFinalBill()`
   * Bad: `cid`, `tot_n`, `calc()`
 
+### 6. Strict Mobile-First Responsive Mandate & Typography System
+
+#### A. Mobile as the Primary Baseline Persona
+* **Rule:** Over 80% of actual users access the LuxuryStay system from mobile devices:
+  * **Guests:** Opening the portal in their suite from an iPhone/Android to unlock the door, order dining, or request housekeeping.
+  * **Housekeepers:** Carrying a mobile phone across floors to inspect rooms and toggle cleaning status.
+  * **Front Desk & Concierge:** Walking the lobby or desk with a tablet or mobile phone.
+  * **Admin:** Monitoring live occupancy and financial reports on the go.
+* **The Mandate:** Mobile is **never** an afterthought or a scaled-down desktop window. All interfaces must be designed and verified **Mobile-First (375px–390px)**, cascading upward:
+  $$\text{Mobile (375px–390px)} \longrightarrow \text{Tablet (768px)} \longrightarrow \text{Laptop (1024px–1280px)} \longrightarrow \text{Desktop Monitor (1440px+)}$$
+
+#### B. Touch & Viewport Standards
+1. **44×44px Minimum Touch Target:** Every button, input, toggle switch, dropdown, and tab must have a minimum interactive tap boundary of 44×44px (complying with Apple Human Interface Guidelines and WCAG 2.2 AA target size criteria).
+2. **Bottom Sheets & Mobile Drawers:** Cramped desktop centered modal dialogues are strictly forbidden on mobile screens (< 768px). All mobile overlays, filters, and booking forms must render as bottom sheets (`fixed inset-x-0 bottom-0 rounded-t-2xl max-h-[92vh] overflow-y-auto`) or full-screen viewports with thumb-friendly dismiss targets.
+3. **Zero Horizontal Scroll:** Root viewports must enforce `overflow-x: hidden`. No element may cause horizontal scrolling or layout jumping.
+4. **Adaptive Data Displays (Table-to-Card Transformation):** Multi-column tabular data (booking logs, room queues, staff rosters, folio itemizations) must never render as squished or cut-off tables on mobile screens. Tables must automatically transform into clean, stacked vertical cards below `768px` (`hidden md:table` / `md:hidden block`).
+
+#### C. Unified Luxury Typography Standard
+Eliminate all arbitrary, one-off, and discordant font choices. The entire LuxuryStay application adheres to exactly one unified typography pairing:
+
+| Role | Font Family | CSS Utility | Usage Scope |
+| :--- | :--- | :--- | :--- |
+| **Architectural / Accent** | `Cinzel` | `.font-cinzel` | Architectural monograms, room numbers, Roman numeral badges |
+| **Editorial Serif Headings** | `Playfair Display` | `.font-serif-grand` | Display titles, section headers (H1–H3), suite names |
+| **Clean UI & Body** | `Plus Jakarta Sans` | `.font-sans-clean` | All body copy, buttons, inputs, navigation, status pills, labels |
+| **Financial / Telemetry** | `JetBrains Mono` | `.font-mono` / `.font-mono-code` | Currency (`PKR`), timestamps, dates, booking codes, coordinates |
+
+#### D. Standardized Design Token Type Scale
+Every portal must adhere strictly to these typography hierarchy tokens:
+
+* **H1 (Hero & Main Titles):**
+  * Mobile: `text-2xl` (24px) / `leading-tight` / `font-serif-grand font-normal`
+  * Desktop: `text-4xl` to `text-5xl` (36px–48px) / `leading-none` / `tracking-tight`
+* **H2 (Section Headings):**
+  * Mobile: `text-xl` (20px) / `font-serif-grand font-medium`
+  * Desktop: `text-2xl` to `text-3xl` (24px–30px) / `tracking-tight`
+* **H3 (Card Titles & Sub-Sections):**
+  * Mobile: `text-base` (16px) / `font-sans-clean font-semibold`
+  * Desktop: `text-lg` to `text-xl` (18px–20px) / `tracking-tight`
+* **Subtitle / Section Context:**
+  * Universal: `text-sm` (14px) / `font-sans-clean font-normal text-slate-500 leading-relaxed`
+* **Body Text:**
+  * Universal: `text-sm` (14px) to `text-base` (16px) / `font-sans-clean font-normal text-slate-700 leading-relaxed`
+* **Eyebrow / Category Badges:**
+  * Universal: `text-[10px]` to `text-[11px]` / `font-mono uppercase font-bold tracking-[0.2em] text-slate-500`
+* **Button & Interactive Controls:**
+  * Universal: `min-h-[44px]` / `px-4 sm:px-6` / `text-[11px] sm:text-xs` / `font-mono uppercase font-bold tracking-[0.2em]`
+
 ---
 
 ## Part 2: Security & Zero-Trust Architecture

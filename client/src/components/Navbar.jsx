@@ -250,16 +250,20 @@ export default function Navbar({ onOpenDrawer }) {
             text="Reserve"
             onClick={onOpenDrawer}
             size="xs"
-            variant="primary"
-            className="!rounded-full !px-3.5 !h-7 ml-1"
+            variant="outline"
+            className="ml-1"
           />
           <button
             type="button"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open Navigation Menu"
-            className="w-8 h-8 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all"
+            className="group relative w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-2xs shrink-0"
           >
-            <span className="text-sm font-bold text-slate-900">&equiv;</span>
+            <div className="relative w-3 h-2 sm:w-3.5 sm:h-2.5 flex flex-col justify-between items-center pointer-events-none">
+              <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
+            </div>
           </button>
         </div>
       </div>

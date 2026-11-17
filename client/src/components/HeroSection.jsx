@@ -50,7 +50,9 @@ export default function HeroSection({ onQuickReserve }) {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <img
           ref={imageRef}
-          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80"
+          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=75"
+          srcSet="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=75 800w, https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=75 1200w"
+          sizes="100vw"
           alt="Luxury Oceanfront Resort"
           fetchPriority="high"
           decoding="async"

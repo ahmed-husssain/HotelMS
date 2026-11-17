@@ -1,30 +1,42 @@
 {
-  "$schema": "https://agenticresourcediscovery.org/schema/v1/ai-catalog.json",
-  "name": "Habitas Luxury Resort",
-  "description": "Ultra-luxury oceanfront sanctuary reservation system and guest concierge services.",
-  "url": "https://habittas.web.app",
-  "provider": {
-    "name": "Habitas Hospitality Group",
-    "url": "https://habittas.web.app"
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Habitas Luxury Resort",
+    "identifier": "did:web:habittas.web.app"
   },
-  "resources": [
+  "entries": [
     {
-      "name": "Residences Catalog",
-      "description": "Room types, oceanfront suites, architectural details, and nightly rates.",
+      "identifier": "urn:air:habittas.web.app:residences:catalog",
+      "displayName": "Residences Catalog",
+      "type": "text/html",
       "url": "https://habittas.web.app/suites",
-      "type": "webpage"
+      "description": "Room types, oceanfront suites, architectural details, and nightly rates.",
+      "representativeQueries": [
+        "Browse oceanfront suites, villas, and rates at Habitas",
+        "Check available room types and luxury amenities"
+      ]
     },
     {
-      "name": "Reservation Portal",
-      "description": "Guest reservation engine with 30% advance deposit via Safepay.",
+      "identifier": "urn:air:habittas.web.app:reservation:portal",
+      "displayName": "Reservation Portal",
+      "type": "text/html",
       "url": "https://habittas.web.app/reserve",
-      "type": "webpage"
+      "description": "Guest reservation engine with 30% advance deposit via Safepay.",
+      "representativeQueries": [
+        "Book a suite at Habitas with 30% Safepay deposit",
+        "Reserve luxury oceanfront villa"
+      ]
     },
     {
-      "name": "Guest Stay Portal",
-      "description": "In-stay digital key, room controls, dining orders, and billing folio.",
+      "identifier": "urn:air:habittas.web.app:guest:portal",
+      "displayName": "Guest Stay Dossier",
+      "type": "text/html",
       "url": "https://habittas.web.app/my-stay",
-      "type": "webpage"
+      "description": "In-stay digital key, room controls, dining orders, and billing folio.",
+      "representativeQueries": [
+        "Access digital key and in-room dining",
+        "Check reservation folio and billing"
+      ]
     }
   ]
 }
