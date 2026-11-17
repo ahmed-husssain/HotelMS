@@ -36,25 +36,25 @@ function StaggeredWaveText({ text }) {
       {Array.from(text).map((char, index) => (
         <span
           key={index}
-          className="relative inline-block overflow-hidden align-top select-none"
-          style={{ height: '1.25em' }}
+          className="relative inline-block overflow-hidden align-top select-none leading-tight"
+          style={{ height: '1.15em' }}
         >
           {/* Sizer to hold exact font metrics and eliminate layout reflow */}
           <span className="invisible">{char === ' ' ? '\u00A0' : char}</span>
 
-          {/* Primary character (exits to -100% on wave hover) */}
+          {/* Primary character (exits upward cleanly to -135% on wave hover) */}
           <span
             aria-hidden="true"
-            className="absolute top-0 left-0 inline-block will-change-transform select-none transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] group-hover:-translate-y-full"
+            className="absolute top-0 left-0 inline-block will-change-transform select-none transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] group-hover:-translate-y-[135%]"
             style={{ transitionDelay: `${index * 12}ms` }}
           >
             {char === ' ' ? '\u00A0' : char}
           </span>
 
-          {/* Duplicate character (enters from 100% to 0% on wave hover) */}
+          {/* Duplicate character (enters from 135% below to 0% — completely hidden at rest) */}
           <span
             aria-hidden="true"
-            className="absolute top-0 left-0 inline-block will-change-transform select-none font-semibold text-slate-900 transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] translate-y-full group-hover:translate-y-0"
+            className="absolute top-0 left-0 inline-block will-change-transform select-none font-semibold text-slate-900 transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] translate-y-[135%] group-hover:translate-y-0"
             style={{ transitionDelay: `${index * 12}ms` }}
           >
             {char === ' ' ? '\u00A0' : char}
