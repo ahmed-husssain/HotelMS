@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agenticresourcediscovery.org/schema/v1/ai-catalog.json",
+  "name": "Habitas Luxury Resort",
+  "description": "Ultra-luxury oceanfront sanctuary reservation system and guest concierge services.",
+  "url": "https://habittas.web.app",
+  "provider": {
+    "name": "Habitas Hospitality Group",
+    "url": "https://habittas.web.app"
+  },
+  "resources": [
+    {
+      "name": "Residences Catalog",
+      "description": "Room types, oceanfront suites, architectural details, and nightly rates.",
+      "url": "https://habittas.web.app/suites",
+      "type": "webpage"
+    },
+    {
+      "name": "Reservation Portal",
+      "description": "Guest reservation engine with 30% advance deposit via Safepay.",
+      "url": "https://habittas.web.app/reserve",
+      "type": "webpage"
+    },
+    {
+      "name": "Guest Stay Portal",
+      "description": "In-stay digital key, room controls, dining orders, and billing folio.",
+      "url": "https://habittas.web.app/my-stay",
+      "type": "webpage"
+    }
+  ]
+}

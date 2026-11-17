@@ -21,6 +21,13 @@ export default function SplashScreen({ onComplete }) {
   const portalRef = useRef(null)
 
   useEffect(() => {
+    // Respect reduced motion preference for accessibility & fast environments
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setIsDismissed(true)
+      if (onComplete) onComplete()
+      return
+    }
+
     // 1. Lock document body scroll while intro is playing
     const originalOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -28,34 +35,34 @@ export default function SplashScreen({ onComplete }) {
     // Phase 1: Begin hairline vector drawing
     const drawTimer = setTimeout(() => {
       setIsDrawn(true)
-    }, 100)
+    }, 60)
 
-    // Phase 2: Keystone Ignition & Brand Reveal (at 1000ms)
+    // Phase 2: Keystone Ignition & Brand Reveal (at 550ms)
     const igniteTimer = setTimeout(() => {
       setIsIgnited(true)
-    }, 1000)
+    }, 550)
 
-    // Phase 3: Cinematic Step-In Glide (at 1650ms - allows 650ms to absorb the brand mark)
+    // Phase 3: Cinematic Step-In Glide (at 1100ms)
     const stepInTimer = setTimeout(() => {
       setIsSteppingIn(true)
 
       // Curtain dissolve initiates during camera forward glide
       const curtainTimer = setTimeout(() => {
         setIsCurtainDissolved(true)
-      }, 200)
+      }, 150)
 
       // Complete unmount & unlock scroll when camera completes transition
       const completeTimer = setTimeout(() => {
         document.body.style.overflow = originalOverflow
         setIsDismissed(true)
         if (onComplete) onComplete()
-      }, 1500)
+      }, 750)
 
       return () => {
         clearTimeout(curtainTimer)
         clearTimeout(completeTimer)
       }
-    }, 1650)
+    }, 1100)
 
     return () => {
       clearTimeout(drawTimer)

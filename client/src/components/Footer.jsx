@@ -72,8 +72,8 @@ export default function Footer() {
             <span className="font-mono text-[11px] tracking-[0.2em] uppercase font-bold text-[#121619]">
               Private Guest Ledger
             </span>
-            <span className="text-[#8E877C] font-mono text-[10px]">&bull;</span>
-            <span className="text-[#5C646A] text-xs font-light">
+            <span className="text-[#57534E] font-mono text-[10px]">&bull;</span>
+            <span className="text-[#44403C] text-xs font-light">
               Seasonal suite openings &amp; dining
             </span>
           </div>
@@ -92,12 +92,13 @@ export default function Footer() {
                   value={inquiryEmail}
                   onChange={(e) => setInquiryEmail(e.target.value)}
                   placeholder="Enter email for private openings"
-                  className="w-full bg-transparent border-b border-[#DDD7CE] focus:border-[#121619] py-1 text-xs text-[#121619] placeholder:text-[#8E877C] font-mono focus:outline-none transition-colors"
+                  aria-label="Enter email for private openings"
+                  className="w-full bg-transparent border-b border-[#DDD7CE] focus:border-[#121619] py-1 text-xs text-[#121619] placeholder:text-[#57534E] font-mono focus:outline-none transition-colors"
                 />
                 <button
                   type="submit"
                   aria-label="Submit email"
-                  className="text-xs font-mono text-[#121619] hover:text-amber-800 transition-colors px-1 cursor-pointer"
+                  className="w-7 h-7 inline-flex items-center justify-center text-xs font-mono text-[#121619] hover:text-amber-800 transition-colors cursor-pointer"
                 >
                   &rarr;
                 </button>
@@ -118,15 +119,15 @@ export default function Footer() {
           <div className="space-y-3">
             <BrandLogo variant="full" theme="dark" size="sm" to="/" />
 
-            <p className="text-xs text-[#5C646A] leading-relaxed max-w-xs font-light">
+            <p className="text-xs text-[#44403C] leading-relaxed max-w-xs font-light">
               Quiet coastal sanctuary of three private oceanfront suites along the Sindh cliffs.
             </p>
 
-            <div className="pt-1 space-y-1 text-xs font-mono">
-              <a href="tel:+922138900000" className="block font-semibold text-[#121619] hover:text-amber-800 transition-colors">
+            <div className="pt-2 flex flex-col gap-1 text-xs font-mono">
+              <a href="tel:+922138900000" className="inline-flex items-center min-h-[28px] py-1 font-semibold text-[#121619] hover:text-amber-800 transition-colors">
                 +92 21 3890 0000
               </a>
-              <a href="mailto:concierge@habitas.pk" className="block text-[11px] text-[#5C646A] hover:text-[#121619] transition-colors">
+              <a href="mailto:concierge@habitas.pk" className="inline-flex items-center min-h-[28px] py-1 text-[11px] text-[#44403C] hover:text-[#121619] transition-colors">
                 concierge@habitas.pk
               </a>
             </div>
@@ -139,40 +140,40 @@ export default function Footer() {
             </span>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/reserve?room=301" className="block group transition-transform duration-200 hover:translate-x-1">
+                <Link to="/reserve?room=301" className="block group transition-transform duration-200 hover:translate-x-1 py-1">
                   <div className="flex items-baseline justify-between">
                     <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors">
                       Suite 301 &bull; Penthouse
                     </span>
-                    <span className="text-[10px] font-mono text-[#8E877C]">[TH-301]</span>
+                    <span className="text-[10px] font-mono text-[#57534E]">[TH-301]</span>
                   </div>
-                  <span className="text-[11px] text-[#8E877C] font-mono block mt-0.5">
+                  <span className="text-[11px] text-[#57534E] font-mono block mt-0.5">
                     PKR 110,000 / night
                   </span>
                 </Link>
               </li>
               <li>
-                <Link to="/reserve?room=204" className="block group transition-transform duration-200 hover:translate-x-1">
+                <Link to="/reserve?room=204" className="block group transition-transform duration-200 hover:translate-x-1 py-1">
                   <div className="flex items-baseline justify-between">
                     <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors">
                       Villa 204 &bull; Courtyard
                     </span>
-                    <span className="text-[10px] font-mono text-[#8E877C]">[TH-204]</span>
+                    <span className="text-[10px] font-mono text-[#57534E]">[TH-204]</span>
                   </div>
-                  <span className="text-[11px] text-[#8E877C] font-mono block mt-0.5">
+                  <span className="text-[11px] text-[#57534E] font-mono block mt-0.5">
                     PKR 75,000 / night
                   </span>
                 </Link>
               </li>
               <li>
-                <Link to="/reserve?room=102" className="block group transition-transform duration-200 hover:translate-x-1">
+                <Link to="/reserve?room=102" className="block group transition-transform duration-200 hover:translate-x-1 py-1">
                   <div className="flex items-baseline justify-between">
                     <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors">
                       Pavilion 102 &bull; Ocean
                     </span>
-                    <span className="text-[10px] font-mono text-[#8E877C]">[TH-102]</span>
+                    <span className="text-[10px] font-mono text-[#57534E]">[TH-102]</span>
                   </div>
-                  <span className="text-[11px] text-[#8E877C] font-mono block mt-0.5">
+                  <span className="text-[11px] text-[#57534E] font-mono block mt-0.5">
                     PKR 95,000 / night
                   </span>
                 </Link>
@@ -185,24 +186,24 @@ export default function Footer() {
             <span className="text-[10px] font-mono tracking-[0.2em] font-bold text-[#121619] uppercase block pb-1 border-b border-[#E5DFD5]">
               02 &bull; EXPERIENCES
             </span>
-            <ul className="space-y-1.5 text-xs text-[#5C646A]">
+            <ul className="space-y-1 text-xs">
               <li>
-                <a href="#experience" className="block hover:text-amber-800 transition-colors">
+                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   Cedar Spa &amp; Saltwater Baths
                 </a>
               </li>
               <li>
-                <a href="#experience" className="block hover:text-amber-800 transition-colors">
+                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   The Harvest Coastal Pavilion
                 </a>
               </li>
               <li>
-                <a href="#experience" className="block hover:text-amber-800 transition-colors">
+                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   Underground Valet &amp; Helipad
                 </a>
               </li>
               <li>
-                <a href="#experience" className="block hover:text-amber-800 transition-colors">
+                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   Private Arabian Boat Charters
                 </a>
               </li>
@@ -221,9 +222,9 @@ export default function Footer() {
               >
                 <div className="flex items-center justify-between text-[#121619]">
                   <span className="font-medium group-hover:text-amber-800 transition-colors">Guest Stay Dossier</span>
-                  <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
+                  <span className="font-mono text-xs text-[#57534E] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#8E877C] block mt-0.5">
+                <span className="text-[10px] font-mono text-[#57534E] block mt-0.5">
                   Digital NFC Key &bull; Room Service
                 </span>
               </Link>
@@ -234,9 +235,9 @@ export default function Footer() {
               >
                 <div className="flex items-center justify-between text-[#121619]">
                   <span className="font-medium group-hover:text-amber-800 transition-colors">Sanctuary Sign In</span>
-                  <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
+                  <span className="font-mono text-xs text-[#57534E] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#8E877C] block mt-0.5">
+                <span className="text-[10px] font-mono text-[#57534E] block mt-0.5">
                   Automatic Role Detection
                 </span>
               </Link>
@@ -245,14 +246,14 @@ export default function Footer() {
                 to="/login"
                 className="group block py-1.5 hover:border-[#121619] transition-colors"
               >
-                <div className="flex items-center justify-between text-[#5C646A]">
+                <div className="flex items-center justify-between text-[#44403C]">
                   <span className="text-[11px] font-mono group-hover:text-[#121619] transition-colors flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-emerald-600 transition-colors" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-500 group-hover:bg-emerald-600 transition-colors" />
                     Staff Operations Terminal
                   </span>
-                  <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform">&rarr;</span>
+                  <span className="font-mono text-xs text-[#57534E] group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </div>
-                <span className="text-[9px] font-mono text-[#8E877C] block mt-0.5 pl-3">
+                <span className="text-[9px] font-mono text-[#57534E] block mt-0.5 pl-3">
                   Front Desk, Housekeeping &amp; General Manager
                 </span>
               </Link>
@@ -264,20 +265,20 @@ export default function Footer() {
         {/* ============================================================== */}
         {/* CORE BASELINE: TIME & SAFEPAY DEPOSIT (LEFT) & TOP BUTTON (RIGHT) */}
         {/* ============================================================== */}
-        <div className="pt-6 mt-6 border-t border-[#E5DFD5] flex items-center justify-between text-xs font-mono text-[#5C646A]">
+        <div className="pt-6 mt-6 border-t border-[#E5DFD5] flex items-center justify-between text-xs font-mono text-[#44403C]">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 font-semibold text-[#121619]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
               <span>{estateTime || '17:28:00 PKT'}</span>
             </span>
             <span>&bull;</span>
-            <span className="text-[#8E877C]">Safepay 30% Deposit</span>
+            <span className="text-[#57534E] font-medium">Safepay 30% Deposit</span>
           </div>
 
           <button
             type="button"
             onClick={scrollToTop}
-            className="text-[#121619] hover:text-amber-800 font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1 transition-colors active:scale-95"
+            className="inline-flex items-center min-h-[28px] py-1 px-1 text-[#121619] hover:text-amber-800 font-bold uppercase tracking-wider cursor-pointer gap-1 transition-colors active:scale-95"
             aria-label="Back to top of page"
           >
             <span>Top</span>

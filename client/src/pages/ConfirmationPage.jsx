@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
 import { useAuth } from '../context/AuthContext'
 
-export default function BookingConfirmation() {
+export default function ConfirmationPage() {
   const location = useLocation()
   const { currentUser } = useAuth()
   const booking = location.state?.booking || {

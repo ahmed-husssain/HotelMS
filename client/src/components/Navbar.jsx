@@ -1,68 +1,40 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
-import RollingTextButton from './RollingTextButton'
+import AnimatedButton from './AnimatedButton'
+import NavMenu from './navigation/NavMenu'
 import { useAuth } from '../context/AuthContext'
 
 /**
- * The Haven — Option 2: Symmetrical Split Navigation
- *
- * ARCHITECTURE & VIVA DEFENSE:
- * 1. Symmetrical Flanking Geometry:
- *    - Left Flank (Width ~190px): 2 primary links ("Residences" & "The Estate") with kinetic vertical reveals.
- *    - Center Portal: Mathematically locked to viewport center (BrandLogo).
- *    - Right Flank (Width ~210px): "Staff PMS" + tactile "Reserve" CTA + circular Aperture Menu button.
- *    - Result: 190px left vs 210px right = optical 1:1 balance with >350px clearance around the center logo.
- *      Zero overlap, zero collision, even on compact 1024px-1280px laptops.
- *
- * 2. Responsive Mobile Adaptability:
- *    - Tablet/Desktop (>= 640px): Displays full architectural emblem & wordmark.
- *    - Mobile (< 640px): Gracefully collapses center to compact emblem so controls never collide on 320px screens.
- *
- * 3. 120 FPS Composited Performance:
- *    - Eliminates DOM rect layout-thrashing on mousemove.
- *    - Kinetic slot-machine vertical character reveal runs purely on the GPU compositor thread.
- */
-
-/**
- * StaggeredWaveText
- * Exact Casa Momo character staggered wave-roll (ScrollRadius.CU3IUbFx.mjs)
- * Duration: 0.65s, Easing: cubic-bezier(0.52, 0, 0, 1), Stagger: 12ms per character
- *
- * Each character rolls up sequentially when the parent element is hovered (group-hover),
- * creating a fluid, cascading ripple across the letters identical to the CustomCursor pill.
+ * StaggeredWaveText — Smooth character roll on hover
  */
 function StaggeredWaveText({ text }) {
   return (
     <span className="inline-flex items-center overflow-hidden h-10 leading-none select-none">
-      {Array.from(text).map((char, index) => (
-        <span
-          key={index}
-          className="relative inline-block overflow-hidden align-top select-none leading-tight"
-          style={{ height: '1.15em' }}
-        >
-          {/* Sizer to hold exact font metrics and eliminate layout reflow */}
-          <span className="invisible">{char === ' ' ? '\u00A0' : char}</span>
-
-          {/* Primary character (exits upward cleanly to -135% on wave hover) */}
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true" className="inline-flex items-center">
+        {Array.from(text).map((char, index) => (
           <span
-            aria-hidden="true"
-            className="absolute top-0 left-0 inline-block will-change-transform select-none transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] group-hover:-translate-y-[135%]"
-            style={{ transitionDelay: `${index * 12}ms` }}
+            key={index}
+            className="relative inline-block overflow-hidden align-top select-none leading-tight"
+            style={{ height: '1.15em' }}
           >
-            {char === ' ' ? '\u00A0' : char}
+            <span className="invisible">{char === ' ' ? '\u00A0' : char}</span>
+            <span
+              className="absolute top-0 left-0 inline-block will-change-transform select-none transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] group-hover:-translate-y-[135%]"
+              style={{ transitionDelay: `${index * 12}ms` }}
+            >
+              {char === ' ' ? '\u00A0' : char}
+            </span>
+            <span
+              className="absolute top-0 left-0 inline-block will-change-transform select-none font-semibold text-slate-900 transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] translate-y-[135%] group-hover:translate-y-0"
+              style={{ transitionDelay: `${index * 12}ms` }}
+            >
+              {char === ' ' ? '\u00A0' : char}
+            </span>
           </span>
-
-          {/* Duplicate character (enters from 135% below to 0% — completely hidden at rest) */}
-          <span
-            aria-hidden="true"
-            className="absolute top-0 left-0 inline-block will-change-transform select-none font-semibold text-slate-900 transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] translate-y-[135%] group-hover:translate-y-0"
-            style={{ transitionDelay: `${index * 12}ms` }}
-          >
-            {char === ' ' ? '\u00A0' : char}
-          </span>
-        </span>
-      ))}
+        ))}
+      </span>
     </span>
   )
 }
@@ -114,10 +86,8 @@ export default function Navbar({ onOpenDrawer }) {
     },
   ], [])
 
-  // Active preview state for the left photo wing
   const [activePreview, setActivePreview] = useState(navItems[0].preview)
 
-  // Live Current Date
   const [{ dateLabel, fullDateLabel }] = useState(() => {
     const now = new Date()
     const day = now.getDate()
@@ -129,63 +99,49 @@ export default function Navbar({ onOpenDrawer }) {
     }
   })
 
-  // Passive window scroll listener
+  // Scroll listener
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80)
-    }
+    const handleScroll = () => setIsScrolled(window.scrollY > 80)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Lock background scroll when menu is open
+  // Body scroll lock
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = isMenuOpen ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
   }, [isMenuOpen])
 
-  // Escape key closes menu
+  // Escape key handler
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isMenuOpen) {
-        setIsMenuOpen(false)
-      }
+      if (e.key === 'Escape' && isMenuOpen) setIsMenuOpen(false)
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isMenuOpen])
 
-  const closeMenu = useCallback(() => {
-    setIsMenuOpen(false)
-  }, [])
+  const closeMenu = useCallback(() => setIsMenuOpen(false), [])
 
   return (
     <>
-      {/* ============================================================== */}
-      {/* 1. TOP HEADER — OPTION 2: SYMMETRICAL SPLIT NAVIGATION */}
-      {/* ============================================================== */}
+      {/* 1. TOP HEADER */}
       <header
         className={`fixed top-0 inset-x-0 z-30 px-5 sm:px-8 md:px-14 py-5 sm:py-6 flex items-center justify-between transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] select-none pointer-events-none ${
           isScrolled ? '-translate-y-6 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
         }`}
       >
-        {/* Left Flank: Primary Architectural Links (Desktop) & Monogram (Mobile) */}
+        {/* Left Flank: Primary Links */}
         <div className="pointer-events-auto flex items-center h-10 shrink-0">
-          {/* Desktop Left Nav Links (Option 2 Symmetrical Split) */}
-          <nav className="hidden lg:flex items-center gap-7 text-xs font-mono uppercase tracking-wider text-slate-700" aria-label="Primary Left Navigation">
+          <nav className="hidden lg:flex items-center gap-7 text-xs font-mono uppercase tracking-wider text-slate-700">
             <Link
               to="/suites"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
               <StaggeredWaveText text="Residences" />
             </Link>
-
             <a
               href="#experience"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
@@ -194,11 +150,10 @@ export default function Navbar({ onOpenDrawer }) {
             </a>
           </nav>
 
-          {/* Mobile/Tablet Fallback Left Anchor (Compact on narrow screens) */}
           <div className="lg:hidden flex items-center h-10">
             <Link
               to="/"
-              className="group flex items-center gap-1.5 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100"
+              className="group flex items-center gap-1.5 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none"
             >
               <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
               <span className="whitespace-nowrap leading-none text-slate-900 font-normal">
@@ -208,7 +163,7 @@ export default function Navbar({ onOpenDrawer }) {
           </div>
         </div>
 
-        {/* Center Portal: Absolute Mathematical Viewport Centering for The Haven Emblem & Wordmark */}
+        {/* Center Portal: Brand Logo */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hidden sm:flex items-center justify-center">
           <BrandLogo variant="full" theme="dark" size="md" />
         </div>
@@ -216,7 +171,7 @@ export default function Navbar({ onOpenDrawer }) {
           <BrandLogo variant="emblem" theme="dark" size="sm" />
         </div>
 
-        {/* Right Flank: Dynamic User Profile / Sign In + Reserve Button + Three-Pill Menu Trigger */}
+        {/* Right Flank: Dynamic Session / Reserve / Menu Trigger */}
         <div className="pointer-events-auto flex items-center gap-2 sm:gap-3 shrink-0 h-10">
           {currentUser ? (
             <div className="hidden lg:flex items-center gap-2 font-mono text-xs">
@@ -256,15 +211,13 @@ export default function Navbar({ onOpenDrawer }) {
             </Link>
           )}
 
-          {/* Reserve CTA with Signature Rolling Text & Moving Diagonal Arrow */}
-          <RollingTextButton
+          <AnimatedButton
             text="Reserve"
             onClick={onOpenDrawer}
             size="sm"
             variant="primary"
           />
 
-          {/* Three-Pill Menu Trigger */}
           <button
             type="button"
             onClick={() => setIsMenuOpen(true)}
@@ -280,10 +233,7 @@ export default function Navbar({ onOpenDrawer }) {
         </div>
       </header>
 
-      {/* ============================================================== */}
       {/* 2. SCROLLED FLOATING CORNER PILL */}
-      {/* (Only visible when scrolled down AND menu is closed) */}
-      {/* ============================================================== */}
       <div
         className={`fixed top-4 right-4 sm:top-6 sm:right-10 z-30 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
           isScrolled && !isMenuOpen
@@ -296,234 +246,35 @@ export default function Navbar({ onOpenDrawer }) {
           <span className="font-mono text-[11px] uppercase tracking-wider text-slate-800">
             {dateLabel}
           </span>
-
-          <RollingTextButton
+          <AnimatedButton
             text="Reserve"
             onClick={onOpenDrawer}
-            size="xs"
+            size="sm"
             variant="primary"
-            className="!rounded-full !px-3 !h-7 ml-1"
           />
-
           <button
             type="button"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open Navigation Menu"
-            className="w-8 h-8 rounded-full hover:bg-slate-200/70 flex items-center justify-center cursor-pointer transition-colors active:scale-95"
+            className="w-8 h-8 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all"
           >
-            <div className="relative w-3.5 h-2.5 flex flex-col justify-between items-center pointer-events-none">
-              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
-              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
-              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
-            </div>
+            <span className="text-sm font-bold text-slate-900">&equiv;</span>
           </button>
         </div>
       </div>
 
-      {/* ============================================================== */}
-      {/* 3. CONCEPT 2: CIRCULAR APERTURE EXPANSION MENU */}
-      {/* Expanding circular lens from trigger button with 0-lag GPU clip-path */}
-      {/* NO ugly deformed side SVG fins — pure architectural geometry */}
-      {/* ============================================================== */}
-
-      {/* Dimmed Dark Luxury Backdrop */}
-      <div
-        onClick={closeMenu}
-        aria-hidden="true"
-        className={`fixed inset-0 z-40 bg-slate-950/70 transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+      {/* 3. APERTURE DRAWER OVERLAY */}
+      <NavMenu
+        isOpen={isMenuOpen}
+        onClose={closeMenu}
+        onOpenDrawer={onOpenDrawer}
+        navItems={navItems}
+        activePreview={activePreview}
+        setActivePreview={setActivePreview}
+        fullDateLabel={fullDateLabel}
+        currentUser={currentUser}
+        logout={logout}
       />
-
-      {/* Expanding Circular Aperture Overlay Sheet */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Main Navigation Menu"
-        className={`fixed inset-0 z-50 flex flex-col md:flex-row bg-[#FAF8F5] shadow-2xl overflow-hidden transition-[clip-path] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
-        }`}
-        style={{
-          clipPath: isMenuOpen
-            ? 'circle(150% at calc(100% - 48px) 36px)'
-            : 'circle(0% at calc(100% - 48px) 36px)',
-        }}
-      >
-        {/* Left 45%: Live Suite Image Preview Window (Desktop Only) */}
-        <div className="hidden md:block md:w-5/12 h-full relative overflow-hidden bg-slate-950 border-r border-slate-200/80">
-          <img
-            src={activePreview.image}
-            alt={activePreview.title}
-            className="w-full h-full object-cover transition-all duration-700 filter brightness-[0.88] scale-100"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-10 lg:p-14 text-white">
-            <span className="font-mono text-[10px] tracking-[0.28em] text-emerald-400 uppercase">
-              {activePreview.tag}
-            </span>
-            <h3 className="font-serif-grand text-3xl font-light mt-1.5 text-white">
-              {activePreview.title}
-            </h3>
-            <p className="font-mono text-xs text-slate-300 mt-2 max-w-sm leading-relaxed">
-              {activePreview.subtitle}
-            </p>
-          </div>
-        </div>
-
-        {/* Right 55%: Navigation Index & Controls */}
-        <div className="w-full md:w-7/12 h-full flex flex-col justify-between p-6 sm:p-8 lg:p-10 overflow-y-auto overscroll-contain">
-          
-          {/* Top Bar: Clean Branding & Dedicated Close Button */}
-          <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest border-b border-slate-200/80 pb-3 shrink-0">
-            <div className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-slate-900 font-semibold tracking-wider">// NAVIGATION</span>
-              <span className="text-slate-300 hidden sm:inline">&middot;</span>
-              <span className="text-slate-500 hidden sm:inline text-[10px]">SINDH COAST, PK</span>
-            </div>
-
-            {/* Dedicated Accessible Close Button */}
-            <button
-              type="button"
-              onClick={closeMenu}
-              aria-label="Close Navigation Menu"
-              className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 hover:border-slate-900 bg-white hover:bg-slate-900 hover:text-white text-[10px] font-mono uppercase tracking-wider text-slate-800 transition-all cursor-pointer active:scale-95 shadow-xs"
-            >
-              <span>Close</span>
-              <span className="font-bold">&times;</span>
-            </button>
-          </div>
-
-          {/* Navigation Links with Dynamic Hover Trigger */}
-          <nav className="my-auto py-2 sm:py-4 space-y-2.5 sm:space-y-3" aria-label="Menu Items">
-            {navItems.map((item) => {
-              const linkContent = (
-                <div
-                  onMouseEnter={() => setActivePreview(item.preview)}
-                  onClick={closeMenu}
-                  className="group block border-b border-slate-200/70 pb-2 sm:pb-2.5 hover:border-slate-900 transition-colors cursor-pointer"
-                >
-                  <div className="flex items-baseline gap-3 sm:gap-4">
-                    <span className="font-mono text-xs text-slate-400 group-hover:text-emerald-800 transition-colors">
-                      [{item.num}]
-                    </span>
-                    <span className="font-serif-grand text-2xl sm:text-3xl lg:text-[2rem] text-slate-900 font-normal group-hover:translate-x-2 transition-transform duration-300 leading-tight">
-                      {item.label}
-                    </span>
-                  </div>
-                  <span className="font-mono text-[11px] sm:text-xs text-slate-500 tracking-wider block mt-0.5 pl-7 sm:pl-9">
-                    {item.desc}
-                  </span>
-                </div>
-              )
-
-              return (
-                <div key={item.label}>
-                  {item.isRouter ? (
-                    <Link to={item.href}>{linkContent}</Link>
-                  ) : (
-                    <a href={item.href}>{linkContent}</a>
-                  )}
-                </div>
-              )
-            })}
-
-            {/* Direct Reserve Sanctuary CTA */}
-            <div className="pt-2 sm:pt-3">
-              <button
-                type="button"
-                onClick={() => {
-                  closeMenu()
-                  onOpenDrawer()
-                }}
-                className="w-full py-3 sm:py-3.5 px-5 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.25em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98] shadow-md"
-              >
-                <span>Reserve a Suite (30% Deposit)</span>
-                <span>&rarr;</span>
-              </button>
-            </div>
-
-            {/* If Logged in as Staff: Exclusive Operational Workspace Access */}
-            {currentUser && currentUser.role !== 'guest' && (
-              <div className="pt-2">
-                <Link
-                  to={
-                    currentUser.role === 'admin'
-                      ? '/admin'
-                      : currentUser.role === 'receptionist'
-                      ? '/pms'
-                      : '/housekeeping'
-                  }
-                  onClick={closeMenu}
-                  className="w-full py-2.5 px-4 bg-emerald-950 text-emerald-200 border border-emerald-800/80 text-xs font-mono uppercase tracking-wider flex items-center justify-between hover:bg-emerald-900 transition-colors rounded-[2px]"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Open {currentUser.roleLabel || 'Staff'} Workspace</span>
-                  </span>
-                  <span>&rarr;</span>
-                </Link>
-              </div>
-            )}
-
-            {/* Account Session Strip inside Menu */}
-            <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs font-mono">
-              {currentUser ? (
-                <div className="flex items-center justify-between w-full">
-                  <span className="text-slate-600">
-                    Signed in as <strong>{currentUser.name}</strong> ({currentUser.role})
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      logout()
-                      closeMenu()
-                    }}
-                    className="text-red-700 hover:text-red-900 font-bold underline cursor-pointer ml-2"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between w-full">
-                  <span className="text-slate-500">Sanctuary Account:</span>
-                  <div className="flex items-center gap-3">
-                    <Link
-                      to="/login"
-                      onClick={closeMenu}
-                      className="text-slate-900 hover:text-amber-800 font-bold underline"
-                    >
-                      Sign In &rarr;
-                    </Link>
-                    <Link
-                      to="/register"
-                      onClick={closeMenu}
-                      className="text-slate-500 hover:text-slate-900"
-                    >
-                      Create Profile
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-          </nav>
-
-          {/* Bottom Telemetry & Metadata Strip */}
-          <div className="border-t border-slate-200/80 pt-3 text-[10px] font-mono text-slate-500 space-y-1 shrink-0">
-            <div className="flex justify-between items-center text-slate-800">
-              <span className="uppercase tracking-widest">Active Vacation Dates</span>
-              <span className="font-semibold">{fullDateLabel}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>LAT: 24&deg;48&apos;N &middot; THERMAL: 41.5&deg;C</span>
-              <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
-            </div>
-            <div className="text-slate-400 pt-0.5 text-[9px] uppercase tracking-wider">
-              Habitas &middot; Safepay 30% Advance &middot; 5-Min Reservation Hold
-            </div>
-          </div>
-
-        </div>
-      </div>
     </>
   )
 }

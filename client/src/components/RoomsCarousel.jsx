@@ -2,7 +2,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import RollingTextButton from './RollingTextButton'
+import AnimatedButton from './AnimatedButton'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -29,7 +29,7 @@ function CasaMomoSlideArrow({ left = false }) {
   )
 }
 
-export default function ResidenceSpread({ residence, index, onReserve }) {
+export default function RoomsCarousel({ residence, index, onReserve }) {
   const containerRef = useRef(null)
   const insetImgRef = useRef(null)
 
@@ -125,6 +125,8 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
                   <img
                     src={photo.url}
                     alt={`${residence.name} - ${photo.title}`}
+                    loading={index === 0 && i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
                     className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025]"
                   />
                 </div>
@@ -219,7 +221,7 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
                     key={idx}
                     className="p-3 bg-white border border-slate-200/80 rounded-[2px] flex flex-col justify-between hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-200 shadow-2xs"
                   >
-                    <span className="text-[8px] tracking-[0.25em] font-bold text-slate-400 uppercase">
+                    <span className="text-[8px] tracking-[0.25em] font-bold text-slate-600 uppercase">
                       {item.label}
                     </span>
                       <span className="text-xs font-bold text-slate-900 tracking-tight mt-1">
@@ -244,18 +246,18 @@ export default function ResidenceSpread({ residence, index, onReserve }) {
                 <div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <div className="flex items-baseline gap-1.5">
-                      <span className="text-xs font-semibold text-slate-500">PKR</span>
+                      <span className="text-xs font-semibold text-slate-600">PKR</span>
                       <span className="text-2xl font-bold text-slate-900 tracking-tight">
                         {residence.nightlyRate.toLocaleString()}
                       </span>
-                      <span className="text-xs text-slate-500 font-normal">/ Night</span>
+                      <span className="text-xs text-slate-600 font-normal">/ Night</span>
                     </div>
                     <span className="text-[10px] tracking-[0.18em] text-emerald-800 font-semibold uppercase block mt-0.5">
                       30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
                     </span>
                   </div>
 
-                  <RollingTextButton
+                  <AnimatedButton
                     text="Suite Details"
                     onClick={() => onReserve(residence)}
                   />

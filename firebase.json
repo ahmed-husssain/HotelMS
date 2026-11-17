@@ -19,7 +19,20 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=31536000"
+            "value": "max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/@(llms.txt|ai-catalog.json|robots.txt|sitemap.xml)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
           }
         ]
       }

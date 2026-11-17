@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * RollingTextButton
+ * AnimatedButton
  * 
  * Signature ultra-luxury staggered kinetic wave button:
  * - Each letter of the word rolls upward sequentially (one by one) with a staggered
@@ -10,7 +10,7 @@ import React from 'react'
  *   a secondary arrow enters from bottom-left into position.
  * - Powered by exponential deceleration easing cubic-bezier(0.16, 1, 0.3, 1) at 120 FPS.
  */
-export default function RollingTextButton({
+export default function AnimatedButton({
   text = 'Reserve',
   onClick,
   className = '',
@@ -39,10 +39,15 @@ export default function RollingTextButton({
     <button
       type={type}
       onClick={onClick}
+      aria-label={text}
+      title={text}
       className={`group relative inline-flex items-center justify-center border font-mono uppercase font-bold overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-300 shadow-xs rounded-[2px] ${sizeStyles} ${baseStyles} ${className}`}
     >
-      {/* 1. Staggered Cascading Wave Text (Letter by Letter) */}
-      <span className="relative inline-flex items-center select-none overflow-hidden h-[1.3em] leading-tight">
+      {/* Accessible text for screen readers & AI agent tree resolution */}
+      <span className="sr-only">{text}</span>
+
+      {/* 1. Staggered Cascading Wave Text (Letter by Letter - Visual Only) */}
+      <span aria-hidden="true" className="relative inline-flex items-center select-none overflow-hidden h-[1.3em] leading-tight">
         {letters.map((char, index) => {
           // Delay each letter by 32ms for a fluid, slow, cascading wave
           const delayMs = index * 32

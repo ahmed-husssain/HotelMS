@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react'
 
 gsap.registerPlugin(ScrollTrigger)
 
-export default function HeroParallax({ onQuickReserve }) {
+export default function HeroSection({ onQuickReserve }) {
   const heroRef = useRef(null)
   const imageRef = useRef(null)
   const titleRef = useRef(null)
@@ -50,8 +50,10 @@ export default function HeroParallax({ onQuickReserve }) {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <img
           ref={imageRef}
-          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2400&q=90"
+          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80"
           alt="Luxury Oceanfront Resort"
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-full object-cover object-center scale-110 origin-center filter brightness-[0.98]"
         />
         {/* Soft Alabaster Editorial Mist: Balances dusk photography with obsidian typography */}

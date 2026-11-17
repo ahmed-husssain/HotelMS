@@ -2,11 +2,11 @@ import React, { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import ResidenceSpread from '../components/ResidenceSpread'
+import RoomsCarousel from '../components/RoomsCarousel'
 import { RESIDENCES } from '../data/residences'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 
-export default function SuitesPage() {
+export default function RoomsPage() {
   useSmoothScroll()
   const navigate = useNavigate()
 
@@ -181,11 +181,11 @@ export default function SuitesPage() {
         </div>
       </section>
 
-      {/* 4. The Suite Cards Stream (Exact Same ResidenceSpread Component) */}
+      {/* 4. The Suite Cards Stream (Exact Same RoomsCarousel Component) */}
       <main className="max-w-7xl mx-auto px-6 py-16 sm:py-24 space-y-24">
         {filteredSuites.length > 0 ? (
           filteredSuites.map((residence, idx) => (
-            <ResidenceSpread
+            <RoomsCarousel
               key={residence.id}
               residence={residence}
               index={idx}

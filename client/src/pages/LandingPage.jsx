@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
-import HeroParallax from '../components/HeroParallax'
+import HeroSection from '../components/HeroSection'
 import Navbar from '../components/Navbar'
-import ResidenceSpread from '../components/ResidenceSpread'
+import RoomsCarousel from '../components/RoomsCarousel'
 import SplashScreen from '../components/SplashScreen'
 import { RESIDENCES } from '../data/residences'
 
@@ -39,7 +39,7 @@ export default function LandingPage() {
       <Navbar onOpenDrawer={() => handleOpenReservation(RESIDENCES[0])} />
 
       {/* Parallax Hero Section */}
-      <HeroParallax onQuickReserve={() => handleOpenReservation(RESIDENCES[0])} />
+      <HeroSection onQuickReserve={() => handleOpenReservation(RESIDENCES[0])} />
 
       {/* Architectural Residences Showcase */}
       <main id="residences" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 space-y-16 sm:space-y-20 lg:space-y-28 overflow-x-clip">
@@ -52,14 +52,14 @@ export default function LandingPage() {
               Featured Suites &amp; Villas
             </h2>
           </div>
-          <span className="text-xs text-slate-500 tracking-[0.15em] uppercase font-medium">
+          <span className="text-xs text-slate-600 tracking-[0.15em] uppercase font-medium">
             3 Private Suites &bull; Complete Seclusion &amp; Ocean Views
           </span>
         </div>
 
         {/* Render Residences with Embla Carousel & Casa Momo Kinetic Hover */}
         {RESIDENCES.map((residence, idx) => (
-          <ResidenceSpread
+          <RoomsCarousel
             key={residence.id}
             residence={residence}
             index={idx}
@@ -72,7 +72,7 @@ export default function LandingPage() {
       <section id="experience" className="bg-white border-y border-slate-200/80 py-14 sm:py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 text-slate-600">
           <div className="space-y-3">
-            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-400 uppercase">
+            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-600 uppercase">
               01 &bull; TOTAL RELAXATION
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
@@ -84,7 +84,7 @@ export default function LandingPage() {
           </div>
 
           <div className="space-y-3">
-            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-400 uppercase">
+            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-600 uppercase">
               02 &bull; DINING
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
@@ -96,7 +96,7 @@ export default function LandingPage() {
           </div>
 
           <div className="space-y-3">
-            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-400 uppercase">
+            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-600 uppercase">
               03 &bull; PRIVACY
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
