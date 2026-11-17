@@ -159,13 +159,13 @@ export default function Navbar({ onOpenDrawer }) {
                 Sindh Coast Sanctuaries
               </span>
               <span className="absolute inset-0 flex items-center whitespace-nowrap font-medium text-slate-900 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] translate-x-[115%] group-hover:translate-x-0 will-change-transform leading-none">
-                The Haven &middot; 2026
+                Habitas &middot; 2026
               </span>
             </span>
           </Link>
         </div>
 
-        {/* Center: Absolute Mathematical Viewport Centering for The Haven Emblem & Wordmark */}
+        {/* Center: Absolute Mathematical Viewport Centering for Habitas Emblem & Wordmark */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hidden md:flex items-center justify-center">
           <BrandLogo variant="full" theme="dark" size="md" />
         </div>
@@ -433,7 +433,7 @@ export default function Navbar({ onOpenDrawer }) {
               <span className="text-emerald-700 font-semibold uppercase">● 3 Sanctuaries Ready</span>
             </div>
             <div className="text-slate-400 pt-1 text-[9px] uppercase tracking-wider">
-              The Haven &middot; Safepay 30% Advance &middot; 5-Min Atomic Lock
+              Habitas &middot; Safepay 30% Advance &middot; 5-Min Atomic Lock
             </div>
           </div>
 

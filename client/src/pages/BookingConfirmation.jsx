@@ -109,7 +109,7 @@ export default function BookingConfirmation() {
       </div>
 
       <footer className="text-center text-[10px] text-slate-400 tracking-[0.2em] uppercase">
-        The Haven &bull; An Aptech Luxury Hospitality Curriculum System &bull; LuxuryStay HMS
+        Habitas &bull; An Aptech Luxury Hospitality Curriculum System &bull; LuxuryStay HMS
       </footer>
     </div>
   )

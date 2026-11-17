@@ -1,5 +1,14 @@
 {
   "projects": {
-    "default": "the-haven-sanctuary"
+    "default": "ahmed-hussain-portfolio"
+  },
+  "targets": {
+    "ahmed-hussain-portfolio": {
+      "hosting": {
+        "habitas": [
+          "habitas"
+        ]
+      }
+    }
   }
 }

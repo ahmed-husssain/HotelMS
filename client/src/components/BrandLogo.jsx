@@ -63,7 +63,7 @@ export default function BrandLogo({
       {(variant === 'full' || variant === 'wordmark') && (
         <div className="flex flex-col text-left leading-none">
           <span className={`font-cinzel font-bold uppercase ${dimensions.title} ${textColor}`}>
-            THE HAVEN
+            HABITAS
           </span>
           <span className={`font-sans-clean font-medium uppercase mt-1 ${dimensions.subtitle} ${subtextColor}`}>
             Residences &bull; Sanctuary
@@ -78,7 +78,7 @@ export default function BrandLogo({
       <Link
         to={to}
         className="group inline-flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-800 transition-opacity hover:opacity-90 active:scale-[0.98]"
-        aria-label="The Haven — Return to home"
+        aria-label="Habitas — Return to home"
       >
         {content}
       </Link>
