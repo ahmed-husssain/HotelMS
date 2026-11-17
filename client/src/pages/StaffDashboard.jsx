@@ -15,8 +15,8 @@ export default function StaffDashboard() {
   const [rooms, setRooms] = useState(INITIAL_ROOMS)
   const [selectedRoom, setSelectedRoom] = useState(INITIAL_ROOMS[0])
   const [extraItems, setExtraItems] = useState([
-    { description: 'In-Room Dining (Kobe & White Truffle)', amount: 18500, time: '14:20' },
-    { description: 'Hinoki Hydrotherapy Soak Service', amount: 12000, time: '16:00' },
+    { description: 'In-Room Dining (Gourmet Steak Dinner)', amount: 18500, time: '14:20' },
+    { description: 'Private Cedar Hot Tub Service', amount: 12000, time: '16:00' },
   ])
 
   const addFolioCharge = (desc, cost) => {
