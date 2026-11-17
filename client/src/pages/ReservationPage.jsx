@@ -147,13 +147,14 @@ export default function ReservationPage() {
       {/* ============================================================== */}
       {/* 1. MINIMAL ARCHITECTURAL TOP BAR */}
       {/* ============================================================== */}
-      <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/60 px-6 sm:px-12 py-5 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/60 px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex items-center justify-between">
         <Link
           to="/"
-          className="group inline-flex items-center gap-2 text-xs font-mono tracking-wider text-slate-600 hover:text-slate-950 uppercase transition-colors"
+          className="group inline-flex items-center gap-1.5 sm:gap-2 text-xs font-mono tracking-wider text-slate-600 hover:text-slate-950 uppercase transition-colors"
         >
           <span className="transition-transform group-hover:-translate-x-1">&larr;</span>
-          <span>Return to Suites</span>
+          <span className="hidden sm:inline">Return to </span>
+          <span>Suites</span>
         </Link>
 
         {/* Center Brand Wordmark */}
@@ -170,24 +171,24 @@ export default function ReservationPage() {
       {/* ============================================================== */}
       {/* 2. MAIN 2-COLUMN MINIMALIST WORKSPACE */}
       {/* ============================================================== */}
-      <main className="max-w-7xl mx-auto px-6 sm:px-12 py-12 lg:py-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 pb-28 lg:pb-12">
         
         {/* Suite Header with Minimal Telemetry */}
-        <div className="mb-12 border-b border-slate-200/80 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-1.5">
+        <div className="mb-8 sm:mb-12 border-b border-slate-200/80 pb-5 sm:pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
+          <div className="space-y-1 sm:space-y-1.5">
             <span className="text-[10px] font-mono tracking-[0.25em] font-extrabold text-emerald-900 uppercase block">
               SUITE {selectedResidence.roomNumber} &bull; {selectedResidence.tier}
             </span>
-            <h1 className="font-cinzel text-3xl sm:text-5xl font-light text-slate-900 tracking-tight">
+            <h1 className="font-cinzel text-2xl sm:text-4xl lg:text-5xl font-light text-slate-900 tracking-tight">
               {selectedResidence.name}
             </h1>
-            <p className="text-xs font-mono text-slate-500 tracking-wider uppercase pt-1">
+            <p className="text-xs font-mono text-slate-500 tracking-wider uppercase pt-0.5 sm:pt-1">
               PKR {selectedResidence.nightlyRate.toLocaleString()} / Night &bull; 100% Uninterrupted Seclusion
             </p>
           </div>
 
           {/* Minimal Suite Switcher */}
-          <div className="flex items-center gap-1.5 bg-white border border-slate-200 p-1 rounded-[2px] self-start md:self-end shadow-2xs">
+          <div className="flex items-center gap-1 sm:gap-1.5 bg-white border border-slate-200 p-1 rounded-[2px] self-start md:self-end shadow-2xs overflow-x-auto max-w-full">
             {RESIDENCES.map((res) => {
               const isActive = res.roomNumber === selectedResidence.roomNumber
               return (
@@ -195,7 +196,7 @@ export default function ReservationPage() {
                   key={res.id}
                   type="button"
                   onClick={() => setSearchParams({ room: res.roomNumber })}
-                  className={`px-3 py-1 text-[11px] font-mono uppercase tracking-wider rounded-[2px] transition-all cursor-pointer ${
+                  className={`px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider rounded-[2px] transition-all cursor-pointer whitespace-nowrap ${
                     isActive
                       ? 'bg-[#0E1201] text-[#FFF0CA] font-bold shadow-xs'
                       : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
@@ -209,7 +210,7 @@ export default function ReservationPage() {
         </div>
 
         {/* 2-Column Responsive Layout */}
-        <form onSubmit={handleConfirmReservation} className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <form onSubmit={handleConfirmReservation} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
           
           {/* ============================================================ */}
           {/* LEFT COLUMN: MINIMALIST DOSSIER & PARAMETERS (7 cols) */}
