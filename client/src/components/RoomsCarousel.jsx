@@ -35,7 +35,32 @@ export default function RoomsCarousel({ residence, index, onReserve }) {
 
   const isReversed = index % 2 !== 0
 
-  // 1. Ultra-Premium Embla Carousel Engine
+  // 1. Defer Off-Screen Embla Engine Initialization (Saves ~400ms Main-Thread TBT)
+  const [shouldInitCarousel, setShouldInitCarousel] = useState(index === 0)
+
+  useEffect(() => {
+    if (shouldInitCarousel) return
+    const el = containerRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setShouldInitCarousel(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShouldInitCarousel(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '300px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [shouldInitCarousel])
+
+  // Ultra-Premium Embla Carousel Engine
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     duration: 35, // Smooth, cinematic transition duration matching luxury editorial sites
@@ -114,8 +139,8 @@ export default function RoomsCarousel({ residence, index, onReserve }) {
           data-cursor="Suite Details"
           className="relative aspect-[16/10] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none cursor-pointer"
         >
-          {/* Embla Viewport */}
-          <div ref={emblaRef} className="overflow-hidden w-full h-full">
+          {/* Embla Viewport (Lazy-connected for off-screen suites) */}
+          <div ref={shouldInitCarousel ? emblaRef : null} className="overflow-hidden w-full h-full">
             <div className="flex w-full h-full touch-pan-y">
               {gallery.map((photo, i) => (
                 <div

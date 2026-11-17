@@ -13,6 +13,11 @@
     <!-- Hero LCP Image Preload (Optimized responsive mobile-first image) -->
     <link rel="preload" as="image" href="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=75" fetchpriority="high" />
 
+    <!-- Direct WOFF2 Font Preloads for Instant Headings & Body Painting (Zero Waterfall) -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/cinzel/v26/8vIJ7ww63mVu7gt79mT7PkRXMw.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgEM86xQ.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yygg_vb.woff2" />
+
     <!-- Google Fonts for Editorial Luxury (Asynchronous Non-Blocking Load) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,7 +28,21 @@
     </noscript>
   </head>
   <body class="bg-[#FAF8F5] text-slate-900 selection:bg-emerald-100 selection:text-emerald-950 overflow-x-hidden antialiased">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Instant First-Frame Hero LCP Shell: Eliminates JS Hydration Delay for 90+ Score -->
+      <div style="position:relative;min-height:92vh;background-color:#FAF8F5;overflow:hidden">
+        <img
+          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&amp;fit=crop&amp;w=800&amp;q=75"
+          srcset="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&amp;fit=crop&amp;w=800&amp;q=75 800w, https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&amp;fit=crop&amp;w=1200&amp;q=75 1200w"
+          sizes="100vw"
+          alt="Luxury Oceanfront Resort"
+          fetchpriority="high"
+          decoding="async"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.1);filter:brightness(0.98)"
+        />
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(250,248,245,0.9), rgba(250,248,245,0.7), rgba(250,248,245,1))"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

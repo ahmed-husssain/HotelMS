@@ -308,13 +308,13 @@ export default function GuestPortalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between">
+    <div className="h-screen h-[100dvh] max-h-[100dvh] overflow-hidden bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between">
       {/* ============================================================== */}
       {/* 1. TOP ESSENTIAL APP DOCK (ZERO CLUTTER, 44PX TARGETS)        */}
       {/* ============================================================== */}
-      <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80">
+      <header className="shrink-0 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80 z-40">
         {/* Main Essential Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-3">
           {/* Left: Return & Brand */}
           <div className="flex items-center gap-3 sm:gap-4">
             <Link
@@ -401,7 +401,7 @@ export default function GuestPortalPage() {
           <div className="border-t border-slate-200/60 bg-[#FAF8F5]">
             <nav
               aria-label="Guest Operations Navigation"
-              className="max-w-7xl mx-auto px-4 sm:px-8 py-2 flex items-center justify-start sm:justify-center gap-1.5 sm:gap-3 overflow-x-auto scrollbar-none"
+              className="max-w-7xl mx-auto px-4 sm:px-8 py-1.5 flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2.5 overflow-x-auto scrollbar-none"
             >
               {[
                 { id: 'suite', label: 'My Suite & Key', icon: '🔑' },
@@ -416,7 +416,7 @@ export default function GuestPortalPage() {
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`touch-target px-3.5 sm:px-4 py-2 rounded-full font-mono text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+                    className={`touch-target px-3.5 sm:px-4 py-1.5 rounded-full font-mono text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
                       isActive
                         ? 'bg-slate-900 text-[#FFF0CA] shadow-sm'
                         : 'bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80'
@@ -446,11 +446,11 @@ export default function GuestPortalPage() {
           onLoadDemo={handleLoadDemo}
         />
       ) : (
-        <main className="max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-10 flex-1 w-full space-y-8">
+        <main className="flex-1 min-h-0 overflow-y-auto scrollbar-none max-w-7xl mx-auto px-4 sm:px-8 py-3 sm:py-5 w-full space-y-5">
           {/* Live Service Notification Toast */}
           {serviceFeedbackNotice && (
-            <div className="p-3.5 sm:p-4 bg-emerald-950 text-emerald-200 text-xs font-mono flex items-center justify-between rounded-[2px] shadow-lg border border-emerald-800 animate-fade-in">
-              <div className="flex items-center gap-2.5">
+            <div className="p-3 bg-emerald-950 text-emerald-200 text-xs font-mono flex items-center justify-between rounded-[2px] shadow-lg border border-emerald-800 animate-fade-in">
+              <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
                 <span>{serviceFeedbackNotice}</span>
               </div>
@@ -462,10 +462,10 @@ export default function GuestPortalPage() {
 
           {/* Express Checkout Toast */}
           {expressCheckoutNotice && (
-            <div className="p-3.5 sm:p-4 bg-slate-900 text-[#FFF0CA] text-xs font-mono flex items-center justify-between rounded-[2px] shadow-lg border border-slate-800 animate-fade-in">
-              <div className="flex items-center gap-2.5">
+            <div className="p-3 bg-slate-900 text-[#FFF0CA] text-xs font-mono flex items-center justify-between rounded-[2px] shadow-lg border border-slate-800 animate-fade-in">
+              <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping shrink-0" />
-                <span>Express Check-out initiated. Butler & Valet dispatched to Suite 301.</span>
+                <span>Express Check-out initiated. Butler &amp; Valet dispatched to Suite 301.</span>
               </div>
               <span className="text-[10px] text-amber-400 uppercase tracking-widest font-bold">
                 FRONT DESK NOTIFIED
@@ -477,11 +477,11 @@ export default function GuestPortalPage() {
           {/* TAB 1: MY SUITE & DIGITAL KEY                                */}
           {/* ============================================================ */}
           {activeTab === 'suite' && (
-            <div className="space-y-8 animate-fade-in">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="space-y-4 animate-fade-in">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
                 {/* Left: Cinematic Suite Card with Live NFC Key Access */}
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-[2px] overflow-hidden bg-slate-900 border border-slate-200/80 shadow-lg group">
+                <div className="lg:col-span-7 space-y-3">
+                  <div className="relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/9.5] max-h-[360px] sm:max-h-[380px] rounded-[2px] overflow-hidden bg-slate-900 border border-slate-200/80 shadow-md group">
                     <img
                       src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85"
                       alt="Suite 301 Horizon Penthouse"
@@ -490,7 +490,7 @@ export default function GuestPortalPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/35" />
 
                     {/* Top Overlay Badges */}
-                    <div className="absolute top-4 inset-x-4 flex items-center justify-between font-mono text-[10px] text-white">
+                    <div className="absolute top-3 inset-x-3 sm:top-4 sm:inset-x-4 flex items-center justify-between font-mono text-[10px] text-white">
                       <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-[2px] border border-white/15 tracking-widest uppercase text-[#FFF0CA] font-bold">
                         {currentBooking.roomNumber || 'Suite 301'} &bull; 210 m²
                       </span>
@@ -500,12 +500,12 @@ export default function GuestPortalPage() {
                     </div>
 
                     {/* Bottom Digital Key Trigger */}
-                    <div className="absolute bottom-5 inset-x-5 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div className="absolute bottom-4 inset-x-4 sm:bottom-5 sm:inset-x-5 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                       <div>
                         <span className="text-[9px] font-mono tracking-[0.25em] text-amber-400 uppercase block font-bold">
                           CONTACTLESS DIGITAL NFC PASS
                         </span>
-                        <h2 className="font-serif-grand text-2xl sm:text-3xl text-white block mt-0.5">
+                        <h2 className="font-serif-grand text-xl sm:text-2xl text-white block mt-0.5">
                           {currentBooking.residence?.name || 'The Horizon Penthouse'}
                         </h2>
                       </div>
@@ -514,7 +514,7 @@ export default function GuestPortalPage() {
                         type="button"
                         onClick={handleTriggerDigitalKey}
                         disabled={isKeyUnlocking}
-                        className={`touch-target px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-widest rounded-full shadow-2xl flex items-center justify-center gap-2.5 transition-all cursor-pointer shrink-0 active:scale-95 ${
+                        className={`touch-target px-5 py-3 font-mono text-xs font-bold uppercase tracking-widest rounded-full shadow-2xl flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 active:scale-95 ${
                           isKeyUnlocking
                             ? 'bg-amber-400 text-slate-950 scale-102 ring-4 ring-amber-300/40'
                             : 'bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-slate-950 hover:brightness-105'
@@ -528,7 +528,7 @@ export default function GuestPortalPage() {
 
                   {/* Key Unlock Feedback Toast */}
                   {keyUnlockedToast && (
-                    <div className="p-3.5 bg-emerald-950 text-emerald-200 border border-emerald-800 rounded-[2px] font-mono text-xs flex items-center justify-between shadow-md animate-fade-in">
+                    <div className="p-3 bg-emerald-950 text-emerald-200 border border-emerald-800 rounded-[2px] font-mono text-xs flex items-center justify-between shadow-md animate-fade-in">
                       <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                         <span>Suite 301 lock disengaged. Welcome inside, {currentBooking.guestName}.</span>
@@ -541,20 +541,20 @@ export default function GuestPortalPage() {
                 </div>
 
                 {/* Right: In-Room Amenities & Tactile Controls */}
-                <div className="lg:col-span-5 space-y-6">
+                <div className="lg:col-span-5 space-y-3.5">
                   <div>
-                    <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
+                    <span className="text-[9px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
                       IN-RESIDENCE CREDENTIALS
                     </span>
-                    <h3 className="type-h2 text-2xl text-slate-900 mt-0.5">
+                    <h3 className="type-h2 text-xl sm:text-2xl text-slate-900 mt-0.5">
                       Suite Controls &amp; Valet
                     </h3>
                   </div>
 
                   {/* 3 Metric Control Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                     {/* Wi-Fi Card */}
-                    <div className="p-3.5 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
+                    <div className="p-3 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-[9px] font-mono text-slate-400 uppercase font-bold">WI-FI</span>
                         <button
@@ -572,7 +572,7 @@ export default function GuestPortalPage() {
                     </div>
 
                     {/* Climate Card */}
-                    <div className="p-3.5 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
+                    <div className="p-3 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-[9px] font-mono text-slate-400 uppercase font-bold">CLIMATE</span>
                         <button
@@ -590,7 +590,7 @@ export default function GuestPortalPage() {
                     </div>
 
                     {/* Valet Bay Card */}
-                    <div className="p-3.5 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
+                    <div className="p-3 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
                       <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">VALET</span>
                       <span className="font-mono text-xs font-bold text-slate-900 block">
                         Bay #301
@@ -600,8 +600,8 @@ export default function GuestPortalPage() {
                   </div>
 
                   {/* Private Butler & Residence Features */}
-                  <div className="p-5 bg-white border border-slate-200/90 rounded-[2px] space-y-3 shadow-xs text-xs text-slate-600">
-                    <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+                  <div className="p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-2.5 shadow-xs text-xs text-slate-600">
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                       <div>
                         <span className="font-bold text-slate-900 block">Private Butler on Duty</span>
                         <span className="text-[11px] text-slate-500 font-mono">Tariq J. &bull; In-House</span>
@@ -620,7 +620,7 @@ export default function GuestPortalPage() {
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                       <span className="font-medium text-slate-800">Private Oceanfront Pool</span>
                       <span className="font-mono text-emerald-900 font-semibold text-[11px]">Heated &bull; 28°C</span>
                     </div>
@@ -632,11 +632,11 @@ export default function GuestPortalPage() {
                   </div>
 
                   {/* Quick Housekeeping Triggers */}
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-mono tracking-wider font-bold text-slate-400 uppercase block">
+                  <div className="space-y-1.5">
+                    <span className="text-[9px] font-mono tracking-wider font-bold text-slate-400 uppercase block">
                       QUICK REQUESTS &bull; 1-TOUCH DISPATCH
                     </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <button
                         type="button"
                         onClick={() => handleRequestService({
@@ -645,7 +645,7 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-2.5"
+                        className="touch-target p-3 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-2"
                       >
                         <span className="text-base">🛏️</span>
                         <div>
@@ -662,7 +662,7 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-2.5"
+                        className="touch-target p-3 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-2"
                       >
                         <span className="text-base">🕯️</span>
                         <div>
@@ -1094,8 +1094,8 @@ export default function GuestPortalPage() {
       {/* ============================================================== */}
       {/* 3. ULTRA-MINIMAL GUEST FOOTER                                  */}
       {/* ============================================================== */}
-      <footer className="border-t border-slate-200/60 bg-[#FAF8F5] py-4 px-4 sm:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono text-slate-500">
+      <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2 px-4 sm:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-500">
           <span>&copy; 2026 HABITAS SANCTUARY &bull; SINDH COAST</span>
           <div className="flex items-center gap-4">
             <span>Concierge: +92 300 8921455</span>
