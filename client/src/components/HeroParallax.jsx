@@ -44,7 +44,7 @@ export default function HeroParallax({ onQuickReserve }) {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-[95vh] pt-28 flex flex-col justify-between overflow-hidden bg-white"
+      className="relative min-h-[95vh] pt-28 flex flex-col justify-between overflow-hidden bg-[#FAF8F5]"
     >
       {/* Background Hero Image with Hardware Scale */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -52,14 +52,15 @@ export default function HeroParallax({ onQuickReserve }) {
           ref={imageRef}
           src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2400&q=90"
           alt="Luxury Architecture Sanctuary"
-          className="w-full h-full object-cover object-center scale-110 origin-center filter brightness-[0.96]"
+          className="w-full h-full object-cover object-center scale-110 origin-center filter brightness-[0.98]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-transparent to-white/95" />
+        {/* Soft Alabaster Editorial Mist: Balances dusk photography with obsidian typography */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/90 via-[#FAF8F5]/70 to-[#FAF8F5]" />
       </div>
 
       {/* Hero Editorial Header */}
       <div ref={titleRef} className="relative z-10 max-w-7xl mx-auto px-6 pt-16 w-full text-center">
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1 mb-6 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 text-slate-700 text-[10px] tracking-[0.28em] font-semibold uppercase">
+        <div className="inline-flex items-center gap-2.5 px-3.5 py-1 mb-6 rounded-full bg-white/95 backdrop-blur-md border border-slate-300/80 text-slate-800 text-[10px] tracking-[0.28em] font-semibold uppercase shadow-xs">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
           Autumn Residency Openings
         </div>
@@ -68,7 +69,7 @@ export default function HeroParallax({ onQuickReserve }) {
           Where Architecture Meets Silence.
         </h1>
 
-        <p className="mt-4 text-xs sm:text-sm tracking-[0.25em] text-slate-600 uppercase font-medium">
+        <p className="mt-4 text-xs sm:text-sm tracking-[0.25em] text-slate-800 uppercase font-medium">
           Privileged Sanctuaries &bull; Ocean Horizon &bull; Complete Privacy
         </p>
       </div>
