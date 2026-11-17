@@ -169,7 +169,7 @@ export default function Navbar({ onOpenDrawer }) {
               <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
               <span className="relative inline-flex items-center overflow-hidden h-10 w-[140px]">
                 <span className="absolute inset-0 flex items-center whitespace-nowrap leading-none text-slate-900 font-normal">
-                  The Haven &middot; 2026
+                  Habitas &middot; 2026
                 </span>
               </span>
             </Link>

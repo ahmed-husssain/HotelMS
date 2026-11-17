@@ -2,14 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 /**
- * BrandLogo — The Haven Architectural Emblem & Wordmark
+ * BrandLogo — Habitas Architectural Emblem & Wordmark
  *
  * Grounded in the architectural ethos of the property:
  * - Monolithic Arch: The portal to absolute privacy and seclusion
  * - Hairline Horizon: Where the Sindh coast meets the Arabian Sea
  * - Celestial Keystone: Gold dawn marker (#D4AF37)
- *
- * Scalable across navbar, drawer, receipt folios, and footer.
+ * - Single-line pure wordmark: HABITAS
  */
 export default function BrandLogo({
   variant = 'full', // 'full' | 'emblem' | 'wordmark'
@@ -22,13 +21,12 @@ export default function BrandLogo({
 
   // Size configurations
   const dimensions = {
-    sm: { emblem: 'w-6 h-6', title: 'text-base tracking-[0.22em]', subtitle: 'text-[9px] tracking-[0.25em]' },
-    md: { emblem: 'w-8 h-8', title: 'text-xl tracking-[0.25em]', subtitle: 'text-[10px] tracking-[0.28em]' },
-    lg: { emblem: 'w-12 h-12', title: 'text-3xl tracking-[0.28em]', subtitle: 'text-xs tracking-[0.3em]' },
+    sm: { emblem: 'w-6 h-6', title: 'text-base tracking-[0.22em]' },
+    md: { emblem: 'w-7 h-7 sm:w-8 sm:h-8', title: 'text-lg sm:text-xl tracking-[0.25em]' },
+    lg: { emblem: 'w-10 h-10 sm:w-12 sm:h-12', title: 'text-2xl sm:text-3xl tracking-[0.28em]' },
   }[size] || dimensions.md
 
   const textColor = isLight ? 'text-[#FAF8F5]' : 'text-slate-900'
-  const subtextColor = isLight ? 'text-slate-400' : 'text-slate-500'
   const emblemStroke = isLight ? '#FAF8F5' : '#0F172A'
 
   // Scalable SVG Architectural Monogram
@@ -57,18 +55,13 @@ export default function BrandLogo({
   )
 
   const content = (
-    <div className={`inline-flex items-center gap-3 select-none ${className}`}>
+    <div className={`inline-flex items-center gap-2.5 sm:gap-3 select-none ${className}`}>
       {(variant === 'full' || variant === 'emblem') && Emblem}
 
       {(variant === 'full' || variant === 'wordmark') && (
-        <div className="flex flex-col text-left leading-none">
-          <span className={`font-cinzel font-bold uppercase ${dimensions.title} ${textColor}`}>
-            HABITAS
-          </span>
-          <span className={`font-sans-clean font-medium uppercase mt-1 ${dimensions.subtitle} ${subtextColor}`}>
-            Residences &bull; Sanctuary
-          </span>
-        </div>
+        <span className={`font-cinzel font-bold uppercase ${dimensions.title} ${textColor} leading-none`}>
+          HABITAS
+        </span>
       )}
     </div>
   )

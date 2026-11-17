@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import HeroParallax from '../components/HeroParallax'
 import Navbar from '../components/Navbar'
 import ResidenceSpread from '../components/ResidenceSpread'
+import SplashScreen from '../components/SplashScreen'
 import { RESIDENCES } from '../data/residences'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 
@@ -13,8 +14,23 @@ export default function LandingPage() {
   useSmoothScroll()
   const navigate = useNavigate()
 
+  // Cinematic opening sequence state
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hasSeen = sessionStorage.getItem('habitas_splash_seen')
+      const forceIntro = new URLSearchParams(window.location.search).get('intro') === 'true'
+      return !hasSeen || forceIntro
+    }
+    return true
+  })
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedResidence, setSelectedResidence] = useState(RESIDENCES[0])
+
+  const handleSplashComplete = () => {
+    sessionStorage.setItem('habitas_splash_seen', 'true')
+    setShowSplash(false)
+  }
 
   const handleOpenDrawer = (residence = RESIDENCES[0]) => {
     setSelectedResidence(residence)
@@ -28,6 +44,9 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-slate-900 selection:bg-emerald-100 selection:text-emerald-950 font-sans-clean">
+      {/* Monolithic Opening Portal Sequence */}
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+
       {/* Floating Header */}
       <Navbar onOpenDrawer={() => handleOpenDrawer(RESIDENCES[0])} />
 
