@@ -55,13 +55,19 @@ html.lenis, html.lenis body {
   transition: transform 100ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Option B: Site-wide luxury custom cursor suppression for mouse/trackpad */
+/* Site-wide luxury custom cursor suppression for mouse/trackpad (Only active when custom cursor has initialized) */
 @media (hover: hover) and (pointer: fine) {
-  html, body, a, button, [role="button"], [data-cursor] {
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor [role="button"],
+  html.has-custom-cursor [data-cursor] {
     cursor: none !important;
   }
-  /* Allow natural I-beam cursor for typing in text fields */
-  input, textarea {
+  /* Always allow natural I-beam cursor for typing in text fields */
+  html.has-custom-cursor input,
+  html.has-custom-cursor textarea {
     cursor: text !important;
   }
 }

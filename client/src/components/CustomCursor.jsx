@@ -89,14 +89,14 @@ function ArrowRoll({ isRolled, charCount }) {
 }
 
 /**
- * Concept 3: Pure Quiet Luxury Minimal Cursor (Subtle Soft Halo)
+ * Bulletproof Concept 3: Quiet Luxury Minimal Cursor (Subtle Soft Halo)
  * 
- * Architecture:
- * - Single unified dot (zero outer detached rings, zero lag)
- * - Restrained 24px soft translucent whisper halo on hover over clickable elements
- * - Seamless morph into Casa Momo Suite pill over room photo cards
- * - 0% opacity over text inputs for native I-beam typing
- * - 120 FPS hardware translate3d positioning
+ * Reliability Guarantees:
+ * - Always mounts container immediately so rootRef is never null on mount
+ * - Injects 'has-custom-cursor' on <html> ONLY when mouse movement is active
+ * - Zero detached elements: single unified dot that smoothly blossoms into a 28px soft halo
+ * - Suite photo cards smoothly bloom into the signature Suite Details ↗ pill
+ * - Form inputs gracefully restore native I-beam typing
  */
 export default function CustomCursor() {
   const rootRef = useRef(null)
@@ -106,23 +106,29 @@ export default function CustomCursor() {
   const [cursorMode, setCursorMode] = useState('default') // 'default' | 'link' | 'card' | 'input'
   const [cardLabel, setCardLabel] = useState('Suite Details')
   const [isRolled, setIsRolled] = useState(false)
-  const [isFinePointer, setIsFinePointer] = useState(false)
+  const [isActive, setIsActive] = useState(false)
 
   useEffect(() => {
-    // Touchscreen / Coarse pointer guard
+    // Check if the device has a mouse/fine pointer
     const isFine = window.matchMedia('(hover: hover) and (pointer: fine)').matches
-    setIsFinePointer(isFine)
-    if (!isFine) return
+    if (!isFine) {
+      document.documentElement.classList.remove('has-custom-cursor')
+      return
+    }
 
     const rootEl = rootRef.current
     if (!rootEl) return
 
-    // Direct 1-to-1 immediate mouse follow (0 latency, impossible to detach)
+    // Activates custom cursor upon first real mouse movement
     const onPointerMove = (e) => {
+      if (!document.documentElement.classList.contains('has-custom-cursor')) {
+        document.documentElement.classList.add('has-custom-cursor')
+        setIsActive(true)
+      }
       rootEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`
     }
 
-    // Boundary-triggered element detection (0 overhead on pointermove)
+    // Boundary-triggered element detection (efficient event-driven target handling)
     const onPointerOver = (e) => {
       const target = e.target
       if (!target || !(target instanceof Element)) {
@@ -174,13 +180,12 @@ export default function CustomCursor() {
     window.addEventListener('pointerout', onPointerOut, { passive: true })
 
     return () => {
+      document.documentElement.classList.remove('has-custom-cursor')
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerover', onPointerOver)
       window.removeEventListener('pointerout', onPointerOut)
     }
   }, [])
-
-  if (!isFinePointer) return null
 
   const isInput = cursorMode === 'input'
   const isLink = cursorMode === 'link'
@@ -189,7 +194,9 @@ export default function CustomCursor() {
   return (
     <div
       ref={rootRef}
-      className="custom-cursor-container fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform select-none"
+      className={`custom-cursor-container fixed top-0 left-0 pointer-events-none z-[999999] will-change-transform select-none ${
+        isActive ? 'block' : 'hidden'
+      }`}
       style={{ transform: 'translate3d(-100px, -100px, 0)' }}
     >
       {/* ============================================================== */}
@@ -201,8 +208,8 @@ export default function CustomCursor() {
           isInput || isCard ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
         } ${
           isLink
-            ? 'w-6 h-6 bg-[#121619]/15 shadow-none'
-            : 'w-1.5 h-1.5 bg-[#121619]'
+            ? 'w-7 h-7 bg-[#121619]/15 border border-[#121619]/20'
+            : 'w-2 h-2 bg-[#121619]'
         }`}
       />
 
