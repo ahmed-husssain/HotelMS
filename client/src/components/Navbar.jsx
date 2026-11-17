@@ -21,6 +21,50 @@ import BrandLogo from './BrandLogo'
  *    - Eliminates DOM rect layout-thrashing on mousemove.
  *    - Kinetic slot-machine vertical character reveal runs purely on the GPU compositor thread.
  */
+
+/**
+ * StaggeredWaveText
+ * Exact Casa Momo character staggered wave-roll (ScrollRadius.CU3IUbFx.mjs)
+ * Duration: 0.65s, Easing: cubic-bezier(0.52, 0, 0, 1), Stagger: 12ms per character
+ *
+ * Each character rolls up sequentially when the parent element is hovered (group-hover),
+ * creating a fluid, cascading ripple across the letters identical to the CustomCursor pill.
+ */
+function StaggeredWaveText({ text }) {
+  return (
+    <span className="inline-flex items-center overflow-hidden h-10 leading-none select-none">
+      {Array.from(text).map((char, index) => (
+        <span
+          key={index}
+          className="relative inline-block overflow-hidden align-top select-none"
+          style={{ height: '1.25em' }}
+        >
+          {/* Sizer to hold exact font metrics and eliminate layout reflow */}
+          <span className="invisible">{char === ' ' ? '\u00A0' : char}</span>
+
+          {/* Primary character (exits to -100% on wave hover) */}
+          <span
+            aria-hidden="true"
+            className="absolute top-0 left-0 inline-block will-change-transform select-none transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] group-hover:-translate-y-full"
+            style={{ transitionDelay: `${index * 12}ms` }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+
+          {/* Duplicate character (enters from 100% to 0% on wave hover) */}
+          <span
+            aria-hidden="true"
+            className="absolute top-0 left-0 inline-block will-change-transform select-none font-semibold text-slate-900 transition-transform duration-[620ms] ease-[cubic-bezier(0.52,0,0,1)] translate-y-full group-hover:translate-y-0"
+            style={{ transitionDelay: `${index * 12}ms` }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
 export default function Navbar({ onOpenDrawer }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -135,28 +179,14 @@ export default function Navbar({ onOpenDrawer }) {
               href="#residences"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
-                <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                  Residences
-                </span>
-                <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                  Residences
-                </span>
-              </span>
+              <StaggeredWaveText text="Residences" />
             </a>
 
             <a
               href="#experience"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
-                <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                  The Estate
-                </span>
-                <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                  The Estate
-                </span>
-              </span>
+              <StaggeredWaveText text="The Estate" />
             </a>
           </nav>
 
@@ -190,14 +220,7 @@ export default function Navbar({ onOpenDrawer }) {
             to="/pms"
             className="hidden lg:flex group relative h-10 items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none mr-2"
           >
-            <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
-              <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                Staff PMS
-              </span>
-              <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
-                Staff PMS
-              </span>
-            </span>
+            <StaggeredWaveText text="Staff PMS" />
           </Link>
 
           {/* Reserve CTA */}
