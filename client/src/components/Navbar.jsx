@@ -143,18 +143,18 @@ export default function Navbar({ onOpenDrawer }) {
       {/* 1. TOP HEADER (Visible at top, fades gracefully on scroll) */}
       {/* ============================================================== */}
       <header
-        className={`fixed top-0 inset-x-0 z-30 px-5 sm:px-8 md:px-14 py-5 sm:py-7 flex items-center justify-between transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] select-none pointer-events-none ${
+        className={`fixed top-0 inset-x-0 z-30 px-5 sm:px-8 md:px-14 py-5 sm:py-6 flex items-center justify-between transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] select-none pointer-events-none ${
           isScrolled ? '-translate-y-6 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
         }`}
       >
         {/* Left: Rolling Monogram Emblem */}
-        <div className="pointer-events-auto flex items-center h-8">
+        <div className="pointer-events-auto flex items-center h-10 shrink-0">
           <Link
             to="/"
-            className="group flex items-center gap-2 h-8 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            className="group flex items-center gap-2 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none active:scale-[0.97] transition-transform duration-100 ease-[cubic-bezier(0.16,1,0.3,1)]"
           >
             <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
-            <span className="relative inline-flex items-center overflow-hidden h-8 w-[130px] sm:w-[175px]">
+            <span className="relative inline-flex items-center overflow-hidden h-10 w-[130px] sm:w-[175px]">
               <span className="absolute inset-0 flex items-center whitespace-nowrap transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-x-[115%] will-change-transform leading-none text-slate-900 font-normal">
                 Sindh Coast Sanctuaries
               </span>
@@ -165,22 +165,22 @@ export default function Navbar({ onOpenDrawer }) {
           </Link>
         </div>
 
-        {/* Center: The Haven Monolithic Emblem & Wordmark */}
-        <div className="pointer-events-auto hidden md:flex items-center">
+        {/* Center: Absolute Mathematical Viewport Centering for The Haven Emblem & Wordmark */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hidden md:flex items-center justify-center">
           <BrandLogo variant="full" theme="dark" size="md" />
         </div>
 
         {/* Right: Desktop Links + Reserve Button + Three-Pill Menu Trigger */}
-        <div className="pointer-events-auto flex items-center gap-4 sm:gap-6">
+        <div className="pointer-events-auto flex items-center gap-3 sm:gap-5 shrink-0 h-10">
           <nav
             ref={navTrackRef}
             onMouseLeave={handleMouseLeave}
-            className="hidden lg:flex items-center h-8 gap-7 relative"
+            className="hidden lg:flex items-center h-10 gap-5 xl:gap-7 relative"
             aria-label="Desktop Navigation"
           >
             <span
               aria-hidden="true"
-              className="absolute bottom-0 h-[1.5px] bg-slate-900 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="absolute bottom-1 h-[1.5px] bg-slate-900 pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
               style={{
                 transform: `translate3d(${indicatorStyle.left}px, 0, 0)`,
                 width: `${indicatorStyle.width}px`,
@@ -191,13 +191,13 @@ export default function Navbar({ onOpenDrawer }) {
             <a
               href="#residences"
               onMouseEnter={handleMouseEnter}
-              className="group relative h-8 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
+              className="group relative h-10 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <span className="relative inline-flex flex-col h-8 overflow-hidden justify-center leading-none">
-                <span className="h-8 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+              <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
+                <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
                   Residences
                 </span>
-                <span className="absolute top-full left-0 h-8 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+                <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
                   Residences
                 </span>
               </span>
@@ -206,13 +206,13 @@ export default function Navbar({ onOpenDrawer }) {
             <a
               href="#experience"
               onMouseEnter={handleMouseEnter}
-              className="group relative h-8 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
+              className="group relative h-10 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <span className="relative inline-flex flex-col h-8 overflow-hidden justify-center leading-none">
-                <span className="h-8 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+              <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
+                <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
                   The Estate
                 </span>
-                <span className="absolute top-full left-0 h-8 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+                <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
                   The Estate
                 </span>
               </span>
@@ -221,13 +221,13 @@ export default function Navbar({ onOpenDrawer }) {
             <Link
               to="/pms"
               onMouseEnter={handleMouseEnter}
-              className="group relative h-8 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
+              className="group relative h-10 flex items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <span className="relative inline-flex flex-col h-8 overflow-hidden justify-center leading-none">
-                <span className="h-8 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+              <span className="relative inline-flex flex-col h-10 overflow-hidden justify-center leading-none">
+                <span className="h-10 flex items-center whitespace-nowrap transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
                   Staff PMS
                 </span>
-                <span className="absolute top-full left-0 h-8 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
+                <span className="absolute top-full left-0 h-10 flex items-center whitespace-nowrap font-semibold text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full will-change-transform">
                   Staff PMS
                 </span>
               </span>
@@ -238,7 +238,7 @@ export default function Navbar({ onOpenDrawer }) {
           <button
             type="button"
             onClick={onOpenDrawer}
-            className="px-3.5 sm:px-4 py-2 text-[11px] sm:text-xs font-mono uppercase tracking-[0.2em] border border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-[#FAF8F5] transition-all duration-300 active:scale-[0.97] cursor-pointer"
+            className="h-9 px-4 flex items-center justify-center text-[11px] sm:text-xs font-mono uppercase tracking-[0.2em] border border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-[#FAF8F5] transition-all duration-300 active:scale-[0.97] cursor-pointer rounded-[2px]"
           >
             Reserve
           </button>
@@ -248,12 +248,12 @@ export default function Navbar({ onOpenDrawer }) {
             type="button"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open Navigation Menu"
-            className="group relative w-10 h-10 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-xs"
+            className="group relative w-9 h-9 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-xs shrink-0"
           >
-            <div className="relative w-4 h-3 flex flex-col justify-between items-center pointer-events-none">
-              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full" />
-              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full" />
-              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full" />
+            <div className="relative w-3.5 h-2.5 flex flex-col justify-between items-center pointer-events-none">
+              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
             </div>
           </button>
         </div>
