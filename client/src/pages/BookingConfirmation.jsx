@@ -93,10 +93,10 @@ export default function BookingConfirmation() {
           {/* Action Links */}
           <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-4 pt-4 border-t border-slate-100">
             <Link
-              to="/"
-              className="tactile flex-1 py-3 text-center bg-slate-900 hover:bg-emerald-950 text-white text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px]"
+              to="/my-stay"
+              className="tactile flex-1 py-3 text-center bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px]"
             >
-              RETURN TO OVERVIEW
+              OPEN GUEST PORTAL &rarr;
             </Link>
             <Link
               to="/pms"

@@ -214,6 +214,16 @@ export default function Footer() {
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link
+                  to="/my-stay"
+                  className="inline-flex items-center gap-1.5 text-slate-300 hover:text-amber-400 font-semibold transition-colors"
+                >
+                  <span>Guest Portal (My Stay)</span>
+                  <span>&rarr;</span>
+                </Link>
+                <span className="text-[10px] text-slate-500 block">Digital Key, Room Service &amp; Reviews</span>
+              </li>
+              <li>
+                <Link
                   to="/pms"
                   className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 font-semibold transition-colors"
                 >

@@ -6,11 +6,8 @@ import Navbar from '../components/Navbar'
 import ResidenceSpread from '../components/ResidenceSpread'
 import SplashScreen from '../components/SplashScreen'
 import { RESIDENCES } from '../data/residences'
-import { useSmoothScroll } from '../hooks/useSmoothScroll'
 
 export default function LandingPage() {
-  // Initialize Lenis + GSAP single scroll authority
-  useSmoothScroll()
   const navigate = useNavigate()
 
   // Cinematic opening sequence state

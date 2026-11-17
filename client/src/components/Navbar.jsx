@@ -97,6 +97,19 @@ export default function Navbar({ onOpenDrawer }) {
     },
     {
       num: '03',
+      label: 'My Stay',
+      href: '/my-stay',
+      isRouter: true,
+      desc: 'Digital Key, Room Service & Feedback',
+      preview: {
+        tag: 'GUEST PORTAL',
+        title: 'Your Private Stay Dossier',
+        subtitle: 'Manage your active reservation, request in-room dining, view your live bill, and access your digital key.',
+        image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85',
+      },
+    },
+    {
+      num: '04',
       label: 'Staff PMS',
       href: '/pms',
       isRouter: true,
@@ -215,10 +228,10 @@ export default function Navbar({ onOpenDrawer }) {
         {/* Right Flank: Staff PMS + Reserve Button + Three-Pill Menu Trigger */}
         <div className="pointer-events-auto flex items-center gap-3 sm:gap-4 shrink-0 h-10">
           <Link
-            to="/pms"
+            to="/my-stay"
             className="hidden lg:flex group relative h-10 items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none mr-2"
           >
-            <StaggeredWaveText text="Staff PMS" />
+            <StaggeredWaveText text="My Stay" />
           </Link>
 
           {/* Reserve CTA */}

@@ -172,7 +172,7 @@ export default function ReservationPage() {
       {/* 2. MAIN 2-COLUMN MINIMALIST WORKSPACE */}
       {/* ============================================================== */}
       <main className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 pb-28 lg:pb-12">
-        
+
         {/* Suite Header with Minimal Telemetry */}
         <div className="mb-8 sm:mb-12 border-b border-slate-200/80 pb-5 sm:pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
           <div className="space-y-1 sm:space-y-1.5">
@@ -196,11 +196,10 @@ export default function ReservationPage() {
                   key={res.id}
                   type="button"
                   onClick={() => setSearchParams({ room: res.roomNumber })}
-                  className={`px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider rounded-[2px] transition-all cursor-pointer whitespace-nowrap ${
-                    isActive
+                  className={`px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider rounded-[2px] transition-all cursor-pointer whitespace-nowrap ${isActive
                       ? 'bg-[#0E1201] text-[#FFF0CA] font-bold shadow-xs'
                       : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
-                  }`}
+                    }`}
                 >
                   Suite {res.roomNumber}
                 </button>
@@ -211,12 +210,12 @@ export default function ReservationPage() {
 
         {/* 2-Column Responsive Layout */}
         <form onSubmit={handleConfirmReservation} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
-          
+
           {/* ============================================================ */}
           {/* LEFT COLUMN: MINIMALIST DOSSIER & PARAMETERS (7 cols) */}
           {/* ============================================================ */}
           <div className="lg:col-span-7 space-y-12">
-            
+
             {/* Section 1: Stay Parameters */}
             <section className="space-y-5">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
@@ -240,11 +239,10 @@ export default function ReservationPage() {
                         key={n}
                         type="button"
                         onClick={() => setNights(n)}
-                        className={`flex-1 py-2 text-xs font-mono rounded-[2px] border transition-all cursor-pointer ${
-                          nights === n
+                        className={`flex-1 py-2 text-xs font-mono rounded-[2px] border transition-all cursor-pointer ${nights === n
                             ? 'bg-[#0E1201] text-[#FFF0CA] border-[#0E1201] font-bold shadow-xs'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
-                        }`}
+                          }`}
                       >
                         {n}N
                       </button>
@@ -262,11 +260,10 @@ export default function ReservationPage() {
                         key={g}
                         type="button"
                         onClick={() => setGuestCount(g)}
-                        className={`flex-1 py-2 text-[11px] sm:text-xs font-mono rounded-[2px] border transition-all cursor-pointer whitespace-nowrap ${
-                          guestCount === g
+                        className={`flex-1 py-2 text-[11px] sm:text-xs font-mono rounded-[2px] border transition-all cursor-pointer whitespace-nowrap ${guestCount === g
                             ? 'bg-[#0E1201] text-[#FFF0CA] border-[#0E1201] font-bold shadow-xs'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
-                        }`}
+                          }`}
                       >
                         {g} <span className="hidden xs:inline sm:inline">{g === 1 ? 'Guest' : 'Guests'}</span><span className="xs:hidden sm:hidden">G</span>
                       </button>
@@ -377,17 +374,16 @@ export default function ReservationPage() {
                     <div
                       key={addon.id}
                       onClick={() => toggleAddon(addon.id)}
-                      className={`p-3.5 rounded-[2px] border transition-all cursor-pointer flex items-center justify-between select-none ${
-                        isChecked
+                      className={`p-3.5 rounded-[2px] border transition-all cursor-pointer flex items-center justify-between select-none ${isChecked
                           ? 'bg-white border-slate-900 shadow-2xs'
                           : 'bg-white/60 border-slate-200/80 hover:border-slate-300'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={isChecked}
-                          onChange={() => {}}
+                          onChange={() => { }}
                           className="w-4 h-4 accent-slate-950 rounded cursor-pointer"
                         />
                         <span className="text-xs font-medium text-slate-900">
@@ -410,10 +406,10 @@ export default function ReservationPage() {
           {/* Designed with vertical height budgeting so the CTA is NEVER cut off on laptops */}
           {/* ============================================================ */}
           <div className="lg:col-span-5 lg:sticky lg:top-20 space-y-6">
-            
+
             {/* The Monograph Folio Card */}
             <div className="bg-white rounded-[2px] border border-slate-200/90 shadow-lg overflow-hidden flex flex-col lg:max-h-[calc(100dvh-5.5rem)]">
-              
+
               {/* Suite Photography Hero */}
               <div className="relative aspect-[16/10] sm:aspect-[16/9] max-h-48 sm:max-h-52 lg:max-h-44 overflow-hidden bg-slate-900 shrink-0">
                 <img
@@ -428,8 +424,8 @@ export default function ReservationPage() {
                 </div>
               </div>
 
-              {/* Ledger Breakdown (Scrolls internally if laptop viewport is compact) */}
-              <div className="p-5 sm:p-6 space-y-3 text-xs text-slate-600 overflow-y-auto flex-1">
+              {/* Ledger Breakdown (Scrolls internally with zero input latency) */}
+              <div data-lenis-prevent className="p-5 sm:p-6 space-y-3 text-xs text-slate-600 overflow-y-auto flex-1">
                 <div className="flex justify-between">
                   <span>{nights} Nights &times; PKR {selectedResidence.nightlyRate.toLocaleString()}</span>
                   <span className="font-mono font-medium text-slate-900">
@@ -540,11 +536,12 @@ export default function ReservationPage() {
 
       {/* Mobile Collapsible Folio Overlay Modal */}
       {showMobileFolio && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex flex-col justify-end"
           onClick={() => setShowMobileFolio(false)}
         >
-          <div 
+          <div
+            data-lenis-prevent
             className="bg-white rounded-t-lg border-t border-slate-200 p-5 sm:p-6 space-y-4 max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -552,8 +549,8 @@ export default function ReservationPage() {
               <span className="text-xs font-mono font-bold tracking-wider text-slate-900 uppercase">
                 Reservation Folio &bull; Suite {selectedResidence.roomNumber}
               </span>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setShowMobileFolio(false)}
                 className="text-xs font-mono text-slate-500 hover:text-slate-900 p-1 cursor-pointer"
               >

@@ -1,15 +1,20 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
+import { useSmoothScroll } from './hooks/useSmoothScroll'
 import BookingConfirmation from './pages/BookingConfirmation'
 import LandingPage from './pages/LandingPage'
+import MyStayPage from './pages/MyStayPage'
 import ReservationPage from './pages/ReservationPage'
 import StaffDashboard from './pages/StaffDashboard'
 
-export default function App() {
+function AppRoutes() {
+  // Enterprise-grade 120 FPS momentum scroll authority
+  useSmoothScroll()
+
   return (
-    <BrowserRouter>
-      {/* Magnetic Architectural Cursor Follower */}
+    <>
+      {/* Magnetic Architectural Cursor Follower (Disabled on Touch) */}
       <CustomCursor />
 
       <Routes>
@@ -19,12 +24,23 @@ export default function App() {
         {/* Dedicated 2-Column Luxury Reservation Flow */}
         <Route path="/reserve" element={<ReservationPage />} />
 
+        {/* Guest Self-Service Portal (Digital Key, In-Stay Services & Feedback) */}
+        <Route path="/my-stay" element={<MyStayPage />} />
+
         {/* Post-Reservation Confirmation Receipt */}
         <Route path="/confirmation" element={<BookingConfirmation />} />
 
         {/* Aptech Curriculum Front-Desk Staff PMS & Folio Terminal */}
         <Route path="/pms" element={<StaffDashboard />} />
       </Routes>
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   )
 }

@@ -1,42 +1,80 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * useSmoothScroll
- * Establishes a single scroll authority linking Lenis virtual momentum scroll
- * to GSAP's requestAnimationFrame ticker for stutter-free 120 FPS parallax.
+ * useSmoothScroll — Enterprise High-Performance Scroll Authority
+ * 
+ * VIVA & ARCHITECTURAL DEFENSE:
+ * 1. Hardware Segregation (Native on Mobile, Smooth on Desktop):
+ *    - Mobile Phones & Tablets: Emulating touch via JS creates lag and battery drain.
+ *      Touchscreens are bypassed to run on 100% native 120Hz GPU ProMotion scroll.
+ *    - Desktop & Laptop: Snappy 0.85s exponential momentum glide for precision mouse wheels.
+ * 
+ * 2. Zero-Lag Form Isolation & Route Filtering:
+ *    - Nested form sheets use 'data-lenis-prevent' to eliminate input latency.
+ *    - Front-Desk Staff PMS (/pms) runs at 100% raw native speed for cashier efficiency.
+ * 
+ * 3. Accessibility & Frame Locking:
+ *    - Bypasses virtual scroll if user has 'prefers-reduced-motion: reduce'.
+ *    - Direct GSAP ticker binding eliminates micro-stutters and layout reflow.
  */
 export function useSmoothScroll() {
+  const location = useLocation()
+  const lenisRef = useRef(null)
+
   useEffect(() => {
-    // 1. Initialize Lenis with exponential luxury easing
+    // 1. Accessibility Guard: Respect user reduced-motion OS preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return
+
+    // 2. Hardware Guard: Never emulate touch on mobile/tablet (uses 100% native 120Hz GPU scroll)
+    const isTouchDevice = window.matchMedia('(pointer: coarse), (hover: none)').matches
+    if (isTouchDevice) return
+
+    // 3. Operational Route Guard: Staff PMS terminal runs at raw native speed
+    if (location.pathname === '/pms') return
+
+    // 4. Initialize Lenis with snappy, non-sluggish luxury physics (0.85s duration)
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 0.85, // Snappy & brisk; eliminates the "sluggish/heavy" feeling
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential deceleration
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.95, // Smooth trackpad dampening
+      touchMultiplier: 0,    // 0% touch hijacking
+      autoRaf: false,        // GSAP ticker drives the render loop for 120 FPS sync
     })
 
-    // 2. Feed Lenis scroll updates into GSAP ScrollTrigger
+    lenisRef.current = lenis
+
+    // 5. Connect Lenis scroll updates to GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update)
 
-    // 3. Bind Lenis to GSAP ticker for frame-locked synchronization
+    // 6. Frame-locked synchronization on GSAP ticker
     const tickerCallback = (time) => {
       lenis.raf(time * 1000)
     }
     gsap.ticker.add(tickerCallback)
-    gsap.ticker.lagSmoothing(0)
 
-    // Cleanup on unmount
     return () => {
       gsap.ticker.remove(tickerCallback)
       lenis.destroy()
+      lenisRef.current = null
     }
-  }, [])
+  }, [location.pathname])
+
+  // Reset scroll to top cleanly on route navigation
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true })
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [location.pathname])
 }
