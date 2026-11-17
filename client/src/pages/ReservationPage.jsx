@@ -262,13 +262,13 @@ export default function ReservationPage() {
                         key={g}
                         type="button"
                         onClick={() => setGuestCount(g)}
-                        className={`flex-1 py-2 text-xs font-mono rounded-[2px] border transition-all cursor-pointer ${
+                        className={`flex-1 py-2 text-[11px] sm:text-xs font-mono rounded-[2px] border transition-all cursor-pointer whitespace-nowrap ${
                           guestCount === g
                             ? 'bg-[#0E1201] text-[#FFF0CA] border-[#0E1201] font-bold shadow-xs'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
                         }`}
                       >
-                        {g} {g === 1 ? 'Guest' : 'Guests'}
+                        {g} <span className="hidden xs:inline sm:inline">{g === 1 ? 'Guest' : 'Guests'}</span><span className="xs:hidden sm:hidden">G</span>
                       </button>
                     ))}
                   </div>
@@ -276,7 +276,7 @@ export default function ReservationPage() {
               </div>
             </section>
 
-            {/* Section 2: Primary Guest Dossier Form (Clean Hairline Inputs) */}
+            {/* Section 2: Primary Guest Dossier Form (Clean Touch-Optimized Luxury Inputs) */}
             <section className="space-y-6">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
                 <span className="text-xs font-mono font-bold tracking-[0.2em] text-slate-900 uppercase">
@@ -287,7 +287,7 @@ export default function ReservationPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="text-[10px] font-mono tracking-wider font-semibold text-slate-400 uppercase block mb-1">
                     Full Legal Name
@@ -298,7 +298,7 @@ export default function ReservationPage() {
                     value={guestDossier.fullName}
                     onChange={(e) => setGuestDossier({ ...guestDossier, fullName: e.target.value })}
                     placeholder="Ahmed Khan"
-                    className="w-full py-2.5 px-0 bg-transparent border-b border-slate-300 focus:border-slate-900 text-sm font-medium text-slate-900 focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-[2px] focus:border-slate-900 focus:ring-1 focus:ring-slate-900 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none transition-all placeholder:text-slate-400 min-h-[42px]"
                   />
                 </div>
 
@@ -312,7 +312,7 @@ export default function ReservationPage() {
                     value={guestDossier.identificationNumber}
                     onChange={(e) => setGuestDossier({ ...guestDossier, identificationNumber: e.target.value })}
                     placeholder="42101-9876543-1"
-                    className="w-full py-2.5 px-0 bg-transparent border-b border-slate-300 focus:border-slate-900 text-sm font-mono text-slate-900 focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-[2px] focus:border-slate-900 focus:ring-1 focus:ring-slate-900 text-xs sm:text-sm font-mono text-slate-900 focus:outline-none transition-all placeholder:text-slate-400 min-h-[42px]"
                   />
                 </div>
 
@@ -326,7 +326,7 @@ export default function ReservationPage() {
                     value={guestDossier.email}
                     onChange={(e) => setGuestDossier({ ...guestDossier, email: e.target.value })}
                     placeholder="ahmed@example.com"
-                    className="w-full py-2.5 px-0 bg-transparent border-b border-slate-300 focus:border-slate-900 text-sm text-slate-900 focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-[2px] focus:border-slate-900 focus:ring-1 focus:ring-slate-900 text-xs sm:text-sm text-slate-900 focus:outline-none transition-all placeholder:text-slate-400 min-h-[42px]"
                   />
                 </div>
 
@@ -340,7 +340,7 @@ export default function ReservationPage() {
                     value={guestDossier.phone}
                     onChange={(e) => setGuestDossier({ ...guestDossier, phone: e.target.value })}
                     placeholder="+92 300 1234567"
-                    className="w-full py-2.5 px-0 bg-transparent border-b border-slate-300 focus:border-slate-900 text-sm font-mono text-slate-900 focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-[2px] focus:border-slate-900 focus:ring-1 focus:ring-slate-900 text-xs sm:text-sm font-mono text-slate-900 focus:outline-none transition-all placeholder:text-slate-400 min-h-[42px]"
                   />
                 </div>
               </div>
@@ -354,7 +354,7 @@ export default function ReservationPage() {
                   value={guestDossier.specialRequests}
                   onChange={(e) => setGuestDossier({ ...guestDossier, specialRequests: e.target.value })}
                   placeholder="e.g. Dawn check-in; dietary restrictions"
-                  className="w-full py-2.5 px-0 bg-transparent border-b border-slate-300 focus:border-slate-900 text-xs text-slate-900 focus:outline-none transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-[2px] focus:border-slate-900 focus:ring-1 focus:ring-slate-900 text-xs text-slate-900 focus:outline-none transition-all placeholder:text-slate-400 min-h-[42px]"
                 />
               </div>
             </section>
