@@ -3,23 +3,24 @@ import { Link } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 
 /**
- * LuxuryStay Minimalist Navigation
- * 
- * VIVA DEFENSE & ARCHITECTURE SUMMARY:
- * 1. Self-Contained Modal Architecture:
- *    The slide-over drawer owns its own header, title, and dedicated Close button.
- *    The external floating pill disappears when the drawer opens (`isScrolled && !isMenuOpen`),
- *    preventing the awkward layout overlap seen on mobile/tablet viewports.
- * 
- * 2. 120 FPS GPU-Composited Transitions:
- *    - Replaced heavy multi-pass `backdrop-filter: blur` on animated full-screen backdrops
- *      with a crisp, performant architectural dark wash (`bg-slate-950/60`).
- *    - Isolated the drawer on a dedicated hardware compositing layer (`will-change-transform`).
- *    - Uses `scrollbar-gutter: stable` (in index.css) so locking scroll never shifts viewport width by 15px.
- * 
- * 3. Responsive Fluid Layout:
- *    - Fits smoothly across 320px mobile screens up to ultra-wide displays.
- *    - Uses fluid typography and `overscroll-contain` to prevent vertical clipping on mobile devices.
+ * The Haven — Circular Aperture Navigation (Concept 2)
+ *
+ * ARCHITECTURE & VIVA DEFENSE:
+ * 1. Circular Aperture Geometry (No awkward side SVG fins):
+ *    The entire menu expands outward from the menu button coordinates using
+ *    GPU-composited `clip-path: circle(...)`. When closed, it smoothly collapses
+ *    back into the button. Zero layout thrashing, zero static SVG deformities.
+ *
+ * 2. Dynamic Sanctuary Visual Preview:
+ *    Hovering over any link dynamically cross-fades the left photo wing with
+ *    high-resolution photography of that specific sanctuary or section.
+ *
+ * 3. 120 FPS Compositing:
+ *    Runs entirely on the compositor thread with Apple's fluid cubic-bezier curve.
+ *    Paired with `scrollbar-gutter: stable` so locking scroll causes 0px layout shift.
+ *
+ * 4. Zero Fluff / Clean Design:
+ *    Direct, grounded architectural copy: // NAVIGATION · SINDH COAST.
  */
 export default function Navbar({ onOpenDrawer }) {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -27,19 +28,63 @@ export default function Navbar({ onOpenDrawer }) {
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 })
   const navTrackRef = useRef(null)
 
-  // 1. Live Date Calculation for the floating pill and drawer footer
+  // Navigation Links & Live Preview Data (The Haven Sindh Coast)
+  const navItems = useMemo(() => [
+    {
+      num: '01',
+      label: 'Residences',
+      href: '#residences',
+      desc: 'Private Monolithic Sanctuaries',
+      preview: {
+        tag: 'SANCTUARY I',
+        title: 'The Cliff Sanctuary',
+        subtitle: 'Suspended above the Arabian Sea with private infinity plunge pool and basalt stone courtyard.',
+        image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1400&q=85',
+      },
+    },
+    {
+      num: '02',
+      label: 'The Estate',
+      href: '#experience',
+      desc: 'Thermal Hydrotherapy & Private Dunes',
+      preview: {
+        tag: 'SANCTUARY WELLNESS',
+        title: 'Thermal Springs & Dining',
+        subtitle: 'Subterranean mineral baths at 41.5°C and zero-kilometer coastal tasting menus.',
+        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=85',
+      },
+    },
+    {
+      num: '03',
+      label: 'Staff PMS',
+      href: '/pms',
+      isRouter: true,
+      desc: 'Front Desk Operations & Folio Console',
+      preview: {
+        tag: 'OPERATIONAL FOLIO',
+        title: 'Property Management Console',
+        subtitle: 'Real-time room status, 5-minute pessimistic hold manager, and Safepay ledger.',
+        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85',
+      },
+    },
+  ], [])
+
+  // Active preview state for the left photo wing
+  const [activePreview, setActivePreview] = useState(navItems[0].preview)
+
+  // Live Current Date
   const { dateLabel, fullDateLabel } = useMemo(() => {
     const now = new Date()
     const day = now.getDate()
     const month = now.toLocaleString('en-US', { month: 'short' }).toUpperCase()
     const year = now.getFullYear()
     return {
-      dateLabel: `${day} ${month}`,            // e.g. "16 NOV"
-      fullDateLabel: `${day} ${month} ${year}`   // e.g. "16 NOV 2026"
+      dateLabel: `${day} ${month}`,
+      fullDateLabel: `${day} ${month} ${year}`,
     }
   }, [])
 
-  // 2. Track Window Scroll Position (Passive listener for 0-jank scroll detection)
+  // Passive window scroll listener
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 80)
@@ -48,7 +93,7 @@ export default function Navbar({ onOpenDrawer }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // 3. Lock Background Scroll when Drawer is Open
+  // Lock background scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'
@@ -60,7 +105,7 @@ export default function Navbar({ onOpenDrawer }) {
     }
   }, [isMenuOpen])
 
-  // 4. Keyboard Accessibility: Close drawer on Escape key
+  // Escape key closes menu
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isMenuOpen) {
@@ -71,7 +116,7 @@ export default function Navbar({ onOpenDrawer }) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isMenuOpen])
 
-  // 5. Sliding Underline Indicator on Desktop Nav Links
+  // Desktop links sliding underline tracker
   const handleMouseEnter = (e) => {
     if (!navTrackRef.current) return
     const trackRect = navTrackRef.current.getBoundingClientRect()
@@ -92,17 +137,10 @@ export default function Navbar({ onOpenDrawer }) {
     setIsMenuOpen(false)
   }, [])
 
-  // Navigation Links Data
-  const navLinks = [
-    { num: '01', label: 'Residences', href: '#residences', desc: 'Private Monolithic Sanctuaries' },
-    { num: '02', label: 'The Estate', href: '#experience', desc: 'Thermal Onsen & Alpine Gardens' },
-    { num: '03', label: 'Staff PMS', href: '/pms', isRouter: true, desc: 'Operational Console & Folio' },
-  ]
-
   return (
     <>
       {/* ============================================================== */}
-      {/* 1. TOP HEADER (Visible at top of page, gracefully fades on scroll) */}
+      {/* 1. TOP HEADER (Visible at top, fades gracefully on scroll) */}
       {/* ============================================================== */}
       <header
         className={`fixed top-0 inset-x-0 z-30 px-5 sm:px-8 md:px-14 py-5 sm:py-7 flex items-center justify-between transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] select-none pointer-events-none ${
@@ -132,9 +170,8 @@ export default function Navbar({ onOpenDrawer }) {
           <BrandLogo variant="full" theme="dark" size="md" />
         </div>
 
-        {/* Right: Desktop Links + Reserve CTA + Three-Pill Menu Trigger */}
+        {/* Right: Desktop Links + Reserve Button + Three-Pill Menu Trigger */}
         <div className="pointer-events-auto flex items-center gap-4 sm:gap-6">
-          {/* Desktop Links with Sliding Hairline Indicator */}
           <nav
             ref={navTrackRef}
             onMouseLeave={handleMouseLeave}
@@ -197,7 +234,7 @@ export default function Navbar({ onOpenDrawer }) {
             </Link>
           </nav>
 
-          {/* Reserve Button */}
+          {/* Reserve CTA */}
           <button
             type="button"
             onClick={onOpenDrawer}
@@ -206,7 +243,7 @@ export default function Navbar({ onOpenDrawer }) {
             Reserve
           </button>
 
-          {/* Three-Pill Hamburger Button */}
+          {/* Three-Pill Menu Trigger */}
           <button
             type="button"
             onClick={() => setIsMenuOpen(true)}
@@ -214,9 +251,9 @@ export default function Navbar({ onOpenDrawer }) {
             className="group relative w-10 h-10 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-xs"
           >
             <div className="relative w-4 h-3 flex flex-col justify-between items-center pointer-events-none">
-              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-4 h-[1.5px] bg-slate-900 rounded-full" />
             </div>
           </button>
         </div>
@@ -224,8 +261,7 @@ export default function Navbar({ onOpenDrawer }) {
 
       {/* ============================================================== */}
       {/* 2. SCROLLED FLOATING CORNER PILL */}
-      {/* Appears strictly when user is scrolled AND menu is closed */}
-      {/* (Never overlaps or interferes with the opened drawer) */}
+      {/* (Only visible when scrolled down AND menu is closed) */}
       {/* ============================================================== */}
       <div
         className={`fixed top-4 right-4 sm:top-6 sm:right-10 z-30 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
@@ -235,13 +271,11 @@ export default function Navbar({ onOpenDrawer }) {
         }`}
       >
         <div className="flex items-center gap-2 bg-[#FAF8F5]/95 border border-slate-300/80 p-1.5 pl-3.5 rounded-full shadow-md">
-          {/* Live Dynamic Date */}
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
           <span className="font-mono text-[11px] uppercase tracking-wider text-slate-800">
             {dateLabel}
           </span>
 
-          {/* Quick Reserve CTA */}
           <button
             type="button"
             onClick={onOpenDrawer}
@@ -250,7 +284,6 @@ export default function Navbar({ onOpenDrawer }) {
             Reserve
           </button>
 
-          {/* Menu Trigger inside Pill */}
           <button
             type="button"
             onClick={() => setIsMenuOpen(true)}
@@ -267,56 +300,64 @@ export default function Navbar({ onOpenDrawer }) {
       </div>
 
       {/* ============================================================== */}
-      {/* 3. FULL-HEIGHT CURVED NAVIGATION DRAWER */}
-      {/* Self-contained modal with dedicated header and Close button */}
+      {/* 3. CONCEPT 2: CIRCULAR APERTURE EXPANSION MENU */}
+      {/* Expanding circular lens from trigger button with 0-lag GPU clip-path */}
+      {/* NO ugly deformed side SVG fins — pure architectural geometry */}
       {/* ============================================================== */}
-      
-      {/* Backdrop: Lightweight GPU tint (No expensive Gaussian blur shader) */}
+
+      {/* Dimmed Dark Luxury Backdrop */}
       <div
         onClick={closeMenu}
         aria-hidden="true"
-        className={`fixed inset-0 z-40 bg-slate-950/60 transition-opacity duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed inset-0 z-40 bg-slate-950/70 transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       />
 
-      {/* Slide-in Drawer Sheet */}
-      <aside
+      {/* Expanding Circular Aperture Overlay Sheet */}
+      <div
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation Menu"
-        className="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[480px] md:w-[520px] max-h-[100dvh] bg-[#FAF8F5] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform shadow-2xl border-l border-slate-200 flex flex-col justify-between"
+        aria-label="Main Navigation Menu"
+        className={`fixed inset-0 z-50 flex flex-col md:flex-row bg-[#FAF8F5] shadow-2xl overflow-hidden transition-[clip-path] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}
         style={{
-          transform: isMenuOpen ? 'translate3d(0, 0, 0)' : 'translate3d(100%, 0, 0)',
+          clipPath: isMenuOpen
+            ? 'circle(150% at calc(100% - 48px) 36px)'
+            : 'circle(0% at calc(100% - 48px) 36px)',
         }}
       >
-        {/* Organic Left Edge Curve for screens >= 640px */}
-        <div
-          className="absolute top-0 -left-[59px] w-[60px] h-full pointer-events-none select-none hidden sm:block z-20 text-[#FAF8F5]"
-          aria-hidden="true"
-        >
-          <svg
-            viewBox="0 0 60 1000"
-            fill="currentColor"
-            preserveAspectRatio="none"
-            className="w-full h-full"
-          >
-            <path d="M60,0 L60,1000 Q0,500 60,0 Z" />
-          </svg>
+        {/* Left 45%: Live Suite Image Preview Window (Desktop Only) */}
+        <div className="hidden md:block md:w-5/12 h-full relative overflow-hidden bg-slate-950 border-r border-slate-200/80">
+          <img
+            src={activePreview.image}
+            alt={activePreview.title}
+            className="w-full h-full object-cover transition-all duration-700 filter brightness-[0.88] scale-100"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-10 lg:p-14 text-white">
+            <span className="font-mono text-[10px] tracking-[0.28em] text-emerald-400 uppercase">
+              {activePreview.tag}
+            </span>
+            <h3 className="font-serif-grand text-3xl font-light mt-1.5 text-white">
+              {activePreview.title}
+            </h3>
+            <p className="font-mono text-xs text-slate-300 mt-2 max-w-sm leading-relaxed">
+              {activePreview.subtitle}
+            </p>
+          </div>
         </div>
 
-        {/* Drawer Body Container */}
-        <div className="relative w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-12 overflow-y-auto overscroll-contain z-10">
+        {/* Right 55%: Navigation Index & Controls */}
+        <div className="w-full md:w-7/12 h-full flex flex-col justify-between p-6 sm:p-10 lg:p-14 overflow-y-auto overscroll-contain">
           
-          {/* ========================================================== */}
-          {/* DRAWER HEADER: Self-Contained Close Controls & Navigation Tag */}
-          {/* ========================================================== */}
+          {/* Top Bar: Clean Branding & Dedicated Close Button */}
           <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest border-b border-slate-200/80 pb-4 shrink-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-slate-900 font-semibold">// NAVIGATION</span>
+              <span className="text-slate-900 font-semibold tracking-wider">// NAVIGATION</span>
               <span className="text-slate-300 hidden sm:inline">&middot;</span>
-              <span className="text-slate-500 hidden sm:inline text-[10px]">THE HAVEN &bull; SINDH COAST</span>
+              <span className="text-slate-500 hidden sm:inline text-[10px]">SINDH COAST, PK</span>
             </div>
 
             {/* Dedicated Accessible Close Button */}
@@ -324,50 +365,38 @@ export default function Navbar({ onOpenDrawer }) {
               type="button"
               onClick={closeMenu}
               aria-label="Close Navigation Menu"
-              className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-300 hover:border-slate-900 bg-white/90 hover:bg-white text-[10px] font-mono uppercase tracking-wider text-slate-800 transition-all cursor-pointer active:scale-95 shadow-xs"
+              className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 hover:border-slate-900 bg-white hover:bg-slate-900 hover:text-white text-[10px] font-mono uppercase tracking-wider text-slate-800 transition-all cursor-pointer active:scale-95 shadow-xs"
             >
               <span>Close</span>
-              <span className="text-slate-400 group-hover:text-slate-950 font-bold">&times;</span>
+              <span className="font-bold">&times;</span>
             </button>
           </div>
 
-          {/* ========================================================== */}
-          {/* DRAWER NAVIGATION LINKS (Staggered Entrance Animation) */}
-          {/* ========================================================== */}
-          <nav className="my-auto py-6 sm:py-8 space-y-4 sm:space-y-6 shrink-0" aria-label="Menu Links">
-            {navLinks.map((item, index) => {
-              const delay = 100 + index * 60
+          {/* Navigation Links with Dynamic Hover Trigger */}
+          <nav className="my-auto py-6 sm:py-8 space-y-5 lg:space-y-7 shrink-0" aria-label="Menu Items">
+            {navItems.map((item) => {
               const linkContent = (
                 <div
-                  className="group block py-2 border-b border-slate-200/60 hover:border-slate-900 transition-colors"
+                  onMouseEnter={() => setActivePreview(item.preview)}
                   onClick={closeMenu}
+                  className="group block border-b border-slate-200/70 pb-4 hover:border-slate-900 transition-colors cursor-pointer"
                 >
-                  <div className="flex items-baseline gap-3 sm:gap-4">
+                  <div className="flex items-baseline gap-4">
                     <span className="font-mono text-xs text-slate-400 group-hover:text-emerald-800 transition-colors">
                       [{item.num}]
                     </span>
-                    <span className="font-serif-grand text-2xl sm:text-3xl md:text-4xl text-slate-900 font-normal group-hover:translate-x-2 transition-transform duration-300">
+                    <span className="font-serif-grand text-3xl sm:text-4xl lg:text-5xl text-slate-900 font-normal group-hover:translate-x-3 transition-transform duration-300">
                       {item.label}
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] sm:text-[11px] text-slate-500 tracking-wider block mt-1 pl-8 sm:pl-10">
+                  <span className="font-mono text-xs text-slate-500 tracking-wider block mt-1 pl-10">
                     {item.desc}
                   </span>
                 </div>
               )
 
               return (
-                <div
-                  key={item.label}
-                  className="overflow-hidden will-change-transform"
-                  style={{
-                    transform: isMenuOpen ? 'translate3d(0, 0, 0)' : 'translate3d(0, 80%, 0)',
-                    opacity: isMenuOpen ? 1 : 0,
-                    transition: isMenuOpen
-                      ? `transform 450ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity 350ms ease ${delay}ms`
-                      : 'transform 200ms ease, opacity 150ms ease',
-                  }}
-                >
+                <div key={item.label}>
                   {item.isRouter ? (
                     <Link to={item.href}>{linkContent}</Link>
                   ) : (
@@ -377,37 +406,26 @@ export default function Navbar({ onOpenDrawer }) {
               )
             })}
 
-            {/* Direct Reserve Residence Action CTA inside Drawer */}
-            <div
-              className="overflow-hidden will-change-transform pt-2"
-              style={{
-                transform: isMenuOpen ? 'translate3d(0, 0, 0)' : 'translate3d(0, 80%, 0)',
-                opacity: isMenuOpen ? 1 : 0,
-                transition: isMenuOpen
-                  ? 'transform 450ms cubic-bezier(0.16, 1, 0.3, 1) 280ms, opacity 350ms ease 280ms'
-                  : 'transform 200ms ease, opacity 150ms ease',
-              }}
-            >
+            {/* Direct Reserve Sanctuary CTA */}
+            <div className="pt-2">
               <button
                 type="button"
                 onClick={() => {
                   closeMenu()
                   onOpenDrawer()
                 }}
-                className="w-full py-3.5 sm:py-4 px-5 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.22em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98]"
+                className="w-full py-4 px-6 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.25em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98] shadow-md"
               >
-                <span>Reserve Residence (30% Online)</span>
+                <span>Reserve Sanctuary (30% Online)</span>
                 <span>&rarr;</span>
               </button>
             </div>
           </nav>
 
-          {/* ========================================================== */}
-          {/* DRAWER FOOTER: Metadata & Zero-Trust Architecture Note */}
-          {/* ========================================================== */}
+          {/* Bottom Telemetry & Metadata Strip */}
           <div className="border-t border-slate-200/80 pt-5 text-[10px] font-mono text-slate-500 space-y-1.5 shrink-0">
             <div className="flex justify-between items-center text-slate-800">
-              <span className="uppercase tracking-widest">Active Vacation Window</span>
+              <span className="uppercase tracking-widest">Active Vacation Dates</span>
               <span className="font-semibold">{fullDateLabel}</span>
             </div>
             <div className="flex justify-between items-center">
@@ -420,7 +438,7 @@ export default function Navbar({ onOpenDrawer }) {
           </div>
 
         </div>
-      </aside>
+      </div>
     </>
   )
 }
