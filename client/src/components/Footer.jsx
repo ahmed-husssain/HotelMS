@@ -5,12 +5,12 @@ import BrandLogo from './BrandLogo'
 /**
  * Minimalist Travertine Footer for Habitas
  * 
- * - Single unified #FAF8F5 surface (zero color banding)
+ * - Single unified #FAF8F5 surface
  * - Minimal wording, zero corporate/marketing fluff
  * - Sleek hairline guest ledger strip (no eCommerce boxes)
  * - Clean typographic directory with subtle hover micro-interactions
- * - Subtle watermark monogram across the baseline
- * - Live Karachi (PKT / UTC+5) ticking clock & Michelin keys
+ * - Core integrated baseline: Live PKT Time, Safepay 30% Deposit & Top button
+ * - Zero separate bottom telemetry strips or fake entity strings
  */
 export default function Footer() {
   const [estateTime, setEstateTime] = useState('')
@@ -109,7 +109,7 @@ export default function Footer() {
       </div>
 
       {/* ============================================================== */}
-      {/* 2. REFINED 4-COLUMN DIRECTORY (CLEAN EDITORIAL TYPOGRAPHY) */}
+      {/* 2. CORE DIRECTORY & INTEGRATED BASELINE */}
       {/* ============================================================== */}
       <div className="max-w-7xl mx-auto px-6 sm:px-10 py-8 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10 items-start">
@@ -209,7 +209,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Portals & Access (Sleek Hairline Rows - No Boxy Cards) */}
+          {/* Column 4: Portals & Access */}
           <div className="space-y-3">
             <span className="text-[10px] font-mono tracking-[0.2em] font-bold text-[#121619] uppercase block pb-1 border-b border-[#E5DFD5]">
               03 &bull; PORTALS
@@ -265,41 +265,31 @@ export default function Footer() {
           </div>
 
         </div>
-      </div>
 
-      {/* ============================================================== */}
-      {/* 3. INTEGRATED TELEMETRY & ACCREDITATION BAR (SEAMLESS) */}
-      {/* ============================================================== */}
-      <div className="border-t border-[#E5DFD5] px-6 sm:px-10 py-3 relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[10px] font-mono text-[#5C646A]">
-          
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-bold text-[#121619]">&copy; 2026 Habitas</span>
-            <span>&bull;</span>
-            <span>Sindh Coast (24&deg;48&apos;N, 67&deg;01&apos;E)</span>
-            <span>&bull;</span>
-            <span className="flex items-center gap-1.5 font-bold text-[#121619]">
+        {/* ============================================================== */}
+        {/* CORE BASELINE: TIME & SAFEPAY DEPOSIT (LEFT) & TOP BUTTON (RIGHT) */}
+        {/* ============================================================== */}
+        <div className="pt-6 mt-6 border-t border-[#E5DFD5] flex items-center justify-between text-xs font-mono text-[#5C646A]">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5 font-semibold text-[#121619]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-              <span>{estateTime || '16:25:00 PKT'}</span>
+              <span>{estateTime || '17:28:00 PKT'}</span>
             </span>
-            <span className="hidden sm:inline">&bull;</span>
-            <span className="hidden sm:inline text-amber-800 font-semibold">&starf;&starf;&starf; Three Michelin Keys</span>
+            <span>&bull;</span>
+            <span className="text-[#8E877C]">Safepay 30% Deposit</span>
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className="hidden lg:inline text-[#8E877C]">Safepay 30% Deposit Verified</span>
-            <button
-              type="button"
-              onClick={scrollToTop}
-              className="text-[#121619] hover:text-amber-800 font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1 transition-colors active:scale-95"
-              aria-label="Back to top of page"
-            >
-              <span>Top</span>
-              <span className="text-xs">&uarr;</span>
-            </button>
-          </div>
-
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="text-[#121619] hover:text-amber-800 font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1 transition-colors active:scale-95"
+            aria-label="Back to top of page"
+          >
+            <span>Top</span>
+            <span className="text-xs">&uarr;</span>
+          </button>
         </div>
+
       </div>
     </footer>
   )
