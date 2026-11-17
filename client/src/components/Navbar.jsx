@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
+import RollingTextButton from './RollingTextButton'
+import { useAuth } from '../context/AuthContext'
 
 /**
  * The Haven — Option 2: Symmetrical Split Navigation
@@ -66,6 +68,7 @@ function StaggeredWaveText({ text }) {
 }
 
 export default function Navbar({ onOpenDrawer }) {
+  const { currentUser, logout } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -107,19 +110,6 @@ export default function Navbar({ onOpenDrawer }) {
         title: 'Your Private Stay Dossier',
         subtitle: 'Manage your active reservation, request in-room dining, view your live bill, and access your digital key.',
         image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85',
-      },
-    },
-    {
-      num: '04',
-      label: 'Staff PMS',
-      href: '/pms',
-      isRouter: true,
-      desc: 'Front Desk & Guest Billing',
-      preview: {
-        tag: 'STAFF TERMINAL',
-        title: 'Property Management Console',
-        subtitle: 'Real-time room status, 5-minute temporary room hold, and guest billing.',
-        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85',
       },
     },
   ], [])
@@ -226,23 +216,53 @@ export default function Navbar({ onOpenDrawer }) {
           <BrandLogo variant="emblem" theme="dark" size="sm" />
         </div>
 
-        {/* Right Flank: Staff PMS + Reserve Button + Three-Pill Menu Trigger */}
-        <div className="pointer-events-auto flex items-center gap-3 sm:gap-4 shrink-0 h-10">
-          <Link
-            to="/my-stay"
-            className="hidden lg:flex group relative h-10 items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none mr-2"
-          >
-            <StaggeredWaveText text="My Stay" />
-          </Link>
+        {/* Right Flank: Dynamic User Profile / Sign In + Reserve Button + Three-Pill Menu Trigger */}
+        <div className="pointer-events-auto flex items-center gap-2 sm:gap-3 shrink-0 h-10">
+          {currentUser ? (
+            <div className="hidden lg:flex items-center gap-2 font-mono text-xs">
+              <Link
+                to={
+                  currentUser.role === 'admin'
+                    ? '/admin'
+                    : currentUser.role === 'receptionist'
+                    ? '/pms'
+                    : currentUser.role === 'housekeeping'
+                    ? '/housekeeping'
+                    : '/my-stay'
+                }
+                className="group relative h-9 px-2.5 flex items-center gap-1.5 border border-slate-300 rounded-[2px] hover:border-slate-900 transition-colors bg-[#FAF8F5]"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                <span className="font-semibold text-slate-900">{currentUser.name.split(' ')[0]}</span>
+                <span className="text-[9px] text-slate-500 uppercase tracking-wider">
+                  [{currentUser.role.slice(0, 4)}]
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={logout}
+                className="text-[10px] text-slate-400 hover:text-red-700 transition-colors uppercase cursor-pointer"
+                title="Sign Out"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="hidden lg:flex group relative h-10 items-center text-xs font-mono uppercase tracking-wider text-slate-700 hover:text-slate-950 transition-colors select-none mr-1"
+            >
+              <StaggeredWaveText text="Sign In" />
+            </Link>
+          )}
 
-          {/* Reserve CTA */}
-          <button
-            type="button"
+          {/* Reserve CTA with Signature Rolling Text & Moving Diagonal Arrow */}
+          <RollingTextButton
+            text="Reserve"
             onClick={onOpenDrawer}
-            className="h-9 px-4 flex items-center justify-center text-[11px] sm:text-xs font-mono uppercase tracking-[0.2em] border border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-[#FAF8F5] transition-all duration-300 active:scale-[0.97] cursor-pointer rounded-[2px]"
-          >
-            Reserve
-          </button>
+            size="sm"
+            variant="primary"
+          />
 
           {/* Three-Pill Menu Trigger */}
           <button
@@ -277,13 +297,13 @@ export default function Navbar({ onOpenDrawer }) {
             {dateLabel}
           </span>
 
-          <button
-            type="button"
+          <RollingTextButton
+            text="Reserve"
             onClick={onOpenDrawer}
-            className="px-3 py-1 bg-slate-900 text-[#FAF8F5] text-[10px] font-mono uppercase tracking-wider rounded-full hover:bg-slate-800 transition-colors ml-1 cursor-pointer active:scale-95"
-          >
-            Reserve
-          </button>
+            size="xs"
+            variant="primary"
+            className="!rounded-full !px-3 !h-7 ml-1"
+          />
 
           <button
             type="button"
@@ -420,6 +440,70 @@ export default function Navbar({ onOpenDrawer }) {
                 <span>Reserve a Suite (30% Deposit)</span>
                 <span>&rarr;</span>
               </button>
+            </div>
+
+            {/* If Logged in as Staff: Exclusive Operational Workspace Access */}
+            {currentUser && currentUser.role !== 'guest' && (
+              <div className="pt-2">
+                <Link
+                  to={
+                    currentUser.role === 'admin'
+                      ? '/admin'
+                      : currentUser.role === 'receptionist'
+                      ? '/pms'
+                      : '/housekeeping'
+                  }
+                  onClick={closeMenu}
+                  className="w-full py-2.5 px-4 bg-emerald-950 text-emerald-200 border border-emerald-800/80 text-xs font-mono uppercase tracking-wider flex items-center justify-between hover:bg-emerald-900 transition-colors rounded-[2px]"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Open {currentUser.roleLabel || 'Staff'} Workspace</span>
+                  </span>
+                  <span>&rarr;</span>
+                </Link>
+              </div>
+            )}
+
+            {/* Account Session Strip inside Menu */}
+            <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs font-mono">
+              {currentUser ? (
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-slate-600">
+                    Signed in as <strong>{currentUser.name}</strong> ({currentUser.role})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout()
+                      closeMenu()
+                    }}
+                    className="text-red-700 hover:text-red-900 font-bold underline cursor-pointer ml-2"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-slate-500">Sanctuary Account:</span>
+                  <div className="flex items-center gap-3">
+                    <Link
+                      to="/login"
+                      onClick={closeMenu}
+                      className="text-slate-900 hover:text-amber-800 font-bold underline"
+                    >
+                      Sign In &rarr;
+                    </Link>
+                    <Link
+                      to="/register"
+                      onClick={closeMenu}
+                      className="text-slate-500 hover:text-slate-900"
+                    >
+                      Create Profile
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           </nav>
 
