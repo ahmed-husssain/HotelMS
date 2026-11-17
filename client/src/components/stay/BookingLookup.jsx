@@ -67,11 +67,11 @@ export default function BookingLookup({
         </form>
 
         <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono">
-          <span className="text-[10px]">Aptech Evaluation Demo:</span>
+          <span className="text-[10px] uppercase tracking-wider text-slate-400">Demo Stay Credentials:</span>
           <button
             type="button"
             onClick={onLoadDemo}
-            className="px-3 py-1.5 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 rounded-[2px] border border-emerald-200/80 text-[10px] uppercase font-bold tracking-wider transition-colors cursor-pointer"
+            className="px-3 py-2 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 rounded-[2px] border border-emerald-200/80 text-[10px] uppercase font-bold tracking-wider transition-colors cursor-pointer min-h-[44px] flex items-center justify-center"
           >
             1-Click Load: Suite 301 Demo &rarr;
           </button>
