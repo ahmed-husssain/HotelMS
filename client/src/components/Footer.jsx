@@ -114,7 +114,7 @@ export default function Footer() {
             <BrandLogo variant="full" theme="light" size="md" />
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              An architectural ocean sanctuary built into the coastal limestone cliffs. Three bespoke residential units designed for absolute silence, privacy, and architectural meditation.
+              A luxury oceanfront resort built along the coastal cliffs. Three private suites and villas designed for complete privacy, ocean views, and uninterrupted relaxation.
             </p>
 
             {/* Live Estate Telemetry Card */}
@@ -144,25 +144,25 @@ export default function Footer() {
           {/* Directory Column 1: The Sanctuaries (Col 5-6) */}
           <div className="lg:col-span-3 space-y-4">
             <h3 className="font-mono text-xs font-bold text-[#FAF8F5] tracking-[0.25em] uppercase border-b border-slate-800 pb-2">
-              THE SANCTUARIES
+              OUR SUITES &amp; VILLAS
             </h3>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <a href="#residences" className="hover:text-amber-400 transition-colors block">
                   <span className="text-[#FAF8F5] block font-medium">The Horizon Penthouse</span>
-                  <span className="text-[11px] text-slate-500">Suite 301 &bull; 210 m² &bull; Cantilevered Reef Pool</span>
+                  <span className="text-[11px] text-slate-500">Suite 301 &bull; 210 m² &bull; 20M Infinity Pool</span>
                 </a>
               </li>
               <li>
                 <a href="#residences" className="hover:text-amber-400 transition-colors block">
                   <span className="text-[#FAF8F5] block font-medium">The Courtyard Villa</span>
-                  <span className="text-[11px] text-slate-500">Villa 204 &bull; 165 m² &bull; Kyoto Cedar Garden</span>
+                  <span className="text-[11px] text-slate-500">Villa 204 &bull; 165 m² &bull; Private Courtyard &amp; Hot Tub</span>
                 </a>
               </li>
               <li>
                 <a href="#residences" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">The Cliffside Pavilion</span>
-                  <span className="text-[11px] text-slate-500">Pavilion 102 &bull; 140 m² &bull; Monolithic Sea Arch</span>
+                  <span className="text-[#FAF8F5] block font-medium">The Ocean Pavilion</span>
+                  <span className="text-[11px] text-slate-500">Pavilion 102 &bull; 185 m² &bull; Overwater Sunset Deck</span>
                 </a>
               </li>
               <li>
@@ -181,26 +181,26 @@ export default function Footer() {
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <a href="#experience" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">Hinoki Cedar Wellness</span>
-                  <span className="text-[11px] text-slate-500">Thermal hydrotherapy baths above tide level</span>
+                  <span className="text-[#FAF8F5] block font-medium">Cedar Spa &amp; Hot Springs</span>
+                  <span className="text-[11px] text-slate-500">Warm cedar mineral baths above the tide</span>
                 </a>
               </li>
               <li>
                 <a href="#experience" className="hover:text-amber-400 transition-colors block">
                   <span className="text-[#FAF8F5] block font-medium">The Harvest Pavilion</span>
-                  <span className="text-[11px] text-slate-500">Zero-kilometer organic coastal dining</span>
+                  <span className="text-[11px] text-slate-500">Fresh farm-to-table coastal dining</span>
                 </a>
               </li>
               <li>
                 <a href="#experience" className="hover:text-amber-400 transition-colors block">
-                  <span className="text-[#FAF8F5] block font-medium">Subterranean Valet</span>
-                  <span className="text-[11px] text-slate-500">Soundless in-residence arrivals, zero lobbies</span>
+                  <span className="text-[#FAF8F5] block font-medium">Private Underground Valet</span>
+                  <span className="text-[11px] text-slate-500">Private garage arrival with direct suite elevator</span>
                 </a>
               </li>
               <li>
                 <span className="hover:text-slate-300 transition-colors block cursor-default">
-                  <span className="text-[#FAF8F5] block font-medium">Marine &amp; Helipad Charters</span>
-                  <span className="text-[11px] text-slate-500">Direct coordinate arrivals via private pad</span>
+                  <span className="text-[#FAF8F5] block font-medium">Boat &amp; Helipad Transfers</span>
+                  <span className="text-[11px] text-slate-500">Direct arrivals via private on-site helipad</span>
                 </span>
               </li>
             </ul>
@@ -220,7 +220,7 @@ export default function Footer() {
                   <span>Staff PMS Terminal</span>
                   <span>&rarr;</span>
                 </Link>
-                <span className="text-[10px] text-slate-500 block">Front Desk, Folio &amp; Z-Report</span>
+                <span className="text-[10px] text-slate-500 block">Front Desk, Billing &amp; Shift Report</span>
               </li>
               <li className="pt-2 border-t border-slate-800/80">
                 <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">
@@ -243,7 +243,7 @@ export default function Footer() {
                   Concurrency Control
                 </span>
                 <span className="text-[11px] text-slate-400 block mt-0.5">
-                  5-Min Atomic Lock
+                  5-Min Temporary Hold
                 </span>
               </li>
             </ul>
@@ -262,7 +262,7 @@ export default function Footer() {
               <span>THREE MICHELIN KEYS (PREVIEW)</span>
             </span>
             <span className="hidden sm:inline text-slate-700">&bull;</span>
-            <span>ARCHITECTURAL DIGEST SANCTUARY 2026</span>
+            <span>ARCHITECTURAL DIGEST BEST RESORT 2026</span>
             <span className="hidden sm:inline text-slate-700">&bull;</span>
             <span>100% CARBON NEUTRAL OPERATION</span>
           </div>
@@ -273,7 +273,7 @@ export default function Footer() {
             className="flex items-center gap-2 text-slate-400 hover:text-[#FAF8F5] transition-colors uppercase tracking-[0.2em] font-semibold text-[10px] cursor-pointer"
             aria-label="Return to top of page"
           >
-            <span>Return to Summit</span>
+            <span>Back to Top</span>
             <span className="text-amber-400">&uarr;</span>
           </button>
         </div>
