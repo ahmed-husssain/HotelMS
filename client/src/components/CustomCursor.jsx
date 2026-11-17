@@ -89,32 +89,21 @@ function ArrowRoll({ isRolled, charCount }) {
 }
 
 /**
- * Ultra-Optimized Site-Wide Luxury Custom Cursor
+ * Concept 3: Pure Quiet Luxury Minimal Cursor (Subtle Soft Halo)
  * 
- * Performance Design:
- * - Direct 1-to-1 immediate dot tracking (0 lag / zero delay)
- * - 120 FPS spring interpolation (lerp = 0.22) for outer magnetic ring / capsule pill
- * - Target detection strictly on pointerover / pointerout (cuts 98% of unnecessary DOM traversal)
- * - GPU translate3d transforms only
- * - Automatic graceful fallback on touch / coarse devices
+ * Architecture:
+ * - Single unified dot (zero outer detached rings, zero lag)
+ * - Restrained 24px soft translucent whisper halo on hover over clickable elements
+ * - Seamless morph into Casa Momo Suite pill over room photo cards
+ * - 0% opacity over text inputs for native I-beam typing
+ * - 120 FPS hardware translate3d positioning
  */
 export default function CustomCursor() {
+  const rootRef = useRef(null)
   const dotRef = useRef(null)
-  const ringRef = useRef(null)
   const pillRef = useRef(null)
 
-  // Hardware physics coordinates (Stored in mutable refs to bypass React state re-renders)
-  const coordsRef = useRef({
-    targetX: -100,
-    targetY: -100,
-    ringX: -100,
-    ringY: -100,
-    hasMoved: false,
-    isVisible: false,
-  })
-
-  // Cursor Mode: 'default' | 'link' | 'card' | 'input'
-  const [cursorMode, setCursorMode] = useState('default')
+  const [cursorMode, setCursorMode] = useState('default') // 'default' | 'link' | 'card' | 'input'
   const [cardLabel, setCardLabel] = useState('Suite Details')
   const [isRolled, setIsRolled] = useState(false)
   const [isFinePointer, setIsFinePointer] = useState(false)
@@ -125,56 +114,35 @@ export default function CustomCursor() {
     setIsFinePointer(isFine)
     if (!isFine) return
 
-    const coords = coordsRef.current
-    let animId
+    const rootEl = rootRef.current
+    if (!rootEl) return
 
-    // 120 FPS High-Precision Interpolation Loop
-    const renderLoop = () => {
-      if (coords.hasMoved) {
-        // Direct instant dot positioning (0ms latency)
-        if (dotRef.current) {
-          dotRef.current.style.transform = `translate3d(${coords.targetX}px, ${coords.targetY}px, 0) translate(-50%, -50%)`
-        }
-
-        // Fluid spring interpolation for outer ring & pill (0.22 factor)
-        coords.ringX += (coords.targetX - coords.ringX) * 0.22
-        coords.ringY += (coords.targetY - coords.ringY) * 0.22
-
-        const transformStr = `translate3d(${coords.ringX}px, ${coords.ringY}px, 0) translate(-50%, -50%)`
-        if (ringRef.current) {
-          ringRef.current.style.transform = transformStr
-        }
-        if (pillRef.current) {
-          pillRef.current.style.transform = transformStr
-        }
-      }
-
-      animId = requestAnimationFrame(renderLoop)
+    // Direct 1-to-1 immediate mouse follow (0 latency, impossible to detach)
+    const onPointerMove = (e) => {
+      rootEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`
     }
 
-    animId = requestAnimationFrame(renderLoop)
-
-    // Optimized Target Detection: Runs strictly on boundary changes, NOT on every frame
-    const handleTargetChange = (target) => {
+    // Boundary-triggered element detection (0 overhead on pointermove)
+    const onPointerOver = (e) => {
+      const target = e.target
       if (!target || !(target instanceof Element)) {
         setCursorMode('default')
         return
       }
 
-      // 1. Text input / textarea: Hide custom cursor to show native typing caret
+      // 1. Text input / textarea: Hide custom cursor for clean typing
       if (target.closest('input, textarea, [contenteditable="true"]')) {
         setCursorMode('input')
         return
       }
 
-      // 2. Interactive buttons inside cards (e.g. carousel < > arrows): Switch to link mode
-      const buttonOrAction = target.closest('button, [data-cursor-hide], [data-no-cursor]')
-      if (buttonOrAction) {
+      // 2. Buttons inside cards (e.g. carousel < > arrows): Switch to subtle link halo
+      if (target.closest('button, [data-cursor-hide], [data-no-cursor]')) {
         setCursorMode('link')
         return
       }
 
-      // 3. Project / Suite Card hover with [data-cursor]
+      // 3. Suite / Project Cards: Signature Casa Momo Pill
       const card = target.closest('[data-cursor]')
       if (card) {
         const text = card.getAttribute('data-cursor') || 'Suite Details'
@@ -185,7 +153,7 @@ export default function CustomCursor() {
         return
       }
 
-      // 4. Standard Links & Buttons across the site
+      // 4. Clickable Links, Buttons & Menu triggers across the site
       if (target.closest('a, [role="button"], .cursor-pointer, select')) {
         setCursorMode('link')
         return
@@ -195,26 +163,8 @@ export default function CustomCursor() {
       setCursorMode('default')
     }
 
-    // High-performance pointer movement listener (updates coordinates only)
-    const onPointerMove = (e) => {
-      if (!coords.hasMoved) {
-        coords.ringX = e.clientX
-        coords.ringY = e.clientY
-        coords.hasMoved = true
-      }
-      coords.targetX = e.clientX
-      coords.targetY = e.clientY
-    }
-
-    // Boundary event listener for target checking (efficient & event-driven)
-    const onPointerOver = (e) => {
-      coords.isVisible = true
-      handleTargetChange(e.target)
-    }
-
     const onPointerOut = (e) => {
       if (!e.relatedTarget) {
-        coords.isVisible = false
         setCursorMode('default')
       }
     }
@@ -227,7 +177,6 @@ export default function CustomCursor() {
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerover', onPointerOver)
       window.removeEventListener('pointerout', onPointerOut)
-      cancelAnimationFrame(animId)
     }
   }, [])
 
@@ -238,47 +187,38 @@ export default function CustomCursor() {
   const isCard = cursorMode === 'card'
 
   return (
-    <div className="custom-cursor-container fixed inset-0 pointer-events-none z-[99999] overflow-hidden select-none">
+    <div
+      ref={rootRef}
+      className="custom-cursor-container fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform select-none"
+      style={{ transform: 'translate3d(-100px, -100px, 0)' }}
+    >
       {/* ============================================================== */}
-      {/* 1. INSTANT CENTER DOT (Zero Delay / 0 Latency) */}
+      {/* 1. SINGLE UNIFIED QUIET LUXURY DOT / SOFT HALO */}
       {/* ============================================================== */}
       <div
         ref={dotRef}
-        className={`fixed top-0 left-0 w-2 h-2 rounded-full will-change-transform transition-opacity duration-200 ${
-          isInput || isCard ? 'opacity-0 scale-0' : 'opacity-90'
-        } ${isLink ? 'bg-amber-700 scale-75' : 'bg-[#121619]'}`}
-        style={{ left: 0, top: 0 }}
-      />
-
-      {/* ============================================================== */}
-      {/* 2. SMOOTH FLUID OUTER RING (Interpolated 0.22 Spring Factor) */}
-      {/* ============================================================== */}
-      <div
-        ref={ringRef}
-        className={`fixed top-0 left-0 rounded-full will-change-transform border transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isInput || isCard ? 'opacity-0 scale-50' : 'opacity-100'
+        className={`will-change-transform rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isInput || isCard ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
         } ${
           isLink
-            ? 'w-10 h-10 border-amber-800/60 bg-amber-900/10 scale-100'
-            : 'w-7 h-7 border-[#121619]/25 bg-[#121619]/[0.02] scale-100'
+            ? 'w-6 h-6 bg-[#121619]/15 shadow-none'
+            : 'w-1.5 h-1.5 bg-[#121619]'
         }`}
-        style={{ left: 0, top: 0 }}
       />
 
       {/* ============================================================== */}
-      {/* 3. FLOATING LUXURY PILL CAPSULE (For Suite / Project Cards) */}
+      {/* 2. SIGNATURE MONOLITHIC SUITE PILL (OVER ROOM CARDS) */}
       {/* ============================================================== */}
       <div
         ref={pillRef}
-        className={`fixed top-0 left-0 px-3.5 py-1.5 rounded-[2px] bg-slate-900/95 border border-slate-700/60 shadow-xl backdrop-blur-md flex items-center justify-center will-change-transform transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`absolute top-0 left-0 px-3.5 py-1.5 rounded-[2px] bg-slate-900/95 border border-slate-700/60 shadow-xl backdrop-blur-md flex items-center justify-center -translate-x-1/2 -translate-y-1/2 will-change-transform transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isCard
             ? 'opacity-100 scale-100 pointer-events-none'
             : 'opacity-0 scale-75 pointer-events-none'
         }`}
-        style={{ left: 0, top: 0 }}
       >
         {/* Kinetic Staggered Wave-Roll Typography */}
-        <div className="flex items-center text-[13px] font-medium tracking-tight whitespace-nowrap leading-[1.2em] font-sans-clean text-[#FFF0CA]">
+        <div className="flex items-center text-[12px] font-medium tracking-tight whitespace-nowrap leading-[1.2em] font-sans-clean text-[#FFF0CA]">
           {Array.from(cardLabel).map((char, index) => (
             <CharacterRoll
               key={index}

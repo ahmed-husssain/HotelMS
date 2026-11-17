@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
 import { RESIDENCES } from '../data/residences'
+import { useAuth } from '../context/AuthContext'
 
 // Default Demo Stay Record (Suite 301 - Dr. Tariq Khan)
 const DEMO_BOOKING = {
@@ -64,15 +65,26 @@ const AVAILABLE_SERVICES = [
 export default function MyStayPage() {
   const [searchParams] = useSearchParams()
   const initialRef = searchParams.get('ref') || ''
+  const { currentUser, logout } = useAuth()
 
   // Portal Authentication State
-  const [bookingCode, setBookingCode] = useState(initialRef || 'TH-301-9041')
-  const [guestEmailInput, setGuestEmailInput] = useState('')
-  const [isUnlocked, setIsUnlocked] = useState(Boolean(initialRef))
+  const [bookingCode, setBookingCode] = useState(() => initialRef || currentUser?.activeReservationCode || 'TH-301-9041')
+  const [guestEmailInput, setGuestEmailInput] = useState(() => currentUser?.email || '')
+  const [isUnlocked, setIsUnlocked] = useState(() => Boolean(initialRef || currentUser?.role === 'guest'))
   const [searchError, setSearchError] = useState('')
 
   // Active Stay State
-  const [currentBooking, setCurrentBooking] = useState(DEMO_BOOKING)
+  const [currentBooking, setCurrentBooking] = useState(() => {
+    if (currentUser?.name) {
+      return {
+        ...DEMO_BOOKING,
+        guestName: currentUser.name,
+        guestEmail: currentUser.email || DEMO_BOOKING.guestEmail,
+        bookingRef: currentUser.activeReservationCode || DEMO_BOOKING.bookingRef,
+      }
+    }
+    return DEMO_BOOKING
+  })
   const [orderedServices, setOrderedServices] = useState(DEMO_BOOKING.initialServices)
   const [serviceFeedbackNotice, setServiceFeedbackNotice] = useState('')
 
@@ -171,23 +183,47 @@ export default function MyStayPage() {
       {/* ============================================================== */}
       {/* 1. TOP HEADER (Consistent with Habitas Editorial Style) */}
       {/* ============================================================== */}
-      <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/60 px-6 sm:px-12 py-5 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/60 px-4 sm:px-12 py-4 flex items-center justify-between">
         <Link
           to="/"
           className="group inline-flex items-center gap-2 text-xs font-mono tracking-wider text-slate-600 hover:text-slate-950 uppercase transition-colors"
         >
           <span className="transition-transform group-hover:-translate-x-1">&larr;</span>
-          <span>Return to Overview</span>
+          <span className="hidden sm:inline">Return to </span>
+          <span>Overview</span>
         </Link>
 
         {/* Center Brand Wordmark */}
         <BrandLogo variant="wordmark" theme="dark" size="sm" />
 
-        {/* Portal Tag */}
-        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-          <span>Guest Portal</span>
-          <span className="hidden sm:inline">&bull; Sindh Coast</span>
+        {/* Portal Status & Auth Info */}
+        <div className="flex items-center gap-3">
+          {currentUser ? (
+            <div className="flex items-center gap-2 text-[10px] font-mono">
+              <span className="hidden md:inline text-slate-500 uppercase tracking-wider">
+                Guest: <strong className="text-slate-900">{currentUser.name}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={logout}
+                className="px-2 py-1 bg-slate-200/70 hover:bg-slate-300 text-slate-800 uppercase tracking-wider rounded-[2px] transition-colors cursor-pointer text-[9px]"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login?redirect=/my-stay"
+              className="text-[10px] font-mono text-emerald-900 hover:text-emerald-950 uppercase tracking-widest font-bold underline transition-colors"
+            >
+              Sign In
+            </Link>
+          )}
+
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 uppercase tracking-widest pl-2 border-l border-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+            <span className="hidden sm:inline">Guest Portal</span>
+          </div>
         </div>
       </header>
 

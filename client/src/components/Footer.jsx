@@ -212,7 +212,7 @@ export default function Footer() {
           {/* Column 4: Portals & Access */}
           <div className="space-y-3">
             <span className="text-[10px] font-mono tracking-[0.2em] font-bold text-[#121619] uppercase block pb-1 border-b border-[#E5DFD5]">
-              03 &bull; PORTALS
+              03 &bull; PORTALS &amp; ACCESS
             </span>
             <div className="space-y-2 text-xs">
               <Link
@@ -220,46 +220,41 @@ export default function Footer() {
                 className="group block py-1.5 border-b border-[#E5DFD5]/80 hover:border-[#121619] transition-colors"
               >
                 <div className="flex items-center justify-between text-[#121619]">
-                  <span className="font-medium group-hover:text-amber-800 transition-colors">Guest Portal</span>
+                  <span className="font-medium group-hover:text-amber-800 transition-colors">Guest Stay Dossier</span>
                   <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
                 </div>
                 <span className="text-[10px] font-mono text-[#8E877C] block mt-0.5">
-                  Digital Key &bull; In-Stay Folio
-                </span>
-              </Link>
-
-              <Link
-                to="/pms"
-                className="group block py-1.5 border-b border-[#E5DFD5]/80 hover:border-[#121619] transition-colors"
-              >
-                <div className="flex items-center justify-between text-[#121619]">
-                  <span className="font-medium group-hover:text-amber-800 transition-colors">Front Desk PMS</span>
-                  <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
-                </div>
-                <span className="text-[10px] font-mono text-[#8E877C] block mt-0.5">
-                  Arrivals &bull; Folio Billing
-                </span>
-              </Link>
-
-              <Link
-                to="/housekeeping"
-                className="group block py-1.5 border-b border-[#E5DFD5]/80 hover:border-[#121619] transition-colors"
-              >
-                <div className="flex items-center justify-between text-[#121619]">
-                  <span className="font-medium group-hover:text-amber-800 transition-colors">Housekeeping Queue</span>
-                  <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
-                </div>
-                <span className="text-[10px] font-mono text-[#8E877C] block mt-0.5">
-                  Room Turnovers &bull; Maintenance
+                  Digital NFC Key &bull; Room Service
                 </span>
               </Link>
 
               <Link
                 to="/login"
-                className="group block py-1 text-[11px] font-mono text-[#8E877C] hover:text-[#121619] transition-colors flex items-center justify-between pt-1"
+                className="group block py-1.5 border-b border-[#E5DFD5]/80 hover:border-[#121619] transition-colors"
               >
-                <span>Staff Sign In</span>
-                <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                <div className="flex items-center justify-between text-[#121619]">
+                  <span className="font-medium group-hover:text-amber-800 transition-colors">Sanctuary Sign In</span>
+                  <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
+                </div>
+                <span className="text-[10px] font-mono text-[#8E877C] block mt-0.5">
+                  Automatic Role Detection
+                </span>
+              </Link>
+
+              <Link
+                to="/login"
+                className="group block py-1.5 hover:border-[#121619] transition-colors"
+              >
+                <div className="flex items-center justify-between text-[#5C646A]">
+                  <span className="text-[11px] font-mono group-hover:text-[#121619] transition-colors flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-emerald-600 transition-colors" />
+                    Staff Operations Terminal
+                  </span>
+                  <span className="font-mono text-xs text-[#8E877C] group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+                <span className="text-[9px] font-mono text-[#8E877C] block mt-0.5 pl-3">
+                  Front Desk, Housekeeping &amp; General Manager
+                </span>
               </Link>
             </div>
           </div>

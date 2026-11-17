@@ -1,10 +1,13 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
+import { useAuth } from '../context/AuthContext'
 
 export default function BookingConfirmation() {
   const location = useLocation()
+  const { currentUser } = useAuth()
   const booking = location.state?.booking || {
+    bookingRef: 'TH-301-9041',
     residence: {
       name: 'The Horizon Penthouse',
       roomNumber: '301',
@@ -39,7 +42,7 @@ export default function BookingConfirmation() {
                 CONFIRMATION CODE
               </span>
               <h2 className="font-mono text-base sm:text-lg font-bold text-slate-900 mt-0.5">
-                LX-2026-90412
+                {booking.bookingRef || 'TH-301-9041'}
               </h2>
             </div>
             <span className="px-3 py-1 bg-emerald-100 text-emerald-950 text-[10px] tracking-[0.15em] font-bold uppercase rounded-full">
@@ -93,17 +96,27 @@ export default function BookingConfirmation() {
           {/* Action Links */}
           <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-4 pt-4 border-t border-slate-100">
             <Link
-              to="/my-stay"
+              to={`/my-stay?ref=${booking.bookingRef || 'TH-301-9041'}`}
               className="tactile flex-1 py-3 text-center bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px]"
             >
               OPEN GUEST PORTAL &rarr;
             </Link>
-            <Link
-              to="/pms"
-              className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px]"
-            >
-              VIEW ON STAFF PMS &rarr;
-            </Link>
+            {currentUser && (currentUser.role === 'admin' || currentUser.role === 'receptionist') ? (
+              <Link
+                to="/pms"
+                className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px]"
+              >
+                VIEW ON STAFF PMS &rarr;
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px] cursor-pointer"
+              >
+                PRINT TAX VOUCHER &darr;
+              </button>
+            )}
           </div>
         </div>
       </div>

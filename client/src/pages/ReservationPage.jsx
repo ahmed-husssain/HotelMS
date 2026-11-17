@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
 import { RESIDENCES } from '../data/residences'
+import { useAuth } from '../context/AuthContext'
 
 /**
  * ReservationPage — The Haven Minimalist Reservation Monograph (/reserve)
@@ -44,6 +45,7 @@ const CONCIERGE_ADDONS = [
 export default function ReservationPage() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
+  const { currentUser } = useAuth()
 
   // 1. Resolve Active Suite from Query Param (?room=102, ?room=301, ?room=204)
   const roomParam = searchParams.get('room')
@@ -57,14 +59,14 @@ export default function ReservationPage() {
   const [guestCount, setGuestCount] = useState(2)
   const [selectedAddons, setSelectedAddons] = useState(['helipad'])
 
-  // 3. Guest Information
-  const [guestDossier, setGuestDossier] = useState({
-    fullName: 'Ahmed Khan',
-    email: 'ahmed.khan@havenresorts.pk',
-    phone: '+92 300 1234567',
+  // 3. Guest Information (Auto-populated from authenticated profile if available)
+  const [guestDossier, setGuestDossier] = useState(() => ({
+    fullName: currentUser?.name || 'Ahmed Khan',
+    email: currentUser?.email || 'ahmed.khan@havenresorts.pk',
+    phone: currentUser?.phone || '+92 300 1234567',
     identificationNumber: '42101-9876543-1',
     specialRequests: '',
-  })
+  }))
 
   // 4. Atomic 5-Minute Inventory Hold (300 seconds)
   const [secondsLeft, setSecondsLeft] = useState(300)
@@ -72,7 +74,6 @@ export default function ReservationPage() {
   const [showMobileFolio, setShowMobileFolio] = useState(false)
 
   useEffect(() => {
-    setSecondsLeft(300)
     const timer = setInterval(() => {
       setSecondsLeft((prev) => {
         if (prev <= 1) {
@@ -279,9 +280,19 @@ export default function ReservationPage() {
                 <span className="text-xs font-mono font-bold tracking-[0.2em] text-slate-900 uppercase">
                   02 &bull; Guest Information
                 </span>
-                <span className="text-[10px] font-mono text-slate-400 uppercase">
-                  Direct Check-in Registration
-                </span>
+                {currentUser ? (
+                  <span className="text-[10px] font-mono text-emerald-800 uppercase font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                    Express Check-in &bull; {currentUser.name}
+                  </span>
+                ) : (
+                  <Link
+                    to="/login?redirect=/reserve"
+                    className="text-[10px] font-mono text-slate-500 hover:text-slate-900 uppercase underline transition-colors"
+                  >
+                    Sign In for 1-Click Dossier &rarr;
+                  </Link>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
