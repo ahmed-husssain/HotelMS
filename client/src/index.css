@@ -55,18 +55,20 @@ html.lenis, html.lenis body {
   transition: transform 100ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Card hover cursor suppression (Hides native OS pointer over [data-cursor] cards so custom pill is primary) */
+/* Option B: Site-wide luxury custom cursor suppression for mouse/trackpad */
 @media (hover: hover) and (pointer: fine) {
-  [data-cursor] {
+  html, body, a, button, [role="button"], [data-cursor] {
     cursor: none !important;
   }
-  [data-cursor] * {
-    cursor: none !important;
+  /* Allow natural I-beam cursor for typing in text fields */
+  input, textarea {
+    cursor: text !important;
   }
 }
 
-/* Suppress custom cursor on touch devices (smartphones and tablets) */
+/* Suppress custom cursor container completely on touch devices (smartphones and tablets) */
 @media (pointer: coarse), (hover: none) {
+  .custom-cursor-container,
   .custom-cursor-root {
     display: none !important;
   }
