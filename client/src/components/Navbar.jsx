@@ -215,7 +215,7 @@ export default function Navbar({ onOpenDrawer }) {
             text="Reserve"
             onClick={onOpenDrawer}
             size="sm"
-            variant="primary"
+            variant="outline"
           />
 
           <button
@@ -249,8 +249,9 @@ export default function Navbar({ onOpenDrawer }) {
           <AnimatedButton
             text="Reserve"
             onClick={onOpenDrawer}
-            size="sm"
+            size="xs"
             variant="primary"
+            className="!rounded-full !px-3.5 !h-7 ml-1"
           />
           <button
             type="button"

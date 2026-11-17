@@ -200,11 +200,16 @@ export default function CustomCursor() {
       }
     }
 
-    // Real-time scroll detection: checks what scrolled directly under the mouse
+    // Real-time scroll detection throttled with RAF (eliminates forced reflows during scroll)
+    let scrollRaf = null
     const onScroll = () => {
       if (!pos.hasMoved || pos.x < 0 || pos.y < 0) return
-      const elementUnderMouse = document.elementFromPoint(pos.x, pos.y)
-      detectTarget(elementUnderMouse)
+      if (scrollRaf) return
+      scrollRaf = requestAnimationFrame(() => {
+        scrollRaf = null
+        const elementUnderMouse = document.elementFromPoint(pos.x, pos.y)
+        detectTarget(elementUnderMouse)
+      })
     }
 
     window.addEventListener('pointermove', onPointerMove, { passive: true })
@@ -213,6 +218,7 @@ export default function CustomCursor() {
     window.addEventListener('scroll', onScroll, { passive: true, capture: true })
 
     return () => {
+      if (scrollRaf) cancelAnimationFrame(scrollRaf)
       document.documentElement.classList.remove('has-custom-cursor')
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerover', onPointerOver)

@@ -125,6 +125,8 @@ export default function RoomsCarousel({ residence, index, onReserve }) {
                   <img
                     src={photo.url}
                     alt={`${residence.name} - ${photo.title}`}
+                    width="600"
+                    height="375"
                     loading={index === 0 && i === 0 ? 'eager' : 'lazy'}
                     decoding="async"
                     className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025]"
@@ -194,6 +196,10 @@ export default function RoomsCarousel({ residence, index, onReserve }) {
             <img
               src={residence.detailImage}
               alt={`${residence.name} Detail`}
+              width="450"
+              height="338"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           </div>

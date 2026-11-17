@@ -4,7 +4,7 @@
     "public": "client/dist",
     "ignore": [
       "firebase.json",
-      "**/.*",
+      ".git/**",
       "**/node_modules/**"
     ],
     "rewrites": [
@@ -24,7 +24,24 @@
         ]
       },
       {
-        "source": "/@(llms.txt|ai-catalog.json|robots.txt|sitemap.xml)",
+        "source": "@(.well-known/ai-catalog.json|ai-catalog.json)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json; charset=utf-8"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "@(llms.txt|robots.txt|sitemap.xml)",
         "headers": [
           {
             "key": "Access-Control-Allow-Origin",
