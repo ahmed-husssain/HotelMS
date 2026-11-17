@@ -242,10 +242,12 @@ function CasaMomoArrow() {
 
             {/* 2. Expanded Floating Pill Capsule (Exact Casa Momo 2px border radius) */}
             <div
-                      ? 'opacity-100 scale-100 translate-y-0 pointer-events-none'
-                      : 'opacity-0 scale-75 pointer-events-none'
-                  }`}
-      >
+              className={`absolute top-0 left-0 px-3 py-1.5 rounded-[2px] bg-slate-900/90 border border-slate-700/50 backdrop-blur-md flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                active
+                  ? 'opacity-100 scale-100 translate-y-0 pointer-events-none'
+                  : 'opacity-0 scale-75 pointer-events-none'
+              }`}
+            >
         {/* Kinetic Staggered Wave-Roll Typography */}
         <div className="flex items-center text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap leading-[1.2em] font-sans-clean text-[#FFF0CA]">
           {Array.from(label).map((char, index) => (
