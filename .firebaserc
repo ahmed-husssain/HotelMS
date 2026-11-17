@@ -2,5 +2,15 @@
   "projects": {
     "default": "habitas-ba07e",
     "production": "habitas-ba07e"
-  }
+  },
+  "targets": {
+    "habitas-ba07e": {
+      "hosting": {
+        "the-habitas": [
+          "the-habitas"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

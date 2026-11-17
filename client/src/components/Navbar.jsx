@@ -349,10 +349,10 @@ export default function Navbar({ onOpenDrawer }) {
         </div>
 
         {/* Right 55%: Navigation Index & Controls */}
-        <div className="w-full md:w-7/12 h-full flex flex-col justify-between p-6 sm:p-10 lg:p-14 overflow-y-auto overscroll-contain">
+        <div className="w-full md:w-7/12 h-full flex flex-col justify-between p-6 sm:p-8 lg:p-10 overflow-y-auto overscroll-contain">
           
           {/* Top Bar: Clean Branding & Dedicated Close Button */}
-          <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest border-b border-slate-200/80 pb-4 shrink-0">
+          <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest border-b border-slate-200/80 pb-3 shrink-0">
             <div className="flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
               <span className="text-slate-900 font-semibold tracking-wider">// NAVIGATION</span>
@@ -373,23 +373,23 @@ export default function Navbar({ onOpenDrawer }) {
           </div>
 
           {/* Navigation Links with Dynamic Hover Trigger */}
-          <nav className="my-auto py-6 sm:py-8 space-y-5 lg:space-y-7 shrink-0" aria-label="Menu Items">
+          <nav className="my-auto py-2 sm:py-4 space-y-2.5 sm:space-y-3" aria-label="Menu Items">
             {navItems.map((item) => {
               const linkContent = (
                 <div
                   onMouseEnter={() => setActivePreview(item.preview)}
                   onClick={closeMenu}
-                  className="group block border-b border-slate-200/70 pb-4 hover:border-slate-900 transition-colors cursor-pointer"
+                  className="group block border-b border-slate-200/70 pb-2 sm:pb-2.5 hover:border-slate-900 transition-colors cursor-pointer"
                 >
-                  <div className="flex items-baseline gap-4">
+                  <div className="flex items-baseline gap-3 sm:gap-4">
                     <span className="font-mono text-xs text-slate-400 group-hover:text-emerald-800 transition-colors">
                       [{item.num}]
                     </span>
-                    <span className="font-serif-grand text-3xl sm:text-4xl lg:text-5xl text-slate-900 font-normal group-hover:translate-x-3 transition-transform duration-300">
+                    <span className="font-serif-grand text-2xl sm:text-3xl lg:text-[2rem] text-slate-900 font-normal group-hover:translate-x-2 transition-transform duration-300 leading-tight">
                       {item.label}
                     </span>
                   </div>
-                  <span className="font-mono text-xs text-slate-500 tracking-wider block mt-1 pl-10">
+                  <span className="font-mono text-[11px] sm:text-xs text-slate-500 tracking-wider block mt-0.5 pl-7 sm:pl-9">
                     {item.desc}
                   </span>
                 </div>
@@ -407,14 +407,14 @@ export default function Navbar({ onOpenDrawer }) {
             })}
 
             {/* Direct Reserve Sanctuary CTA */}
-            <div className="pt-2">
+            <div className="pt-2 sm:pt-3">
               <button
                 type="button"
                 onClick={() => {
                   closeMenu()
                   onOpenDrawer()
                 }}
-                className="w-full py-4 px-6 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.25em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98] shadow-md"
+                className="w-full py-3 sm:py-3.5 px-5 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.25em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98] shadow-md"
               >
                 <span>Reserve a Suite (30% Deposit)</span>
                 <span>&rarr;</span>
@@ -423,7 +423,7 @@ export default function Navbar({ onOpenDrawer }) {
           </nav>
 
           {/* Bottom Telemetry & Metadata Strip */}
-          <div className="border-t border-slate-200/80 pt-5 text-[10px] font-mono text-slate-500 space-y-1.5 shrink-0">
+          <div className="border-t border-slate-200/80 pt-3 text-[10px] font-mono text-slate-500 space-y-1 shrink-0">
             <div className="flex justify-between items-center text-slate-800">
               <span className="uppercase tracking-widest">Active Vacation Dates</span>
               <span className="font-semibold">{fullDateLabel}</span>
@@ -432,7 +432,7 @@ export default function Navbar({ onOpenDrawer }) {
               <span>LAT: 24&deg;48&apos;N &middot; THERMAL: 41.5&deg;C</span>
               <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
             </div>
-            <div className="text-slate-400 pt-1 text-[9px] uppercase tracking-wider">
+            <div className="text-slate-400 pt-0.5 text-[9px] uppercase tracking-wider">
               Habitas &middot; Safepay 30% Advance &middot; 5-Min Reservation Hold
             </div>
           </div>
