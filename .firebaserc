@@ -1,14 +1,6 @@
 {
   "projects": {
-    "default": "ahmed-hussain-portfolio"
-  },
-  "targets": {
-    "ahmed-hussain-portfolio": {
-      "hosting": {
-        "habitas": [
-          "habitas"
-        ]
-      }
-    }
+    "default": "habitas-ba07e",
+    "production": "habitas-ba07e"
   }
 }

@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "target": "habitas",
     "public": "client/dist",
     "ignore": [
       "firebase.json",
