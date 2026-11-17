@@ -89,19 +89,26 @@ function ArrowRoll({ isRolled, charCount }) {
 }
 
 /**
- * Bulletproof Concept 3: Quiet Luxury Minimal Cursor (Subtle Soft Halo)
+ * Concept 3: Quiet Luxury Minimal Cursor (Subtle Soft Halo)
  * 
- * Reliability Guarantees:
- * - Always mounts container immediately so rootRef is never null on mount
- * - Injects 'has-custom-cursor' on <html> ONLY when mouse movement is active
- * - Zero detached elements: single unified dot that smoothly blossoms into a 28px soft halo
- * - Suite photo cards smoothly bloom into the signature Suite Details ↗ pill
+ * Features:
+ * - Single unified dot (zero outer detached rings, zero lag)
+ * - 28px soft translucent whisper halo over links & buttons
+ * - Immediate auto-detection on scroll via document.elementFromPoint
+ * - Suite photo cards seamlessly bloom into Suite Details ↗ pill
  * - Form inputs gracefully restore native I-beam typing
  */
 export default function CustomCursor() {
   const rootRef = useRef(null)
   const dotRef = useRef(null)
   const pillRef = useRef(null)
+
+  const posRef = useRef({
+    x: -100,
+    y: -100,
+    hasMoved: false,
+    activeCard: null,
+  })
 
   const [cursorMode, setCursorMode] = useState('default') // 'default' | 'link' | 'card' | 'input'
   const [cardLabel, setCardLabel] = useState('Suite Details')
@@ -119,31 +126,26 @@ export default function CustomCursor() {
     const rootEl = rootRef.current
     if (!rootEl) return
 
-    // Activates custom cursor upon first real mouse movement
-    const onPointerMove = (e) => {
-      if (!document.documentElement.classList.contains('has-custom-cursor')) {
-        document.documentElement.classList.add('has-custom-cursor')
-        setIsActive(true)
-      }
-      rootEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`
-    }
+    const pos = posRef.current
 
-    // Boundary-triggered element detection (efficient event-driven target handling)
-    const onPointerOver = (e) => {
-      const target = e.target
+    // Unified target classifier
+    const detectTarget = (target) => {
       if (!target || !(target instanceof Element)) {
+        pos.activeCard = null
         setCursorMode('default')
         return
       }
 
       // 1. Text input / textarea: Hide custom cursor for clean typing
       if (target.closest('input, textarea, [contenteditable="true"]')) {
+        pos.activeCard = null
         setCursorMode('input')
         return
       }
 
       // 2. Buttons inside cards (e.g. carousel < > arrows): Switch to subtle link halo
       if (target.closest('button, [data-cursor-hide], [data-no-cursor]')) {
+        pos.activeCard = null
         setCursorMode('link')
         return
       }
@@ -151,13 +153,18 @@ export default function CustomCursor() {
       // 3. Suite / Project Cards: Signature Casa Momo Pill
       const card = target.closest('[data-cursor]')
       if (card) {
-        const text = card.getAttribute('data-cursor') || 'Suite Details'
-        setCardLabel(text)
-        setCursorMode('card')
-        setIsRolled(false)
-        setTimeout(() => setIsRolled(true), 25)
+        if (pos.activeCard !== card) {
+          pos.activeCard = card
+          const text = card.getAttribute('data-cursor') || 'Suite Details'
+          setCardLabel(text)
+          setCursorMode('card')
+          setIsRolled(false)
+          setTimeout(() => setIsRolled(true), 25)
+        }
         return
       }
+
+      pos.activeCard = null
 
       // 4. Clickable Links, Buttons & Menu triggers across the site
       if (target.closest('a, [role="button"], .cursor-pointer, select')) {
@@ -169,21 +176,48 @@ export default function CustomCursor() {
       setCursorMode('default')
     }
 
+    // Direct 1-to-1 immediate mouse follow (0 latency, impossible to detach)
+    const onPointerMove = (e) => {
+      pos.x = e.clientX
+      pos.y = e.clientY
+      if (!pos.hasMoved) {
+        pos.hasMoved = true
+        document.documentElement.classList.add('has-custom-cursor')
+        setIsActive(true)
+      }
+      rootEl.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`
+    }
+
+    // Boundary-triggered element detection on hover
+    const onPointerOver = (e) => {
+      detectTarget(e.target)
+    }
+
     const onPointerOut = (e) => {
       if (!e.relatedTarget) {
+        pos.activeCard = null
         setCursorMode('default')
       }
+    }
+
+    // Real-time scroll detection: checks what scrolled directly under the mouse
+    const onScroll = () => {
+      if (!pos.hasMoved || pos.x < 0 || pos.y < 0) return
+      const elementUnderMouse = document.elementFromPoint(pos.x, pos.y)
+      detectTarget(elementUnderMouse)
     }
 
     window.addEventListener('pointermove', onPointerMove, { passive: true })
     window.addEventListener('pointerover', onPointerOver, { passive: true })
     window.addEventListener('pointerout', onPointerOut, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true })
 
     return () => {
       document.documentElement.classList.remove('has-custom-cursor')
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerover', onPointerOver)
       window.removeEventListener('pointerout', onPointerOut)
+      window.removeEventListener('scroll', onScroll, { capture: true })
     }
   }, [])
 
