@@ -7,25 +7,24 @@ export default function BookingLookup({
   setGuestEmailInput,
   searchError,
   onSubmit,
-  onLoadDemo,
 }) {
   return (
-    <main className="flex-1 w-full flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
-      <div className="w-full max-w-lg text-center space-y-4 sm:space-y-5 my-auto">
-        <div className="space-y-2">
-          <span className="text-[10px] font-mono tracking-[0.3em] font-extrabold text-emerald-900 uppercase block">
+    <main className="flex-1 w-full flex flex-col items-center justify-center px-4 sm:px-6 py-4">
+      <div className="w-full max-w-md text-center space-y-4 my-auto">
+        <div className="space-y-1.5">
+          <span className="text-[10px] font-mono tracking-[0.25em] font-extrabold text-emerald-900 uppercase block">
             GUEST SELF-SERVICE PORTAL
           </span>
-          <h1 className="font-serif-grand text-2xl sm:text-4xl font-light text-slate-900 tracking-tight">
+          <h1 className="font-serif-grand text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
             Access Your Stay.
           </h1>
-          <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-            Enter your booking reference code or email address to view your digital key, request in-room dining, manage services, and download your tax invoice.
+          <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+            Enter your booking reference code or email address to view your digital key, request in-room dining, and manage services.
           </p>
         </div>
 
-        <div className="bg-white border border-slate-200/90 shadow-xl p-6 sm:p-7 rounded-[2px] text-left space-y-4 sm:space-y-5">
-          <form onSubmit={onSubmit} className="space-y-4">
+        <div className="bg-white border border-slate-200/90 shadow-xl p-5 sm:p-6 rounded-[2px] text-left space-y-4">
+          <form onSubmit={onSubmit} className="space-y-3.5">
             <div>
               <label className="text-[10px] font-mono tracking-wider font-semibold text-slate-400 uppercase block mb-1">
                 Booking Reference Code
@@ -36,7 +35,7 @@ export default function BookingLookup({
                 value={bookingCode}
                 onChange={(e) => setBookingCode(e.target.value)}
                 placeholder="e.g. TH-301-9041"
-                className="w-full py-2 px-3 bg-slate-50/70 border border-slate-300 focus:border-slate-900 text-sm font-mono uppercase tracking-wider text-slate-900 focus:outline-none transition-colors rounded-[2px]"
+                className="w-full py-2.5 px-3 bg-slate-50/70 border border-slate-300 focus:border-slate-900 text-sm font-mono uppercase tracking-wider text-slate-900 focus:outline-none transition-colors rounded-[2px]"
               />
             </div>
 
@@ -49,7 +48,7 @@ export default function BookingLookup({
                 value={guestEmailInput}
                 onChange={(e) => setGuestEmailInput(e.target.value)}
                 placeholder="e.g. tariq.khan@luxury.pk"
-                className="w-full py-2 px-3 bg-slate-50/70 border border-slate-300 focus:border-slate-900 text-sm text-slate-900 focus:outline-none transition-colors rounded-[2px]"
+                className="w-full py-2.5 px-3 bg-slate-50/70 border border-slate-300 focus:border-slate-900 text-sm text-slate-900 focus:outline-none transition-colors rounded-[2px]"
               />
             </div>
 
@@ -66,17 +65,6 @@ export default function BookingLookup({
               Unlock My Stay &rarr;
             </button>
           </form>
-
-          <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-slate-500 font-mono">
-            <span className="text-[10px] uppercase tracking-wider text-slate-400">Demo Stay Credentials:</span>
-            <button
-              type="button"
-              onClick={onLoadDemo}
-              className="px-3 py-1.5 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 rounded-[2px] border border-emerald-200/80 text-[10px] uppercase font-bold tracking-wider transition-colors cursor-pointer min-h-[44px] flex items-center justify-center"
-            >
-              1-Click Load: Suite 301 Demo &rarr;
-            </button>
-          </div>
         </div>
       </div>
     </main>

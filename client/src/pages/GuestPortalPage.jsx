@@ -498,7 +498,11 @@ export default function GuestPortalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between overflow-x-hidden">
+    <div
+      className={`${
+        !isUnlocked ? 'h-[100dvh] max-h-[100dvh] overflow-hidden' : 'min-h-screen overflow-x-hidden'
+      } bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between`}
+    >
       {/* ============================================================== */}
       {/* 1. TOP ESSENTIAL APP DOCK (ZERO CLUTTER, 44PX TARGETS)        */}
       {/* ============================================================== */}
@@ -1295,24 +1299,24 @@ export default function GuestPortalPage() {
       )}
 
       {/* ============================================================== */}
-      {/* 3. ULTRA-MINIMAL GUEST FOOTER                                  */}
+      {/* 3. ULTRA-MINIMAL GUEST FOOTER (ONLY WHEN IN-RESIDENCE)          */}
       {/* ============================================================== */}
-      <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2 px-4 sm:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-500">
-          <span>&copy; {new Date().getFullYear()} HABITAS HOTEL &bull; ALL RIGHTS RESERVED</span>
-          <div className="flex items-center gap-4">
-            <span>Concierge: +92 300 8921455</span>
-            <span>Valet Bay #301</span>
-            <button
-              type="button"
-              onClick={() => setIsUnlocked(false)}
-              className="text-slate-600 hover:text-slate-950 underline cursor-pointer"
-            >
-              Switch Reservation
-            </button>
+      {isUnlocked && (
+        <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2 px-4 sm:px-8">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-500">
+            <span className="uppercase tracking-widest text-[9px] text-slate-400">HABITAS IN-RESIDENCE GUEST FOLIO</span>
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setIsUnlocked(false)}
+                className="text-slate-600 hover:text-slate-950 underline cursor-pointer"
+              >
+                Switch Reservation
+              </button>
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
 
       {/* Official Luxury Hotel Tax Invoice Modal */}
       <InvoicePreviewModal
