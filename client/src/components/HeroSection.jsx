@@ -46,20 +46,22 @@ export default function HeroSection({ onQuickReserve }) {
       ref={heroRef}
       className="relative min-h-[92dvh] sm:min-h-[95vh] pt-24 sm:pt-28 flex flex-col justify-between overflow-hidden bg-[#FAF8F5]"
     >
-      {/* Background Hero Image with Hardware Scale */}
+      {/* Background Hero Cinematic Drone Video with Fallback Poster */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <img
+        <video
           ref={imageRef}
-          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=75"
-          srcSet="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=75 800w, https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=75 1200w"
-          sizes="100vw"
-          alt="Luxury Oceanfront Resort"
-          fetchPriority="high"
-          decoding="async"
-          className="w-full h-full object-cover object-center scale-110 origin-center filter brightness-[0.98]"
-        />
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/assets/hero-drone-poster.jpg"
+          className="w-full h-full object-cover object-center scale-105 origin-center filter brightness-[0.95]"
+        >
+          <source src="/assets/hero-drone-optimized.mp4" type="video/mp4" />
+        </video>
         {/* Soft Alabaster Editorial Mist: Balances dusk photography with obsidian typography */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/90 via-[#FAF8F5]/70 to-[#FAF8F5]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/85 via-[#FAF8F5]/60 to-[#FAF8F5]" />
       </div>
 
       {/* Hero Editorial Header */}

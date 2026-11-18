@@ -16,6 +16,11 @@ export const RESIDENCES = [
     nightlyRate: 110000,
     gallery: [
       {
+        title: 'King Master Bedroom Suite',
+        tag: 'MASTER BEDROOM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997207/hotel-suites/room-01/room-01-4.webp',
+      },
+      {
         title: '360° Ocean Horizon Deck & Living',
         tag: 'LIVING SUITE',
         url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997084/hotel-suites/room-01/room-01-1.webp',
@@ -29,11 +34,6 @@ export const RESIDENCES = [
         title: 'Heated Marble Spa Bath',
         tag: 'SPA BATH',
         url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997205/hotel-suites/room-01/room-01-3.webp',
-      },
-      {
-        title: 'King Master Bedroom Suite',
-        tag: 'MASTER BEDROOM',
-        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997207/hotel-suites/room-01/room-01-4.webp',
       },
       {
         title: 'Private In-Suite Lounge',
@@ -68,14 +68,14 @@ export const RESIDENCES = [
     nightlyRate: 75000,
     gallery: [
       {
-        title: 'Private Cedar Enclosed Courtyard',
-        tag: 'ZEN GARDEN',
-        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997211/hotel-suites/room-02/room-02-1.webp',
-      },
-      {
         title: 'Grand King Villa Suite',
         tag: 'BEDROOM',
         url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997213/hotel-suites/room-02/room-02-2.webp',
+      },
+      {
+        title: 'Private Cedar Enclosed Courtyard',
+        tag: 'ZEN GARDEN',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997211/hotel-suites/room-02/room-02-1.webp',
       },
       {
         title: 'Outdoor Garden Terrace',
@@ -120,14 +120,14 @@ export const RESIDENCES = [
     nightlyRate: 95000,
     gallery: [
       {
-        title: 'Overwater Sundeck & Ocean Panorama',
-        tag: 'TERRACE',
-        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997220/hotel-suites/room-03/room-03-1.webp',
-      },
-      {
         title: 'Oceanfront Master Suite',
         tag: 'BEDROOM',
         url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997222/hotel-suites/room-03/room-03-2.webp',
+      },
+      {
+        title: 'Overwater Sundeck & Ocean Panorama',
+        tag: 'TERRACE',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997220/hotel-suites/room-03/room-03-1.webp',
       },
       {
         title: 'Designer Rainfall Bath',
@@ -172,14 +172,14 @@ export const RESIDENCES = [
     nightlyRate: 85000,
     gallery: [
       {
-        title: 'Clifftop Architectural Living Space',
-        tag: 'LIVING ROOM',
-        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997229/hotel-suites/room-04/room-04-1.webp',
-      },
-      {
         title: 'Double Master Bedroom Suite',
         tag: 'BEDROOM',
         url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997231/hotel-suites/room-04/room-04-2.webp',
+      },
+      {
+        title: 'Clifftop Architectural Living Space',
+        tag: 'LIVING ROOM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997229/hotel-suites/room-04/room-04-1.webp',
       },
       {
         title: 'Stone Clad Spa Bathroom',
@@ -224,14 +224,14 @@ export const RESIDENCES = [
     nightlyRate: 125000,
     gallery: [
       {
-        title: 'Executive Grand Salon',
-        tag: 'GRAND SALON',
-        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997240/hotel-suites/room-05/room-05-1.webp',
-      },
-      {
         title: 'Presidential Master Bedchamber',
         tag: 'BEDCHAMBER',
         url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997243/hotel-suites/room-05/room-05-2.webp',
+      },
+      {
+        title: 'Executive Grand Salon',
+        tag: 'GRAND SALON',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997240/hotel-suites/room-05/room-05-1.webp',
       },
       {
         title: 'Italian Marble En-Suite Bath',

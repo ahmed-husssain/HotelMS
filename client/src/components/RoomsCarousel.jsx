@@ -29,6 +29,47 @@ function CasaMomoSlideArrow({ left = false }) {
   )
 }
 
+/**
+ * CarouselSlide — Handles per-slide image loading with clean "Loading..." feedback
+ */
+function CarouselSlide({ photo, residenceName, isEager }) {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const imgRef = useRef(null)
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      setIsLoaded(true)
+    }
+  }, [photo.url])
+
+  return (
+    <div className="flex-[0_0_100%] min-w-0 relative w-full h-full overflow-hidden bg-slate-900">
+      {/* Clean Loading... state while the photo downloads */}
+      {!isLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-900 z-10 transition-opacity duration-300">
+          <span className="text-[#FFF0CA] font-mono text-xs tracking-[0.25em] uppercase animate-pulse select-none">
+            Loading...
+          </span>
+        </div>
+      )}
+
+      <img
+        ref={imgRef}
+        src={photo.url}
+        alt={`${residenceName} - ${photo.title}`}
+        width="600"
+        height="375"
+        loading={isEager ? 'eager' : 'lazy'}
+        decoding="async"
+        onLoad={() => setIsLoaded(true)}
+        className={`w-full h-full object-cover object-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025] ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+    </div>
+  )
+}
+
 export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs }) {
   const containerRef = useRef(null)
   const insetImgRef = useRef(null)
@@ -143,20 +184,12 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
           <div ref={shouldInitCarousel ? emblaRef : null} className="overflow-hidden w-full h-full">
             <div className="flex w-full h-full touch-pan-y">
               {gallery.map((photo, i) => (
-                <div
+                <CarouselSlide
                   key={i}
-                  className="flex-[0_0_100%] min-w-0 relative w-full h-full overflow-hidden"
-                >
-                  <img
-                    src={photo.url}
-                    alt={`${residence.name} - ${photo.title}`}
-                    width="600"
-                    height="375"
-                    loading={index === 0 && i === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025]"
-                  />
-                </div>
+                  photo={photo}
+                  residenceName={residence.name}
+                  isEager={index === 0 && i === 0}
+                />
               ))}
             </div>
           </div>

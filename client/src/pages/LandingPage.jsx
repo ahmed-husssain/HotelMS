@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import HeroSection from '../components/HeroSection'
 import Navbar from '../components/Navbar'
@@ -57,8 +57,8 @@ export default function LandingPage() {
           </span>
         </div>
 
-        {/* Render Residences with Embla Carousel & Casa Momo Kinetic Hover */}
-        {RESIDENCES.map((residence, idx) => (
+        {/* Render Exactly 3 Signature Residences with Embla Carousel & Casa Momo Kinetic Hover */}
+        {RESIDENCES.slice(0, 3).map((residence, idx) => (
           <RoomsCarousel
             key={residence.id}
             residence={residence}
@@ -66,6 +66,25 @@ export default function LandingPage() {
             onReserve={(res) => handleOpenReservation(res)}
           />
         ))}
+
+        {/* Explore All Suites Link */}
+        <div className="pt-6 sm:pt-10 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 sm:p-8 bg-white border border-slate-200/90 rounded-[2px] shadow-2xs">
+          <div>
+            <span className="text-[9px] font-mono tracking-[0.25em] text-emerald-900 uppercase font-bold block">
+              FULL ARCHITECTURAL COLLECTION
+            </span>
+            <p className="font-serif-grand text-xl sm:text-2xl text-slate-900 font-normal mt-0.5">
+              Discover All 5 Suites &amp; Private Cliff Residences
+            </p>
+          </div>
+          <Link
+            to="/suites"
+            className="inline-flex items-center gap-3 px-6 py-3.5 bg-slate-900 hover:bg-emerald-950 text-[#FFF0CA] text-xs font-mono tracking-[0.2em] uppercase transition-all duration-300 rounded-[2px] shadow-xs hover:shadow-md cursor-pointer group"
+          >
+            <span>Explore All Suites</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+          </Link>
+        </div>
       </main>
 
       {/* Wellness / Estate Brief Section */}
