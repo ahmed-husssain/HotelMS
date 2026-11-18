@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AnimatedButton from './AnimatedButton'
+import { getOptimizedImageUrl, getResponsiveSrcSet } from '../utils/cloudinary'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -30,42 +31,64 @@ function CasaMomoSlideArrow({ left = false }) {
 }
 
 /**
- * CarouselSlide — Handles per-slide image loading with clean "Loading..." feedback
+ * CarouselSlide — High-Performance JIT Slide with LQIP Blur-Up & Loading Feedback
  */
-function CarouselSlide({ photo, residenceName, isEager }) {
+function CarouselSlide({ photo, residenceName, isEager, shouldLoad = true }) {
   const [isLoaded, setIsLoaded] = useState(false)
   const imgRef = useRef(null)
+
+  const optimizedSrc = getOptimizedImageUrl(photo.url, { width: 900 })
+  const responsiveSrcSet = getResponsiveSrcSet(photo.url, [450, 800, 1200])
+  const lqipSrc = getOptimizedImageUrl(photo.url, { lqip: true })
 
   useEffect(() => {
     if (imgRef.current && imgRef.current.complete) {
       setIsLoaded(true)
     }
-  }, [photo.url])
+  }, [optimizedSrc])
 
   return (
-    <div className="flex-[0_0_100%] min-w-0 relative w-full h-full overflow-hidden bg-slate-900">
-      {/* Clean Loading... state while the photo downloads */}
-      {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-900 z-10 transition-opacity duration-300">
+    <div className="flex-[0_0_100%] min-w-0 relative w-full h-full overflow-hidden bg-slate-900 select-none">
+      {/* 1. Instant ~400-byte Blurred Silhouette (LQIP) — Prevents cold black screen */}
+      {lqipSrc && (
+        <img
+          src={lqipSrc}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 w-full h-full object-cover object-center filter blur-lg scale-110 pointer-events-none transition-opacity duration-700 ${
+            isLoaded ? 'opacity-0' : 'opacity-60'
+          }`}
+        />
+      )}
+
+      {/* 2. Minimalist "Loading..." feedback during active download */}
+      {!isLoaded && shouldLoad && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-900/60 backdrop-blur-[2px] z-10 transition-opacity duration-300">
           <span className="text-[#FFF0CA] font-mono text-xs tracking-[0.25em] uppercase animate-pulse select-none">
             Loading...
           </span>
         </div>
       )}
 
-      <img
-        ref={imgRef}
-        src={photo.url}
-        alt={`${residenceName} - ${photo.title}`}
-        width="600"
-        height="375"
-        loading={isEager ? 'eager' : 'lazy'}
-        decoding="async"
-        onLoad={() => setIsLoaded(true)}
-        className={`w-full h-full object-cover object-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025] ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-      />
+      {/* 3. Deferred High-Res Image with Responsive SrcSet */}
+      {shouldLoad && (
+        <img
+          ref={imgRef}
+          src={optimizedSrc}
+          srcSet={responsiveSrcSet}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+          alt={`${residenceName} - ${photo.title}`}
+          width="800"
+          height="500"
+          loading={isEager ? 'eager' : 'lazy'}
+          fetchPriority={isEager ? 'high' : 'auto'}
+          decoding="async"
+          onLoad={() => setIsLoaded(true)}
+          className={`relative z-[5] w-full h-full object-cover object-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025] ${
+            isLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      )}
     </div>
   )
 }
@@ -78,6 +101,22 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
 
   // 1. Defer Off-Screen Embla Engine Initialization (Saves ~400ms Main-Thread TBT)
   const [shouldInitCarousel, setShouldInitCarousel] = useState(index === 0)
+
+  // JIT Image Deferral: Load Slide 0 immediately; fetch slides 1-4 on hover, touch, or idle
+  const [isEngaged, setIsEngaged] = useState(false)
+
+  const markEngaged = useCallback(() => {
+    setIsEngaged(true)
+  }, [])
+
+  // Idle prefetch: When card has been visible in viewport for 1.2s, quietly fetch remaining slides
+  useEffect(() => {
+    if (!shouldInitCarousel || isEngaged) return
+    const timer = setTimeout(() => {
+      setIsEngaged(true)
+    }, 1200)
+    return () => clearTimeout(timer)
+  }, [shouldInitCarousel, isEngaged])
 
   useEffect(() => {
     if (shouldInitCarousel) return
@@ -126,6 +165,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
     (e) => {
       e.preventDefault()
       e.stopPropagation()
+      setIsEngaged(true)
       if (emblaApi) emblaApi.scrollPrev()
     },
     [emblaApi]
@@ -135,6 +175,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
     (e) => {
       e.preventDefault()
       e.stopPropagation()
+      setIsEngaged(true)
       if (emblaApi) emblaApi.scrollNext()
     },
     [emblaApi]
@@ -169,6 +210,8 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
   return (
     <div
       ref={containerRef}
+      onMouseEnter={markEngaged}
+      onTouchStart={markEngaged}
       className={`group/card relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center py-12 transition-all duration-500 ${isReversed ? 'lg:grid-flow-dense' : ''
         }`}
     >
@@ -189,6 +232,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
                   photo={photo}
                   residenceName={residence.name}
                   isEager={index === 0 && i === 0}
+                  shouldLoad={i === 0 || isEngaged}
                 />
               ))}
             </div>
@@ -252,7 +296,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
               } w-44 sm:w-48 lg:w-56 aspect-[4/3] bg-white p-1.5 shadow-xl border border-slate-200 z-20 group-hover/card:translate-y-[-2px] transition-transform duration-300 pointer-events-none`}
           >
             <img
-              src={residence.detailImage}
+              src={getOptimizedImageUrl(residence.detailImage, { width: 450 })}
               alt={`${residence.name} Detail`}
               width="450"
               height="338"

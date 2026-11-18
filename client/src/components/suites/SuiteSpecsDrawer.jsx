@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { getOptimizedImageUrl } from '../../utils/cloudinary'
 
 /**
  * SuiteSpecsDrawer
@@ -113,8 +114,12 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
           {/* Hero Perspective Photo */}
           <div className="relative aspect-[16/9] w-full rounded-[2px] overflow-hidden bg-slate-900 border border-slate-200 shadow-sm">
             <img
-              src={residence.mainImage}
+              src={getOptimizedImageUrl(residence.gallery?.[0]?.url || residence.mainImage, { width: 800 })}
               alt={residence.name}
+              width="800"
+              height="450"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover filter brightness-[0.95]"
             />
             <div className="absolute bottom-2.5 left-2.5 px-3 py-1 bg-black/60 backdrop-blur-md rounded-[2px] text-[10px] font-mono text-[#FFF0CA] uppercase tracking-wider">
@@ -174,7 +179,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
           {/* Curated In-Suite Inclusions */}
           <div className="space-y-3">
             <span className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold text-slate-900 block border-b border-[#E5DFD5] pb-2">
-              02 &bull; COMPLIMENTARY SANCTUARY INCLUSIONS
+              02 &bull; COMPLIMENTARY SUITE INCLUSIONS
             </span>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
               <li className="flex items-center gap-2">

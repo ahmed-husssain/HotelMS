@@ -944,7 +944,7 @@ export default function GuestPortalPage() {
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 pb-4">
                 <div>
                   <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
-                    TRANSPARENT RESIDENTIAL BILLING
+                    BILLING &amp; FOLIO
                   </span>
                   <h2 className="font-serif-grand text-2xl sm:text-3xl text-slate-900 mt-0.5">
                     Live Stay Folio &amp; Invoice
@@ -1054,7 +1054,7 @@ export default function GuestPortalPage() {
                     </h3>
                   </div>
                   <span className="text-[10px] font-mono text-slate-400 uppercase">
-                    CONFIDENTIAL FEEDBACK
+                    GUEST FEEDBACK
                   </span>
                 </div>
 
@@ -1120,7 +1120,7 @@ export default function GuestPortalPage() {
       {/* ============================================================== */}
       <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-500">
-          <span>&copy; 2026 HABITAS SANCTUARY &bull; SINDH COAST</span>
+          <span>&copy; {new Date().getFullYear()} HABITAS HOTEL &bull; ALL RIGHTS RESERVED</span>
           <div className="flex items-center gap-4">
             <span>Concierge: +92 300 8921455</span>
             <span>Valet Bay #301</span>

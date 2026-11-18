@@ -22,7 +22,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
   // 2. Authenticated but unauthorized role -> Show luxury access denied guard
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
     const roleWorkspaces = {
-      guest: { path: '/my-stay', label: 'Guest Dossier & Key' },
+      guest: { path: '/my-stay', label: 'Guest Portal & Key' },
       receptionist: { path: '/pms', label: 'Front Desk PMS Terminal' },
       housekeeping: { path: '/housekeeping', label: 'Housekeeping & Maintenance' },
       admin: { path: '/admin', label: 'General Manager Console' },
@@ -30,7 +30,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
 
     const authorizedWorkspace = roleWorkspaces[currentUser.role] || {
       path: '/',
-      label: 'Sanctuary Homepage',
+      label: 'Home',
     }
 
     return (
@@ -47,7 +47,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
         <main className="max-w-xl w-full mx-auto bg-[#FAF8F5] text-slate-900 border border-slate-300 rounded-[2px] p-8 sm:p-12 shadow-2xl my-auto space-y-6">
           <div>
             <span className="font-mono text-[10px] text-red-800 uppercase tracking-widest font-bold block mb-1">
-              // SECURITY ENFORCEMENT &bull; RBAC PROTOCOL
+              AUTHORIZATION REQUIRED
             </span>
             <h1 className="font-serif-grand text-3xl text-slate-900 font-light">
               Access Restricted
@@ -80,7 +80,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
         </main>
 
         <footer className="max-w-4xl w-full mx-auto text-center font-mono text-[10px] text-slate-500">
-          HABITAS SANCTUARY &bull; ROLE-BASED ACCESS CONTROL ENFORCEMENT ACTIVE
+          HABITAS HOTEL &bull; ROLE-BASED ACCESS CONTROL
         </footer>
       </div>
     )

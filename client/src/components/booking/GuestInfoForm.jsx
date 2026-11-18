@@ -22,7 +22,7 @@ export default function GuestInfoForm({ guestDossier, setGuestDossier, currentUs
             to="/login?redirect=/reserve"
             className="text-[10px] font-mono text-slate-500 hover:text-slate-900 uppercase underline transition-colors"
           >
-            Sign In for 1-Click Dossier &rarr;
+            Sign in to auto-fill details &rarr;
           </Link>
         )}
       </div>

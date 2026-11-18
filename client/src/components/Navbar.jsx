@@ -79,7 +79,7 @@ export default function Navbar({ onOpenDrawer }) {
       desc: 'Digital Key, Room Service & Feedback',
       preview: {
         tag: 'GUEST PORTAL',
-        title: 'Your Private Stay Dossier',
+        title: 'Your Reservation & Digital Key',
         subtitle: 'Manage your active reservation, request in-room dining, view your live bill, and access your digital key.',
         image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85',
       },

@@ -39,7 +39,7 @@ export default function RegisterPage() {
     }
 
     if (!agreeTerms) {
-      setErrorMsg('Please review and accept the Sanctuary Reservation Terms.')
+      setErrorMsg('Please review and accept the Terms and Privacy Policy.')
       return
     }
 
@@ -69,18 +69,18 @@ export default function RegisterPage() {
           to="/"
           className="font-mono text-xs text-slate-400 hover:text-white uppercase tracking-widest transition-colors flex items-center gap-1.5"
         >
-          <span>&larr;</span> Return to Sanctuary
+          <span>&larr;</span> Back to Home
         </Link>
       </header>
 
       {/* Main Luxury Split Card (Zero-Scroll Container) */}
       <main className="flex-1 min-h-0 w-full max-w-5xl mx-auto bg-[#FAF8F5] sm:border sm:border-slate-300/80 sm:shadow-2xl sm:rounded-[3px] overflow-hidden flex flex-col md:grid md:grid-cols-12">
         
-        {/* 1. MOBILE-ONLY TOP APERTURE BANNER (< md: Bulgari Style) */}
+        {/* 1. MOBILE-ONLY TOP BANNER (< md) */}
         <div className="md:hidden relative w-full h-[215px] sm:h-[235px] shrink-0 overflow-hidden bg-slate-900">
           <img
             src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=85"
-            alt="Habitas Luxury Guest Experience"
+            alt="Habitas Luxury Experience"
             className="w-full h-full object-cover filter brightness-[0.72] contrast-[1.08]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-black/50" />
@@ -90,38 +90,38 @@ export default function RegisterPage() {
             <Link to="/" className="flex items-center gap-1.5">
               <span className="font-serif-grand text-base font-light tracking-[0.25em] text-[#FFF0CA]">HABITAS</span>
               <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/70 border-l border-white/25 pl-1.5">
-                SINDH
+                HOTEL
               </span>
             </Link>
             <Link
               to="/"
               className="font-mono text-[9px] uppercase tracking-wider flex items-center gap-1 text-white/90 hover:text-white bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/15"
             >
-              <span>&larr;</span> Sanctuary
+              <span>&larr;</span> Home
             </Link>
           </div>
 
-          {/* Mobile Threshold Monograph Title */}
+          {/* Mobile Threshold Title */}
           <div className="absolute bottom-2.5 inset-x-0 px-5 z-20">
             <div className="flex items-center justify-between mb-0.5">
-              <span className="text-[8px] font-mono tracking-[0.28em] text-[#8C6D15] uppercase font-bold">
-                // GUEST ONBOARDING
+              <span className="text-[9px] font-mono tracking-wider text-[#8C6D15] uppercase font-bold">
+                Account Registration
               </span>
-              <span className="text-[8px] font-mono text-stone-500 uppercase">
-                PORTAL 2026
+              <span className="text-[9px] font-mono text-stone-500 uppercase">
+                Portal
               </span>
             </div>
             <h1 className="font-serif-grand text-2xl font-light text-slate-900 leading-tight">
-              Register as a Guest.
+              Create an Account.
             </h1>
           </div>
         </div>
 
-        {/* 2. DESKTOP/TABLET LEFT 5 COLUMNS (>= md: Monograph Panel) */}
+        {/* 2. DESKTOP/TABLET LEFT 5 COLUMNS (>= md) */}
         <aside className="hidden md:flex md:col-span-5 bg-[#0E1201] text-[#FAF8F5] relative overflow-hidden flex-col justify-between p-6 sm:p-8 lg:p-10 border-r border-slate-800 shrink-0">
           <img
             src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85"
-            alt="Habitas Luxury Guest Experience"
+            alt="Habitas Luxury Experience"
             className="absolute inset-0 w-full h-full object-cover filter brightness-[0.45] contrast-[1.1] scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0E1201] via-[#0E1201]/40 to-transparent" />
@@ -130,23 +130,20 @@ export default function RegisterPage() {
             <span className="font-serif-grand text-2xl font-light tracking-[0.2em] text-[#FFF0CA] block">
               HABITAS
             </span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-slate-400 block mt-1">
-              Sindh Coast &bull; Pakistan
+            <span className="text-[11px] uppercase tracking-wider text-slate-300 block mt-1 font-sans">
+              Hotel &amp; Residences
             </span>
           </div>
 
           <div className="relative z-10 my-auto py-4">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-[#D4AF37] uppercase font-semibold block mb-2">
-              // Guest Privilege Dossier
-            </span>
-            <p className="font-serif italic text-base lg:text-lg text-slate-200 leading-relaxed font-light">
-              "Your personalized key to cliffside residences, subterranean valet, and coastal wellness."
+            <p className="font-serif text-base lg:text-lg text-slate-200 leading-relaxed font-light">
+              Book your stay, access your digital room key, and manage hotel services.
             </p>
           </div>
 
           <div className="relative z-10 pt-3 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
-            <span>GUEST VERIFICATION PORTAL</span>
-            <span>EST. 2026</span>
+            <span>Guest Registration</span>
+            <span>Secure Access</span>
           </div>
         </aside>
 
@@ -155,20 +152,20 @@ export default function RegisterPage() {
           
           {/* Desktop/Tablet Header (Hidden on Mobile) */}
           <div className="hidden md:block">
-            <span className="text-[10px] font-mono tracking-[0.28em] text-slate-500 uppercase font-semibold">
-              // GUEST ONBOARDING
+            <span className="text-[10px] font-mono tracking-wider text-slate-500 uppercase font-semibold">
+              Account Registration
             </span>
             <h1 className="font-serif-grand text-2xl lg:text-3xl text-slate-900 font-light mt-1">
               Register as a Guest
             </h1>
             <p className="text-xs text-slate-600 mt-1 leading-relaxed font-normal">
-              Create your verified profile to manage active stays, access your digital key pass, and order estate dining.
+              Create your profile to manage active stays, access your digital key, and request hotel services.
             </p>
           </div>
 
           {/* Mobile Subtitle (< md) */}
           <p className="md:hidden text-xs text-stone-600 leading-tight">
-            Register your verified credentials to manage active stays, digital keys, and bespoke dining.
+            Create an account to manage your reservations, digital room keys, and hotel services.
           </p>
 
           {/* Error Banner */}
@@ -244,9 +241,9 @@ export default function RegisterPage() {
               <div>
                 <label
                   htmlFor="reg-pass"
-                  className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 font-semibold block mb-0.5"
+                  className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-semibold block mb-0.5"
                 >
-                  Create Passcode
+                  Password
                 </label>
                 <input
                   id="reg-pass"
@@ -262,15 +259,15 @@ export default function RegisterPage() {
               <div>
                 <label
                   htmlFor="reg-confirm"
-                  className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 font-semibold block mb-0.5"
+                  className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-semibold block mb-0.5"
                 >
-                  Confirm Passcode
+                  Confirm Password
                 </label>
                 <input
                   id="reg-confirm"
                   type="password"
                   required
-                  placeholder="Re-type passcode"
+                  placeholder="Re-type password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full py-1.5 sm:py-2 px-0 bg-transparent border-b border-stone-300 focus:border-slate-900 text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
@@ -289,22 +286,18 @@ export default function RegisterPage() {
                 className="mt-0.5 accent-slate-950 cursor-pointer"
               />
               <label htmlFor="reg-terms" className="text-[10px] sm:text-xs text-stone-600 cursor-pointer select-none leading-tight">
-                I agree to the Habitas Sanctuary Reservation Terms, Privacy Policy, and Valet protocols.
+                I agree to the Terms of Service and Privacy Policy.
               </label>
             </div>
 
-            {/* Concept 3 Borderless Shimmer Button */}
+            {/* Create Account Button */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative w-full py-3 sm:py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FFF0CA] font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.24em] rounded-full transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-1 overflow-hidden flex items-center justify-center gap-2 disabled:opacity-50"
+              className="group relative w-full py-3 sm:py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FFF0CA] font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-1 overflow-hidden flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <span
-                aria-hidden="true"
-                className="button-shimmer-ray pointer-events-none absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[160%]"
-              />
-              <span>{isSubmitting ? 'Creating Profile...' : 'Create Guest Profile'}</span>
-              <span className="text-xs">&nearr;</span>
+              <span>{isSubmitting ? 'Creating Account...' : 'Create Account'}</span>
+              <span className="text-xs">&rarr;</span>
             </button>
           </form>
 
@@ -312,17 +305,17 @@ export default function RegisterPage() {
           <div className="pt-2 border-t border-stone-200/80 space-y-1.5">
             <div className="px-2.5 py-1 bg-amber-50/90 border border-amber-200/80 rounded text-[9px] font-mono text-amber-900 flex items-center gap-1.5">
               <span>🔒</span>
-              <span className="truncate">Public signup provisions <strong>role: 'guest'</strong>. Staff via GM.</span>
+              <span className="truncate">Public signup provisions <strong>role: 'guest'</strong>. Staff accounts via GM.</span>
             </div>
 
             <div className="text-center pt-0.5">
               <p className="text-xs text-stone-600 font-normal">
-                Already registered?{' '}
+                Already have an account?{' '}
                 <Link
                   to="/login"
                   className="text-slate-900 font-bold underline hover:text-amber-900 cursor-pointer ml-1"
                 >
-                  Sign In to Sanctuary &rarr;
+                  Sign In &rarr;
                 </Link>
               </p>
             </div>
@@ -334,7 +327,7 @@ export default function RegisterPage() {
 
       {/* Desktop Footer (Hidden on Mobile) */}
       <footer className="hidden md:block max-w-5xl w-full mx-auto mt-2 text-center font-mono text-[9px] text-slate-500 shrink-0">
-        &copy; 2026 Habitas Sanctuary Residences &bull; Aptech MERN eProject
+        &copy; {new Date().getFullYear()} Habitas Hotel &bull; All rights reserved.
       </footer>
 
     </div>

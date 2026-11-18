@@ -42,7 +42,7 @@ export default function LoginPage() {
       const user = login(email, password)
       
       const roleDestinations = {
-        guest: { path: '/my-stay', label: 'Guest Dossier & Key' },
+        guest: { path: '/my-stay', label: 'Guest Portal & Key' },
         receptionist: { path: '/pms', label: 'Front Desk PMS Terminal' },
         housekeeping: { path: '/housekeeping', label: 'Housekeeping & Maintenance' },
         admin: { path: '/admin', label: 'General Manager Console' },
@@ -76,7 +76,7 @@ export default function LoginPage() {
           to="/"
           className="font-mono text-xs text-slate-400 hover:text-white uppercase tracking-widest transition-colors flex items-center gap-1.5"
         >
-          <span>&larr;</span> Return to Sanctuary
+          <span>&larr;</span> Back to Home
         </Link>
       </header>
 
@@ -87,7 +87,7 @@ export default function LoginPage() {
         <div className="md:hidden relative w-full h-[215px] sm:h-[235px] shrink-0 overflow-hidden bg-slate-900">
           <img
             src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=85"
-            alt="Habitas Sanctuary Architecture"
+            alt="Habitas Architecture"
             className="w-full h-full object-cover filter brightness-[0.72] contrast-[1.08]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-black/50" />
@@ -97,34 +97,34 @@ export default function LoginPage() {
             <Link to="/" className="flex items-center gap-1.5">
               <span className="font-serif-grand text-base font-light tracking-[0.25em] text-[#FFF0CA]">HABITAS</span>
               <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/70 border-l border-white/25 pl-1.5">
-                SINDH
+                HOTEL
               </span>
             </Link>
             <Link
               to="/"
               className="font-mono text-[9px] uppercase tracking-wider flex items-center gap-1 text-white/90 hover:text-white bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/15"
             >
-              <span>&larr;</span> Sanctuary
+              <span>&larr;</span> Home
             </Link>
           </div>
 
-          {/* Mobile Threshold Monograph Title */}
+          {/* Mobile Threshold Title */}
           <div className="absolute bottom-2.5 inset-x-0 px-5 z-20">
             <div className="flex items-center justify-between mb-0.5">
-              <span className="text-[8px] font-mono tracking-[0.28em] text-[#8C6D15] uppercase font-bold">
-                // RESIDENCE IDENTIFICATION
+              <span className="text-[9px] font-mono tracking-wider text-[#8C6D15] uppercase font-bold">
+                Account Sign In
               </span>
-              <span className="text-[8px] font-mono text-stone-500 uppercase">
-                PORTAL 2026
+              <span className="text-[9px] font-mono text-stone-500 uppercase">
+                Portal
               </span>
             </div>
             <h1 className="font-serif-grand text-2xl font-light text-slate-900 leading-tight">
-              Welcome to Sanctuary.
+              Welcome back.
             </h1>
           </div>
         </div>
 
-        {/* 2. DESKTOP/TABLET LEFT 5 COLUMNS (>= md: Monograph Panel) */}
+        {/* 2. DESKTOP/TABLET LEFT 5 COLUMNS (>= md: Panel) */}
         <aside className="hidden md:flex md:col-span-5 bg-[#0E1201] text-[#FAF8F5] relative overflow-hidden flex-col justify-between p-6 sm:p-8 lg:p-10 border-r border-slate-800 shrink-0">
           <img
             src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=85"
@@ -137,23 +137,20 @@ export default function LoginPage() {
             <span className="font-serif-grand text-2xl font-light tracking-[0.2em] text-[#FFF0CA] block">
               HABITAS
             </span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-slate-400 block mt-1">
-              Sindh Coast &bull; Pakistan
+            <span className="text-[11px] uppercase tracking-wider text-slate-300 block mt-1 font-sans">
+              Hotel &amp; Residences
             </span>
           </div>
 
           <div className="relative z-10 my-auto py-4">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-[#D4AF37] uppercase font-semibold block mb-2">
-              // The Sanctuary Standard
-            </span>
-            <p className="font-serif italic text-base lg:text-lg text-slate-200 leading-relaxed font-light">
-              "A seamless bridge between natural limestone silence and effortless hospitality."
+            <p className="font-serif text-base lg:text-lg text-slate-200 leading-relaxed font-light">
+              Manage your reservations, digital key, and hotel services in one place.
             </p>
           </div>
 
           <div className="relative z-10 pt-3 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
-            <span>UNIFIED RBAC GATEWAY</span>
-            <span>EST. 2026</span>
+            <span>Guest &amp; Staff Portal</span>
+            <span>Secure Access</span>
           </div>
         </aside>
 
@@ -162,20 +159,20 @@ export default function LoginPage() {
           
           {/* Desktop/Tablet Header (Hidden on Mobile) */}
           <div className="hidden md:block">
-            <span className="text-[10px] font-mono tracking-[0.28em] text-slate-500 uppercase font-semibold">
-              // AUTHENTICATION ACCESS
+            <span className="text-[10px] font-mono tracking-wider text-slate-500 uppercase font-semibold">
+              Account Sign In
             </span>
             <h1 className="font-serif-grand text-2xl lg:text-3xl text-slate-900 font-light mt-1">
               Sign In to Habitas
             </h1>
             <p className="text-xs text-slate-600 mt-1 leading-relaxed font-normal">
-              Enter your credentials. Automatic role identification directs you to your active workspace.
+              Enter your credentials to access your active reservations and hotel services.
             </p>
           </div>
 
           {/* Mobile Subtitle (< md) */}
           <p className="md:hidden text-xs text-stone-600 leading-tight">
-            Please identify yourself to access your active residence itinerary and digital services.
+            Sign in to access your active reservations, digital key, and hotel services.
           </p>
 
           {/* Feedback Banners */}
@@ -198,9 +195,9 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="login-email"
-                className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 font-semibold block mb-0.5"
+                className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-semibold block mb-0.5"
               >
-                Email Address or Personnel ID
+                Email Address
               </label>
               <input
                 id="login-email"
@@ -213,14 +210,14 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Passcode */}
+            {/* Password */}
             <div>
               <div className="flex justify-between items-center mb-0.5">
                 <label
                   htmlFor="login-pass"
-                  className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 font-semibold"
+                  className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-semibold"
                 >
-                  Secret Passcode
+                  Password
                 </label>
                 <span className="text-[9px] font-mono text-stone-400">Default: password123</span>
               </div>
@@ -244,29 +241,25 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Concept 3 Borderless Shimmer Button */}
+            {/* Sign In Button */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative w-full py-3 sm:py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FFF0CA] font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.24em] rounded-full transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-2 overflow-hidden flex items-center justify-center gap-2 disabled:opacity-50"
+              className="group relative w-full py-3 sm:py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FFF0CA] font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-2 overflow-hidden flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <span
-                aria-hidden="true"
-                className="button-shimmer-ray pointer-events-none absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[160%]"
-              />
-              <span>{isSubmitting ? 'Authenticating...' : 'Enter Sanctuary'}</span>
-              <span className="text-xs">&nearr;</span>
+              <span>{isSubmitting ? 'Signing In...' : 'Sign In'}</span>
+              <span className="text-xs">&rarr;</span>
             </button>
           </form>
 
           {/* Quick Test Roles & Switch to Register */}
           <div className="pt-2 sm:pt-3 border-t border-stone-200/80 space-y-2">
             
-            {/* Quick Test Chips */}
+            {/* Quick Demo Chips */}
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[8px] sm:text-[9px] font-mono text-stone-500 uppercase tracking-wider font-semibold">
-                  // Quick Test Identities:
+                <span className="text-[9px] font-mono text-stone-500 uppercase tracking-wider font-semibold">
+                  Demo Accounts:
                 </span>
                 <span className="text-[8px] font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-bold">
                   Auto-Role Detect
@@ -279,7 +272,7 @@ export default function LoginPage() {
                   onClick={() => handleQuickFill('tariq@luxury.pk')}
                   className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">ROLE 1</span>
+                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
                   <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Guest</span>
                 </button>
 
@@ -288,8 +281,8 @@ export default function LoginPage() {
                   onClick={() => handleQuickFill('reception@habitas.com')}
                   className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">ROLE 2</span>
-                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Front</span>
+                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
+                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Reception</span>
                 </button>
 
                 <button
@@ -297,8 +290,8 @@ export default function LoginPage() {
                   onClick={() => handleQuickFill('cleaning@habitas.com')}
                   className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">ROLE 3</span>
-                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">House</span>
+                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
+                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Cleaning</span>
                 </button>
 
                 <button
@@ -306,8 +299,8 @@ export default function LoginPage() {
                   onClick={() => handleQuickFill('admin@habitas.com')}
                   className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">ROLE 4</span>
-                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">GM</span>
+                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
+                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Admin</span>
                 </button>
               </div>
             </div>
@@ -315,20 +308,20 @@ export default function LoginPage() {
             {/* Switch to Register */}
             <div className="text-center pt-0.5">
               <p className="text-xs text-stone-600 font-normal">
-                New to Habitas Sanctuary?{' '}
+                Don't have an account?{' '}
                 <Link
                   to="/register"
                   className="text-slate-900 font-bold underline hover:text-amber-900 cursor-pointer ml-1"
                 >
-                  Create Guest Profile &rarr;
+                  Create Guest Account &rarr;
                 </Link>
               </p>
             </div>
 
             {/* Desktop Encryption Badge */}
             <div className="hidden sm:flex pt-1.5 border-t border-stone-200/50 text-[9px] font-mono text-stone-400 items-center justify-between">
-              <span>256-BIT ENCRYPTION</span>
-              <span>ROLE-BASED ACCESS CONTROL (RBAC)</span>
+              <span>Encrypted Connection</span>
+              <span>Role-Based Access Control</span>
             </div>
 
           </div>
@@ -339,7 +332,7 @@ export default function LoginPage() {
 
       {/* Desktop Footer (Hidden on Mobile) */}
       <footer className="hidden md:block max-w-5xl w-full mx-auto mt-2 text-center font-mono text-[9px] text-slate-500 shrink-0">
-        &copy; 2026 Habitas Sanctuary Residences &bull; Aptech MERN eProject
+        &copy; {new Date().getFullYear()} Habitas Hotel &bull; All rights reserved.
       </footer>
 
     </div>

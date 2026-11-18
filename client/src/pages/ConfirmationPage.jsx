@@ -72,7 +72,7 @@ export default function ConfirmationPage() {
               <span className="font-mono font-bold text-slate-900">{booking.safepayRef}</span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>Total Valuation:</span>
+              <span>Total Amount:</span>
               <span className="font-semibold text-slate-900">
                 PKR {booking.total.toLocaleString()}
               </span>
@@ -99,24 +99,24 @@ export default function ConfirmationPage() {
           <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-4 pt-4 border-t border-slate-100">
             <Link
               to={`/my-stay?ref=${booking.bookingRef || 'TH-301-9041'}`}
-              className="tactile flex-1 py-3 text-center bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px]"
+              className="tactile flex-1 py-3 text-center bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-semibold transition-colors rounded-[2px]"
             >
-              OPEN GUEST PORTAL &rarr;
+              Open Guest Portal &rarr;
             </Link>
             {currentUser && (currentUser.role === 'admin' || currentUser.role === 'receptionist') ? (
               <Link
                 to="/pms"
-                className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px]"
+                className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold transition-colors rounded-[2px]"
               >
-                VIEW ON STAFF PMS &rarr;
+                View Staff PMS &rarr;
               </Link>
             ) : (
               <button
                 type="button"
                 onClick={() => setIsInvoiceOpen(true)}
-                className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px] cursor-pointer"
+                className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold transition-colors rounded-[2px] cursor-pointer"
               >
-                PREVIEW &amp; PRINT VOUCHER &rarr;
+                Preview &amp; Print Voucher &rarr;
               </button>
             )}
           </div>

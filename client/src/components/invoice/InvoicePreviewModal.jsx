@@ -54,13 +54,13 @@ export default function InvoicePreviewModal({
 
   // Copy structured text summary for WhatsApp / Email
   const handleCopySummary = () => {
-    const summary = `HABITAS SANCTUARY RESIDENCES — OFFICIAL STAY VOUCHER
+    const summary = `HABITAS HOTEL & RESIDENCES — OFFICIAL STAY VOUCHER
 Invoice No: ${invoiceNumber}
 Reservation Ref: ${booking.bookingRef || 'TH-301-9041'}
 Guest Name: ${booking.guestDossier?.fullName || booking.guestName || 'Dr. Tariq Khan'}
 Suite: Room ${booking.residence?.roomNumber || '301'} (${booking.residence?.name || 'The Horizon Penthouse'})
 Duration: ${nights} Nights
-Total Valuation: PKR ${totalValuation.toLocaleString()} (incl. 13% Sindh Tax)
+Total Amount: PKR ${totalValuation.toLocaleString()} (incl. 13% Sindh Tax)
 30% Advance Deposit Paid: PKR ${advancePaid.toLocaleString()} (Safepay: ${booking.safepayRef || 'SPF-829104'})
 Remaining Balance: PKR ${balanceDue.toLocaleString()}
 Live Portal Verification: ${verificationUrl}`
@@ -151,10 +151,10 @@ Live Portal Verification: ${verificationUrl}`
 
           {/* B. Two-Column Guest & Stay Metadata */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 sm:p-5 bg-[#FAF8F5] border border-slate-200/90 rounded-[2px] text-xs">
-            {/* Guest Dossier */}
+            {/* Guest Details */}
             <div className="space-y-1 border-b sm:border-b-0 sm:border-r border-slate-200/80 pb-3 sm:pb-0 sm:pr-4">
               <span className="text-[9px] font-mono tracking-[0.25em] text-slate-400 font-bold uppercase block mb-1">
-                GUEST DOSSIER
+                GUEST DETAILS
               </span>
               <div className="font-semibold text-slate-900 text-sm">
                 {booking.guestDossier?.fullName || booking.guestName || 'Dr. Tariq Khan'}
@@ -170,10 +170,10 @@ Live Portal Verification: ${verificationUrl}`
               </div>
             </div>
 
-            {/* Stay Telemetry */}
+            {/* Stay Details */}
             <div className="space-y-1 sm:pl-2">
               <span className="text-[9px] font-mono tracking-[0.25em] text-slate-400 font-bold uppercase block mb-1">
-                SANCTUARY RESIDENCE
+                SUITE DETAILS
               </span>
               <div className="font-semibold text-slate-900 text-sm">
                 Room {booking.residence?.roomNumber || '301'} &bull; {booking.residence?.name || 'The Horizon Penthouse'}
@@ -324,7 +324,7 @@ Live Portal Verification: ${verificationUrl}`
           <div className="border-t border-slate-200 pt-6 grid grid-cols-2 gap-8 text-[10px] font-mono text-slate-500">
             <div className="space-y-8">
               <p className="leading-relaxed">
-                This document is a computer-generated tax folio issued under the Sindh Revenue Board (SRB) Hotel Services Tariff. All accommodations are governed by the Habitas Sanctuary Guest Terms.
+                This document is a computer-generated tax folio issued under the Sindh Revenue Board (SRB) Hotel Services Tariff. All accommodations are governed by Habitas Guest Terms.
               </p>
               <div className="border-t border-slate-400 pt-1">
                 <span>GUEST SIGNATURE / ACKNOWLEDGEMENT</span>
