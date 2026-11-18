@@ -230,6 +230,7 @@ export default function CustomCursor() {
   const isInput = cursorMode === 'input'
   const isLink = cursorMode === 'link'
   const isCard = cursorMode === 'card'
+  const isButton = cursorMode === 'button'
 
   return (
     <div
@@ -240,18 +241,24 @@ export default function CustomCursor() {
       style={{ transform: 'translate3d(-100px, -100px, 0)' }}
     >
       {/* ============================================================== */}
-      {/* 1. SINGLE UNIFIED QUIET LUXURY DOT / SOFT HALO */}
+      {/* 1. SINGLE UNIFIED QUIET LUXURY DOT / HIGH-VISIBILITY HALO */}
       {/* ============================================================== */}
       <div
         ref={dotRef}
         className={`will-change-transform rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isInput || isCard ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
         } ${
-          isLink
-            ? 'w-7 h-7 bg-[#121619]/15 border border-[#121619]/20'
+          isButton
+            ? 'w-8 h-8 border-2 border-[#FFF0CA] bg-[#FFF0CA]/25 backdrop-blur-xs shadow-[0_0_12px_rgba(255,240,202,0.35)]'
+            : isLink
+            ? 'w-7 h-7 bg-[#121619]/15 border border-[#121619]/25'
             : 'w-2 h-2 bg-[#121619]'
         }`}
-      />
+      >
+        {isButton && (
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FFF0CA] shadow-xs pointer-events-none" />
+        )}
+      </div>
 
       {/* ============================================================== */}
       {/* 2. SIGNATURE MONOLITHIC SUITE PILL (OVER ROOM CARDS) */}
