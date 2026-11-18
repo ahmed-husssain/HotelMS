@@ -7,7 +7,7 @@ const ToastContext = createContext(null)
  * 
  * Luxury Travertine Notification System for Habitas HMS:
  * - Subtle bottom-right floating cards (mobile: centered bottom sheet toast)
- * - Restrained typography (JetBrains Mono for telemetry, Plus Jakarta Sans for body)
+ * - Restrained typography (Space Grotesk for telemetry, Inter for body)
  * - Auto-dismiss with smooth exit animation
  */
 export function ToastProvider({ children }) {

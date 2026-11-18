@@ -59,7 +59,7 @@ export default function BrandLogo({
       {(variant === 'full' || variant === 'emblem') && Emblem}
 
       {(variant === 'full' || variant === 'wordmark') && (
-        <span className={`font-cinzel font-bold uppercase ${dimensions.title} ${textColor} leading-none`}>
+        <span className={`font-serif-grand font-bold uppercase tracking-[0.12em] ${dimensions.title} ${textColor} leading-none`}>
           HABITAS
         </span>
       )}

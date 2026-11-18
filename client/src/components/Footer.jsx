@@ -56,7 +56,7 @@ export default function Footer() {
       {/* Subtle Architectural Watermark Monogram */}
       <div 
         aria-hidden="true" 
-        className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[120px] sm:text-[140px] font-cinzel font-bold text-slate-900/[0.025] tracking-[0.25em] pointer-events-none select-none whitespace-nowrap"
+        className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[120px] sm:text-[140px] font-serif-grand font-bold text-slate-900/[0.025] tracking-[0.25em] pointer-events-none select-none whitespace-nowrap"
       >
         HABITAS
       </div>

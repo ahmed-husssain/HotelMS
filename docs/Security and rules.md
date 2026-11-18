@@ -47,15 +47,14 @@ This document outlines the **Security Standards** and the **Strict Rules of Enga
 3. **Zero Horizontal Scroll:** Root viewports must enforce `overflow-x: hidden`. No element may cause horizontal scrolling or layout jumping.
 4. **Adaptive Data Displays (Table-to-Card Transformation):** Multi-column tabular data (booking logs, room queues, staff rosters, folio itemizations) must never render as squished or cut-off tables on mobile screens. Tables must automatically transform into clean, stacked vertical cards below `768px` (`hidden md:table` / `md:hidden block`).
 
-#### C. Unified Luxury Typography Standard
-Eliminate all arbitrary, one-off, and discordant font choices. The entire LuxuryStay application adheres to exactly one unified typography pairing:
+#### C. Unified Luxury Typography Standard (Option 3 • Perfected Sculptural)
+Eliminate all arbitrary, one-off, and discordant font choices. The entire Stayza application adheres to exactly one unified modern sans-serif typography hierarchy:
 
 | Role | Font Family | CSS Utility | Usage Scope |
 | :--- | :--- | :--- | :--- |
-| **Architectural / Accent** | `Cinzel` | `.font-cinzel` | Architectural monograms, room numbers, Roman numeral badges |
-| **Editorial Serif Headings** | `Playfair Display` | `.font-serif-grand` | Display titles, section headers (H1–H3), suite names |
-| **Clean UI & Body** | `Plus Jakarta Sans` | `.font-sans-clean` | All body copy, buttons, inputs, navigation, status pills, labels |
-| **Financial / Telemetry** | `JetBrains Mono` | `.font-mono` / `.font-mono-code` | Currency (`PKR`), timestamps, dates, booking codes, coordinates |
+| **Architectural Display & Headings** | `Syne` | `.font-serif-grand` / `.font-cinzel` | Display titles, section headers (H1–H3), suite names, brand monogram |
+| **Clean UI & Editorial Body** | `Inter` | `.font-sans-clean` / `body` | All body copy, buttons, inputs, navigation, status pills, labels, drawer copy |
+| **Architectural Numerals & Metrics** | `Space Grotesk` | `.font-mono` / `.font-mono-code` | Currency (`PKR`), room rates, timestamps, dates, booking codes, suite dimensions |
 
 #### D. Standardized Design Token Type Scale
 Every portal must adhere strictly to these typography hierarchy tokens:

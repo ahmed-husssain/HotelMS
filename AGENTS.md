@@ -61,5 +61,5 @@ This document is the **supreme law and behavioral contract** for all AI agents w
 * **Preserve World-Class Quality:** The agent must never break, alter, or downgrade the existing frontend:
   * **90+ Mobile Performance:** Maintain fast FCP and LCP optimizations.
   * **100/100 Accessibility & SEO:** Maintain single DOM text nodes for kinetic buttons, valid label-content names, and ARD 1.0 schema compliance (`specVersion: "1.0"`, `entries: [...]`).
-  * **Luxury Editorial Design:** Retain the Habitas / Aman minimalist aesthetic, typography hierarchy (`Cinzel`, `Playfair Display`, `Plus Jakarta Sans`, `JetBrains Mono`), and smooth micro-interactions.
+  * **Luxury Editorial Design:** Retain the Stayza minimalist aesthetic, modern architectural typography hierarchy (`Syne` for display/headings, `Inter` for clean UI/body, `Space Grotesk` for numerals/pricing), and smooth micro-interactions.
 * **Mobile-First Invariant:** All interactive elements must maintain a minimum **44×44px touch target** with zero horizontal overflow (`overflow-x: hidden`).

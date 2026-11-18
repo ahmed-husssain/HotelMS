@@ -123,7 +123,7 @@ export default function HeroSection({ onQuickReserve }) {
           Winter 2026 Bookings Open
         </div>
 
-        <h1 className="font-serif-grand text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-slate-900 leading-[1.08] max-w-4xl mx-auto">
+        <h1 className="font-serif-grand text-4xl sm:text-6xl md:text-7xl font-bold tracking-[0.02em] text-slate-900 leading-[1.08] max-w-4xl mx-auto">
           Where Architecture Meets Silence.
         </h1>
 

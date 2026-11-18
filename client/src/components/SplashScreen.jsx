@@ -179,7 +179,7 @@ export default function SplashScreen({ onComplete }) {
           }}
           className="text-center mt-5"
         >
-          <div className="font-cinzel text-xl sm:text-2xl font-bold tracking-[0.35em] text-[#FAF8F5]">
+          <div className="font-serif-grand text-xl sm:text-2xl font-bold tracking-[0.35em] text-[#FAF8F5]">
             HABITAS
           </div>
           <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.35em] text-amber-500/85 uppercase mt-1.5 font-light">

@@ -37,6 +37,42 @@ export default function BookingPage() {
     specialRequests: '',
   }))
 
+  const [formErrors, setFormErrors] = useState({})
+  const [touchedFields, setTouchedFields] = useState({})
+  const [isSuitePickerOpen, setIsSuitePickerOpen] = useState(false)
+
+  // Validation helper
+  const validateForm = () => {
+    const errors = {}
+    const nameTrimmed = (guestDossier.fullName || '').trim()
+    const nameParts = nameTrimmed.split(/\s+/).filter(Boolean)
+    if (!nameTrimmed) {
+      errors.fullName = 'Full Legal Name is required'
+    } else if (nameParts.length < 2 || nameTrimmed.length < 4) {
+      errors.fullName = 'Please enter both first and last name (e.g. Ahmed Khan)'
+    }
+
+    const cnicDigits = (guestDossier.identificationNumber || '').replace(/\D/g, '')
+    if (!cnicDigits) {
+      errors.identificationNumber = 'CNIC / National ID is required'
+    } else if (cnicDigits.length !== 13) {
+      errors.identificationNumber = 'CNIC must be exactly 13 digits (XXXXX-XXXXXXX-X)'
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+    if (!guestDossier.email || !emailRegex.test(guestDossier.email.trim())) {
+      errors.email = 'Please provide a valid email address'
+    }
+
+    const phoneDigits = (guestDossier.phone || '').replace(/\D/g, '')
+    if (!phoneDigits || phoneDigits.length < 10 || phoneDigits.length > 14) {
+      errors.phone = 'Please provide a valid mobile number (+92 300 1234567)'
+    }
+
+    setFormErrors(errors)
+    return errors
+  }
+
   // Auto-sync if user logs in while on booking page
   useEffect(() => {
     if (currentUser) {
@@ -100,9 +136,19 @@ export default function BookingPage() {
     e.preventDefault()
     if (secondsLeft === 0) return
 
-    // Require genuine guest details (Zero fake bookings)
-    if (!guestDossier.fullName?.trim() || !guestDossier.email?.trim() || !guestDossier.phone?.trim()) {
-      alert('Please provide your Full Legal Name, Email Address, and Phone Number to complete the reservation.')
+    // Run strict validation against all fields
+    const errors = validateForm()
+    setTouchedFields({
+      fullName: true,
+      identificationNumber: true,
+      email: true,
+      phone: true,
+    })
+
+    if (Object.keys(errors).length > 0) {
+      // Focus on first invalid input or alert
+      const firstError = Object.values(errors)[0]
+      alert(`Please correct the following: ${firstError}`)
       return
     }
 
@@ -119,7 +165,7 @@ export default function BookingPage() {
 
       // 1. Create 5-minute atomic hold on the suite in MongoDB Atlas
       const holdRes = await createCheckoutHold({
-        roomId: selectedResidence.id,
+        roomId: selectedResidence.roomNumber || selectedResidence.id,
         checkInDate: tomorrow.toISOString(),
         checkOutDate: departure.toISOString(),
         guestDetails: {
@@ -197,7 +243,7 @@ export default function BookingPage() {
             <span className="text-[10px] font-mono tracking-[0.25em] font-extrabold text-emerald-900 uppercase block">
               SUITE {selectedResidence.roomNumber} &bull; {selectedResidence.tier}
             </span>
-            <h1 className="font-cinzel text-2xl sm:text-4xl lg:text-5xl font-light text-slate-900 tracking-tight">
+            <h1 className="font-serif-grand text-2xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
               {selectedResidence.name}
             </h1>
             <p className="text-xs font-mono text-slate-500 tracking-wider uppercase pt-0.5 sm:pt-1">
@@ -205,24 +251,83 @@ export default function BookingPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-1.5 bg-white border border-slate-200 p-1 rounded-[2px] self-start md:self-end shadow-2xs overflow-x-auto max-w-full">
-            {RESIDENCES.map((res) => {
-              const isActive = res.roomNumber === selectedResidence.roomNumber
-              return (
-                <button
-                  key={res.id}
-                  type="button"
-                  onClick={() => setSearchParams({ room: res.roomNumber })}
-                  className={`px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider rounded-[2px] transition-all cursor-pointer whitespace-nowrap ${
-                    isActive
-                      ? 'bg-[#0E1201] text-[#FFF0CA] font-bold shadow-xs'
-                      : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
-                  }`}
-                >
-                  Suite {res.roomNumber}
-                </button>
-              )
-            })}
+          {/* Scalable Luxury Suite Dropdown Picker (Zero Horizontal Scrollbar) */}
+          <div className="relative self-start md:self-end">
+            <button
+              type="button"
+              onClick={() => setIsSuitePickerOpen((prev) => !prev)}
+              className="flex items-center gap-3 px-3.5 py-2 bg-white border border-slate-300 hover:border-slate-900 rounded-[2px] text-xs font-mono tracking-wider text-slate-900 shadow-xs transition-all cursor-pointer min-h-[44px]"
+              aria-expanded={isSuitePickerOpen}
+              aria-label="Select Accommodation Suite"
+            >
+              <div className="flex items-center gap-2 text-left">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />
+                <div>
+                  <span className="font-bold uppercase block text-slate-900 text-[11px]">
+                    Suite {selectedResidence.roomNumber} &bull; {selectedResidence.name}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono block">
+                    PKR {selectedResidence.nightlyRate.toLocaleString()} / Night
+                  </span>
+                </div>
+              </div>
+              <span className={`text-[10px] text-slate-400 transition-transform duration-200 ${isSuitePickerOpen ? 'rotate-180' : ''}`}>
+                &#9660;
+              </span>
+            </button>
+
+            {/* Dropdown Popover */}
+            {isSuitePickerOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setIsSuitePickerOpen(false)} 
+                />
+                <div className="absolute right-0 mt-1.5 w-72 sm:w-80 bg-white border border-slate-200 shadow-2xl rounded-[2px] z-50 overflow-hidden divide-y divide-slate-100 max-h-80 overflow-y-auto animate-fade-in">
+                  <div className="px-3.5 py-2 bg-slate-50 font-mono text-[10px] text-slate-500 uppercase tracking-widest font-bold">
+                    Choose Luxury Residence ({RESIDENCES.length} Available)
+                  </div>
+                  {RESIDENCES.map((res) => {
+                    const isSelected = res.roomNumber === selectedResidence.roomNumber
+                    return (
+                      <button
+                        key={res.id}
+                        type="button"
+                        onClick={() => {
+                          setSearchParams({ room: res.roomNumber })
+                          setIsSuitePickerOpen(false)
+                        }}
+                        className={`w-full text-left px-3.5 py-2.5 flex items-center justify-between text-xs transition-colors cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#0E1201] text-[#FFF0CA]'
+                            : 'hover:bg-slate-50 text-slate-800'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-mono font-bold uppercase text-[11px]">
+                              Suite {res.roomNumber}
+                            </span>
+                            <span className={`text-[10px] ${isSelected ? 'text-[#FFF0CA]/70' : 'text-slate-400'}`}>
+                              &bull; {res.categoryLabel || res.tier}
+                            </span>
+                          </div>
+                          <span className={`text-[11px] block ${isSelected ? 'text-white' : 'text-slate-900 font-medium'}`}>
+                            {res.name}
+                          </span>
+                          <span className={`text-[10px] font-mono block ${isSelected ? 'text-[#FFF0CA]/80' : 'text-slate-500'}`}>
+                            PKR {res.nightlyRate.toLocaleString()} / Night
+                          </span>
+                        </div>
+                        {isSelected && (
+                          <span className="text-amber-400 text-sm font-bold font-mono">✓</span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -240,6 +345,9 @@ export default function BookingPage() {
               guestDossier={guestDossier}
               setGuestDossier={setGuestDossier}
               currentUser={currentUser}
+              errors={formErrors}
+              touched={touchedFields}
+              setTouched={setTouchedFields}
             />
 
             <ExtraServices

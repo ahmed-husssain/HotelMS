@@ -21,7 +21,7 @@ You are an expert Principal Full-Stack Engineer and System Architect building th
 8. **Zero-Secret Leakage Protocol:** Private API keys, webhook secrets, database connection URIs, and tokens must NEVER be placed in client code, frontend `.env` files, or committed to GitHub. All external third-party services (Safepay, MongoDB, SMTP) must be proxied exclusively through server-side controller endpoints. Inspect `git status -u` before every commit to ensure no secret or `.env` files are tracked.
 9. **Mobile-First & Typography Standard:**
    * **Mobile as Baseline Persona:** Over 80% of actual users (guests on smartphones, housekeepers carrying phones on the floor, front-desk staff on mobile tablets) interact through mobile viewports. Mobile is not an afterthought—it is the baseline. Every layout, flow, and component must be designed and verified from Mobile (375px–390px) first, cascading up to Tablet (768px), Laptop (1024px–1280px), and Desktop (1440px+). Never design desktop-first and shrink down.
-   * **Unified Typography System:** Strictly adhere to the single luxury font hierarchy (`Cinzel` for monograms and architectural markers, `Playfair Display` for serif display headings H1–H3, `Plus Jakarta Sans` for clean UI body/controls, and `JetBrains Mono` for rates, timestamps, and folio data). Arbitrary or discordant font sizes and weights are strictly forbidden.
+   * **Unified Typography System:** Strictly adhere to the single luxury font hierarchy (`Syne` for display headings and monograms, `Inter` for clean UI body/controls, and `Space Grotesk` for rates, timestamps, dimensions, and folio data). Arbitrary or discordant font sizes and weights are strictly forbidden.
    * **Touch & Viewport Invariants:**
      - Minimum 44×44px touch target on all clickable/tappable elements (Apple Human Interface Guidelines & WCAG 2.2 AA).
      - Bottom-sheet or thumb-friendly drawers instead of cramped desktop modals on mobile viewports.
@@ -153,7 +153,7 @@ The agent must proactively leverage and recommend the following skills based on 
 - [ ] Mobile-First Verified: Tested at 390px viewport with zero horizontal overflow (`overflow-x: hidden`).
 - [ ] Minimum 44×44px touch targets verified for all mobile buttons, toggles, inputs, and tabs.
 - [ ] Responsive Tables: All tabular data transforms into readable vertical card lists on mobile viewports (< 768px).
-- [ ] Typography Tokens: Strictly compliant with the standardized font hierarchy (`Cinzel`, `Playfair Display`, `Plus Jakarta Sans`, `JetBrains Mono`) and type scale.
+- [ ] Typography Tokens: Strictly compliant with the standardized font hierarchy (`Syne`, `Inter`, `Space Grotesk`) and type scale.
 - [ ] No dead, duplicate, or commented-out code remains.
 - [ ] No hardcoded credentials or API keys.
 - [ ] Zero-trust pricing enforced: all calculations occur on the backend.
