@@ -82,12 +82,12 @@ export default function RoomsPage() {
                 Architectural Suites &amp; Villas.
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mt-2 leading-relaxed font-normal">
-                Five oceanfront suites and villas designed for comfort, natural light, and quiet privacy.
+                Seven architectural suites and private villas designed for comfort, natural light, and quiet privacy.
               </p>
             </div>
 
             <div className="text-xs font-mono text-slate-500 uppercase tracking-widest shrink-0">
-              <span>● 100% Oceanfront</span> &bull; <span>5 Private Keys</span>
+              <span>● 100% Oceanfront</span> &bull; <span>7 Private Keys</span>
             </div>
           </div>
         </div>

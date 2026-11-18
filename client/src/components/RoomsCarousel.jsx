@@ -247,7 +247,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
 
               {/* Clean Minimalist Slide Counter (Zero Text Clutter) */}
               <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs">
-                0{selectedIndex + 1} / 0{gallery.length}
+                {String(selectedIndex + 1).padStart(2, '0')} / {String(gallery.length).padStart(2, '0')}
               </span>
               </div>
 

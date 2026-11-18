@@ -19,10 +19,10 @@ function CasaMomoArrow() {
  * CharacterRoll
  * Kinetic character staggered wave-roll with cubic-bezier easing
  */
-function CharacterRoll({ char, index, isRolled }) {
+function CharacterRoll({ char, index, isRolled, active = true }) {
   const delay = `${index * 12}ms`
-  const transition = isRolled
-    ? `transform 0.65s cubic-bezier(0.52, 0, 0, 1) ${delay}`
+  const transition = isRolled && active
+    ? `transform 0.45s cubic-bezier(0.52, 0, 0, 1) ${delay}`
     : 'none'
 
   return (
@@ -32,7 +32,7 @@ function CharacterRoll({ char, index, isRolled }) {
         aria-hidden="true"
         className="absolute top-0 left-0 inline-block will-change-transform select-none"
         style={{
-          transform: isRolled ? 'translateY(-100%)' : 'translateY(0%)',
+          transform: isRolled && active ? 'translateY(-100%)' : 'translateY(0%)',
           transition,
         }}
       >
@@ -42,7 +42,7 @@ function CharacterRoll({ char, index, isRolled }) {
         aria-hidden="true"
         className="absolute top-0 left-0 inline-block will-change-transform select-none"
         style={{
-          transform: isRolled ? 'translateY(0%)' : 'translateY(100%)',
+          transform: isRolled && active ? 'translateY(0%)' : 'translateY(100%)',
           transition,
         }}
       >
@@ -56,10 +56,10 @@ function CharacterRoll({ char, index, isRolled }) {
  * ArrowRoll
  * Kinetic dual-arrow diagonal translation
  */
-function ArrowRoll({ isRolled, charCount }) {
+function ArrowRoll({ isRolled, charCount, active = true }) {
   const delay = `${charCount * 12 + 20}ms`
-  const transition = isRolled
-    ? `transform 0.65s cubic-bezier(0.52, 0, 0, 1) ${delay}`
+  const transition = isRolled && active
+    ? `transform 0.45s cubic-bezier(0.52, 0, 0, 1) ${delay}`
     : 'none'
 
   return (
@@ -68,7 +68,7 @@ function ArrowRoll({ isRolled, charCount }) {
         aria-hidden="true"
         className="absolute top-0 left-0 block will-change-transform"
         style={{
-          transform: isRolled ? 'translate(11px, -11px)' : 'translate(0px, 0px)',
+          transform: isRolled && active ? 'translate(11px, -11px)' : 'translate(0px, 0px)',
           transition,
         }}
       >
@@ -78,7 +78,7 @@ function ArrowRoll({ isRolled, charCount }) {
         aria-hidden="true"
         className="absolute top-0 left-0 block will-change-transform"
         style={{
-          transform: isRolled ? 'translate(0px, 0px)' : 'translate(-11px, 11px)',
+          transform: isRolled && active ? 'translate(0px, 0px)' : 'translate(-11px, 11px)',
           transition,
         }}
       >
@@ -246,29 +246,25 @@ export default function CustomCursor() {
       <div
         ref={dotRef}
         className={`will-change-transform rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isInput || isCard ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+          isInput || isCard ? 'opacity-0 scale-0 pointer-events-none' : 'opacity-100 scale-100 pointer-events-none'
         } ${
           isButton
-            ? 'w-8 h-8 border-2 border-[#FFF0CA] bg-[#FFF0CA]/25 backdrop-blur-xs shadow-[0_0_12px_rgba(255,240,202,0.35)]'
+            ? 'w-9 h-9 border-2 border-[#FFF0CA] bg-[#FFF0CA]/15 shadow-[0_0_15px_rgba(255,240,202,0.35),0_0_2px_rgba(0,0,0,0.4)] backdrop-blur-xs'
             : isLink
             ? 'w-7 h-7 bg-[#121619]/15 border border-[#121619]/25'
             : 'w-2 h-2 bg-[#121619]'
         }`}
-      >
-        {isButton && (
-          <span className="w-1.5 h-1.5 rounded-full bg-[#FFF0CA] shadow-xs pointer-events-none" />
-        )}
-      </div>
+      />
 
       {/* ============================================================== */}
       {/* 2. SIGNATURE MONOLITHIC SUITE PILL (OVER ROOM CARDS) */}
       {/* ============================================================== */}
       <div
         ref={pillRef}
-        className={`absolute top-0 left-0 px-3.5 py-1.5 rounded-[2px] bg-slate-900/95 border border-slate-700/60 shadow-xl backdrop-blur-md flex items-center justify-center -translate-x-1/2 -translate-y-1/2 will-change-transform transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`absolute top-0 left-0 px-3.5 py-1.5 rounded-[2px] bg-slate-900/95 border border-slate-700/60 shadow-xl backdrop-blur-md flex items-center justify-center -translate-x-1/2 -translate-y-1/2 will-change-transform transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isCard
             ? 'opacity-100 scale-100 pointer-events-none'
-            : 'opacity-0 scale-75 pointer-events-none'
+            : 'opacity-0 scale-50 pointer-events-none'
         }`}
       >
         {/* Kinetic Staggered Wave-Roll Typography */}
@@ -279,6 +275,7 @@ export default function CustomCursor() {
               char={char}
               index={index}
               isRolled={isRolled}
+              active={isCard}
             />
           ))}
         </div>
@@ -288,6 +285,7 @@ export default function CustomCursor() {
           <ArrowRoll
             isRolled={isRolled}
             charCount={cardLabel.length}
+            active={isCard}
           />
         </div>
       </div>

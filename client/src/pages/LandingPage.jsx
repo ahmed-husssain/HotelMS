@@ -74,7 +74,7 @@ export default function LandingPage() {
               FULL ARCHITECTURAL COLLECTION
             </span>
             <p className="font-serif-grand text-xl sm:text-2xl text-slate-900 font-normal mt-0.5">
-              Discover All 5 Suites &amp; Private Cliff Residences
+              Discover All 7 Suites &amp; Private Cliff Residences
             </p>
           </div>
           <Link

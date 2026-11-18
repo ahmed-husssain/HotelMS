@@ -28,14 +28,26 @@ export default function BookingPage() {
   const [guestCount, setGuestCount] = useState(2)
   const [selectedAddons, setSelectedAddons] = useState(['helipad'])
 
-  // 3. Guest Information
+  // 3. Guest Information (Empty by default unless authenticated)
   const [guestDossier, setGuestDossier] = useState(() => ({
-    fullName: currentUser?.name || 'Ahmed Khan',
-    email: currentUser?.email || 'ahmed.khan@havenresorts.pk',
-    phone: currentUser?.phone || '+92 300 1234567',
-    identificationNumber: '42101-9876543-1',
+    fullName: currentUser?.name || '',
+    email: currentUser?.email || '',
+    phone: currentUser?.phone || '',
+    identificationNumber: '',
     specialRequests: '',
   }))
+
+  // Auto-sync if user logs in while on booking page
+  useEffect(() => {
+    if (currentUser) {
+      setGuestDossier((prev) => ({
+        ...prev,
+        fullName: prev.fullName || currentUser.name || '',
+        email: prev.email || currentUser.email || '',
+        phone: prev.phone || currentUser.phone || '',
+      }))
+    }
+  }, [currentUser])
 
   // 4. Atomic 5-Minute Inventory Hold (300 seconds)
   const [secondsLeft, setSecondsLeft] = useState(300)
@@ -87,6 +99,12 @@ export default function BookingPage() {
   const handleConfirmReservation = async (e) => {
     e.preventDefault()
     if (secondsLeft === 0) return
+
+    // Require genuine guest details (Zero fake bookings)
+    if (!guestDossier.fullName?.trim() || !guestDossier.email?.trim() || !guestDossier.phone?.trim()) {
+      alert('Please provide your Full Legal Name, Email Address, and Phone Number to complete the reservation.')
+      return
+    }
 
     setIsProcessing(true)
 

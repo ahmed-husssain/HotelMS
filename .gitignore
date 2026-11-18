@@ -59,3 +59,5 @@ Thumbs.db
 .idea/
 Raw Images/
 optimized_images/
+client/public/Images/
+client/public/typography-lab.html
