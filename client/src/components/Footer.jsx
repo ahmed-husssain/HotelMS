@@ -120,7 +120,7 @@ export default function Footer() {
             <BrandLogo variant="full" theme="dark" size="sm" to="/" />
 
             <p className="text-xs text-[#44403C] leading-relaxed max-w-xs font-light">
-              Quiet coastal sanctuary of three private oceanfront suites along the Sindh cliffs.
+              Luxury oceanfront suites and residences with bespoke hospitality.
             </p>
 
             <div className="pt-2 flex flex-col gap-1 text-xs font-mono">

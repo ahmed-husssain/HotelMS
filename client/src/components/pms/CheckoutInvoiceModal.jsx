@@ -50,7 +50,7 @@ export default function CheckoutInvoiceModal({
         {/* Invoice Header Details */}
         <div className="grid grid-cols-2 gap-4 text-xs font-mono p-4 bg-white border border-slate-200/80 rounded-[2px]">
           <div>
-            <span className="text-slate-400 uppercase text-[9px] block">Guest Dossier:</span>
+            <span className="text-slate-400 uppercase text-[9px] block">Guest Details:</span>
             <strong className="text-slate-900">{selectedRoom.guest}</strong>
             <div className="text-[11px] text-slate-500">{selectedRoom.phone}</div>
           </div>

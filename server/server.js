@@ -23,7 +23,14 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 
-// 3. Health & Status Check Endpoint
+// 3. API Routes
+const roomRoutes = require('./src/routes/roomRoutes')
+const bookingRoutes = require('./src/routes/bookingRoutes')
+
+app.use('/api/rooms', roomRoutes)
+app.use('/api/bookings', bookingRoutes)
+
+// Health & Status Check Endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
 import { RESIDENCES } from '../data/residences'
@@ -7,6 +7,13 @@ import { useHotelData } from '../context/HotelDataContext'
 import { useToast } from '../context/ToastContext'
 import BookingLookup from '../components/stay/BookingLookup'
 import InvoicePreviewModal from '../components/invoice/InvoicePreviewModal'
+import {
+  lookupStay,
+  toggleDigitalDoor,
+  updateStaySettings,
+  orderStayService,
+  submitStayFeedback,
+} from '../services/api'
 
 // Demo Stay Record for Suite 301
 const DEMO_BOOKING = {
@@ -183,6 +190,61 @@ export default function GuestPortalPage() {
     return DEMO_BOOKING
   })
 
+  // Live MongoDB Atlas Stay Sync on Mount
+  useEffect(() => {
+    let isMounted = true
+    const activeRef = initialRef || currentUser?.activeReservationCode || bookingCode || 'TH-301-9041'
+
+    async function loadLiveStay() {
+      try {
+        const res = await lookupStay(activeRef)
+        if (isMounted && res.success && res.data) {
+          const b = res.data
+          const matchedRes = RESIDENCES.find((r) => r.roomNumber === (b.roomNumber?.replace(/\D/g, '') || '301')) || RESIDENCES[0]
+
+          setCurrentBooking({
+            bookingRef: b.bookingReference,
+            roomNumber: b.roomNumber,
+            residence: {
+              ...matchedRes,
+              id: b.room?._id || matchedRes.id,
+              roomNumber: b.roomNumber?.replace(/\D/g, '') || matchedRes.roomNumber,
+              nightlyRate: b.pricingSnapshot?.nightlyRate || matchedRes.nightlyRate,
+              credentials: b.room?.credentials || { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+              valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
+              assignedButler: b.room?.assignedButler || 'Tariq J.',
+            },
+            guestName: b.guestDetails?.name || 'In-House Guest',
+            guestEmail: b.guestDetails?.email || '',
+            guestPhone: b.guestDetails?.phone || '',
+            nights: b.numberOfNights || 4,
+            checkIn: new Date(b.checkInDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            checkOut: new Date(b.checkOutDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            checkInTime: '14:00 PKT',
+            checkOutTime: '12:00 PKT',
+            guestCount: 2,
+            safepayRef: 'SPF-892104',
+            initialServices: b.incidentals && b.incidentals.length > 0 ? b.incidentals : DEMO_BOOKING.initialServices,
+          })
+
+          if (b.incidentals && b.incidentals.length > 0) {
+            setOrderedServices(b.incidentals)
+          }
+          if (b.inStaySettings) {
+            setIsDND(Boolean(b.inStaySettings.isDND))
+            if (b.inStaySettings.climateMode) setClimateMode(b.inStaySettings.climateMode)
+          }
+          setIsUnlocked(true)
+        }
+      } catch (err) {
+        console.info('[GuestPortal] Live stay lookup fallback to local state:', err.message)
+      }
+    }
+
+    loadLiveStay()
+    return () => { isMounted = false }
+  }, [initialRef, currentUser])
+
   const [orderedServices, setOrderedServices] = useState(DEMO_BOOKING.initialServices)
   const [serviceFeedbackNotice, setServiceFeedbackNotice] = useState('')
 
@@ -237,12 +299,52 @@ export default function GuestPortalPage() {
   }), [currentBooking, financials, orderedServices])
 
   // Lookup Form Submission
-  const handleLookupSubmit = (e) => {
+  const handleLookupSubmit = async (e) => {
     e.preventDefault()
     setSearchError('')
 
     const cleanCode = bookingCode.trim().toUpperCase()
     const cleanEmail = guestEmailInput.trim().toLowerCase()
+
+    try {
+      const res = await lookupStay(cleanCode ? { ref: cleanCode } : { email: cleanEmail })
+      if (res.success && res.data) {
+        const b = res.data
+        const matchedRes = RESIDENCES.find((r) => r.roomNumber === (b.roomNumber?.replace(/\D/g, '') || '301')) || RESIDENCES[0]
+        setCurrentBooking({
+          bookingRef: b.bookingReference,
+          roomNumber: b.roomNumber,
+          residence: {
+            ...matchedRes,
+            id: b.room?._id || matchedRes.id,
+            roomNumber: b.roomNumber?.replace(/\D/g, '') || matchedRes.roomNumber,
+            nightlyRate: b.pricingSnapshot?.nightlyRate || matchedRes.nightlyRate,
+            credentials: b.room?.credentials || { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+            valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
+            assignedButler: b.room?.assignedButler || 'Tariq J.',
+          },
+          guestName: b.guestDetails?.name || 'In-House Guest',
+          guestEmail: b.guestDetails?.email || '',
+          guestPhone: b.guestDetails?.phone || '',
+          nights: b.numberOfNights || 4,
+          checkIn: new Date(b.checkInDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          checkOut: new Date(b.checkOutDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          checkInTime: '14:00 PKT',
+          checkOutTime: '12:00 PKT',
+          guestCount: 2,
+          safepayRef: 'SPF-892104',
+          initialServices: b.incidentals || [],
+        })
+        if (b.incidentals && b.incidentals.length > 0) {
+          setOrderedServices(b.incidentals)
+        }
+        setIsUnlocked(true)
+        toast.success(`Welcome to ${b.roomNumber}, ${b.guestDetails?.name}`, 'SUITE CONNECTED')
+        return
+      }
+    } catch {
+      // Graceful fallback to demo
+    }
 
     if (cleanCode === 'TH-301-9041' || cleanCode.startsWith('TH-') || cleanCode.startsWith('LX-') || cleanEmail.includes('@')) {
       setIsUnlocked(true)
@@ -260,8 +362,8 @@ export default function GuestPortalPage() {
   }
 
   // Dispatch In-Stay Guest Service
-  const handleRequestService = (service) => {
-    const alreadyOrdered = orderedServices.some((s) => s.id === service.id)
+  const handleRequestService = async (service) => {
+    const alreadyOrdered = orderedServices.some((s) => s.id === service.id || s.title === service.title)
     if (alreadyOrdered) {
       setServiceFeedbackNotice(`"${service.title}" is already on your active folio.`)
       setTimeout(() => setServiceFeedbackNotice(''), 3500)
@@ -270,10 +372,22 @@ export default function GuestPortalPage() {
 
     const newItem = {
       ...service,
+      id: service.id || `srv-${Date.now()}`,
       time: 'Just now',
     }
 
     setOrderedServices((prev) => [...prev, newItem])
+
+    // Dispatches to backend MongoDB Atlas
+    try {
+      await orderStayService(currentBooking.bookingRef, {
+        title: service.title,
+        price: service.price,
+        category: service.category || 'General',
+      })
+    } catch (err) {
+      console.warn('[GuestPortal] Incidental save fallback:', err.message)
+    }
 
     // Dispatches live request to Housekeeping & PMS context
     requestGuestService(
@@ -290,7 +404,7 @@ export default function GuestPortalPage() {
   }
 
   // Digital Key Trigger
-  const handleTriggerDigitalKey = () => {
+  const handleTriggerDigitalKey = async () => {
     if (isKeyUnlocking) return
     setIsKeyUnlocking(true)
 
@@ -299,10 +413,16 @@ export default function GuestPortalPage() {
       navigator.vibrate([40, 60, 40])
     }
 
+    try {
+      await toggleDigitalDoor(currentBooking.bookingRef)
+    } catch (err) {
+      console.warn('[GuestPortal] Unlock fallback:', err.message)
+    }
+
     setTimeout(() => {
       setIsKeyUnlocking(false)
       setKeyUnlockedToast(true)
-      toast.success('Suite 301 NFC Electronic Lock Engaged', 'DOOR UNLOCKED')
+      toast.success(`${currentBooking.roomNumber || 'Suite 301'} NFC Electronic Lock Engaged`, 'DOOR UNLOCKED')
       setTimeout(() => setKeyUnlockedToast(false), 8000)
     }, 1200)
   }
@@ -1065,9 +1185,18 @@ export default function GuestPortalPage() {
                   </div>
                 ) : (
                   <form
-                    onSubmit={(e) => {
+                    onSubmit={async (e) => {
                       e.preventDefault()
                       setReviewSubmitted(true)
+                      try {
+                        await submitStayFeedback(currentBooking.bookingRef, {
+                          rating: reviewRating,
+                          comment: reviewComment,
+                        })
+                        toast.success('Your feedback has been delivered to General Manager Tariq J.', 'THANK YOU')
+                      } catch (err) {
+                        console.warn('[GuestPortal] Feedback submit fallback:', err.message)
+                      }
                     }}
                     className="space-y-4"
                   >

@@ -8,6 +8,7 @@ import StayDatesForm from '../components/booking/StayDatesForm'
 import GuestInfoForm from '../components/booking/GuestInfoForm'
 import ExtraServices, { CONCIERGE_ADDONS } from '../components/booking/ExtraServices'
 import BookingSummary from '../components/booking/BookingSummary'
+import { createCheckoutHold, confirmReservation } from '../services/api'
 
 export default function BookingPage() {
   const navigate = useNavigate()

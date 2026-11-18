@@ -67,9 +67,9 @@ export default function NavMenu({
           <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest border-b border-slate-200/80 pb-3 shrink-0">
             <div className="flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-slate-900 font-semibold tracking-wider">// NAVIGATION</span>
+              <span className="text-slate-900 font-semibold tracking-wider">Navigation</span>
               <span className="text-slate-300 hidden sm:inline">&middot;</span>
-              <span className="text-slate-500 hidden sm:inline text-[10px]">SINDH COAST, PK</span>
+              <span className="text-slate-500 hidden sm:inline text-[10px]">Hotel &amp; Residences</span>
             </div>
 
             <button

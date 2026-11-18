@@ -44,7 +44,7 @@ export default function HousekeepingPage() {
             className="group inline-flex items-center gap-1.5 text-xs font-mono tracking-wider text-slate-600 hover:text-slate-950 uppercase transition-colors"
           >
             <span>&larr;</span>
-            <span className="hidden sm:inline">Sanctuary Overview</span>
+            <span className="hidden sm:inline">Hotel Overview</span>
           </Link>
           <span className="text-slate-300">|</span>
           <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-900 font-bold uppercase tracking-wider">

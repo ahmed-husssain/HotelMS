@@ -73,7 +73,7 @@ export default function RoomsPage() {
         <div className="max-w-7xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/80 text-[10px] font-mono tracking-[0.25em] text-emerald-950 font-semibold uppercase shadow-2xs">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-            RESIDENTIAL DIRECTORY &bull; SINDH COAST
+            SUITES &amp; RESIDENCES
           </div>
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -82,7 +82,7 @@ export default function RoomsPage() {
                 Architectural Suites &amp; Villas.
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mt-2 leading-relaxed font-normal">
-                Five bespoke oceanfront dwellings engineered for absolute privacy, silence, and natural light. Built directly into the limestone cliffs of the Sindh Coast.
+                Five oceanfront suites and villas designed for comfort, natural light, and quiet privacy.
               </p>
             </div>
 

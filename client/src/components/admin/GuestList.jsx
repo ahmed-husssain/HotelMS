@@ -53,7 +53,7 @@ export default function GuestList({ guests = INITIAL_GUEST_PROFILES }) {
           <thead className="bg-slate-50 border-b border-slate-200/80 text-[10px] text-slate-500 uppercase tracking-wider">
             <tr>
               <th className="py-3 px-5">Guest Name</th>
-              <th className="py-3 px-4">Contact Dossier</th>
+              <th className="py-3 px-4">Contact Details</th>
               <th className="py-3 px-4">Tier Status</th>
               <th className="py-3 px-4">Total Stays</th>
               <th className="py-3 px-4">Lifetime Spend</th>

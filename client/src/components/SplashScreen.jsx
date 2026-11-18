@@ -183,7 +183,7 @@ export default function SplashScreen({ onComplete }) {
             HABITAS
           </div>
           <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.35em] text-amber-500/85 uppercase mt-1.5 font-light">
-            SINDH COAST &bull; RESIDENCES
+            HOTEL &bull; RESIDENCES
           </div>
         </div>
       </div>
