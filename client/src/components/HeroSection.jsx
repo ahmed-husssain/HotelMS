@@ -4,41 +4,87 @@ import React, { useEffect, useRef } from 'react'
 
 gsap.registerPlugin(ScrollTrigger)
 
+/**
+ * HeroSection — Cross-Device Optimized Luxury Cinematic Hero
+ * 
+ * Performance & Responsiveness Architecture:
+ * - Mobile/Tablet (<1024px): Bypasses JS scroll scrub to preserve native 60/120Hz touch inertia.
+ * - Laptop/Desktop (>=1024px): Parallax transforms are applied to a lightweight hardware-accelerated
+ *   wrapper div with translate3d, leaving the video decoder untouched in its own GPU thread.
+ * - Battery & GPU Relief: IntersectionObserver auto-pauses video when scrolled out of view.
+ * - Zero GPU Filter Thrashing: Replaced CSS brightness filter with a zero-cost static tint layer.
+ * - Network Efficient: Uses preload="metadata" with high-efficiency WebM & MP4 fallback sources.
+ */
 export default function HeroSection({ onQuickReserve }) {
   const heroRef = useRef(null)
-  const imageRef = useRef(null)
+  const mediaWrapperRef = useRef(null)
+  const videoRef = useRef(null)
   const titleRef = useRef(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Parallax scale and subtle translate scrub for hero image
-      gsap.to(imageRef.current, {
-        scale: 1.0,
-        yPercent: 12,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      })
+    // 1. IntersectionObserver to auto-pause video off-screen (saves 100% GPU/battery when exploring suites)
+    const videoEl = videoRef.current
+    let observer = null
 
-      // Floating title fade and subtle lift on scroll
-      gsap.to(titleRef.current, {
-        yPercent: -20,
-        opacity: 0.2,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
+    if (videoEl && typeof IntersectionObserver !== 'undefined' && heroRef.current) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            videoEl.play().catch(() => {
+              // Gracefully handle browser autoplay policies or iOS Low Power Mode
+            })
+          } else {
+            videoEl.pause()
+          }
         },
-      })
-    }, heroRef)
+        { threshold: 0.05 }
+      )
+      observer.observe(heroRef.current)
+    }
 
-    return () => ctx.revert()
+    // 2. Responsive GSAP Animation (Laptops & Desktops Only)
+    const isDesktop = window.matchMedia && window.matchMedia('(min-width: 1024px)').matches
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    let ctx = null
+    if (isDesktop && !prefersReducedMotion) {
+      ctx = gsap.context(() => {
+        // Parallax translate scrub applied to container wrapper, NOT directly to video tag
+        if (mediaWrapperRef.current) {
+          gsap.to(mediaWrapperRef.current, {
+            yPercent: 12,
+            scale: 1.02,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
+            },
+          })
+        }
+
+        // Subtle lift & fade for typography on scroll
+        if (titleRef.current) {
+          gsap.to(titleRef.current, {
+            yPercent: -20,
+            opacity: 0.2,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
+            },
+          })
+        }
+      }, heroRef)
+    }
+
+    return () => {
+      if (observer) observer.disconnect()
+      if (ctx) ctx.revert()
+    }
   }, [])
 
   return (
@@ -46,20 +92,26 @@ export default function HeroSection({ onQuickReserve }) {
       ref={heroRef}
       className="relative min-h-[92dvh] sm:min-h-[95vh] pt-24 sm:pt-28 flex flex-col justify-between overflow-hidden bg-[#FAF8F5]"
     >
-      {/* Background Hero Cinematic Drone Video with Fallback Poster */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Background Hero Cinematic Media Layer with Decoupled Hardware-Accelerated Wrapper */}
+      <div 
+        ref={mediaWrapperRef}
+        className="absolute inset-0 overflow-hidden pointer-events-none will-change-transform transform-gpu"
+      >
         <video
-          ref={imageRef}
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          preload="auto"
-          poster="/assets/hero-drone-poster.jpg"
-          className="w-full h-full object-cover object-center scale-105 origin-center filter brightness-[0.95]"
+          preload="metadata"
+          poster="/assets/hero-drone-poster.webp"
+          className="w-full h-full object-cover object-center scale-105 origin-center"
         >
+          <source src="/assets/hero-drone-ultra.webm" type="video/webm" />
           <source src="/assets/hero-drone-optimized.mp4" type="video/mp4" />
         </video>
+        {/* Subtle Static Optical Density Tint (Zero GPU Shading Cost vs CSS Filters) */}
+        <div className="absolute inset-0 bg-black/[0.04]" />
         {/* Soft Alabaster Editorial Mist: Balances dusk photography with obsidian typography */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/85 via-[#FAF8F5]/60 to-[#FAF8F5]" />
       </div>
