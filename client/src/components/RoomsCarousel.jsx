@@ -33,8 +33,8 @@ function CarouselSlide({ photo, residenceName, isEager, shouldLoad = true }) {
   const [isLoaded, setIsLoaded] = useState(false)
   const imgRef = useRef(null)
 
-  const optimizedSrc = getOptimizedImageUrl(photo.url, { width: 900 })
-  const responsiveSrcSet = getResponsiveSrcSet(photo.url, [450, 800, 1200])
+  const optimizedSrc = getOptimizedImageUrl(photo.url, { width: 1400 })
+  const responsiveSrcSet = getResponsiveSrcSet(photo.url, [600, 1000, 1400, 1920])
   const lqipSrc = getOptimizedImageUrl(photo.url, { lqip: true })
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function CarouselSlide({ photo, residenceName, isEager, shouldLoad = true }) {
 
   return (
     <div className="flex-[0_0_100%] min-w-0 relative w-full h-full overflow-hidden bg-slate-900 select-none">
-      {/* 1. Instant ~400-byte Blurred Silhouette (LQIP) — Prevents cold black screen */}
+      {/* 1. Instant ~400-byte Blurred Silhouette (LQIP) */}
       {lqipSrc && (
         <img
           src={lqipSrc}
@@ -72,15 +72,15 @@ function CarouselSlide({ photo, residenceName, isEager, shouldLoad = true }) {
           ref={imgRef}
           src={optimizedSrc}
           srcSet={responsiveSrcSet}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 95vw, 1280px"
           alt={`${residenceName} - ${photo.title}`}
-          width="800"
-          height="500"
+          width="1400"
+          height="788"
           loading={isEager ? 'eager' : 'lazy'}
           fetchPriority={isEager ? 'high' : 'auto'}
           decoding="async"
           onLoad={() => setIsLoaded(true)}
-          className={`relative z-[5] w-full h-full object-cover object-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.025] ${
+          className={`relative z-[5] w-full h-full object-cover object-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.015] ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
         />
@@ -91,8 +91,6 @@ function CarouselSlide({ photo, residenceName, isEager, shouldLoad = true }) {
 
 export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs }) {
   const containerRef = useRef(null)
-
-  const isReversed = index % 2 !== 0
 
   // 1. 70% Viewport Visibility Tracker (Card must be >= 70% visible to activate carousel)
   const [isVisible70, setIsVisible70] = useState(index === 0)
@@ -228,175 +226,165 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
     : [{ title: residence.name, tag: 'OVERVIEW', url: residence.mainImage }]
 
   return (
-    <div
+    <article
       ref={containerRef}
       onMouseEnter={markEngaged}
       onTouchStart={markEngaged}
-      className={`group/card relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center py-12 transition-all duration-500 ${
-        isReversed ? 'lg:grid-flow-dense' : ''
-      }`}
+      className="group/card relative w-full space-y-6 sm:space-y-8 py-8 sm:py-14 transition-all duration-500 border-b border-slate-200/80 last:border-b-0"
     >
-      {/* Visual Photography Column (7 cols) — Pure Empty Image Presentation */}
-      <div className={`relative ${isReversed ? 'lg:col-start-6 lg:col-span-7' : 'lg:col-span-7'}`}>
-        
-        {/* Main Architectural Photographic Canvas (Zero dark gradients, zero stamped slop) */}
-        <div
-          onClick={(e) => {
-            if (!isVisible70) {
-              handleMagneticFocus(e)
-              return
-            }
-            if (onOpenSpecs) onOpenSpecs(residence)
-            else onReserve(residence)
-          }}
-          data-cursor={isVisible70 ? "Suite Details" : "Scroll to Focus"}
-          className="relative aspect-[16/10] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none cursor-pointer"
-        >
-          {/* Embla Viewport */}
-          <div ref={shouldInitCarousel ? emblaRef : null} className="overflow-hidden w-full h-full">
-            <div className="flex w-full h-full touch-pan-y">
-              {gallery.map((photo, i) => (
-                <CarouselSlide
-                  key={i}
-                  photo={photo}
-                  residenceName={residence.name}
-                  isEager={index === 0 && i === 0}
-                  shouldLoad={i === 0 || isEngaged}
-                />
-              ))}
-            </div>
+      {/* 1. Main Architectural Photographic Canvas (Full-Width Cinema Runway) */}
+      <div
+        onClick={(e) => {
+          if (!isVisible70) {
+            handleMagneticFocus(e)
+            return
+          }
+          if (onOpenSpecs) onOpenSpecs(residence)
+          else onReserve(residence)
+        }}
+        data-cursor={isVisible70 ? 'Explore Suite' : 'Scroll to Focus'}
+        className="relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[2.1/1] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none cursor-pointer"
+      >
+        {/* Embla Viewport */}
+        <div ref={shouldInitCarousel ? emblaRef : null} className="overflow-hidden w-full h-full">
+          <div className="flex w-full h-full touch-pan-y">
+            {gallery.map((photo, i) => (
+              <CarouselSlide
+                key={i}
+                photo={photo}
+                residenceName={residence.name}
+                isEager={index === 0 && i === 0}
+                shouldLoad={i === 0 || isEngaged}
+              />
+            ))}
           </div>
+        </div>
 
-          {/* Awakening Indicators & Minimalist Telemetry */}
-          <div className="absolute top-4 inset-x-4 flex items-center justify-between pointer-events-none z-20">
-            {/* Room Number Emblem */}
-            <span
-              className={`px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
-                isVisible70 ? 'opacity-100' : 'opacity-40'
-              }`}
-            >
-              SUITE {residence.roomNumber}
-            </span>
+        {/* Top Floating Awakening Indicators */}
+        <div className="absolute top-4 sm:top-6 inset-x-4 sm:inset-x-6 flex items-center justify-between pointer-events-none z-20">
+          {/* Room Number Badge */}
+          <span
+            className={`px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
+              isVisible70 ? 'opacity-100' : 'opacity-40'
+            }`}
+          >
+            SUITE {residence.roomNumber} &bull; {residence.tier}
+          </span>
 
-            {/* Clean Slide Counter (Zero Text Clutter) */}
-            <span
-              className={`px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
-                isVisible70 ? 'opacity-100' : 'opacity-40'
-              }`}
-            >
-              {String(selectedIndex + 1).padStart(2, '0')} / {String(gallery.length).padStart(2, '0')}
-            </span>
-          </div>
+          {/* Minimalist Slide Counter */}
+          <span
+            className={`px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
+              isVisible70 ? 'opacity-100' : 'opacity-40'
+            }`}
+          >
+            {String(selectedIndex + 1).padStart(2, '0')} / {String(gallery.length).padStart(2, '0')}
+          </span>
+        </div>
 
-          {/* Awakening Navigation Arrows:
-              - When < 70%: Subtle 25% opacity; clicking glides card into center
-              - When >= 70%: Fully active with responsive hover and click swiping */}
-          <div className="absolute inset-y-0 inset-x-2 sm:inset-x-3 flex items-center justify-between pointer-events-none z-20">
-            {/* Previous Photo Button */}
-            <button
-              type="button"
-              onClick={scrollPrev}
-              data-cursor-hide="true"
-              aria-label="Previous photo"
-              className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-11 sm:h-11 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
-                isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
-              }`}
-            >
-              <CasaMomoSlideArrow left />
-            </button>
+        {/* Awakening Navigation Arrows:
+            - When < 70%: Discreet 25% opacity; clicking glides card into center
+            - When >= 70%: Fully active with responsive hover and click swiping */}
+        <div className="absolute inset-y-0 inset-x-2 sm:inset-x-4 flex items-center justify-between pointer-events-none z-20">
+          {/* Previous Photo Button */}
+          <button
+            type="button"
+            onClick={scrollPrev}
+            data-cursor-hide="true"
+            aria-label="Previous photo"
+            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
+              isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
+            }`}
+          >
+            <CasaMomoSlideArrow left />
+          </button>
 
-            {/* Next Photo Button */}
-            <button
-              type="button"
-              onClick={scrollNext}
-              data-cursor-hide="true"
-              aria-label="Next photo"
-              className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-11 sm:h-11 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
-                isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
-              }`}
-            >
-              <CasaMomoSlideArrow />
-            </button>
-          </div>
+          {/* Next Photo Button */}
+          <button
+            type="button"
+            onClick={scrollNext}
+            data-cursor-hide="true"
+            aria-label="Next photo"
+            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
+              isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
+            }`}
+          >
+            <CasaMomoSlideArrow />
+          </button>
+        </div>
 
-          {/* Minimal 1px Hairline Progress Track */}
-          <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/15 z-20">
-            <div
-              className={`h-full bg-[#FFF0CA] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)] ${
-                isVisible70 ? 'opacity-100' : 'opacity-40'
-              }`}
-              style={{
-                width: `${((selectedIndex + 1) / gallery.length) * 100}%`,
-              }}
-            />
-          </div>
+        {/* Minimal 1px Hairline Progress Track */}
+        <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/15 z-20">
+          <div
+            className={`h-full bg-[#FFF0CA] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)] ${
+              isVisible70 ? 'opacity-100' : 'opacity-40'
+            }`}
+            style={{
+              width: `${((selectedIndex + 1) / gallery.length) * 100}%`,
+            }}
+          />
         </div>
       </div>
 
-      {/* Telemetry Monograph Column (5 cols) — Clean Editorial Information */}
-      <div className={`${isReversed ? 'lg:col-start-1 lg:col-span-5' : 'lg:col-span-5'} space-y-6`}>
-        {/* Tier & Number Header */}
-        <div className="space-y-1">
+      {/* 2. Quiet Editorial Telemetry Row Below the Image (Zero Clunky White Boxes) */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 px-1">
+        
+        {/* Left: Suite Identity & Clean Single-Line Telemetry */}
+        <div className="space-y-2 max-w-2xl">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
-              ROOM {residence.roomNumber} &bull; {residence.tier}
+            <span className="text-[10px] font-mono tracking-[0.25em] font-extrabold text-emerald-900 uppercase">
+              0{index + 1} &bull; RESIDENCE
             </span>
           </div>
-          <h2 className="font-serif-grand text-3xl sm:text-4xl text-slate-900 font-normal">
+          
+          <h2 className="font-serif-grand text-3xl sm:text-4xl lg:text-5xl text-slate-900 font-light tracking-tight leading-tight">
             {residence.name}
           </h2>
+
+          {/* Single-line Whisper Specs (Zero rectangular cards!) */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-xs sm:text-sm font-mono text-slate-600">
+            {residence.specs.map((item, idx) => (
+              <React.Fragment key={idx}>
+                {idx > 0 && <span className="text-slate-300 select-none">&bull;</span>}
+                <span>
+                  <span className="text-slate-400 font-normal">{item.label} </span>
+                  <strong className="text-slate-900 font-semibold">{item.value}</strong>
+                </span>
+              </React.Fragment>
+            ))}
+            {residence.amenities && residence.amenities.length > 0 && (
+              <>
+                <span className="text-slate-300 select-none">&bull;</span>
+                <span className="text-emerald-900 font-medium">
+                  {residence.amenities[0]}
+                </span>
+              </>
+            )}
+          </div>
         </div>
 
-        {/* Minimalist 3-Metric Editorial Grid */}
-        <div className="grid grid-cols-3 gap-3 pt-2">
-          {residence.specs.slice(0, 3).map((item, idx) => (
-            <div
-              key={idx}
-              className="p-3 bg-white border border-slate-200/80 rounded-[2px] flex flex-col justify-between hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-200 shadow-2xs"
-            >
-              <span className="text-[8px] tracking-[0.25em] font-bold text-slate-600 uppercase">
-                {item.label}
-              </span>
-              <span className="text-xs font-bold text-slate-900 tracking-tight mt-1">
-                {item.value}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Curated Amenities List (Clean 2 Key Highlights) */}
-        <ul className="space-y-2 pt-2 text-xs text-slate-600 font-medium">
-          {residence.amenities.slice(0, 2).map((amenity, i) => (
-            <li key={i} className="flex items-center gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-800/60 shrink-0" />
-              <span>{amenity}</span>
-            </li>
-          ))}
-        </ul>
-
-        {/* Pricing & Signature Kinetic Rolling-Wave Reserve Button */}
-        <div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Right: Nightly Pricing & Signature Kinetic Reserve Button */}
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-6 sm:gap-8 shrink-0 pt-2 lg:pt-0">
           <div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-xs font-semibold text-slate-600">PKR</span>
-              <span className="text-2xl font-bold text-slate-900 tracking-tight">
+              <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
                 {residence.nightlyRate.toLocaleString()}
               </span>
               <span className="text-xs text-slate-600 font-normal">/ Night</span>
             </div>
-            <span className="text-[10px] tracking-[0.18em] text-emerald-800 font-semibold uppercase block mt-0.5">
+            <span className="text-[10px] font-mono tracking-wider text-emerald-800 uppercase block mt-0.5">
               30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {onOpenSpecs && (
               <button
                 type="button"
                 onClick={() => onOpenSpecs(residence)}
-                className="px-2.5 py-1.5 text-[10px] font-mono tracking-wider uppercase text-slate-600 hover:text-slate-950 underline transition-colors cursor-pointer"
+                className="px-3 py-2 text-[10px] font-mono tracking-wider uppercase text-slate-600 hover:text-slate-950 underline transition-colors cursor-pointer"
               >
-                Specs &bull; {residence.roomNumber === '301' ? '185m²' : residence.roomNumber === '204' ? '140m²' : '160m²'}
+                Specs Dossier
               </button>
             )}
             <AnimatedButton
@@ -405,7 +393,8 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
             />
           </div>
         </div>
+
       </div>
-    </div>
+    </article>
   )
 }
