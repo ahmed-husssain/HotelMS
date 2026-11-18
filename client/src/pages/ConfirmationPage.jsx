@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
+import InvoicePreviewModal from '../components/invoice/InvoicePreviewModal'
 import { useAuth } from '../context/AuthContext'
 
 export default function ConfirmationPage() {
   const location = useLocation()
   const { currentUser } = useAuth()
+  const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
   const booking = location.state?.booking || {
     bookingRef: 'TH-301-9041',
     residence: {
@@ -111,14 +113,22 @@ export default function ConfirmationPage() {
             ) : (
               <button
                 type="button"
-                onClick={() => window.print()}
+                onClick={() => setIsInvoiceOpen(true)}
                 className="tactile flex-1 py-3 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-[10px] tracking-[0.2em] font-bold uppercase transition-colors rounded-[2px] cursor-pointer"
               >
-                PRINT TAX VOUCHER &darr;
+                PREVIEW &amp; PRINT VOUCHER &rarr;
               </button>
             )}
           </div>
         </div>
+
+        {/* Live Hotel Tax Invoice & Voucher Preview Modal */}
+        <InvoicePreviewModal
+          isOpen={isInvoiceOpen}
+          onClose={() => setIsInvoiceOpen(false)}
+          booking={booking}
+          type="ADVANCE_RECEIPT"
+        />
       </div>
 
       <footer className="text-center text-[10px] text-slate-400 tracking-[0.2em] uppercase">

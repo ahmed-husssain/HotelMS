@@ -4,6 +4,7 @@ import CustomCursor from './components/CustomCursor'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { HotelDataProvider } from './context/HotelDataContext'
+import { ToastProvider } from './context/ToastContext'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 import LandingPage from './pages/LandingPage'
 
@@ -17,6 +18,7 @@ const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const FrontDeskPage = lazy(() => import('./pages/FrontDeskPage'))
 const HousekeepingPage = lazy(() => import('./pages/HousekeepingPage'))
 const AdminPage = lazy(() => import('./pages/AdminPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 function PageFallback() {
   return (
@@ -86,6 +88,9 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
+
+          {/* 404 Architectural Sanctuary Boundary Fallback */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </>
@@ -97,7 +102,9 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <HotelDataProvider>
-          <AppRoutes />
+          <ToastProvider>
+            <AppRoutes />
+          </ToastProvider>
         </HotelDataProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -1,6 +1,7 @@
 /**
  * Showcase residences data with multi-angle architectural galleries
  * and key feature highlights.
+ * Powered by high-definition Cloudinary CDN delivery.
  */
 export const RESIDENCES = [
   {
@@ -15,27 +16,32 @@ export const RESIDENCES = [
     nightlyRate: 110000,
     gallery: [
       {
-        title: '360° Ocean Horizon Deck',
-        tag: 'TERRACE',
-        url: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=75',
+        title: '360° Ocean Horizon Deck & Living',
+        tag: 'LIVING SUITE',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997084/hotel-suites/room-01/room-01-1.webp',
       },
       {
-        title: 'King Master Bedroom Suite',
-        tag: 'MASTER SUITE',
-        url: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=75',
+        title: 'Panoramic Ocean Balcony',
+        tag: 'TERRACE',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997203/hotel-suites/room-01/room-01-2.webp',
       },
       {
         title: 'Heated Marble Spa Bath',
         tag: 'SPA BATH',
-        url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=75',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997205/hotel-suites/room-01/room-01-3.webp',
       },
       {
-        title: '20M Private Infinity Pool',
-        tag: 'INFINITY POOL',
-        url: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=75',
+        title: 'King Master Bedroom Suite',
+        tag: 'MASTER BEDROOM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997207/hotel-suites/room-01/room-01-4.webp',
+      },
+      {
+        title: 'Private In-Suite Lounge',
+        tag: 'LOUNGE',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997209/hotel-suites/room-01/room-01-5.webp',
       },
     ],
-    detailImage: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=450&q=75',
+    detailImage: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997084/hotel-suites/room-01/room-01-1.webp',
     specs: [
       { label: 'AREA', value: '210 M²' },
       { label: 'VIEW', value: '360° OCEAN' },
@@ -64,25 +70,30 @@ export const RESIDENCES = [
       {
         title: 'Private Cedar Enclosed Courtyard',
         tag: 'ZEN GARDEN',
-        url: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=600&q=75',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997211/hotel-suites/room-02/room-02-1.webp',
       },
       {
         title: 'Grand King Villa Suite',
         tag: 'BEDROOM',
-        url: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=75',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997213/hotel-suites/room-02/room-02-2.webp',
       },
       {
-        title: 'Outdoor Cedar Hot Tub',
-        tag: 'HOT TUB',
-        url: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=75',
+        title: 'Outdoor Garden Terrace',
+        tag: 'TERRACE',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997215/hotel-suites/room-02/room-02-3.webp',
+      },
+      {
+        title: 'Sunlit Marble Vanity',
+        tag: 'BATHROOM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997217/hotel-suites/room-02/room-02-4.webp',
       },
       {
         title: 'Private In-Villa Tea Lounge',
         tag: 'TEA LOUNGE',
-        url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=75',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997218/hotel-suites/room-02/room-02-5.webp',
       },
     ],
-    detailImage: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=450&q=75',
+    detailImage: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997211/hotel-suites/room-02/room-02-1.webp',
     specs: [
       { label: 'AREA', value: '160 M²' },
       { label: 'GARDEN', value: 'PRIVATE COURTYARD' },
@@ -109,27 +120,32 @@ export const RESIDENCES = [
     nightlyRate: 95000,
     gallery: [
       {
-        title: 'Overwater Sundeck & Ocean Ladder',
+        title: 'Overwater Sundeck & Ocean Panorama',
         tag: 'TERRACE',
-        url: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=75',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997220/hotel-suites/room-03/room-03-1.webp',
       },
       {
-        title: 'Glass Floor Lagoon Suite',
+        title: 'Oceanfront Master Suite',
         tag: 'BEDROOM',
-        url: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=75',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997222/hotel-suites/room-03/room-03-2.webp',
       },
       {
-        title: 'Open-Air Rainfall Shower',
-        tag: 'RAIN SHOWER',
-        url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=75',
+        title: 'Designer Rainfall Bath',
+        tag: 'BATHROOM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997224/hotel-suites/room-03/room-03-3.webp',
       },
       {
-        title: 'Private Sunset Lagoon Netting',
+        title: 'Sunset Horizon Lounge',
         tag: 'SUNSET LOUNGE',
-        url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=75',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997226/hotel-suites/room-03/room-03-4.webp',
+      },
+      {
+        title: 'Twilight Coastal Solarium',
+        tag: 'SOLARIUM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997227/hotel-suites/room-03/room-03-5.webp',
       },
     ],
-    detailImage: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=450&q=75',
+    detailImage: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997220/hotel-suites/room-03/room-03-1.webp',
     specs: [
       { label: 'AREA', value: '185 M²' },
       { label: 'TERRACE', value: 'OVERWATER' },
@@ -142,6 +158,100 @@ export const RESIDENCES = [
       'Private Extended Sundeck Daybeds',
       'Night Snorkeling & Scuba Guide',
       'Luxury Egyptian Cotton Bedding',
+    ],
+  },
+  {
+    id: 'res-201',
+    roomNumber: '201',
+    name: 'The Cliff Sanctuary',
+    tier: 'CLIFFTOP RESIDENCE',
+    category: 'villa',
+    categoryLabel: 'Cliff Villa',
+    maxGuests: 4,
+    features: ['pool', 'rain_shower', 'cedar_tub'],
+    nightlyRate: 85000,
+    gallery: [
+      {
+        title: 'Clifftop Architectural Living Space',
+        tag: 'LIVING ROOM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997229/hotel-suites/room-04/room-04-1.webp',
+      },
+      {
+        title: 'Double Master Bedroom Suite',
+        tag: 'BEDROOM',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997231/hotel-suites/room-04/room-04-2.webp',
+      },
+      {
+        title: 'Stone Clad Spa Bathroom',
+        tag: 'SPA BATH',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997233/hotel-suites/room-04/room-04-3.webp',
+      },
+      {
+        title: 'Private Cantilevered Balcony',
+        tag: 'BALCONY',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997235/hotel-suites/room-04/room-04-4.webp',
+      },
+      {
+        title: 'Architectural Details & Lighting',
+        tag: 'DETAILS',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997237/hotel-suites/room-04/room-04-5.webp',
+      },
+    ],
+    detailImage: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997229/hotel-suites/room-04/room-04-1.webp',
+    specs: [
+      { label: 'AREA', value: '175 M²' },
+      { label: 'VIEW', value: 'CLIFF & SEA' },
+      { label: 'BED', value: '2 KING BEDS' },
+      { label: 'BATH', value: 'STONE SPA TUB' },
+      { label: 'SERVICE', value: 'CONCIERGE' },
+    ],
+    amenities: [
+      'Cantilevered Ocean Cliff Balcony',
+      'Handcrafted Sandstone Soaking Tub',
+      'Bespoke Mini Bar with Local Organic Artisans',
+      'High-Speed Satellite Wi-Fi 6',
+    ],
+  },
+  {
+    id: 'res-302',
+    roomNumber: '302',
+    name: 'The Royal Palm Suite',
+    tier: 'ROYAL DUPLEX SUITE',
+    category: 'penthouse',
+    categoryLabel: 'Duplex Penthouse',
+    maxGuests: 2,
+    features: ['pool', 'butler', 'spa_bath'],
+    nightlyRate: 125000,
+    gallery: [
+      {
+        title: 'Executive Grand Salon',
+        tag: 'GRAND SALON',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997240/hotel-suites/room-05/room-05-1.webp',
+      },
+      {
+        title: 'Presidential Master Bedchamber',
+        tag: 'BEDCHAMBER',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997243/hotel-suites/room-05/room-05-2.webp',
+      },
+      {
+        title: 'Italian Marble En-Suite Bath',
+        tag: 'EN-SUITE',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997245/hotel-suites/room-05/room-05-3.webp',
+      },
+    ],
+    detailImage: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997240/hotel-suites/room-05/room-05-1.webp',
+    specs: [
+      { label: 'AREA', value: '240 M²' },
+      { label: 'VIEW', value: 'PANORAMIC ARABIAN SEA' },
+      { label: 'BED', value: 'EMPEROR BED' },
+      { label: 'BATH', value: 'FREESTANDING ONYX TUB' },
+      { label: 'SERVICE', value: 'PRIVATE BUTLER' },
+    ],
+    amenities: [
+      'Double-Height Floor-to-Ceiling Coastal Windows',
+      'Freestanding Italian Onyx Soaking Tub',
+      'Custom Wine Cellar & Sommelier Service',
+      'Chauffeured Airport Transfer Service',
     ],
   },
 ]

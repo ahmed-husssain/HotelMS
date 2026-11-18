@@ -78,12 +78,12 @@ export default function RoomsPage() {
                 Architectural Suites &amp; Villas.
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mt-2 leading-relaxed font-normal">
-                Three bespoke oceanfront dwellings engineered for absolute privacy, silence, and natural light. Built directly into the limestone cliffs of the Sindh Coast.
+                Five bespoke oceanfront dwellings engineered for absolute privacy, silence, and natural light. Built directly into the limestone cliffs of the Sindh Coast.
               </p>
             </div>
 
             <div className="text-xs font-mono text-slate-500 uppercase tracking-widest shrink-0">
-              <span>● 100% Oceanfront</span> &bull; <span>3 Private Keys</span>
+              <span>● 100% Oceanfront</span> &bull; <span>5 Private Keys</span>
             </div>
           </div>
         </div>
