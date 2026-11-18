@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RoomsCarousel from '../components/RoomsCarousel'
+import SuiteSpecsDrawer from '../components/suites/SuiteSpecsDrawer'
 import { RESIDENCES } from '../data/residences'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 
 export default function RoomsPage() {
   useSmoothScroll()
   const navigate = useNavigate()
+
+  // Architectural Specs Drawer State
+  const [activeSpecsSuite, setActiveSpecsSuite] = useState(null)
 
   // Filter States (Doc FR-1.1 & FR-1.2)
   const [selectedCategory, setSelectedCategory] = useState('all') // 'all' | 'penthouse' | 'villa' | 'overwater'
@@ -190,6 +194,7 @@ export default function RoomsPage() {
               residence={residence}
               index={idx}
               onReserve={(res) => handleOpenReservation(res)}
+              onOpenSpecs={(res) => setActiveSpecsSuite(res)}
             />
           ))
         ) : (
@@ -212,6 +217,13 @@ export default function RoomsPage() {
 
       {/* 5. Same Architectural Footer */}
       <Footer />
+
+      {/* 6. Architectural Specification Dossier Drawer */}
+      <SuiteSpecsDrawer
+        residence={activeSpecsSuite}
+        isOpen={Boolean(activeSpecsSuite)}
+        onClose={() => setActiveSpecsSuite(null)}
+      />
     </div>
   )
 }

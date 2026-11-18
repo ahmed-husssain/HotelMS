@@ -29,7 +29,7 @@ function CasaMomoSlideArrow({ left = false }) {
   )
 }
 
-export default function RoomsCarousel({ residence, index, onReserve }) {
+export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs }) {
   const containerRef = useRef(null)
   const insetImgRef = useRef(null)
 
@@ -135,7 +135,7 @@ export default function RoomsCarousel({ residence, index, onReserve }) {
       <div className={`relative ${isReversed ? 'lg:col-start-6 lg:col-span-7' : 'lg:col-span-7'}`}>
         {/* Main Architectural Carousel Frame */}
         <div
-          onClick={() => onReserve(residence)}
+          onClick={() => (onOpenSpecs ? onOpenSpecs(residence) : onReserve(residence))}
           data-cursor="Suite Details"
           className="relative aspect-[16/10] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none cursor-pointer"
         >
@@ -288,10 +288,21 @@ export default function RoomsCarousel({ residence, index, onReserve }) {
                     </span>
                   </div>
 
-                  <AnimatedButton
-                    text="Suite Details"
-                    onClick={() => onReserve(residence)}
-                  />
+                  <div className="flex items-center gap-2">
+                    {onOpenSpecs && (
+                      <button
+                        type="button"
+                        onClick={() => onOpenSpecs(residence)}
+                        className="px-2.5 py-1.5 text-[10px] font-mono tracking-wider uppercase text-slate-600 hover:text-slate-950 underline transition-colors cursor-pointer"
+                      >
+                        Specs &bull; {residence.roomNumber === '301' ? '185m²' : residence.roomNumber === '204' ? '140m²' : '160m²'}
+                      </button>
+                    )}
+                    <AnimatedButton
+                      text="Suite Details"
+                      onClick={() => onReserve(residence)}
+                    />
+                  </div>
                 </div>
               </div>
     </div>

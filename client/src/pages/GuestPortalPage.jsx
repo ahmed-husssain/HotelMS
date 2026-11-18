@@ -4,7 +4,9 @@ import BrandLogo from '../components/BrandLogo'
 import { RESIDENCES } from '../data/residences'
 import { useAuth } from '../context/AuthContext'
 import { useHotelData } from '../context/HotelDataContext'
+import { useToast } from '../context/ToastContext'
 import BookingLookup from '../components/stay/BookingLookup'
+import InvoicePreviewModal from '../components/invoice/InvoicePreviewModal'
 
 // Demo Stay Record for Suite 301
 const DEMO_BOOKING = {
@@ -156,9 +158,11 @@ export default function GuestPortalPage() {
   const initialRef = searchParams.get('ref') || ''
   const { currentUser, logout } = useAuth()
   const { requestGuestService } = useHotelData()
+  const { toast } = useToast()
 
   // Navigation & View State
   const [activeTab, setActiveTab] = useState('suite') // 'suite' | 'dining' | 'spa' | 'concierge' | 'folio'
+  const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
 
   // Portal Authentication State
   const [bookingCode, setBookingCode] = useState(() => initialRef || currentUser?.activeReservationCode || 'TH-301-9041')
@@ -216,6 +220,22 @@ export default function GuestPortalPage() {
     }
   }, [currentBooking, orderedServices])
 
+  // Formatted booking payload for Invoice Preview
+  const invoiceBookingData = useMemo(() => ({
+    bookingRef: currentBooking.bookingRef || 'TH-301-9041',
+    residence: currentBooking.residence || RESIDENCES[0],
+    guestName: currentBooking.guestName,
+    guestPhone: currentBooking.guestPhone,
+    guestEmail: currentBooking.guestEmail,
+    nights: currentBooking.nights,
+    safepayRef: currentBooking.safepayRef || 'SPF-892104',
+    suiteSubtotal: financials.roomSubtotal,
+    selectedAddons: [],
+    diningOrders: orderedServices.filter((s) => s.price > 0).map((s) => ({ title: s.title, price: s.price })),
+    advance: financials.advancePaid,
+    status: 'CONFIRMED',
+  }), [currentBooking, financials, orderedServices])
+
   // Lookup Form Submission
   const handleLookupSubmit = (e) => {
     e.preventDefault()
@@ -265,6 +285,7 @@ export default function GuestPortalPage() {
     )
 
     setServiceFeedbackNotice(`Dispatched to estate concierge: "${service.title}" added to bill.`)
+    toast.success(`"${service.title}" dispatched & added to folio`, 'CONCIERGE DISPATCH')
     setTimeout(() => setServiceFeedbackNotice(''), 4500)
   }
 
@@ -281,6 +302,7 @@ export default function GuestPortalPage() {
     setTimeout(() => {
       setIsKeyUnlocking(false)
       setKeyUnlockedToast(true)
+      toast.success('Suite 301 NFC Electronic Lock Engaged', 'DOOR UNLOCKED')
       setTimeout(() => setKeyUnlockedToast(false), 8000)
     }, 1200)
   }
@@ -291,6 +313,7 @@ export default function GuestPortalPage() {
       navigator.clipboard.writeText('pacific2026')
     }
     setWifiCopied(true)
+    toast.success('Habitas 1Gbps Wi-Fi key copied to clipboard', 'NETWORK KEY COPIED')
     setTimeout(() => setWifiCopied(false), 2500)
   }
 
@@ -304,6 +327,7 @@ export default function GuestPortalPage() {
       0,
       'Front Desk'
     )
+    toast.info('Express check-out dispatched to Front Desk', 'CHECKOUT REQUESTED')
     setTimeout(() => setExpressCheckoutNotice(false), 7000)
   }
 
@@ -929,10 +953,10 @@ export default function GuestPortalPage() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => window.print()}
+                    onClick={() => setIsInvoiceOpen(true)}
                     className="touch-target px-3.5 py-2 bg-white border border-slate-300 hover:border-slate-900 text-slate-900 font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
                   >
-                    Print Folio &darr;
+                    Preview &amp; Print Invoice &rarr;
                   </button>
                   <button
                     type="button"
@@ -1110,6 +1134,14 @@ export default function GuestPortalPage() {
           </div>
         </div>
       </footer>
+
+      {/* Official Luxury Hotel Tax Invoice Modal */}
+      <InvoicePreviewModal
+        isOpen={isInvoiceOpen}
+        onClose={() => setIsInvoiceOpen(false)}
+        booking={invoiceBookingData}
+        type="FINAL_TAX_INVOICE"
+      />
     </div>
   )
 }

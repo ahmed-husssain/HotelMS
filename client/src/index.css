@@ -213,6 +213,23 @@ html.lenis, html.lenis body {
   background: #94A3B8;
 }
 
+/* Official Hotel Tax Invoice & Voucher Print Optimization */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  header, footer, nav, aside, .custom-cursor-root, .print\:hidden {
+    display: none !important;
+  }
+}
+
 /* Zero-scrollbar utility: completely hides scrollbar tracks and sliders while preserving native touch and wheel scrolling */
 .scrollbar-none {
   scrollbar-width: none !important; /* Firefox */
