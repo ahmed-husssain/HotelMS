@@ -150,25 +150,27 @@ export default function Navbar({ onOpenDrawer }) {
             </a>
           </nav>
 
-          <div className="lg:hidden flex items-center h-10">
+          {/* Mobile Left Brand Logo (< sm: Eliminates center collision with Reserve button) */}
+          <div className="sm:hidden flex items-center h-10">
+            <BrandLogo variant="full" theme="dark" size="sm" />
+          </div>
+
+          {/* Tablet Left Eyebrow (sm to lg) */}
+          <div className="hidden sm:flex lg:hidden items-center h-10">
             <Link
               to="/"
               className="group flex items-center gap-1.5 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none"
             >
-              <span className="text-slate-400 font-normal select-none leading-none">&copy;</span>
-              <span className="whitespace-nowrap leading-none text-slate-900 font-normal">
-                <span className="hidden sm:inline">Habitas &middot; </span>2026
+              <span className="whitespace-nowrap leading-none text-slate-900 font-medium tracking-wider">
+                HABITAS &bull; 2026
               </span>
             </Link>
           </div>
         </div>
 
-        {/* Center Portal: Brand Logo */}
+        {/* Center Portal: Brand Logo (Active on sm and desktop with ample breathing space) */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hidden sm:flex items-center justify-center">
           <BrandLogo variant="full" theme="dark" size="md" />
-        </div>
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto sm:hidden flex items-center justify-center">
-          <BrandLogo variant="emblem" theme="dark" size="sm" />
         </div>
 
         {/* Right Flank: Dynamic Session / Reserve / Menu Trigger */}

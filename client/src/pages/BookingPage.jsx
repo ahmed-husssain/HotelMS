@@ -84,35 +84,69 @@ export default function BookingPage() {
   const remainingBalance = totalValuation - advanceDeposit
 
   // 6. Confirm Booking & Post to Shared Arrivals Queue
-  const handleConfirmReservation = (e) => {
+  const handleConfirmReservation = async (e) => {
     e.preventDefault()
     if (secondsLeft === 0) return
 
     setIsProcessing(true)
-    setTimeout(() => {
-      setIsProcessing(false)
-      const bookingData = {
-        residence: selectedResidence,
-        nights,
-        guestCount,
-        guestDossier,
-        selectedAddons: CONCIERGE_ADDONS.filter((a) => selectedAddons.includes(a.id)),
-        suiteSubtotal,
-        addonTotal,
-        sindhTax,
-        total: totalValuation,
-        advance: advanceDeposit,
-        balance: remainingBalance,
-        safepayRef: `SPF-${Math.floor(100000 + Math.random() * 900000)}`,
-        bookingRef: `TH-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`,
-        createdAt: new Date().toISOString(),
+
+    let finalBookingRef = `TH-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
+
+    // Attempt live atomic hold & confirmation in MongoDB Atlas
+    try {
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      const departure = new Date(tomorrow)
+      departure.setDate(departure.getDate() + nights)
+
+      // 1. Create 5-minute atomic hold on the suite in MongoDB Atlas
+      const holdRes = await createCheckoutHold({
+        roomId: selectedResidence.id,
+        checkInDate: tomorrow.toISOString(),
+        checkOutDate: departure.toISOString(),
+        guestDetails: {
+          name: guestDossier.fullName,
+          email: guestDossier.email,
+          phone: guestDossier.phone,
+          specialRequests: guestDossier.specialRequests,
+        },
+      })
+
+      if (holdRes?.data?.bookingReference) {
+        finalBookingRef = holdRes.data.bookingReference
+
+        // 2. Confirm booking with 30% advance deposit in MongoDB Atlas
+        await confirmReservation(finalBookingRef, {
+          paymentMethod: 'SAFEPAY_ONLINE',
+          notes: 'Online 30% advance deposit reservation',
+        })
       }
+    } catch (apiErr) {
+      console.warn('[Booking] Live MongoDB Atlas sync fallback to local store:', apiErr.message)
+    }
 
-      // Sync into unified hotel state!
-      createReservation(bookingData)
+    setIsProcessing(false)
+    const bookingData = {
+      residence: selectedResidence,
+      nights,
+      guestCount,
+      guestDossier,
+      selectedAddons: CONCIERGE_ADDONS.filter((a) => selectedAddons.includes(a.id)),
+      suiteSubtotal,
+      addonTotal,
+      sindhTax,
+      total: totalValuation,
+      advance: advanceDeposit,
+      balance: remainingBalance,
+      safepayRef: `SPF-${Math.floor(100000 + Math.random() * 900000)}`,
+      bookingRef: finalBookingRef,
+      createdAt: new Date().toISOString(),
+    }
 
-      navigate('/confirmation', { state: { booking: bookingData } })
-    }, 1000)
+    // Sync into unified hotel state
+    createReservation(bookingData)
+
+    navigate('/confirmation', { state: { booking: bookingData } })
   }
 
   return (

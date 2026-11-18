@@ -245,12 +245,10 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
                 SUITE {residence.roomNumber}
               </span>
 
-              {/* Current Perspective Tag & Slide Counter */}
-                <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-medium text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs flex items-center gap-2">
-                  <span>0{selectedIndex + 1} / 0{gallery.length}</span>
-                  <span className="w-1 h-1 rounded-full bg-[#FFF0CA]/50" />
-                  <span>{activeSlide.tag}</span>
-                </span>
+              {/* Clean Minimalist Slide Counter (Zero Text Clutter) */}
+              <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs">
+                0{selectedIndex + 1} / 0{gallery.length}
+              </span>
               </div>
 
               {/* Casa Momo Frosted Glass Slide Navigation Arrows (Touch friendly on mobile/tablet) */}

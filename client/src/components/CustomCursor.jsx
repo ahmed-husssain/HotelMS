@@ -110,7 +110,7 @@ export default function CustomCursor() {
     activeCard: null,
   })
 
-  const [cursorMode, setCursorMode] = useState('default') // 'default' | 'link' | 'card' | 'input'
+  const [cursorMode, setCursorMode] = useState('default') // 'default' | 'link' | 'card' | 'input' | 'button'
   const [cardLabel, setCardLabel] = useState('Suite Details')
   const [isRolled, setIsRolled] = useState(false)
   const [isActive, setIsActive] = useState(false)
@@ -143,10 +143,10 @@ export default function CustomCursor() {
         return
       }
 
-      // 2. Buttons inside cards (e.g. carousel < > arrows): Switch to subtle link halo
+      // 2. Buttons inside cards (e.g. carousel < > arrows) & interactive buttons: High-visibility luxury ring
       if (target.closest('button, [data-cursor-hide], [data-no-cursor]')) {
         pos.activeCard = null
-        setCursorMode('link')
+        setCursorMode('button')
         return
       }
 
