@@ -45,18 +45,15 @@ export default function BookingPage() {
   const validateForm = () => {
     const errors = {}
     const nameTrimmed = (guestDossier.fullName || '').trim()
-    const nameParts = nameTrimmed.split(/\s+/).filter(Boolean)
-    if (!nameTrimmed) {
-      errors.fullName = 'Full Legal Name is required'
-    } else if (nameParts.length < 2 || nameTrimmed.length < 4) {
-      errors.fullName = 'Please enter both first and last name (e.g. Ahmed Khan)'
+    if (!nameTrimmed || nameTrimmed.length < 2) {
+      errors.fullName = 'Please enter your name'
     }
 
     const cnicDigits = (guestDossier.identificationNumber || '').replace(/\D/g, '')
     if (!cnicDigits) {
       errors.identificationNumber = 'CNIC / National ID is required'
-    } else if (cnicDigits.length !== 13) {
-      errors.identificationNumber = 'CNIC must be exactly 13 digits (XXXXX-XXXXXXX-X)'
+    } else if (cnicDigits.length < 5) {
+      errors.identificationNumber = 'Please enter a valid CNIC / ID number'
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -65,8 +62,8 @@ export default function BookingPage() {
     }
 
     const phoneDigits = (guestDossier.phone || '').replace(/\D/g, '')
-    if (!phoneDigits || phoneDigits.length < 10 || phoneDigits.length > 14) {
-      errors.phone = 'Please provide a valid mobile number (+92 300 1234567)'
+    if (!phoneDigits || phoneDigits.length < 8) {
+      errors.phone = 'Please provide a valid mobile number'
     }
 
     setFormErrors(errors)
@@ -146,9 +143,7 @@ export default function BookingPage() {
     })
 
     if (Object.keys(errors).length > 0) {
-      // Focus on first invalid input or alert
-      const firstError = Object.values(errors)[0]
-      alert(`Please correct the following: ${firstError}`)
+      // Inline errors will display on the touched fields quietly without any native alert popups
       return
     }
 

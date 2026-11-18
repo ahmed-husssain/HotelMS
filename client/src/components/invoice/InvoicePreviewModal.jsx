@@ -1,14 +1,15 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import BrandLogo from '../BrandLogo'
 
 /**
  * InvoicePreviewModal — Clean Luxury Tax Folio & Advance Stay Voucher
  * 
  * Styled as an authentic luxury hotel tax document.
- * Viewport-responsive (fits within 95vh with smooth internal scroll on any device).
+ * Viewport-responsive with seamless scrolling from header to signature, no trapped scrollbars, no lag.
  */
 export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalInvoice = false }) {
   const invoiceRef = useRef(null)
+  const [copied, setCopied] = useState(false)
 
   if (!isOpen || !booking) return null
 
@@ -45,24 +46,31 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
     
     if (navigator?.clipboard) {
       navigator.clipboard.writeText(summary)
-      alert('Voucher summary copied to clipboard')
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     }
   }
 
   return (
     <div 
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 print:p-0 print:bg-white print:static"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/70 p-3 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static"
       role="dialog"
       aria-modal="true"
       aria-labelledby="invoice-preview-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
     >
-      {/* Outer Card Container - Constrained to 95vh with flex column */}
-      <div className="relative w-full max-w-2xl max-h-[95vh] bg-white border border-slate-300 rounded-[2px] shadow-2xl overflow-hidden flex flex-col my-auto print:border-none print:shadow-none print:w-full print:max-w-none print:m-0 print:max-h-none">
+      {/* Outer Card Container - Natural document flow with zero scroll trapping */}
+      <div 
+        className="relative w-full max-w-2xl bg-white border border-slate-300 rounded-[2px] shadow-2xl my-3 sm:my-6 flex flex-col print:border-none print:shadow-none print:w-full print:max-w-none print:m-0"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* ============================================================== */}
         {/* 1. TOP INTERACTIVE TOOLBAR (STICKY & VISIBLE)                   */}
         {/* ============================================================== */}
-        <div className="bg-[#0E1201] text-[#FAF8F5] px-4 sm:px-6 py-2.5 flex items-center justify-between border-b border-slate-800 print:hidden shrink-0">
+        <div className="sticky top-0 z-20 bg-[#0E1201] text-[#FAF8F5] px-4 sm:px-6 py-2.5 flex items-center justify-between border-b border-slate-800 print:hidden shrink-0">
           <div className="flex items-center gap-2 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="uppercase font-bold tracking-wider text-[11px] sm:text-xs">
@@ -76,7 +84,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
               onClick={handleCopySummary}
               className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-[#FFF0CA] font-mono text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
             >
-              Copy Summary
+              {copied ? '✓ Copied' : 'Copy Summary'}
             </button>
 
             <button
@@ -100,11 +108,11 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
         </div>
 
         {/* ============================================================== */}
-        {/* 2. AUTHENTIC LUXURY HOTEL TAX INVOICE DOCUMENT (SCROLLABLE)    */}
+        {/* 2. AUTHENTIC LUXURY HOTEL TAX INVOICE DOCUMENT                  */}
         {/* ============================================================== */}
         <div 
           ref={invoiceRef} 
-          className="flex-1 overflow-y-auto p-4 sm:p-6 bg-white text-slate-900 font-sans-clean space-y-3 sm:space-y-4 print:p-6 print:overflow-visible"
+          className="p-4 sm:p-6 sm:pb-8 bg-white text-slate-900 font-sans-clean space-y-3 sm:space-y-4 print:p-6"
         >
           {/* A. Formal Letterhead */}
           <div className="border-b-2 border-slate-900 pb-3 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2.5">
@@ -281,7 +289,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
           </div>
 
           {/* E. Legal Audit Declarations & Signatures */}
-          <div className="border-t border-slate-200 pt-2 grid grid-cols-2 gap-3 text-[9px] font-mono text-slate-500">
+          <div className="border-t border-slate-200 pt-2 pb-4 sm:pb-6 grid grid-cols-2 gap-3 text-[9px] font-mono text-slate-500">
             <div className="space-y-2">
               <p className="leading-relaxed">
                 Computer-generated tax voucher under Sindh Revenue Board rules.
