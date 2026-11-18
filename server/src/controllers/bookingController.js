@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const Room = require('../models/Room')
 const Booking = require('../models/Booking')
 const Payment = require('../models/Payment')
@@ -11,6 +12,26 @@ const { checkRoomAvailability } = require('../services/availabilityService')
  * Implements Zero-Trust pricing, 5-minute pessimistic checkout holds,
  * and live /my-stay Guest OS automation.
  */
+
+// Helper to resolve a room by MongoDB ObjectId or room number string (e.g. '301', 'res-301', 'Suite 301')
+async function resolveRoom(roomId) {
+  if (!roomId) return null
+  if (mongoose.Types.ObjectId.isValid(roomId)) {
+    const room = await Room.findById(roomId)
+    if (room) return room
+  }
+  const cleanNumber = String(roomId).replace(/\D/g, '')
+  if (cleanNumber) {
+    return await Room.findOne({
+      $or: [
+        { roomNumber: cleanNumber },
+        { roomNumber: `Suite ${cleanNumber}` },
+        { roomNumber: new RegExp(cleanNumber, 'i') },
+      ],
+    })
+  }
+  return null
+}
 
 // @desc    Calculate verified price quote for a room & dates
 // @route   POST /api/bookings/quote
@@ -26,7 +47,7 @@ async function getQuote(req, res) {
       })
     }
 
-    const room = await Room.findById(roomId)
+    const room = await resolveRoom(roomId)
     if (!room) {
       return res.status(404).json({ success: false, message: 'Suite not found' })
     }
@@ -35,7 +56,7 @@ async function getQuote(req, res) {
     const pricing = calculatePricing(room.baseNightlyRate, checkInDate, checkOutDate)
 
     // 2. Check if dates are available
-    const isAvailable = await checkRoomAvailability(roomId, checkInDate, checkOutDate)
+    const isAvailable = await checkRoomAvailability(room._id, checkInDate, checkOutDate)
 
     res.status(200).json({
       success: true,
@@ -71,18 +92,18 @@ async function createHold(req, res) {
       })
     }
 
-    // 1. Verify availability
-    const isAvailable = await checkRoomAvailability(roomId, checkInDate, checkOutDate)
+    const room = await resolveRoom(roomId)
+    if (!room) {
+      return res.status(404).json({ success: false, message: 'Suite not found' })
+    }
+
+    // 1. Verify availability on resolved room ID
+    const isAvailable = await checkRoomAvailability(room._id, checkInDate, checkOutDate)
     if (!isAvailable) {
       return res.status(409).json({
         success: false,
         message: 'This suite is no longer available for the selected dates. Please choose another date or suite.',
       })
-    }
-
-    const room = await Room.findById(roomId)
-    if (!room) {
-      return res.status(404).json({ success: false, message: 'Suite not found' })
     }
 
     // 2. Zero-Trust pricing calculation

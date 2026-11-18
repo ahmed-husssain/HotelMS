@@ -35,52 +35,52 @@ const DEMO_BOOKING = {
   ],
 }
 
-// In-Suite Dining Catalog
+// In-Suite Dining Catalog — Authentic Luxury Room Service
 const DINING_MENU = [
   {
     id: 'dining-1',
     category: 'Dining',
-    title: 'Coastal Line-Catch Seafood Tasting Dinner',
-    description: 'Fresh Arabian Sea lobster & black pomfret prepared in-suite by our private executive chef.',
-    price: 15000,
-    timeEst: '45 mins',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
+    title: 'Club Sandwich & Herb Sea-Salt Fries',
+    description: 'Toasted brioche, smoked chicken breast, aged white cheddar, butter lettuce, and hand-cut sea salt fries.',
+    price: 2400,
+    timeEst: '25 mins',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=700&q=80',
   },
   {
     id: 'dining-2',
     category: 'Dining',
-    title: 'Arabian Lobster Thermidor with Saffron Pilaf',
-    description: 'Charred rock lobster, gruyère reduction, and wild saffron pilaf served with vintage citrus butter.',
-    price: 18500,
-    timeEst: '40 mins',
-    image: 'https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=700&q=80',
+    title: 'Grilled Arabian Sea Snapper & Greens',
+    description: 'Pan-seared fresh red snapper filet served with charred asparagus, citrus vinaigrette, and wild herb butter.',
+    price: 4800,
+    timeEst: '35 mins',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
   },
   {
     id: 'dining-3',
     category: 'Dining',
-    title: 'Estate High Tea & Artisanal Cedar Brew',
-    description: 'Fresh organic pastries, estate-grown herbal infusions, and ceremonial matcha served on your terrace.',
-    price: 4500,
-    timeEst: '25 mins',
-    image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=700&q=80',
+    title: 'Continental Breakfast & Fresh Croissants',
+    description: 'Artisanal butter croissants, seasonal berry preserves, organic Greek yoghurt, and freshly squeezed orange juice.',
+    price: 3200,
+    timeEst: '20 mins',
+    image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=700&q=80',
   },
   {
     id: 'dining-4',
     category: 'Dining',
-    title: 'Midnight Artisanal Cheese & Fruit Board',
-    description: 'Imported raw milk cheeses, honeycomb, roasted pistachios, sun-dried figs, and sourdough crisps.',
-    price: 6800,
-    timeEst: '20 mins',
-    image: 'https://images.unsplash.com/photo-1631379578550-7038263db699?auto=format&fit=crop&w=700&q=80',
+    title: 'Seasonal Fruit Platter & Wild Honey',
+    description: 'Fresh sliced rockmelon, dragon fruit, sweet figs, and strawberries served with coastal Sindh forest honey.',
+    price: 1600,
+    timeEst: '15 mins',
+    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=700&q=80',
   },
   {
     id: 'dining-5',
     category: 'Dining',
-    title: 'Cold-Pressed Coastal Citrus & Wild Forest Honey',
-    description: 'Valencia oranges, sea buckthorn, cold-pressed mint & wild Sindh forest honey.',
-    price: 2200,
-    timeEst: '15 mins',
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=700&q=80',
+    title: 'Iced Coastal Espresso & Mint Tonic',
+    description: 'Double espresso poured over chilled artisanal mineral tonic with crushed fresh garden mint.',
+    price: 1200,
+    timeEst: '10 mins',
+    image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=700&q=80',
   },
 ]
 
@@ -89,72 +89,72 @@ const SPA_HOUSEKEEPING_SERVICES = [
   {
     id: 'spa-1',
     category: 'Housekeeping',
-    title: 'Fresh Egyptian Linen & Feather Pillow Refresh',
-    description: 'Mid-stay organic cotton linen change with aromatic cedar mist spray.',
+    title: 'Fresh Cotton Linens & Extra Pillows',
+    description: 'Fresh Egyptian cotton linen change and complimentary selection of feather down or firm pillows.',
     price: 0,
-    timeEst: '20 mins',
+    timeEst: '15 mins',
     badge: 'Complimentary',
   },
   {
     id: 'spa-2',
     category: 'Housekeeping',
-    title: 'Evening Cedar Spa & Aromatic Bath Setup',
-    description: 'Organic magnesium flakes, fresh jasmine blossoms, and warmed cedar bath oils prepared in your spa tub.',
-    price: 6000,
-    timeEst: '30 mins',
-    badge: 'Signature',
+    title: 'Plush Bath Towels & Cedar Robes',
+    description: 'Fresh set of oversized organic cotton bath sheets, hand towels, and warm spa robes.',
+    price: 0,
+    timeEst: '15 mins',
+    badge: 'Complimentary',
   },
   {
     id: 'spa-3',
-    category: 'Spa',
-    title: 'Deep Tissue Ocean Mist Massage (60 Min)',
-    description: 'Private therapeutic bodywork with warmed coastal basalt stones in your villa pavilion.',
-    price: 14000,
-    timeEst: 'By Appointment',
-    badge: 'In-Suite Therapist',
+    category: 'Housekeeping',
+    title: 'Evening Turndown Service',
+    description: 'Subtle ambient lighting, bedside iced water carafe, and essential oil mist before rest.',
+    price: 0,
+    timeEst: '20 mins',
+    badge: 'Complimentary',
   },
   {
     id: 'spa-4',
-    category: 'Housekeeping',
-    title: 'Luggage Unpacking, Steaming & Wardrobe Pressing',
-    description: 'Garment steaming and cedar closet organization by floor butler upon arrival.',
-    price: 3500,
-    timeEst: '45 mins',
-    badge: 'Valet Service',
+    category: 'Spa',
+    title: 'Relaxing In-Suite Aromatherapy Bath',
+    description: 'Natural mineral bath salts, jasmine petals, and warm cedar bath oils prepared in your tub.',
+    price: 4500,
+    timeEst: '30 mins',
+    badge: 'Signature',
   },
 ]
 
-// Butler & Bespoke Concierge Catalog
+// Butler & Concierge Services
 const BUTLER_SERVICES = [
   {
     id: 'concierge-1',
     category: 'Transport',
-    title: 'Private Coastal Helipad Transfer',
+    title: 'Private Chauffeur Airport Transfer',
+    description: 'Private luxury sedan with chilled refreshments and valet luggage handling directly to your suite.',
+    price: 12000,
+    timeEst: 'Scheduled Pickup',
+  },
+  {
+    id: 'concierge-2',
+    category: 'Transport',
+    title: 'Coastal Helipad VIP Transfer',
     description: 'Direct helicopter connection between estate helipad and Karachi Jinnah International Airport.',
     price: 25000,
     timeEst: 'Scheduled Flight',
   },
   {
-    id: 'concierge-2',
-    category: 'Transport',
-    title: 'Chauffeur Executive Sedan Airport Transfer',
-    description: 'Private luxury sedan with chilled towels and coastal refreshment upon arrival.',
-    price: 12000,
-    timeEst: 'Scheduled Pickup',
-  },
-  {
     id: 'concierge-3',
     category: 'Experience',
-    title: 'Private Sunset Yacht Charter (2 Hours)',
-    description: 'Twin-engine luxury yacht along the Arabian Sea cliffs with vintage refreshments.',
-    price: 45000,
+    title: 'Private Sunset Coastal Boat Tour (2 Hours)',
+    description: 'Private coastal boat cruise along the cliffs with evening refreshments.',
+    price: 35000,
     timeEst: '17:00 – 19:00 PKT',
   },
   {
     id: 'concierge-4',
     category: 'Experience',
-    title: 'Beachside Stargazing Firepit & Nightcap',
-    description: 'Private cliffside fire pit setup with warm cedar blankets and artisanal nightcaps.',
+    title: 'Beachside Stargazing Firepit Setup',
+    description: 'Private cliffside fire pit setup with warm cedar blankets and herbal tea infusions.',
     price: 8500,
     timeEst: 'Evening Setup',
   },
@@ -172,30 +172,28 @@ export default function GuestPortalPage() {
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
 
   // Portal Authentication State
-  const [bookingCode, setBookingCode] = useState(() => initialRef || currentUser?.activeReservationCode || 'TH-301-9041')
+  const [bookingCode, setBookingCode] = useState(() => initialRef || currentUser?.activeReservationCode || '')
   const [guestEmailInput, setGuestEmailInput] = useState(() => currentUser?.email || '')
-  const [isUnlocked, setIsUnlocked] = useState(() => Boolean(initialRef || currentUser?.role === 'guest'))
+  const [isUnlocked, setIsUnlocked] = useState(false)
+  const [isLoadingStay, setIsLoadingStay] = useState(Boolean(initialRef || currentUser?.activeReservationCode))
   const [searchError, setSearchError] = useState('')
 
   // Active Stay State
-  const [currentBooking, setCurrentBooking] = useState(() => {
-    if (currentUser?.name) {
-      return {
-        ...DEMO_BOOKING,
-        guestName: currentUser.name,
-        guestEmail: currentUser.email || DEMO_BOOKING.guestEmail,
-        bookingRef: currentUser.activeReservationCode || DEMO_BOOKING.bookingRef,
-      }
-    }
-    return DEMO_BOOKING
-  })
+  const [currentBooking, setCurrentBooking] = useState(DEMO_BOOKING)
 
   // Live MongoDB Atlas Stay Sync on Mount
   useEffect(() => {
     let isMounted = true
-    const activeRef = initialRef || currentUser?.activeReservationCode || bookingCode || 'TH-301-9041'
+    const activeRef = initialRef || currentUser?.activeReservationCode
+
+    if (!activeRef) {
+      setIsUnlocked(false)
+      setIsLoadingStay(false)
+      return
+    }
 
     async function loadLiveStay() {
+      setIsLoadingStay(true)
       try {
         const res = await lookupStay(activeRef)
         if (isMounted && res.success && res.data) {
@@ -223,8 +221,8 @@ export default function GuestPortalPage() {
             checkInTime: '14:00 PKT',
             checkOutTime: '12:00 PKT',
             guestCount: 2,
-            safepayRef: 'SPF-892104',
-            initialServices: b.incidentals && b.incidentals.length > 0 ? b.incidentals : DEMO_BOOKING.initialServices,
+            safepayRef: b.safepayRef || 'SPF-892104',
+            initialServices: b.incidentals && b.incidentals.length > 0 ? b.incidentals : [],
           })
 
           if (b.incidentals && b.incidentals.length > 0) {
@@ -235,9 +233,20 @@ export default function GuestPortalPage() {
             if (b.inStaySettings.climateMode) setClimateMode(b.inStaySettings.climateMode)
           }
           setIsUnlocked(true)
+          setSearchError('')
+        } else {
+          if (isMounted) {
+            setIsUnlocked(false)
+            setSearchError(`No reservation found matching reference "${activeRef}". Please check your code or load the verified demo stay.`)
+          }
         }
       } catch (err) {
-        console.info('[GuestPortal] Live stay lookup fallback to local state:', err.message)
+        if (isMounted) {
+          setIsUnlocked(false)
+          setSearchError(`Reservation reference "${activeRef}" was not found in hotel records. Please check your reference code or load the verified demo stay.`)
+        }
+      } finally {
+        if (isMounted) setIsLoadingStay(false)
       }
     }
 
@@ -353,12 +362,49 @@ export default function GuestPortalPage() {
     }
   }
 
-  const handleLoadDemo = () => {
+  const handleLoadDemo = async () => {
     setBookingCode('TH-301-9041')
     setGuestEmailInput('tariq.khan@luxury.pk')
-    setCurrentBooking(DEMO_BOOKING)
-    setIsUnlocked(true)
     setSearchError('')
+    setIsLoadingStay(true)
+    try {
+      const res = await lookupStay('TH-301-9041')
+      if (res.success && res.data) {
+        const b = res.data
+        const matchedRes = RESIDENCES.find((r) => r.roomNumber === '301') || RESIDENCES[0]
+        setCurrentBooking({
+          bookingRef: b.bookingReference,
+          roomNumber: b.roomNumber,
+          residence: {
+            ...matchedRes,
+            id: b.room?._id || matchedRes.id,
+            credentials: b.room?.credentials || { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+            valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
+            assignedButler: b.room?.assignedButler || 'Tariq J.',
+          },
+          guestName: b.guestDetails?.name || 'Dr. Tariq Khan',
+          guestEmail: b.guestDetails?.email || 'tariq.khan@luxury.pk',
+          guestPhone: b.guestDetails?.phone || '+92 300 8219401',
+          nights: b.numberOfNights || 4,
+          checkIn: new Date(b.checkInDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          checkOut: new Date(b.checkOutDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          checkInTime: '14:00 PKT',
+          checkOutTime: '12:00 PKT',
+          guestCount: 2,
+          safepayRef: 'SPF-892104',
+          initialServices: b.incidentals && b.incidentals.length > 0 ? b.incidentals : DEMO_BOOKING.initialServices,
+        })
+        if (b.incidentals && b.incidentals.length > 0) setOrderedServices(b.incidentals)
+        setIsUnlocked(true)
+        return
+      }
+    } catch {
+      // Fallback to static if offline
+      setCurrentBooking(DEMO_BOOKING)
+      setIsUnlocked(true)
+    } finally {
+      setIsLoadingStay(false)
+    }
   }
 
   // Dispatch In-Stay Guest Service
@@ -452,7 +498,7 @@ export default function GuestPortalPage() {
   }
 
   return (
-    <div className="h-screen h-[100dvh] max-h-[100dvh] overflow-hidden bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between overflow-x-hidden">
       {/* ============================================================== */}
       {/* 1. TOP ESSENTIAL APP DOCK (ZERO CLUTTER, 44PX TARGETS)        */}
       {/* ============================================================== */}
@@ -590,7 +636,7 @@ export default function GuestPortalPage() {
           onLoadDemo={handleLoadDemo}
         />
       ) : (
-        <main className="flex-1 min-h-0 overflow-y-auto scrollbar-none max-w-7xl mx-auto px-4 sm:px-8 py-3 sm:py-5 w-full space-y-5">
+        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-6 w-full space-y-6">
           {/* Live Service Notification Toast */}
           {serviceFeedbackNotice && (
             <div className="p-3 bg-emerald-950 text-emerald-200 text-xs font-mono flex items-center justify-between rounded-[2px] shadow-lg border border-emerald-800 animate-fade-in">
@@ -647,7 +693,7 @@ export default function GuestPortalPage() {
                     <div className="absolute bottom-4 inset-x-4 sm:bottom-5 sm:inset-x-5 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                       <div>
                         <span className="text-[9px] font-mono tracking-[0.25em] text-amber-400 uppercase block font-bold">
-                          CONTACTLESS DIGITAL NFC PASS
+                          ROOM KEY &bull; DIGITAL ACCESS
                         </span>
                         <h2 className="font-serif-grand text-xl sm:text-2xl text-white block mt-0.5">
                           {currentBooking.residence?.name || 'The Horizon Penthouse'}
@@ -665,7 +711,7 @@ export default function GuestPortalPage() {
                         }`}
                       >
                         <span className="text-sm">{isKeyUnlocking ? '⚙️' : '🔑'}</span>
-                        <span>{isKeyUnlocking ? 'Disengaging Lock...' : 'Tap to Unlock Door'}</span>
+                        <span>{isKeyUnlocking ? 'Unlocking Door...' : 'Unlock Suite Door'}</span>
                       </button>
                     </div>
                   </div>
@@ -885,7 +931,7 @@ export default function GuestPortalPage() {
                               : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] active:scale-[0.98]'
                           }`}
                         >
-                          {isOrdered ? 'Added to Active Bill ✓' : 'Order to Suite 301 &rarr;'}
+                          {isOrdered ? 'Added to Room Bill ✓' : `Order to ${currentBooking.roomNumber || 'Suite 301'} →`}
                         </button>
                       </div>
                     </div>
@@ -956,7 +1002,7 @@ export default function GuestPortalPage() {
                             : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] active:scale-[0.98]'
                         }`}
                       >
-                        {isOrdered ? 'Service Dispatched ✓' : 'Request Service &rarr;'}
+                        {isOrdered ? 'Service Requested ✓' : 'Request Service →'}
                       </button>
                     </div>
                   )
@@ -1026,7 +1072,7 @@ export default function GuestPortalPage() {
                             : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] active:scale-[0.98]'
                         }`}
                       >
-                        {isOrdered ? 'Reserved & Posted ✓' : 'Reserve Experience &rarr;'}
+                        {isOrdered ? 'Reserved & Posted ✓' : 'Reserve Experience →'}
                       </button>
                     </div>
                   )
@@ -1048,9 +1094,10 @@ export default function GuestPortalPage() {
                 </div>
                 <a
                   href="tel:+923008921455"
-                  className="touch-target px-5 py-2.5 bg-[#D4AF37] text-slate-950 font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-amber-300 transition-colors shrink-0"
+                  className="touch-target px-5 py-2.5 bg-[#D4AF37] text-slate-950 font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-amber-300 transition-colors shrink-0 flex items-center gap-1.5"
                 >
-                  Call Concierge Desk &rarr;
+                  <span>Call Concierge Desk</span>
+                  <span>→</span>
                 </a>
               </div>
             </div>
@@ -1074,16 +1121,18 @@ export default function GuestPortalPage() {
                   <button
                     type="button"
                     onClick={() => setIsInvoiceOpen(true)}
-                    className="touch-target px-3.5 py-2 bg-white border border-slate-300 hover:border-slate-900 text-slate-900 font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
+                    className="touch-target px-3.5 py-2 bg-white border border-slate-300 hover:border-slate-900 text-slate-900 font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1"
                   >
-                    Preview &amp; Print Invoice &rarr;
+                    <span>Preview &amp; Print Invoice</span>
+                    <span>→</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleRequestCheckout}
-                    className="touch-target px-4 py-2 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-sm active:scale-95"
+                    className="touch-target px-4 py-2 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-sm active:scale-95 flex items-center gap-1"
                   >
-                    Request Express Checkout &rarr;
+                    <span>Request Express Checkout</span>
+                    <span>→</span>
                   </button>
                 </div>
               </div>
@@ -1232,9 +1281,10 @@ export default function GuestPortalPage() {
 
                     <button
                       type="submit"
-                      className="touch-target px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
+                      className="touch-target px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1.5"
                     >
-                      Submit Stay Feedback &rarr;
+                      <span>Submit Stay Feedback</span>
+                      <span>→</span>
                     </button>
                   </form>
                 )}

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const Room = require('../models/Room')
 const Booking = require('../models/Booking')
 
@@ -10,8 +11,9 @@ const Booking = require('../models/Booking')
 
 /**
  * Checks whether a specific room is available for the given date range.
+ * Supports both MongoDB ObjectId and room number identifiers (e.g., '301', 'res-301').
  * 
- * @param {string|ObjectId} roomId - Room MongoDB ObjectId
+ * @param {string|ObjectId} roomId - Room MongoDB ObjectId or Room Number
  * @param {Date|string} checkInDate - Arrival date
  * @param {Date|string} checkOutDate - Departure date
  * @param {string|null} excludeBookingId - Optional booking ID to ignore (e.g., renewing hold)
@@ -21,8 +23,24 @@ async function checkRoomAvailability(roomId, checkInDate, checkOutDate, excludeB
   const checkIn = new Date(checkInDate)
   const checkOut = new Date(checkOutDate)
 
-  // 1. Verify Room exists and is published
-  const room = await Room.findById(roomId).select('status isPublished maintenance')
+  // 1. Resolve Room by ObjectId or Room Number / Suite Name
+  let room = null
+  if (mongoose.Types.ObjectId.isValid(roomId)) {
+    room = await Room.findById(roomId).select('status isPublished maintenance _id roomNumber')
+  }
+  if (!room) {
+    const roomNum = String(roomId).replace(/\D/g, '')
+    if (roomNum) {
+      room = await Room.findOne({
+        $or: [
+          { roomNumber: roomNum },
+          { roomNumber: `Suite ${roomNum}` },
+          { roomNumber: new RegExp(roomNum, 'i') },
+        ],
+      }).select('status isPublished maintenance _id roomNumber')
+    }
+  }
+
   if (!room || !room.isPublished) {
     return false
   }
@@ -35,7 +53,7 @@ async function checkRoomAvailability(roomId, checkInDate, checkOutDate, excludeB
   // 3. Build atomic overlap query (Doc TRD 3.1)
   // Condition: Existing Booking Starts before Request Departure AND Ends after Request Arrival
   const query = {
-    room: roomId,
+    room: room._id,
     checkInDate: { $lt: checkOut },
     checkOutDate: { $gt: checkIn },
     $or: [
@@ -95,8 +113,18 @@ async function findAvailableRooms(checkInDate, checkOutDate, minGuests = 1) {
  */
 async function getRoomBookedRanges(roomId) {
   const now = new Date()
+
+  let targetId = roomId
+  if (!mongoose.Types.ObjectId.isValid(roomId)) {
+    const roomNum = String(roomId).replace(/\D/g, '')
+    if (roomNum) {
+      const room = await Room.findOne({ roomNumber: roomNum }).select('_id')
+      if (room) targetId = room._id
+    }
+  }
+
   const bookings = await Booking.find({
-    room: roomId,
+    room: targetId,
     checkOutDate: { $gt: now },
     $or: [
       { status: { $in: ['CONFIRMED', 'CHECKED_IN'] } },

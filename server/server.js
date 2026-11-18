@@ -26,9 +26,11 @@ if (process.env.NODE_ENV !== 'production') {
 // 3. API Routes
 const roomRoutes = require('./src/routes/roomRoutes')
 const bookingRoutes = require('./src/routes/bookingRoutes')
+const staffRoutes = require('./src/routes/staffRoutes')
 
 app.use('/api/rooms', roomRoutes)
 app.use('/api/bookings', bookingRoutes)
+app.use('/api/staff', staffRoutes)
 
 // Health & Status Check Endpoint
 app.get('/api/health', (req, res) => {

@@ -10,7 +10,7 @@ export default function BookingLookup({
   onLoadDemo,
 }) {
   return (
-    <main className="flex-1 min-h-0 w-full flex flex-col items-center justify-center px-4 sm:px-6 py-4 overflow-y-auto scrollbar-none">
+    <main className="flex-1 w-full flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
       <div className="w-full max-w-lg text-center space-y-4 sm:space-y-5 my-auto">
         <div className="space-y-2">
           <span className="text-[10px] font-mono tracking-[0.3em] font-extrabold text-emerald-900 uppercase block">

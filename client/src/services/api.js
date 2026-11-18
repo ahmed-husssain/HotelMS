@@ -105,3 +105,33 @@ export async function submitStayFeedback(reference, feedback) {
     body: JSON.stringify(feedback),
   })
 }
+
+// 4. Staff & Front Desk PMS Operations
+export async function fetchStaffDashboard() {
+  return request('/staff/dashboard')
+}
+
+export async function checkInStaffGuest(bookingRef, payload = {}) {
+  return request(`/staff/check-in/${encodeURIComponent(bookingRef)}`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function checkOutStaffGuest(bookingRef, payload = {}) {
+  return request(`/staff/check-out/${encodeURIComponent(bookingRef)}`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function postFolioCharge(bookingRef, payload) {
+  return request(`/staff/folio/${encodeURIComponent(bookingRef)}/add`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function fetchCashierShift() {
+  return request('/staff/shifts/current')
+}
