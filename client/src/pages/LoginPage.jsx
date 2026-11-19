@@ -24,18 +24,71 @@ export default function LoginPage() {
   const [successMsg, setSuccessMsg] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Custom field validation state
+  const [errors, setErrors] = useState({})
+  const [touched, setTouched] = useState({})
+
+  const validateField = (field, value) => {
+    switch (field) {
+      case 'email':
+        if (!value.trim()) return 'Email address is required.'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+          return 'Please enter a valid email address.'
+        }
+        return ''
+      case 'password':
+        if (!value) return 'Password is required.'
+        return ''
+      default:
+        return ''
+    }
+  }
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+    const val = field === 'email' ? email : password
+    const err = validateField(field, val)
+    setErrors((prev) => ({ ...prev, [field]: err }))
+  }
+
+  const handleEmailChange = (val) => {
+    setEmail(val)
+    if (touched.email) {
+      setErrors((prev) => ({ ...prev, email: validateField('email', val) }))
+    }
+  }
+
+  const handlePasswordChange = (val) => {
+    setPassword(val)
+    if (touched.password) {
+      setErrors((prev) => ({ ...prev, password: validateField('password', val) }))
+    }
+  }
+
   // 1-Click Role Quick Fill for testing
   const handleQuickFill = (roleEmail) => {
     setEmail(roleEmail)
     setPassword('Password123!')
     setErrorMsg('')
     setSuccessMsg('')
+    setErrors({})
+    setTouched({})
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMsg('')
     setSuccessMsg('')
+
+    const emailErr = validateField('email', email)
+    const passErr = validateField('password', password)
+
+    if (emailErr || passErr) {
+      setTouched({ email: true, password: true })
+      setErrors({ email: emailErr, password: passErr })
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -155,7 +208,7 @@ export default function LoginPage() {
           )}
 
           {/* Clean Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             
             {/* Email Address */}
             <div>
@@ -168,12 +221,21 @@ export default function LoginPage() {
               <input
                 id="login-email"
                 type="email"
-                required
                 placeholder="name@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full py-2.5 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm font-medium text-slate-900 focus:outline-none transition-colors"
+                onChange={(e) => handleEmailChange(e.target.value)}
+                onBlur={() => handleBlur('email')}
+                className={`w-full py-2.5 px-3 bg-white border rounded-[2px] text-xs sm:text-sm font-medium text-slate-900 focus:outline-none transition-colors ${
+                  touched.email && errors.email
+                    ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                    : 'border-slate-300 focus:border-slate-900'
+                }`}
               />
+              {touched.email && errors.email && (
+                <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                  {errors.email}
+                </span>
+              )}
             </div>
 
             {/* Password */}
@@ -188,11 +250,15 @@ export default function LoginPage() {
                 <input
                   id="login-pass"
                   type={showPassword ? 'text' : 'password'}
-                  required
                   placeholder="••••••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full py-2.5 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors pr-10 font-mono"
+                  onChange={(e) => handlePasswordChange(e.target.value)}
+                  onBlur={() => handleBlur('password')}
+                  className={`w-full py-2.5 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors pr-10 font-mono ${
+                    touched.password && errors.password
+                      ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                      : 'border-slate-300 focus:border-slate-900'
+                  }`}
                 />
                 <button
                   type="button"
@@ -203,6 +269,11 @@ export default function LoginPage() {
                   {showPassword ? '🔒' : '👁'}
                 </button>
               </div>
+              {touched.password && errors.password && (
+                <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                  {errors.password}
+                </span>
+              )}
             </div>
 
             {/* Sign In Button */}

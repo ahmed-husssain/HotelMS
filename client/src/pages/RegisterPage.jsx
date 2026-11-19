@@ -10,6 +10,7 @@ import { useAuth } from '../context/AuthContext'
  * - Mobile: Clean responsive layout with zero cut-off elements
  * - Provisions strict role: 'guest' in compliance with Aptech Module 1 & 7
  * - Pure theme monochrome (zero yellowish accents)
+ * - Custom React validation with inline error messaging (zero generic HTML popups)
  */
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -21,25 +22,113 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
+
+  // Custom Field-Level Validation State
+  const [errors, setErrors] = useState({})
+  const [touched, setTouched] = useState({})
+  const [apiError, setApiError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Validation function
+  const validateField = (field, value, allValues = {}) => {
+    switch (field) {
+      case 'name':
+        if (!value.trim()) return 'Full legal name is required.'
+        if (value.trim().length < 2) return 'Please enter your full name.'
+        return ''
+      case 'email':
+        if (!value.trim()) return 'Email address is required.'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+          return 'Please enter a valid email address (e.g. name@domain.com).'
+        }
+        return ''
+      case 'phone':
+        if (!value.trim()) return 'Contact phone number is required.'
+        if (value.replace(/\D/g, '').length < 10) {
+          return 'Please enter a valid phone number (at least 10 digits).'
+        }
+        return ''
+      case 'password':
+        if (!value) return 'Password is required.'
+        if (value.length < 6) return 'Password must be at least 6 characters.'
+        return ''
+      case 'confirmPassword':
+        if (!value) return 'Please re-type your password.'
+        if (value !== (allValues.password ?? password)) {
+          return 'Passwords do not match.'
+        }
+        return ''
+      case 'terms':
+        if (!value) return 'You must agree to the Terms and Privacy Policy.'
+        return ''
+      default:
+        return ''
+    }
+  }
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+    let val = ''
+    if (field === 'name') val = name
+    if (field === 'email') val = email
+    if (field === 'phone') val = phone
+    if (field === 'password') val = password
+    if (field === 'confirmPassword') val = confirmPassword
+    if (field === 'terms') val = agreeTerms
+
+    const err = validateField(field, val, { password, confirmPassword })
+    setErrors((prev) => ({ ...prev, [field]: err }))
+  }
+
+  const handleChange = (field, value) => {
+    if (field === 'name') setName(value)
+    if (field === 'email') setEmail(value)
+    if (field === 'phone') setPhone(value)
+    if (field === 'password') {
+      setPassword(value)
+      if (touched.confirmPassword && confirmPassword) {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: validateField('confirmPassword', confirmPassword, { password: value }),
+        }))
+      }
+    }
+    if (field === 'confirmPassword') setConfirmPassword(value)
+    if (field === 'terms') setAgreeTerms(value)
+
+    if (touched[field]) {
+      const err = validateField(field, value, { password, confirmPassword })
+      setErrors((prev) => ({ ...prev, [field]: err }))
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setErrorMsg('')
+    setApiError('')
 
-    if (password !== confirmPassword) {
-      setErrorMsg('Passcodes do not match. Please verify and re-enter.')
-      return
+    // Validate all fields
+    const allErrors = {
+      name: validateField('name', name),
+      email: validateField('email', email),
+      phone: validateField('phone', phone),
+      password: validateField('password', password),
+      confirmPassword: validateField('confirmPassword', confirmPassword, { password }),
+      terms: validateField('terms', agreeTerms),
     }
 
-    if (password.length < 6) {
-      setErrorMsg('Passcode must be at least 6 characters in length.')
-      return
-    }
+    setTouched({
+      name: true,
+      email: true,
+      phone: true,
+      password: true,
+      confirmPassword: true,
+      terms: true,
+    })
 
-    if (!agreeTerms) {
-      setErrorMsg('Please review and accept the Terms and Privacy Policy.')
+    const hasErrors = Object.values(allErrors).some(Boolean)
+    setErrors(allErrors)
+
+    if (hasErrors) {
       return
     }
 
@@ -52,7 +141,7 @@ export default function RegisterPage() {
         navigate('/my-stay')
       }, 500)
     } catch (err) {
-      setErrorMsg(err.message || 'Failed to create guest profile.')
+      setApiError(err.message || 'Failed to create guest profile.')
       setIsSubmitting(false)
     }
   }
@@ -134,15 +223,15 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* Error Banner */}
-          {errorMsg && (
+          {/* Backend API Error Banner */}
+          {apiError && (
             <div className="p-3 bg-red-50 border border-red-200 text-red-900 text-xs font-mono rounded-[2px]">
-              {errorMsg}
+              {apiError}
             </div>
           )}
 
-          {/* The Registration Form */}
-          <form onSubmit={handleSubmit} className="space-y-3">
+          {/* The Registration Form (noValidate disables generic browser bubbles) */}
+          <form onSubmit={handleSubmit} noValidate className="space-y-3">
             
             {/* Full Name */}
             <div>
@@ -155,12 +244,21 @@ export default function RegisterPage() {
               <input
                 id="reg-name"
                 type="text"
-                required
                 placeholder="e.g. Tariq Khan"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm font-medium text-slate-900 focus:outline-none transition-colors"
+                onChange={(e) => handleChange('name', e.target.value)}
+                onBlur={() => handleBlur('name')}
+                className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm font-medium text-slate-900 focus:outline-none transition-colors ${
+                  touched.name && errors.name
+                    ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                    : 'border-slate-300 focus:border-slate-900'
+                }`}
               />
+              {touched.name && errors.name && (
+                <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                  {errors.name}
+                </span>
+              )}
             </div>
 
             {/* Email & Phone Grid */}
@@ -175,12 +273,21 @@ export default function RegisterPage() {
                 <input
                   id="reg-email"
                   type="email"
-                  required
-                  placeholder="tariq@stayza.com"
+                  placeholder="guest@stayza.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  onBlur={() => handleBlur('email')}
+                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono ${
+                    touched.email && errors.email
+                      ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                      : 'border-slate-300 focus:border-slate-900'
+                  }`}
                 />
+                {touched.email && errors.email && (
+                  <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                    {errors.email}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -193,12 +300,21 @@ export default function RegisterPage() {
                 <input
                   id="reg-phone"
                   type="tel"
-                  required
                   placeholder="+92 300 1234567"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  onBlur={() => handleBlur('phone')}
+                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono ${
+                    touched.phone && errors.phone
+                      ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                      : 'border-slate-300 focus:border-slate-900'
+                  }`}
                 />
+                {touched.phone && errors.phone && (
+                  <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                    {errors.phone}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -214,12 +330,21 @@ export default function RegisterPage() {
                 <input
                   id="reg-pass"
                   type="password"
-                  required
                   placeholder="Min 6 characters"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  onChange={(e) => handleChange('password', e.target.value)}
+                  onBlur={() => handleBlur('password')}
+                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono ${
+                    touched.password && errors.password
+                      ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                      : 'border-slate-300 focus:border-slate-900'
+                  }`}
                 />
+                {touched.password && errors.password && (
+                  <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                    {errors.password}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -232,28 +357,44 @@ export default function RegisterPage() {
                 <input
                   id="reg-confirm"
                   type="password"
-                  required
                   placeholder="Re-type password"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                  onBlur={() => handleBlur('confirmPassword')}
+                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono ${
+                    touched.confirmPassword && errors.confirmPassword
+                      ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                      : 'border-slate-300 focus:border-slate-900'
+                  }`}
                 />
+                {touched.confirmPassword && errors.confirmPassword && (
+                  <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                    {errors.confirmPassword}
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Terms & Conditions */}
-            <div className="flex items-start gap-2 pt-1">
-              <input
-                id="reg-terms"
-                type="checkbox"
-                required
-                checked={agreeTerms}
-                onChange={(e) => setAgreeTerms(e.target.checked)}
-                className="mt-0.5 accent-slate-950 cursor-pointer"
-              />
-              <label htmlFor="reg-terms" className="text-[10px] sm:text-xs text-slate-600 cursor-pointer select-none leading-tight">
-                I agree to the Terms of Service and Privacy Policy.
-              </label>
+            <div className="pt-1">
+              <div className="flex items-start gap-2">
+                <input
+                  id="reg-terms"
+                  type="checkbox"
+                  checked={agreeTerms}
+                  onChange={(e) => handleChange('terms', e.target.checked)}
+                  onBlur={() => handleBlur('terms')}
+                  className="mt-0.5 accent-slate-950 cursor-pointer"
+                />
+                <label htmlFor="reg-terms" className="text-[10px] sm:text-xs text-slate-600 cursor-pointer select-none leading-tight">
+                  I agree to the Terms of Service and Privacy Policy.
+                </label>
+              </div>
+              {touched.terms && errors.terms && (
+                <span className="text-[10px] text-red-600 font-mono mt-1 block">
+                  {errors.terms}
+                </span>
+              )}
             </div>
 
             {/* Create Account Button */}
