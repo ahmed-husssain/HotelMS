@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
 
-export default function NewTicketModal({ isOpen, onClose, rooms, onSubmitTicket }) {
-  const [roomNumber, setRoomNumber] = useState('Suite 301')
+export default function NewTicketModal({ isOpen, onClose, rooms = [], onSubmitTicket, initialRoomNumber = '' }) {
+  const [roomNumber, setRoomNumber] = useState(initialRoomNumber || (rooms[0]?.roomNumber || 'Suite 301'))
   const [category, setCategory] = useState('HVAC / Climate')
   const [issue, setIssue] = useState('')
   const [urgency, setUrgency] = useState('HIGH')
   const [assignedTo, setAssignedTo] = useState('Chief Engineer Rashid')
   const [isRendered, setIsRendered] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    if (isOpen && initialRoomNumber) {
+      setRoomNumber(initialRoomNumber)
+    }
+  }, [isOpen, initialRoomNumber])
 
   // Fluid Hardware-Accelerated Mount/Unmount lifecycle
   useEffect(() => {
