@@ -273,16 +273,14 @@ In world-class 5-star hospitality, operational velocity between the **Front Desk
 * ✅ **Core Backend Architecture:** MongoDB Atlas connection, 5 core Mongoose models, DB seeder, Zero-Trust pricing engine, availability overlap service, and PMS staff controllers.
 * ✅ **Guest OS & Self-Service Portal:** Interactive guest portal with live stay details, digital key toggle, in-stay requests, and print-ready tax invoice modal.
 * ✅ **Real-Time WebSockets Synchronization (Socket.io):** Full-duplex WebSocket bus between Front Desk PMS (`/pms`) and Housekeeping (`/housekeeping`), broadcasting room status changes, cleaning checklist updates, folio postings, and check-in/out events with <40ms latency and zero full-page reloads.
+* ✅ **Full-Stack Admin Console & 5-Metric Executive Analytics (PRD Module 6 & 7):** Live `/api/admin` backend aggregating Gross Realized Revenue (30/70 split), Live Occupancy %, ADR & RevPAR yield, 5-Minute Hold Conversion vs Abandonment Rate, and Incidental Folio Upsells, backed by real Staff Governance CRUD and Guest CRM.
 
 ### 10.2 Prioritized Remaining Tasks (Next Sprints)
-1. 🎯 **Priority 1: Server-Side Authentication & JWT Security Middleware**
-   * Implement `POST /api/auth/login` and `POST /api/auth/register` with JWT cookies/headers.
-   * Protect staff endpoints (`/api/staff/*`, `/api/rooms/:id/status`, `/api/rooms/:id/checklist`) with `verifyToken` and `requireRole(['admin', 'receptionist', 'housekeeping'])`.
-2. 🎯 **Priority 2: Safepay Hosted Checkout & Webhook Verification**
+1. 🎯 **Priority 1: Safepay Hosted Checkout & Webhook Verification**
    * Integrate Safepay sandbox checkout session generator and HMAC SHA-256 webhook listener for real test-card payment simulation.
-3. 🎯 **Priority 3: Stayza Official Brand Logo Integration**
+2. 🎯 **Priority 2: Stayza Official Brand Logo Integration**
    * Awaiting user's finalized logo asset to place across all brand mark touchpoints (`BrandLogo`, `SplashScreen`, `InvoicePreviewModal`).
-4. 🎯 **Priority 4: Automated PDF Email Receipts**
+3. 🎯 **Priority 3: Automated PDF Email Receipts**
    * Implement server-side PDF invoice generation / email dispatch for confirmed bookings and checkout folio settlements.
 
 
