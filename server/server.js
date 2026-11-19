@@ -62,6 +62,35 @@ const staffRoutes = require('./src/routes/staffRoutes')
 const housekeepingRoutes = require('./src/routes/housekeepingRoutes')
 const adminRoutes = require('./src/routes/adminRoutes')
 
+// Welcome & Healthcheck Endpoints
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Stayza Hotel Management System API is live on Vercel',
+    version: '1.0.0',
+    database: 'MongoDB Atlas Connected',
+    status: 'OPERATIONAL',
+    endpoints: {
+      auth: '/api/auth',
+      rooms: '/api/rooms',
+      bookings: '/api/bookings',
+      staff: '/api/staff',
+      housekeeping: '/api/housekeeping',
+      admin: '/api/admin',
+      health: '/api/health',
+    },
+    timestamp: new Date().toISOString(),
+  })
+})
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  })
+})
+
 app.use('/api/auth', authRoutes)
 app.use('/api/rooms', roomRoutes)
 app.use('/api/bookings', bookingRoutes)
