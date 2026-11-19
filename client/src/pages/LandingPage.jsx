@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import HeroSection from '../components/HeroSection'
 import Navbar from '../components/Navbar'
-import RoomsCarousel from '../components/RoomsCarousel'
+import ResidenceSpread from '../components/ResidenceSpread'
 import SplashScreen from '../components/SplashScreen'
 import SuiteSpecsDrawer from '../components/suites/SuiteSpecsDrawer'
 import { RESIDENCES } from '../data/residences'
@@ -72,9 +72,9 @@ export default function LandingPage() {
           </span>
         </div>
 
-        {/* Render Exactly 3 Signature Residences with Embla Carousel & Casa Momo Kinetic Hover */}
+        {/* Render Exactly 3 Signature Residences with Alternating Editorial Layout & Inset Parallax */}
         {RESIDENCES.slice(0, 3).map((residence, idx) => (
-          <RoomsCarousel
+          <ResidenceSpread
             key={residence.id}
             residence={residence}
             index={idx}
