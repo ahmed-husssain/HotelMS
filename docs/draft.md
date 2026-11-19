@@ -144,11 +144,17 @@ A room is considered **Blocked / Unavailable** if it has any booking matching:
   * `server/src/services/availabilityService.js` — Atomic calendar overlap checking and pessimistic hold validation.
   * `server/src/controllers/bookingController.js` — Holds, quotes, confirmations, guest lookups, digital keys.
   * `server/src/controllers/staffOperationsController.js` — Live PMS dashboard, check-ins, incidental posting, check-outs, cashier shifts (Z-Report).
+* ✅ **Component 5: Real-Time WebSockets Synchronization (`server/server.js`, `server/src/services/socket.js`):**
+  * Express wrapped in native `http.createServer(app)` with full-duplex Socket.io server.
+  * Bi-directional live dispatch for `room:status_changed`, `room:checklist_updated`, `folio:charge_added`, `booking:checked_in`, `booking:checked_out` (<40ms latency).
+* ✅ **Component 6: JWT Authentication & Core RBAC Guard (`server/src/middleware/auth.js`, `server/src/middleware/rbac.js`):**
+  * `POST /api/auth/login`, `POST /api/auth/register`, and `GET /api/auth/me` with 7-day cryptographic tokens.
+  * `staffRoutes.js` (`/api/staff/*`) locked down with `protect` and `authorize('receptionist', 'admin')`.
 
 ### 7.2 Remaining Backend Tasks
-* ⏳ **Task 1: WebSockets Real-Time Sync (`Socket.io`)** — Wrap HTTP server with Socket.io in `server/server.js` and connect to `HotelDataContext.jsx` for live 0-latency room turnover events.
-* ⏳ **Task 2: JWT Authentication & RBAC Middleware (`server/src/middleware/auth.js`)** — Enforce server-side token verification on staff routes (`receptionist`, `housekeeping`, `admin`).
-* ⏳ **Task 3: Safepay Webhook & Hosted Checkout (`server/src/controllers/paymentController.js`)** — Production HMAC SHA-256 signature verification.
+* ⏳ **Task 1: Complete RBAC Lockdown on Turnover Routes (`server/src/routes/roomRoutes.js`)** — Attach `protect` and `authorize('receptionist', 'housekeeping', 'admin')` to `PATCH /api/rooms/:id/status` and `PATCH /api/rooms/:id/checklist` to prevent unauthenticated mutation.
+* ⏳ **Task 2: Safepay Hosted Checkout & Webhook Listener (`server/src/controllers/paymentController.js`)** — Initialize sandbox checkout tracker token and verify HMAC SHA-256 webhook signatures.
+* ⏳ **Task 3: Automated PDF Invoicing & Email Receipts** — Server-side PDF generation via `pdfkit` for advance receipts and final settled check-out folios.
 
 ---
 
