@@ -273,30 +273,30 @@ export const RESIDENCES = [
       {
         title: 'Canopy King Bedroom Suite',
         tag: 'BEDROOM',
-        url: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997207/hotel-suites/room-01/room-01-4.webp',
       },
       {
         title: 'Open-Air Chukum Living Pavilion',
         tag: 'LIVING PAVILION',
-        url: 'https://images.unsplash.com/photo-1540541338287-41700207dee6',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997084/hotel-suites/room-01/room-01-1.webp',
       },
       {
         title: 'Private Limestone Cenote Plunge Pool',
         tag: 'CENOTE POOL',
-        url: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997203/hotel-suites/room-01/room-01-2.webp',
       },
       {
         title: 'Sculptural Chukum Plaster Bath',
         tag: 'SPA BATH',
-        url: 'https://images.unsplash.com/photo-1590490360182-c33d57733427',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997205/hotel-suites/room-01/room-01-3.webp',
       },
       {
         title: 'Banana Garden Rain Solarium',
         tag: 'SOLARIUM',
-        url: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997209/hotel-suites/room-01/room-01-5.webp',
       },
     ],
-    detailImage: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b',
+    detailImage: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997084/hotel-suites/room-01/room-01-1.webp',
     specs: [
       { label: 'AREA', value: '195 M²' },
       { label: 'CANOPY', value: 'PRIVATE CENOTE' },
@@ -325,30 +325,30 @@ export const RESIDENCES = [
       {
         title: 'Executive Caldera Bedchamber',
         tag: 'BEDCHAMBER',
-        url: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997213/hotel-suites/room-02/room-02-2.webp',
       },
       {
         title: 'Monolithic Basalt Grand Salon',
         tag: 'GRAND SALON',
-        url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997211/hotel-suites/room-02/room-02-1.webp',
       },
       {
         title: 'Cantilevered Black Basalt Infinity Pool',
         tag: 'INFINITY POOL',
-        url: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997215/hotel-suites/room-02/room-02-3.webp',
       },
       {
         title: 'Deep Obsidian Soaking Tub',
         tag: 'SPA BATH',
-        url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997217/hotel-suites/room-02/room-02-4.webp',
       },
       {
         title: 'Charred Timber Twilight Deck',
         tag: 'TERRACE',
-        url: 'https://images.unsplash.com/photo-1602002418082-a4443e081dd1',
+        url: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997218/hotel-suites/room-02/room-02-5.webp',
       },
     ],
-    detailImage: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff',
+    detailImage: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1794997211/hotel-suites/room-02/room-02-1.webp',
     specs: [
       { label: 'AREA', value: '260 M²' },
       { label: 'VIEW', value: '360° CALDERA SEA' },
