@@ -281,7 +281,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
             onClick={scrollPrev}
             data-cursor-hide="true"
             aria-label="Previous photo"
-            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/60 hover:bg-[#0E1201]/90 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
+            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/60 hover:bg-[#0E1201]/90 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FAF8F5] shadow-xl cursor-pointer ${
               isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
             }`}
           >
@@ -294,7 +294,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
             onClick={scrollNext}
             data-cursor-hide="true"
             aria-label="Next photo"
-            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/60 hover:bg-[#0E1201]/90 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
+            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/60 hover:bg-[#0E1201]/90 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FAF8F5] shadow-xl cursor-pointer ${
               isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
             }`}
           >
@@ -308,7 +308,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
             
             {/* Left: Suite Number, Name & Single-line Specs */}
             <div className="space-y-1 sm:space-y-1.5 max-w-2xl">
-              <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-[#FFF0CA]/90 uppercase block select-none">
+              <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-[#FAF8F5]/90 uppercase block select-none">
                 0{index + 1} &bull; RESIDENCE
               </span>
               
@@ -340,7 +340,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
                   </span>
                   <span className="text-xs text-slate-300 font-normal">/ Night</span>
                 </div>
-                <span className="text-[9px] sm:text-[10px] font-mono tracking-wider text-[#FFF0CA] uppercase block mt-0.5">
+                <span className="text-[9px] sm:text-[10px] font-mono tracking-wider text-[#FAF8F5]/90 uppercase block mt-0.5">
                   30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
                 </span>
               </div>
@@ -370,7 +370,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
         {/* Minimal 1px Hairline Progress Track */}
         <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/20 z-30">
           <div
-            className={`h-full bg-[#FFF0CA] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)] ${
+            className={`h-full bg-[#FAF8F5] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)] ${
               isVisible70 ? 'opacity-100' : 'opacity-40'
             }`}
             style={{

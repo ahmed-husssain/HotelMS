@@ -149,10 +149,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen min-h-dvh bg-[#0E1201] text-slate-800 p-3 sm:p-5 md:p-8 flex flex-col justify-center selection:bg-slate-700 selection:text-white">
+    <div className="min-h-screen min-h-dvh bg-[#0E1201] text-slate-800 p-3 sm:p-5 md:p-8 pb-12 sm:pb-8 flex flex-col justify-start md:justify-center overflow-y-auto selection:bg-slate-700 selection:text-white">
       
-      {/* Top Desktop Brand Bar */}
-      <header className="max-w-5xl w-full mx-auto mb-3 sm:mb-4 flex items-center justify-between">
+      {/* Top Desktop Brand Bar (Hidden on Mobile: Mobile uses the Aperture Header) */}
+      <header className="hidden md:flex max-w-5xl w-full mx-auto mb-3 sm:mb-4 items-center justify-between shrink-0">
         <Link to="/" className="inline-block">
           <BrandLogo variant="full" theme="light" size="sm" />
         </Link>
