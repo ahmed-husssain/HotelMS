@@ -181,9 +181,14 @@ export function AuthProvider({ children }) {
       // Check if this is an explicit business rejection from Express (e.g. 401 invalid password)
       const isNetworkOrProxyFailure =
         !apiErr.message ||
+        apiErr.status === 404 ||
+        apiErr.status >= 500 ||
         apiErr.message.toLowerCase().includes('failed to fetch') ||
         apiErr.message.toLowerCase().includes('networkerror') ||
         apiErr.message.toLowerCase().includes('backend api unavailable') ||
+        apiErr.message.toLowerCase().includes('route not found') ||
+        apiErr.message.toLowerCase().includes('cannot post') ||
+        apiErr.message.toLowerCase().includes('not found') ||
         apiErr.message.toLowerCase().includes('non-json') ||
         apiErr.message.toLowerCase().includes('unexpected token') ||
         apiErr.message.includes('<!doctype')
@@ -276,9 +281,14 @@ export function AuthProvider({ children }) {
     } catch (apiErr) {
       const isNetworkOrProxyFailure =
         !apiErr.message ||
+        apiErr.status === 404 ||
+        apiErr.status >= 500 ||
         apiErr.message.toLowerCase().includes('failed to fetch') ||
         apiErr.message.toLowerCase().includes('networkerror') ||
         apiErr.message.toLowerCase().includes('backend api unavailable') ||
+        apiErr.message.toLowerCase().includes('route not found') ||
+        apiErr.message.toLowerCase().includes('cannot post') ||
+        apiErr.message.toLowerCase().includes('not found') ||
         apiErr.message.toLowerCase().includes('non-json') ||
         apiErr.message.toLowerCase().includes('unexpected token') ||
         apiErr.message.includes('<!doctype')
