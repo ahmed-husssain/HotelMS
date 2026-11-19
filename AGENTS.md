@@ -63,3 +63,24 @@ This document is the **supreme law and behavioral contract** for all AI agents w
   * **100/100 Accessibility & SEO:** Maintain single DOM text nodes for kinetic buttons, valid label-content names, and ARD 1.0 schema compliance (`specVersion: "1.0"`, `entries: [...]`).
   * **Luxury Editorial Design:** Retain the Stayza minimalist aesthetic, modern architectural typography hierarchy (`Syne` for display/headings, `Inter` for clean UI/body, `Space Grotesk` for numerals/pricing), and smooth micro-interactions.
 * **Mobile-First Invariant:** All interactive elements must maintain a minimum **44×44px touch target** with zero horizontal overflow (`overflow-x: hidden`).
+
+---
+
+## 7. Server-Side Authentication & Zero Client-Trust Protocol
+
+* **Server-Enforced Auth:** The backend Express server must never expose open mutation or administrative routes without JWT token validation (`auth.js`) and role guards (`rbac.js`).
+* **Zero Client-Side Role Authority:** User roles stored in `localStorage` or React Context are strictly for UI rendering convenience; the server must independently verify the cryptographic JWT signature on every incoming request.
+* **Privilege Escalation Defense:** Public registration endpoints must strictly force `role: 'guest'`. Under no circumstances may client payloads assign or elevate roles (`receptionist`, `housekeeping`, `admin`).
+
+---
+
+## 8. Single Source of Truth (Database-First, Zero LocalStorage Divergence)
+
+* **No Orphaned State:** Operational state (Housekeeping tasks, maintenance tickets, cashier shifts, room availability) must reside in MongoDB Atlas.
+* **LocalStorage Boundary:** `localStorage` must only be used to store the user's active session token (`token`) and non-sensitive display preferences, never business domain data.
+
+---
+
+## 9. Automated Testing & Verification Standard
+
+* **Automated Guardrails:** Core financial calculations (`pricingService.js`), atomic holds (`availabilityService.js`), and RBAC routes must have executable test suites verifying that tampering, concurrency races, and boundary exploits are rejected with standard HTTP errors.
