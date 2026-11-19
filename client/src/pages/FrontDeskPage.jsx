@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import BrandLogo from '../components/BrandLogo'
 import { useAuth } from '../context/AuthContext'
 import { useHotelData } from '../context/HotelDataContext'
 import RoomRack from '../components/pms/RoomRack'
@@ -21,9 +20,10 @@ export default function FrontDeskPage() {
     systemSettings,
   } = useHotelData()
 
-  // Terminal Navigation Tab: 'RACK' | 'ARRIVALS'
-  const [activeTab, setActiveTab] = useState('RACK')
+  // Terminal Navigation Tab: 'QUEUE' | 'RACK'
+  const [activeTab, setActiveTab] = useState('QUEUE')
   const [roomFilter, setRoomFilter] = useState('ALL')
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Modals State
   const [selectedRoom, setSelectedRoom] = useState(null)
@@ -37,7 +37,7 @@ export default function FrontDeskPage() {
   const occupiedCount = rooms.filter((r) => r.status === 'OCCUPIED').length
   const availableCount = rooms.filter((r) => r.status === 'AVAILABLE').length
   const dirtyCount = rooms.filter((r) => r.status === 'DIRTY' || r.status === 'CLEANING').length
-  const occupancyRate = Math.round((occupiedCount / rooms.length) * 100)
+  const occupancyRate = rooms.length > 0 ? Math.round((occupiedCount / rooms.length) * 100) : 0
 
   // Modal Handlers
   const handleOpenCheckIn = (room) => {
@@ -72,8 +72,8 @@ export default function FrontDeskPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950">
-      {/* 1. TOP OPERATIONAL HEADER */}
-      <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/60 px-4 sm:px-8 lg:px-12 py-3.5 flex items-center justify-between">
+      {/* 1. TOP OPERATIONAL HEADER (STRICTLY ZERO ICONS) */}
+      <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 lg:px-12 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
             to="/"
@@ -82,91 +82,117 @@ export default function FrontDeskPage() {
             <span>&larr;</span>
             <span className="hidden sm:inline">Hotel Overview</span>
           </Link>
-          <span className="text-slate-300">|</span>
-          <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-900 font-bold uppercase tracking-wider">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            <span>FRONT DESK PMS TERMINAL</span>
+          <span className="text-slate-300">/</span>
+          <div className="flex items-center gap-2">
+            <span className="font-serif-grand text-base font-bold tracking-tight text-slate-900">STAYZA</span>
+            <span className="text-slate-300">/</span>
+            <span className="text-xs font-mono uppercase tracking-widest text-slate-600 font-semibold">Front Desk Operations</span>
           </div>
         </div>
 
-        <BrandLogo variant="wordmark" theme="dark" size="sm" />
-
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4 text-xs font-mono">
+          <span className="text-slate-500 hidden md:inline">Shift: {currentUser?.name || 'Sara Ahmed'}</span>
+          <span className="text-slate-300 hidden md:inline">/</span>
           <button
             type="button"
             onClick={() => setIsZReportOpen(true)}
-            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-950 text-[#FFF0CA] text-[10px] font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
+            className="px-3.5 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs"
           >
-            Cashier Z-Report
+            Shift Z-Report &rarr;
           </button>
-
-          <div className="hidden sm:flex items-center gap-2 pl-3 border-l border-slate-300 text-xs font-mono">
-            <span className="text-slate-500">{currentUser?.name || 'Sara Ahmed'}</span>
-            <button
-              type="button"
-              onClick={logout}
-              className="text-[10px] text-red-700 hover:underline uppercase cursor-pointer"
-            >
-              Exit
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={logout}
+            className="text-[11px] text-red-700 hover:underline uppercase cursor-pointer"
+          >
+            Exit
+          </button>
         </div>
       </header>
 
       {/* 2. MAIN WORKSPACE */}
       <main className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-8 space-y-8">
-        {/* Metric Ribbon */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="p-4 bg-white border border-slate-200/90 rounded-[2px] shadow-2xs">
-            <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">Occupancy Rate</span>
-            <span className="font-serif-grand text-2xl text-slate-900 mt-1 block">{occupancyRate}%</span>
-            <span className="text-[10px] font-mono text-slate-500">{occupiedCount} of {rooms.length} Suites</span>
+        {/* Operational Summary & Search Bar (Structured, Non-Empty, Strictly Zero Icons) */}
+        <div className="bg-white border border-slate-200/90 rounded-[2px] p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400 font-bold block">
+              Today's Front Desk Summary
+            </span>
+            <div className="flex items-baseline gap-6 text-xs font-mono flex-wrap">
+              <div>
+                <span className="text-slate-400 block text-[10px] uppercase">Arrivals</span>
+                <strong className="text-base text-slate-900 font-bold">{arrivals.length} Incoming</strong>
+              </div>
+              <div className="border-l border-slate-200 pl-6">
+                <span className="text-slate-400 block text-[10px] uppercase">Departures</span>
+                <strong className="text-base text-slate-900 font-bold">{occupiedCount} Due Today</strong>
+              </div>
+              <div className="border-l border-slate-200 pl-6">
+                <span className="text-slate-400 block text-[10px] uppercase">House Occupancy</span>
+                <strong className="text-base text-slate-900 font-bold">{occupancyRate}% ({occupiedCount} of {rooms.length})</strong>
+              </div>
+              <div className="border-l border-slate-200 pl-6">
+                <span className="text-slate-400 block text-[10px] uppercase">Ready for Check-In</span>
+                <strong className="text-base text-emerald-950 font-bold">{availableCount} Suites</strong>
+              </div>
+              <div className="border-l border-slate-200 pl-6">
+                <span className="text-slate-400 block text-[10px] uppercase">In Turnover</span>
+                <strong className="text-base text-amber-900 font-bold">{dirtyCount} Suites</strong>
+              </div>
+            </div>
           </div>
-          <div className="p-4 bg-white border border-slate-200/90 rounded-[2px] shadow-2xs">
-            <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">Available Ready</span>
-            <span className="font-serif-grand text-2xl text-emerald-900 mt-1 block">{availableCount} Suites</span>
-            <span className="text-[10px] font-mono text-emerald-700">Inspected &amp; Clean</span>
-          </div>
-          <div className="p-4 bg-white border border-slate-200/90 rounded-[2px] shadow-2xs">
-            <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">Pending Turnover</span>
-            <span className="font-serif-grand text-2xl text-amber-900 mt-1 block">{dirtyCount} Suites</span>
-            <span className="text-[10px] font-mono text-slate-500">In Housekeeping Queue</span>
-          </div>
-          <div className="p-4 bg-white border border-slate-200/90 rounded-[2px] shadow-2xs">
-            <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">Today&apos;s Arrivals</span>
-            <span className="font-serif-grand text-2xl text-slate-900 mt-1 block">{arrivals.length} Guests</span>
-            <span className="text-[10px] font-mono text-slate-500">Safepay 30% Held</span>
+
+          <div className="w-full md:w-80 space-y-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
+              Instant Search
+            </span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Type guest name, suite #, phone..."
+              className="w-full px-3.5 py-2 bg-[#FAF8F5] border border-slate-200/90 rounded-[2px] text-xs font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-900 transition-colors"
+            />
           </div>
         </div>
 
-        {/* Tab Controls */}
-        <div className="flex border-b border-slate-200">
+        {/* Tab Controls (Structured, Clean, Substantial) */}
+        <div className="flex items-center gap-3 border-b border-slate-200/80 pb-2">
           <button
             type="button"
-            onClick={() => setActiveTab('RACK')}
-            className={`px-5 py-3 text-xs font-mono uppercase font-bold tracking-wider cursor-pointer border-b-2 transition-all ${
-              activeTab === 'RACK'
-                ? 'border-slate-900 text-slate-900'
-                : 'border-transparent text-slate-400 hover:text-slate-700'
+            onClick={() => setActiveTab('QUEUE')}
+            className={`px-4 py-2 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] cursor-pointer transition-colors ${
+              activeTab === 'QUEUE'
+                ? 'bg-[#0E1201] text-[#FFF0CA]'
+                : 'bg-white hover:bg-slate-50 border border-slate-200 text-slate-700'
             }`}
           >
-            Physical Room Rack ({rooms.length})
+            Today's Guest Desk ({arrivals.length + occupiedCount})
           </button>
           <button
             type="button"
-            onClick={() => setActiveTab('ARRIVALS')}
-            className={`px-5 py-3 text-xs font-mono uppercase font-bold tracking-wider cursor-pointer border-b-2 transition-all ${
-              activeTab === 'ARRIVALS'
-                ? 'border-slate-900 text-slate-900'
-                : 'border-transparent text-slate-400 hover:text-slate-700'
+            onClick={() => setActiveTab('RACK')}
+            className={`px-4 py-2 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] cursor-pointer transition-colors ${
+              activeTab === 'RACK'
+                ? 'bg-[#0E1201] text-[#FFF0CA]'
+                : 'bg-white hover:bg-slate-50 border border-slate-200 text-slate-700'
             }`}
           >
-            Expected Arrivals Queue ({arrivals.length})
+            All {rooms.length} Suites Status
           </button>
         </div>
 
         {/* Views */}
-        {activeTab === 'RACK' ? (
+        {activeTab === 'QUEUE' ? (
+          <ArrivalsList
+            arrivals={arrivals}
+            rooms={rooms}
+            onCheckInArrival={handleCheckInArrival}
+            onOpenFolio={handleOpenFolio}
+            onOpenInvoice={handleOpenInvoice}
+            searchQuery={searchQuery}
+          />
+        ) : (
           <RoomRack
             rooms={rooms}
             activeFilter={roomFilter}
@@ -174,11 +200,7 @@ export default function FrontDeskPage() {
             onOpenCheckIn={handleOpenCheckIn}
             onOpenFolio={handleOpenFolio}
             onOpenInvoice={handleOpenInvoice}
-          />
-        ) : (
-          <ArrivalsList
-            arrivals={arrivals}
-            onCheckInArrival={handleCheckInArrival}
+            searchQuery={searchQuery}
           />
         )}
       </main>
