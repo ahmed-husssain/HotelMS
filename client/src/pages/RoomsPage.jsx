@@ -70,32 +70,28 @@ export default function RoomsPage() {
       {/* 1. Minimal Fixed Navbar */}
       <Navbar onOpenDrawer={() => handleOpenReservation(RESIDENCES[0])} />
 
-      {/* 2. Editorial Header with Quiet Inline Collection Switcher (Static, Never Sticky) */}
-      <header className="pt-32 sm:pt-40 pb-8 px-6 sm:px-12 border-b border-slate-200/80 bg-gradient-to-b from-white/60 to-transparent">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/80 text-[10px] font-mono tracking-[0.25em] text-emerald-950 font-semibold uppercase shadow-2xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-            SUITES &amp; RESIDENCES
+      {/* 2. Low-Profile Architectural Masthead (Clean, Poised, Suites Immediately Visible) */}
+      <header className="pt-24 sm:pt-28 pb-4 sm:pb-6 px-6 sm:px-12 border-b border-slate-200/80 bg-gradient-to-b from-white/70 to-transparent">
+        <div className="max-w-7xl mx-auto space-y-4">
+          
+          {/* Subtle Monograph Eyebrow */}
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
+              THE RESIDENCES &bull; 7 PRIVATE KEYS
+            </span>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:inline-block">
+              100% Oceanfront
+            </span>
           </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div>
-              <h1 className="font-serif-grand text-4xl sm:text-6xl text-slate-900 font-light tracking-tight">
-                Architectural Suites &amp; Villas.
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mt-2 leading-relaxed font-normal">
-                Curated collections of private oceanfront residences designed for quiet privacy, natural light, and space.
-              </p>
-            </div>
+          {/* Grand Architectural Serif Title */}
+          <h1 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light tracking-tight leading-tight">
+            Architectural Suites &amp; Villas.
+          </h1>
 
-            <div className="text-xs font-mono text-slate-500 uppercase tracking-widest shrink-0">
-              <span>● 100% Oceanfront</span> &bull; <span>7 Private Keys</span>
-            </div>
-          </div>
-
-          {/* Quiet Luxury Editorial Navigation Tabs (Full Width, Zero Tagline Clutter) */}
-          <div className="pt-6 border-t border-slate-200/70">
-            <nav aria-label="Suite Collections" className="flex items-center gap-4 sm:gap-8 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
+          {/* Quiet Luxury Editorial Navigation Tabs */}
+          <div className="pt-2">
+            <nav aria-label="Suite Collections" className="flex items-center gap-6 sm:gap-10 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
               {ARCHITECTURAL_COLLECTIONS.map((col, idx) => {
                 const isActive = selectedCollectionId === col.id
                 return (
@@ -103,7 +99,7 @@ export default function RoomsPage() {
                     key={col.id}
                     type="button"
                     onClick={() => setSelectedCollectionId(col.id)}
-                    className={`relative py-3 transition-colors cursor-pointer whitespace-nowrap min-h-[44px] flex items-center gap-2 select-none ${
+                    className={`relative py-2.5 transition-colors cursor-pointer whitespace-nowrap min-h-[44px] flex items-center gap-2 select-none ${
                       isActive
                         ? 'text-slate-950 font-bold'
                         : 'text-slate-500 hover:text-slate-950 font-normal'
