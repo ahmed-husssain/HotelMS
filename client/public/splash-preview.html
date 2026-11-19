@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stayza — Splash Screen & Logo Animation Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0E1201;
+      color: #FAF8F5;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .splash-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Concept 01 Vector Lines */
+    .roof-line {
+      stroke-dasharray: 95;
+      stroke-dashoffset: 95;
+      animation: drawLine 800ms cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards;
+    }
+
+    .pylon-line {
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: drawLine 650ms cubic-bezier(0.16, 1, 0.3, 1) 450ms forwards;
+    }
+
+    .arch-line {
+      stroke-dasharray: 125;
+      stroke-dashoffset: 125;
+      animation: drawLine 750ms cubic-bezier(0.16, 1, 0.3, 1) 750ms forwards;
+    }
+
+    .base-line {
+      stroke-dasharray: 75;
+      stroke-dashoffset: 75;
+      animation: drawLine 600ms cubic-bezier(0.16, 1, 0.3, 1) 850ms forwards;
+    }
+
+    .horizon-line {
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: drawLine 600ms cubic-bezier(0.16, 1, 0.3, 1) 950ms forwards;
+    }
+
+    .keystone-dot {
+      opacity: 0;
+      transform: scale(0.2);
+      transform-origin: 50px 50px;
+      animation: popIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 1200ms forwards;
+    }
+
+    .wordmark-group {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeInUp 750ms cubic-bezier(0.16, 1, 0.3, 1) 1250ms forwards;
+    }
+
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes popIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .replay-btn {
+      position: absolute;
+      bottom: 32px;
+      padding: 10px 20px;
+      border: 1px solid rgba(250, 248, 245, 0.2);
+      background: rgba(250, 248, 245, 0.05);
+      color: #FAF8F5;
+      font-family: 'Space Grotesk', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .replay-btn:hover {
+      background: #FAF8F5;
+      color: #0E1201;
+      border-color: #FAF8F5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="splash-container" id="splash">
+    <svg viewBox="0 0 100 100" width="130" height="130" fill="none" stroke="#FAF8F5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- 1. Cantilevered Overhang Roof -->
+      <path class="roof-line" d="M 12 34 L 50 20 L 88 34" stroke-width="2.6" />
+      
+      <!-- 2. Monolithic Vertical Pylons -->
+      <line class="pylon-line" x1="26" y1="36" x2="26" y2="78" stroke-width="2.2" />
+      <line class="pylon-line" x1="74" y1="36" x2="74" y2="78" stroke-width="2.2" />
+      
+      <!-- 3. Inner Sanctuary Portal Arch -->
+      <path class="arch-line" d="M 38 78 L 38 52 C 38 45.4 43.4 40 50 40 C 56.6 40 62 45.4 62 52 L 62 78" stroke-width="1.8" opacity="0.45" />
+      
+      <!-- 4. Structural Travertine Lintel Base -->
+      <line class="base-line" x1="16" y1="78" x2="84" y2="78" stroke-width="3.2" />
+      
+      <!-- 5. Coastal Horizon Hairline -->
+      <line class="horizon-line" x1="22" y1="65" x2="78" y2="65" stroke-width="1" opacity="0.35" />
+      
+      <!-- 6. Keystone Center Dot (Pure Alabaster Monochrome, ZERO Yellow) -->
+      <circle class="keystone-dot" cx="50" cy="50" r="3.2" fill="#FAF8F5" stroke="none" />
+    </svg>
+
+    <div class="wordmark-group" style="margin-top: 24px;">
+      <h1 style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: 0.28em; color: #FAF8F5; text-transform: uppercase;">
+        STAYZA
+      </h1>
+      <p style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 500; letter-spacing: 0.38em; color: #A8A29E; text-transform: uppercase; margin-top: 6px;">
+        SANCTUARY &bull; RESIDENCES
+      </p>
+    </div>
+  </div>
+
+  <button class="replay-btn" onclick="replay()">&#x21bb; Replay Animation</button>
+
+  <script>
+    function replay() {
+      const container = document.getElementById('splash');
+      const clone = container.cloneNode(true);
+      container.parentNode.replaceChild(clone, container);
+    }
+  </script>
+</body>
+</html>
