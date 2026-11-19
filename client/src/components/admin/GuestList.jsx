@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { fetchAdminGuests } from '../../services/api'
 
 export const INITIAL_GUEST_PROFILES = [
   {
@@ -33,7 +34,28 @@ export const INITIAL_GUEST_PROFILES = [
   },
 ]
 
-export default function GuestList({ guests = INITIAL_GUEST_PROFILES }) {
+export default function GuestList() {
+  const [guests, setGuests] = useState(INITIAL_GUEST_PROFILES)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let isMounted = true
+    async function loadGuests() {
+      try {
+        setLoading(true)
+        const res = await fetchAdminGuests()
+        if (isMounted && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setGuests(res.data)
+        }
+      } catch (err) {
+        console.warn('[GuestList] Remote Atlas sync warning:', err.message)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+    loadGuests()
+    return () => { isMounted = false }
+  }, [])
   return (
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs overflow-hidden">
       <div className="p-5 border-b border-slate-100 flex items-center justify-between">

@@ -1,9 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { fetchAdminAuditLogs } from '../../services/api'
 
-export default function ActivityLog({ auditLogs }) {
+export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
+  const [logs, setLogs] = useState(fallbackLogs)
   const [filterCategory, setFilterCategory] = useState('ALL')
 
-  const filteredLogs = auditLogs.filter((log) => {
+  useEffect(() => {
+    let isMounted = true
+    fetchAdminAuditLogs()
+      .then((res) => {
+        if (isMounted && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setLogs(res.data)
+        }
+      })
+      .catch((err) => console.warn('[ActivityLog] Atlas sync warning:', err.message))
+    return () => { isMounted = false }
+  }, [])
+
+  const filteredLogs = logs.filter((log) => {
     if (filterCategory === 'ALL') return true
     return log.category === filterCategory
   })

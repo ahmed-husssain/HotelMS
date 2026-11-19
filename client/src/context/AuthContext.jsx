@@ -1,5 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { loginUser, registerUser } from '../services/api'
+import {
+  loginUser,
+  registerUser,
+  fetchAdminStaff,
+  createAdminStaff,
+  toggleAdminStaffStatus,
+} from '../services/api'
 
 /**
  * HABITAS SANCTUARY & LUXURYSTAY — AUTHENTICATION & RBAC CONTEXT
@@ -95,6 +101,30 @@ export function AuthProvider({ children }) {
     localStorage.setItem('stayza_staff_registry', JSON.stringify(staffAccounts))
     localStorage.removeItem('habitas_staff_registry')
   }, [staffAccounts])
+
+  // Live Staff Registry Sync for Admin
+  useEffect(() => {
+    let isMounted = true
+    if (currentUser?.role === 'admin') {
+      fetchAdminStaff()
+        .then((res) => {
+          if (isMounted && res.success && Array.isArray(res.data) && res.data.length > 0) {
+            const mapped = res.data.map((s) => ({
+              id: s._id || s.id,
+              name: s.name,
+              email: s.email,
+              role: s.role,
+              phone: s.phone || '',
+              status: s.isActive !== false ? 'active' : 'inactive',
+              createdAt: s.createdAt,
+            }))
+            setStaffAccounts(mapped)
+          }
+        })
+        .catch((err) => console.warn('[AuthContext] Staff fetch warning:', err.message))
+    }
+    return () => { isMounted = false }
+  }, [currentUser?.role])
 
   /**
    * Login function with Server-Side JWT Authentication & Automatic Role Detection.
@@ -245,7 +275,7 @@ export function AuthProvider({ children }) {
   /**
    * Admin Function: Create new staff member
    */
-  const createStaffAccount = ({ name, email, role, phone }) => {
+  const createStaffAccount = async ({ name, email, role, phone }) => {
     const cleanEmail = email.trim().toLowerCase().replace('@habitas.com', '@stayza.com')
     
     if (staffAccounts.some((acc) => acc.email.toLowerCase() === cleanEmail)) {
@@ -258,8 +288,9 @@ export function AuthProvider({ children }) {
       admin: 'Operations Manager',
     }
 
+    const tempId = `usr-${role.slice(0, 3)}-${Date.now().toString().slice(-3)}`
     const newStaff = {
-      id: `usr-${role.slice(0, 3)}-${Date.now().toString().slice(-3)}`,
+      id: tempId,
       name: name.trim(),
       email: cleanEmail,
       role,
@@ -271,13 +302,27 @@ export function AuthProvider({ children }) {
     }
 
     setStaffAccounts((prev) => [...prev, newStaff])
+
+    // Persist to MongoDB Atlas
+    try {
+      const res = await createAdminStaff({ name, email: cleanEmail, role, phone })
+      if (res.success && res.data) {
+        setStaffAccounts((prev) =>
+          prev.map((s) => (s.id === tempId ? { ...s, id: res.data.id || s.id } : s))
+        )
+      }
+    } catch (err) {
+      console.warn('[Staff Create] Remote Atlas sync warning:', err.message)
+      throw err
+    }
+
     return newStaff
   }
 
   /**
    * Admin Function: Toggle account activation (active / inactive)
    */
-  const toggleStaffStatus = (id) => {
+  const toggleStaffStatus = async (id) => {
     setStaffAccounts((prev) =>
       prev.map((acc) => {
         if (acc.id === id) {
@@ -287,6 +332,12 @@ export function AuthProvider({ children }) {
         return acc
       })
     )
+
+    try {
+      await toggleAdminStaffStatus(id)
+    } catch (err) {
+      console.warn('[Staff Toggle] Remote Atlas sync warning:', err.message)
+    }
   }
 
   /**
