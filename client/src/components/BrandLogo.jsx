@@ -77,8 +77,8 @@ export default function BrandLogo({
       <line x1="16" y1="78" x2="84" y2="78" strokeWidth="3" />
       {/* Coastal Horizon Line */}
       <line x1="22" y1="65" x2="78" y2="65" strokeWidth="1" opacity="0.3" />
-      {/* Celestial Dawn Keystone */}
-      <circle cx="50" cy="50" r="3.2" fill="#D4AF37" stroke="none" />
+      {/* Keystone Center Dot — Unified Theme Monochrome */}
+      <circle cx="50" cy="50" r="3.2" fill={emblemStroke} stroke="none" />
     </svg>
   )
 

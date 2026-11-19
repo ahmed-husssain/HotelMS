@@ -135,22 +135,22 @@ export default function HeroSection({ onQuickReserve }) {
           className="group inline-flex items-center gap-2 p-1.5 pl-4 pr-1.5 bg-[#FAF8F5]/90 hover:bg-[#FAF8F5] backdrop-blur-md rounded-full border border-[#E5DFD5] hover:border-slate-900 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer min-h-[44px] active:scale-[0.98]"
           aria-label="Book a luxury residence at Stayza"
         >
-          <div className="flex items-center gap-2 font-mono text-xs">
-            {/* Stayza Concept 01 Pavilion Emblem */}
-            <svg className="w-4 h-4 text-[#D4AF37]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
+          <div className="flex items-center gap-2 font-mono text-xs text-slate-900">
+            {/* Stayza Concept 01 Pavilion Emblem — Pure Monochrome Matching Theme */}
+            <svg className="w-4 h-4 text-slate-900" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
               <path d="M 14 36 L 50 22 L 86 36" strokeWidth="7" />
               <line x1="28" y1="38" x2="28" y2="78" strokeWidth="6" />
               <line x1="72" y1="38" x2="72" y2="78" strokeWidth="6" />
               <line x1="16" y1="78" x2="84" y2="78" strokeWidth="8" />
-              <circle cx="50" cy="50" r="7" fill="#D4AF37" stroke="none" />
+              <circle cx="50" cy="50" r="7" fill="currentColor" stroke="none" />
             </svg>
             <span className="font-semibold text-slate-900 tracking-wider">Book a Residence</span>
           </div>
 
           <span className="w-[1px] h-4 bg-[#E5DFD5] mx-1" aria-hidden="true" />
 
-          {/* Kinetic Arrow Capsule */}
-          <div className="px-4 py-2 bg-[#0E1201] group-hover:bg-[#D4AF37] group-hover:text-slate-950 text-[#FFF0CA] font-mono text-[10px] font-bold uppercase tracking-widest rounded-full transition-colors flex items-center gap-1.5 shadow-xs">
+          {/* Kinetic Arrow Capsule — Theme Monochrome */}
+          <div className="px-4 py-2 bg-slate-900 group-hover:bg-slate-800 text-[#FAF8F5] font-mono text-[10px] font-bold uppercase tracking-widest rounded-full transition-colors flex items-center gap-1.5 shadow-xs">
             <span>Reserve</span>
             <span className="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
           </div>

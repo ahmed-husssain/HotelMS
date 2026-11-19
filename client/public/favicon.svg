@@ -12,6 +12,6 @@
   <line x1="16" y1="78" x2="84" y2="78" stroke="#FAF8F5" stroke-width="4" stroke-linecap="round"/>
   <!-- Coastal Horizon Hairline -->
   <line x1="24" y1="65" x2="76" y2="65" stroke="#FAF8F5" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
-  <!-- Celestial Dawn Keystone -->
-  <circle cx="50" cy="50" r="4" fill="#D4AF37"/>
+  <!-- Keystone Center Dot -->
+  <circle cx="50" cy="50" r="4" fill="#FAF8F5"/>
 </svg>

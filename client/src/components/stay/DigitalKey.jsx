@@ -3,13 +3,13 @@ import BrandLogo from '../BrandLogo'
 
 export default function DigitalKey({ currentBooking }) {
   return (
-    <div className="bg-[#0E1201] text-[#FFF0CA] border border-slate-800 p-7 rounded-[2px] shadow-xl space-y-6 relative overflow-hidden">
+    <div className="bg-[#0E1201] text-[#FAF8F5] border border-slate-800 p-7 rounded-[2px] shadow-xl space-y-6 relative overflow-hidden">
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
-          <span className="text-[9px] font-mono tracking-[0.25em] text-amber-400 uppercase block">
+          <span className="text-[9px] font-mono tracking-[0.25em] text-[#A8A29E] uppercase block">
             CONTACTLESS DIGITAL PASS
           </span>
-          <h3 className="font-cinzel text-xl font-bold tracking-widest text-[#FAF8F5] mt-0.5">
+          <h3 className="font-serif-grand text-xl font-bold tracking-widest text-[#FAF8F5] mt-0.5">
             {currentBooking.roomNumber || `SUITE ${currentBooking.residence?.roomNumber}`}
           </h3>
         </div>
@@ -52,7 +52,7 @@ export default function DigitalKey({ currentBooking }) {
         </div>
         <div className="flex justify-between">
           <span className="text-slate-400">Access Tier:</span>
-          <span className="text-amber-400">UNRESTRICTED RESIDENTIAL</span>
+          <span className="text-[#FAF8F5] font-semibold">UNRESTRICTED RESIDENTIAL</span>
         </div>
         <div className="flex justify-between">
           <span className="text-slate-400">Valet Bay:</span>

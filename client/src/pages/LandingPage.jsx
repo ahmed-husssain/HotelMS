@@ -8,24 +8,29 @@ import SplashScreen from '../components/SplashScreen'
 import SuiteSpecsDrawer from '../components/suites/SuiteSpecsDrawer'
 import { RESIDENCES } from '../data/residences'
 
+// Module-level flag: plays on each fresh page load/reload, avoids replaying on internal SPA back-and-forth
+let hasPlayedSplashThisPageLoad = false
+
 export default function LandingPage() {
   const navigate = useNavigate()
 
   // Architectural Specs Drawer State
   const [activeSpecsSuite, setActiveSpecsSuite] = useState(null)
 
-  // Cinematic opening sequence state
+  // Cinematic opening sequence state — plays on each page load/refresh
   const [showSplash, setShowSplash] = useState(() => {
     if (typeof window !== 'undefined') {
-      const hasSeen = sessionStorage.getItem('stayza_splash_seen') || sessionStorage.getItem('habitas_splash_seen')
       const forceIntro = new URLSearchParams(window.location.search).get('intro') === 'true'
-      return !hasSeen || forceIntro
+      const skipIntro = new URLSearchParams(window.location.search).get('intro') === 'false'
+      if (skipIntro) return false
+      if (forceIntro) return true
+      return !hasPlayedSplashThisPageLoad
     }
     return true
   })
 
   const handleSplashComplete = () => {
-    sessionStorage.setItem('stayza_splash_seen', 'true')
+    hasPlayedSplashThisPageLoad = true
     setShowSplash(false)
   }
 

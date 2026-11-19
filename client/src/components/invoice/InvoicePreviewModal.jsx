@@ -248,7 +248,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
 
               <div className="space-y-0.5 text-[10px] font-mono text-slate-500 max-w-xs">
                 <span className="font-bold text-emerald-950 uppercase block">
-                  &bull; VERIFIED SECURE FOLIO
+                  &bull; VERIFIED ROOM BILL
                 </span>
                 <p className="leading-tight">
                   Ref: <strong className="text-slate-900">{booking.bookingRef || 'ST-301-9041'}</strong>
