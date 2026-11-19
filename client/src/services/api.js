@@ -22,6 +22,14 @@ async function request(endpoint, options = {}) {
 
   try {
     const res = await fetch(url, { ...options, headers })
+
+    // Verify response is actually JSON before calling res.json()
+    // (Prevents Firebase static hosting SPA fallback returning index.html "<!doctype" from crashing JSON parsing)
+    const contentType = res.headers.get('content-type') || ''
+    if (!contentType.includes('application/json')) {
+      throw new Error('Backend API unavailable. Running in client mode.')
+    }
+
     const data = await res.json()
     if (!res.ok) {
       throw new Error(data.message || `Request failed with status ${res.status}`)

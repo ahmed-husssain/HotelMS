@@ -10,6 +10,26 @@ import BrandLogo from '../BrandLogo'
 export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalInvoice = false }) {
   const invoiceRef = useRef(null)
   const [copied, setCopied] = useState(false)
+  const [isRendered, setIsRendered] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true)
+      const raf = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true)
+        })
+      })
+      return () => cancelAnimationFrame(raf)
+    } else {
+      setIsVisible(false)
+      const timer = setTimeout(() => {
+        setIsRendered(false)
+      }, 250)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
 
   // Body scroll lock effect
   useEffect(() => {
@@ -28,7 +48,7 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
     }
   }, [isOpen, onClose])
 
-  if (!isOpen || !booking) return null
+  if (!isRendered || !booking) return null
 
   const residence = booking.residence || {
     name: 'The Horizon Penthouse',

@@ -21,6 +21,17 @@ import {
 export const INITIAL_STAFF_ACCOUNTS = [
   {
     id: 'usr-guest-001',
+    name: 'Dr. Tariq Khan',
+    email: 'guest@stayza.com',
+    role: 'guest',
+    roleLabel: 'Verified Guest',
+    phone: '+92 300 8219401',
+    activeReservationCode: 'TH-301-9041',
+    suiteNumber: 'Suite 301',
+    status: 'active',
+  },
+  {
+    id: 'usr-guest-002',
     name: 'Tariq Khan',
     email: 'tariq@luxury.pk',
     role: 'guest',
@@ -167,21 +178,42 @@ export function AuthProvider({ children }) {
         return userSession
       }
     } catch (apiErr) {
-      // If server returned an explicit auth rejection (e.g. 401 invalid password), throw it!
-      if (apiErr.message && !apiErr.message.toLowerCase().includes('failed to fetch')) {
+      // Check if this is an explicit business rejection from Express (e.g. 401 invalid password)
+      const isNetworkOrProxyFailure =
+        !apiErr.message ||
+        apiErr.message.toLowerCase().includes('failed to fetch') ||
+        apiErr.message.toLowerCase().includes('networkerror') ||
+        apiErr.message.toLowerCase().includes('backend api unavailable') ||
+        apiErr.message.toLowerCase().includes('non-json') ||
+        apiErr.message.toLowerCase().includes('unexpected token') ||
+        apiErr.message.includes('<!doctype')
+
+      if (!isNetworkOrProxyFailure) {
         throw apiErr
       }
       console.warn('[AuthContext] Backend API unreachable, falling back to cached registry:', apiErr.message)
     }
 
-    // 2. Offline / Cached local fallback
+    // 2. Offline / Hosted static fallback
     const matchedAccount = staffAccounts.find(
-      (acc) => acc.email.toLowerCase() === cleanEmail || acc.email.toLowerCase() === cleanEmail.replace('@habitas.com', '@stayza.com')
+      (acc) =>
+        acc.email.toLowerCase() === cleanEmail ||
+        acc.email.toLowerCase() === cleanEmail.replace('@habitas.com', '@stayza.com') ||
+        acc.email.toLowerCase() === cleanEmail.replace('@stayza.com', '@habitas.com')
     )
 
     if (matchedAccount) {
       if (matchedAccount.status === 'inactive') {
         throw new Error('This account has been deactivated by the General Manager.')
+      }
+
+      // Loosely check testing passwords in client mode so Password123!, password123, 123 all work seamlessly
+      const normalizedPass = (password || '').trim().toLowerCase()
+      if (
+        normalizedPass &&
+        !['password123!', 'password123', '123', 'admin', '123456', 'pass'].includes(normalizedPass)
+      ) {
+        throw new Error('Invalid credentials. Password is Password123!')
       }
 
       const userSession = {

@@ -219,7 +219,7 @@ export default function LoginPage() {
                 >
                   Password
                 </label>
-                <span className="text-[9px] font-mono text-stone-400">Default: password123</span>
+                <span className="text-[9px] font-mono text-stone-400">Default: Password123!</span>
               </div>
               <div className="relative">
                 <input
@@ -263,7 +263,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-center gap-3 text-xs">
                 <button
                   type="button"
-                  onClick={() => handleQuickFill('tariq@luxury.pk')}
+                  onClick={() => handleQuickFill('guest@stayza.com')}
                   className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
                 >
                   Guest

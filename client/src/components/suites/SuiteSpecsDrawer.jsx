@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getOptimizedImageUrl } from '../../utils/cloudinary'
 
@@ -11,6 +11,28 @@ import { getOptimizedImageUrl } from '../../utils/cloudinary'
  * - Direct luxury booking CTA with 30% deposit calculation
  */
 export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
+  const [isRendered, setIsRendered] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Fluid Hardware-Accelerated Mount/Unmount lifecycle
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true)
+      const raf = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true)
+        })
+      })
+      return () => cancelAnimationFrame(raf)
+    } else {
+      setIsVisible(false)
+      const timer = setTimeout(() => {
+        setIsRendered(false)
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
+
   // Lock document body scroll while drawer is open
   useEffect(() => {
     if (!isOpen) return
@@ -28,7 +50,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
     }
   }, [isOpen, onClose])
 
-  if (!isOpen || !residence) return null
+  if (!isRendered || !residence) return null
 
   // Calculate advance deposit preview
   const advanceDepositPreview = Math.round(residence.nightlyRate * 0.3)
@@ -127,17 +149,23 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
       {/* 1. Backdrop */}
       <div 
         onClick={onClose} 
-        className="absolute inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity duration-300" 
+        className={`absolute inset-0 bg-slate-950/70 transition-opacity duration-300 ease-out cursor-pointer ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        }`}
       />
 
       {/* 2. Slide-Over Panel (Mobile: Bottom Sheet | Desktop: Right Drawer) */}
       <div 
         data-lenis-prevent="true"
-        className="fixed inset-x-0 bottom-0 md:inset-x-auto md:right-0 md:top-0 md:bottom-0 w-full md:max-w-xl bg-[#FAF8F5] text-slate-900 border-t md:border-t-0 md:border-l border-[#E5DFD5] shadow-2xl flex flex-col max-h-[92vh] md:max-h-full overflow-hidden rounded-t-2xl md:rounded-none animate-in slide-in-from-bottom md:slide-in-from-right duration-400"
+        className={`fixed inset-x-0 bottom-0 md:inset-x-auto md:right-0 md:top-0 md:bottom-0 w-full md:max-w-xl bg-[#FAF8F5] text-slate-900 border-t md:border-t-0 md:border-l border-[#E5DFD5] shadow-2xl flex flex-col max-h-[92vh] md:max-h-full overflow-hidden rounded-t-2xl md:rounded-none will-change-transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isVisible
+            ? 'translate-y-0 md:translate-x-0'
+            : 'translate-y-full md:translate-y-0 md:translate-x-full'
+        }`}
       >
         
         {/* Drawer Header */}
-        <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5]/90 backdrop-blur-md shrink-0">
+        <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5] shrink-0">
           <div>
             <span className="text-[9px] font-mono tracking-[0.25em] font-bold text-emerald-900 uppercase">
               SUITE SPECIFICATIONS &bull; SUITE {residence.roomNumber}
@@ -170,11 +198,11 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
               alt={residence.name}
               width="800"
               height="450"
-              loading="lazy"
+              loading="eager"
               decoding="async"
               className="w-full h-full object-cover filter brightness-[0.95]"
             />
-            <div className="absolute bottom-2.5 left-2.5 px-3 py-1 bg-black/60 backdrop-blur-md rounded-[2px] text-[10px] font-mono text-[#FFF0CA] uppercase tracking-wider">
+            <div className="absolute bottom-2.5 left-2.5 px-3 py-1 bg-black/75 rounded-[2px] text-[10px] font-mono text-[#FFF0CA] uppercase tracking-wider">
               {residence.tier || 'PRESIDENTIAL RESIDENCE'}
             </div>
           </div>

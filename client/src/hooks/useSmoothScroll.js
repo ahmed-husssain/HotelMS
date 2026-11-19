@@ -93,7 +93,18 @@ export function useSmoothScroll() {
     }
     gsap.ticker.add(tickerCallback)
 
+    // 7. Zero-overhead suspension: Pause Lenis when body scroll is locked by any modal
+    const bodyObserver = new MutationObserver(() => {
+      if (document.body.style.overflow === 'hidden') {
+        lenis.stop()
+      } else {
+        lenis.start()
+      }
+    })
+    bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['style'] })
+
     return () => {
+      bodyObserver.disconnect()
       gsap.ticker.remove(tickerCallback)
       lenis.destroy()
       lenisRef.current = null
