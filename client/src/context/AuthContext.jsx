@@ -275,7 +275,7 @@ export function AuthProvider({ children }) {
   /**
    * Admin Function: Create new staff member
    */
-  const createStaffAccount = async ({ name, email, role, phone }) => {
+  const createStaffAccount = async ({ name, email, role, phone, password = 'Password123!' }) => {
     const cleanEmail = email.trim().toLowerCase().replace('@habitas.com', '@stayza.com')
     
     if (staffAccounts.some((acc) => acc.email.toLowerCase() === cleanEmail)) {
@@ -305,7 +305,7 @@ export function AuthProvider({ children }) {
 
     // Persist to MongoDB Atlas
     try {
-      const res = await createAdminStaff({ name, email: cleanEmail, role, phone })
+      const res = await createAdminStaff({ name, email: cleanEmail, role, phone, password })
       if (res.success && res.data) {
         setStaffAccounts((prev) =>
           prev.map((s) => (s.id === tempId ? { ...s, id: res.data.id || s.id } : s))

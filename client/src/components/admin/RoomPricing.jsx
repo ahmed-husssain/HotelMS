@@ -1,22 +1,68 @@
 import React, { useState } from 'react'
+import { useToast } from '../../context/ToastContext'
 
 export default function RoomPricing({
   rooms,
   onUpdateRate,
   onToggleMaintenance,
 }) {
+  const { showToast } = useToast()
   const [editingRoom, setEditingRoom] = useState(null)
   const [newRate, setNewRate] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
 
   const handleStartEdit = (room) => {
     setEditingRoom(room.roomNumber)
     setNewRate(room.nightlyRate)
   }
 
-  const handleSaveRate = (roomNumber) => {
-    if (!newRate) return
-    onUpdateRate(roomNumber, Number(newRate))
-    setEditingRoom(null)
+  const handleSaveRate = async (roomNumber) => {
+    const rateVal = Number(newRate)
+    if (!rateVal || rateVal <= 0) {
+      showToast({
+        type: 'error',
+        title: 'Invalid Tariff',
+        message: 'Please specify a positive nightly rate in PKR.',
+      })
+      return
+    }
+
+    try {
+      setIsSaving(true)
+      await onUpdateRate(roomNumber, rateVal)
+      showToast({
+        type: 'success',
+        title: 'Tariff Updated',
+        message: `${roomNumber} base nightly tariff set to PKR ${rateVal.toLocaleString()}.`,
+      })
+      setEditingRoom(null)
+    } catch (err) {
+      showToast({
+        type: 'error',
+        title: 'Update Failed',
+        message: err.message || 'Could not update room tariff.',
+      })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleToggleMaintenance = async (room) => {
+    try {
+      await onToggleMaintenance(room.roomNumber)
+      const nextMode = room.status === 'MAINTENANCE' ? 'Active Inventory' : 'Refurbishment'
+      showToast({
+        type: 'info',
+        title: 'Inventory Mode Changed',
+        message: `${room.roomNumber} set to ${nextMode}.`,
+      })
+    } catch (err) {
+      showToast({
+        type: 'error',
+        title: 'Action Failed',
+        message: err.message || 'Could not update maintenance status.',
+      })
+    }
   }
 
   return (
@@ -60,13 +106,22 @@ export default function RoomPricing({
                           value={newRate}
                           onChange={(e) => setNewRate(e.target.value)}
                           className="w-28 px-2 py-1 bg-white border border-slate-300 rounded-[2px] text-xs font-mono"
+                          disabled={isSaving}
                         />
                         <button
                           type="button"
                           onClick={() => handleSaveRate(room.roomNumber)}
-                          className="px-2 py-1 bg-[#0E1201] text-[#FFF0CA] text-[9px] uppercase font-bold rounded-[2px]"
+                          disabled={isSaving}
+                          className="px-2.5 py-1 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-[9px] uppercase font-bold rounded-[2px] cursor-pointer disabled:opacity-50"
                         >
-                          Save
+                          {isSaving ? '...' : 'Save'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingRoom(null)}
+                          className="px-1.5 py-1 text-slate-400 hover:text-slate-700 text-xs cursor-pointer"
+                        >
+                          &times;
                         </button>
                       </div>
                     ) : (
@@ -94,7 +149,7 @@ export default function RoomPricing({
                     </button>
                     <button
                       type="button"
-                      onClick={() => onToggleMaintenance(room.roomNumber)}
+                      onClick={() => handleToggleMaintenance(room)}
                       className={`px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer border ${
                         room.status === 'MAINTENANCE'
                           ? 'border-emerald-200 text-emerald-800 hover:bg-emerald-50'

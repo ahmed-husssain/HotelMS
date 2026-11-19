@@ -4,22 +4,37 @@ import { fetchAdminAuditLogs } from '../../services/api'
 export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
   const [logs, setLogs] = useState(fallbackLogs)
   const [filterCategory, setFilterCategory] = useState('ALL')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    let isMounted = true
+  const loadLogs = () => {
+    setLoading(true)
     fetchAdminAuditLogs()
       .then((res) => {
-        if (isMounted && res.success && Array.isArray(res.data) && res.data.length > 0) {
+        if (res.success && Array.isArray(res.data) && res.data.length > 0) {
           setLogs(res.data)
         }
       })
       .catch((err) => console.warn('[ActivityLog] Atlas sync warning:', err.message))
-    return () => { isMounted = false }
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    loadLogs()
   }, [])
 
   const filteredLogs = logs.filter((log) => {
-    if (filterCategory === 'ALL') return true
-    return log.category === filterCategory
+    if (filterCategory !== 'ALL' && log.category !== filterCategory) {
+      return false
+    }
+    if (!searchQuery) return true
+    const q = searchQuery.toLowerCase()
+    return (
+      log.actor?.toLowerCase().includes(q) ||
+      log.action?.toLowerCase().includes(q) ||
+      log.details?.toLowerCase().includes(q) ||
+      log.id?.toLowerCase().includes(q)
+    )
   })
 
   // Export CSV
@@ -50,19 +65,37 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            type="text"
+            placeholder="Search logs by actor, action..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-900 w-44 sm:w-56"
+          />
+
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
             className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-mono text-slate-800"
           >
             <option value="ALL">All Categories</option>
+            <option value="SECURITY">Security &amp; Auth</option>
             <option value="PMS">Front Desk PMS</option>
             <option value="HOUSEKEEPING">Housekeeping</option>
             <option value="MAINTENANCE">Maintenance</option>
-            <option value="SETTINGS">Settings</option>
+            <option value="SETTINGS">Settings &amp; Tariffs</option>
             <option value="BILLING">Billing &amp; Tax</option>
           </select>
+
+          <button
+            type="button"
+            onClick={loadLogs}
+            disabled={loading}
+            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
+          >
+            <span>{loading ? '...' : '↻ Refresh'}</span>
+          </button>
 
           <button
             type="button"
@@ -101,6 +134,13 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
                 <td className="py-3.5 px-5 text-slate-700 max-w-md">{log.details}</td>
               </tr>
             ))}
+            {filteredLogs.length === 0 && (
+              <tr>
+                <td colSpan="6" className="py-8 text-center text-slate-400 font-mono text-xs">
+                  No activity log entries found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

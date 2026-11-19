@@ -1,48 +1,100 @@
 import React, { useState } from 'react'
+import { useToast } from '../../context/ToastContext'
 
 export default function StaffList({
   staffAccounts,
   onCreateStaff,
   onToggleStatus,
 }) {
+  const { showToast } = useToast()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('Password123!')
   const [role, setRole] = useState('receptionist')
   const [phone, setPhone] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault()
     setErrorMsg('')
+    setIsSubmitting(true)
 
     try {
-      onCreateStaff({ name, email, role, phone })
+      await onCreateStaff({ name, email, role, phone, password })
+      showToast({
+        type: 'success',
+        title: 'Staff Account Created',
+        message: `Account for ${name.trim()} (${role}) provisioned successfully.`,
+      })
       setName('')
       setEmail('')
       setPhone('')
+      setPassword('Password123!')
       setIsModalOpen(false)
     } catch (err) {
       setErrorMsg(err.message || 'Failed to create staff account.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
+  const handleToggle = async (staff) => {
+    try {
+      await onToggleStatus(staff.id)
+      const nextStatus = staff.status === 'active' ? 'Deactivated' : 'Activated'
+      showToast({
+        type: 'info',
+        title: `Staff ${nextStatus}`,
+        message: `${staff.name} is now ${nextStatus.toLowerCase()}.`,
+      })
+    } catch (err) {
+      showToast({
+        type: 'error',
+        title: 'Status Update Failed',
+        message: err.message || 'Could not update staff status.',
+      })
+    }
+  }
+
+  const filteredStaff = staffAccounts.filter((s) => {
+    if (!searchQuery) return true
+    const q = searchQuery.toLowerCase()
+    return (
+      s.name?.toLowerCase().includes(q) ||
+      s.email?.toLowerCase().includes(q) ||
+      s.role?.toLowerCase().includes(q)
+    )
+  })
+
   return (
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs overflow-hidden">
-      <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+      <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-serif-grand text-xl text-slate-900">Staff Account Governance</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
             Role-Based Access Control (RBAC) &bull; Receptionists, Housekeeping, Operations
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-slate-900 hover:bg-slate-950 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
-        >
-          + Add Staff Account
-        </button>
+
+        <div className="flex items-center gap-3">
+          <input
+            type="text"
+            placeholder="Search staff by name or role..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-900 w-52 sm:w-64"
+          />
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-950 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shrink-0"
+          >
+            + Add Staff Account
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -58,7 +110,7 @@ export default function StaffList({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {staffAccounts.map((staff) => (
+            {filteredStaff.map((staff) => (
               <tr key={staff.id} className="hover:bg-slate-50/80 transition-colors">
                 <td className="py-3.5 px-5 font-bold text-slate-900">{staff.name}</td>
                 <td className="py-3.5 px-4 text-slate-600">{staff.email}</td>
@@ -83,7 +135,7 @@ export default function StaffList({
                   {staff.role !== 'admin' && (
                     <button
                       type="button"
-                      onClick={() => onToggleStatus(staff.id)}
+                      onClick={() => handleToggle(staff)}
                       className={`px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer border ${
                         staff.status === 'active'
                           ? 'border-red-200 text-red-700 hover:bg-red-50'
@@ -96,6 +148,13 @@ export default function StaffList({
                 </td>
               </tr>
             ))}
+            {filteredStaff.length === 0 && (
+              <tr>
+                <td colSpan="6" className="py-8 text-center text-slate-400 font-mono text-xs">
+                  No staff members match the query "{searchQuery}".
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -150,6 +209,19 @@ export default function StaffList({
 
               <div>
                 <label className="text-[10px] uppercase text-slate-500 font-semibold block mb-1">
+                  Initial Password
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900 font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] uppercase text-slate-500 font-semibold block mb-1">
                   Assigned RBAC Role
                 </label>
                 <select
@@ -186,9 +258,10 @@ export default function StaffList({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] font-bold uppercase tracking-wider rounded-[2px] cursor-pointer"
+                  disabled={isSubmitting}
+                  className="px-5 py-2.5 bg-[#0E1201] hover:bg-slate-900 disabled:opacity-50 text-[#FFF0CA] font-bold uppercase tracking-wider rounded-[2px] cursor-pointer"
                 >
-                  Create Staff Account →
+                  {isSubmitting ? 'Creating...' : 'Create Staff Account →'}
                 </button>
               </div>
             </form>

@@ -37,37 +37,85 @@ export const INITIAL_GUEST_PROFILES = [
 export default function GuestList() {
   const [guests, setGuests] = useState(INITIAL_GUEST_PROFILES)
   const [loading, setLoading] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [tierFilter, setTierFilter] = useState('ALL')
+
+  const loadGuests = async () => {
+    try {
+      setLoading(true)
+      const res = await fetchAdminGuests()
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+        setGuests(res.data)
+      }
+    } catch (err) {
+      console.warn('[GuestList] Remote Atlas sync warning:', err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    let isMounted = true
-    async function loadGuests() {
-      try {
-        setLoading(true)
-        const res = await fetchAdminGuests()
-        if (isMounted && res.success && Array.isArray(res.data) && res.data.length > 0) {
-          setGuests(res.data)
-        }
-      } catch (err) {
-        console.warn('[GuestList] Remote Atlas sync warning:', err.message)
-      } finally {
-        if (isMounted) setLoading(false)
-      }
-    }
     loadGuests()
-    return () => { isMounted = false }
   }, [])
+
+  const filteredGuests = guests.filter((g) => {
+    if (tierFilter !== 'ALL' && !g.tier?.toUpperCase().includes(tierFilter)) {
+      return false
+    }
+    if (!searchQuery) return true
+    const q = searchQuery.toLowerCase()
+    return (
+      g.name?.toLowerCase().includes(q) ||
+      g.email?.toLowerCase().includes(q) ||
+      g.phone?.toLowerCase().includes(q) ||
+      g.preferences?.toLowerCase().includes(q)
+    )
+  })
+
   return (
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs overflow-hidden">
-      <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+      <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-serif-grand text-xl text-slate-900">Registered Guest Directory</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
             Guest profiles, VIP tiers, preferences, and historical stay expenditures
           </p>
         </div>
-        <span className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-mono font-bold rounded-full">
-          {guests.length} Profiles
-        </span>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            type="text"
+            placeholder="Search by guest name, email, phone..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-900 w-52 sm:w-64"
+          />
+
+          <select
+            value={tierFilter}
+            onChange={(e) => setTierFilter(e.target.value)}
+            className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-mono text-slate-800"
+          >
+            <option value="ALL">All Tiers</option>
+            <option value="PLATINUM">Platinum VIP</option>
+            <option value="DIPLOMATIC">Diplomatic VIP</option>
+            <option value="RESIDENT">Estate Resident</option>
+            <option value="STANDARD">Standard Guest</option>
+          </select>
+
+          <button
+            type="button"
+            onClick={loadGuests}
+            disabled={loading}
+            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
+          >
+            <span>{loading ? '...' : '↻ Refresh'}</span>
+          </button>
+
+          <span className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-mono font-bold rounded-full">
+            {filteredGuests.length} / {guests.length} Profiles
+          </span>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -83,7 +131,7 @@ export default function GuestList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {guests.map((g) => (
+            {filteredGuests.map((g) => (
               <tr key={g.id} className="hover:bg-slate-50/80 transition-colors">
                 <td className="py-3.5 px-5 font-bold text-slate-900">{g.name}</td>
                 <td className="py-3.5 px-4 text-slate-600">
@@ -102,6 +150,13 @@ export default function GuestList() {
                 <td className="py-3.5 px-5 text-slate-500 max-w-xs">{g.preferences}</td>
               </tr>
             ))}
+            {filteredGuests.length === 0 && (
+              <tr>
+                <td colSpan="6" className="py-8 text-center text-slate-400 font-mono text-xs">
+                  No guest profiles match the search query "{searchQuery}".
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

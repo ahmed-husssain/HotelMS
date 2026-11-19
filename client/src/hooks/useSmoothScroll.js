@@ -51,6 +51,35 @@ export function useSmoothScroll() {
       wheelMultiplier: 0.95, // Smooth trackpad dampening
       touchMultiplier: 0,    // 0% touch hijacking
       autoRaf: false,        // GSAP ticker drives the render loop for 120 FPS sync
+      allowNestedScroll: true, // Allow native scroll inside nested scrollable panes
+      prevent: (node) => {
+        if (!node || typeof node.closest !== 'function') return false
+
+        // 1. Any element explicitly marked with data-lenis-prevent
+        if (node.closest('[data-lenis-prevent]')) return true
+
+        // 2. Any modal dialog, drawer, bottom sheet or fixed overlay
+        if (node.closest('[role="dialog"], [aria-modal="true"], .fixed.z-50, .fixed.z-40')) return true
+
+        // 3. Any element inside an ancestor with scrollable overflow
+        let el = node
+        while (el && el !== document.body && el !== document.documentElement) {
+          if (el instanceof HTMLElement) {
+            const overflowY = window.getComputedStyle(el).overflowY
+            if (['auto', 'scroll'].includes(overflowY) && el.scrollHeight > el.clientHeight) {
+              return true
+            }
+          }
+          el = el.parentElement
+        }
+
+        // 4. Any time document body scroll is locked by a modal
+        if (typeof document !== 'undefined' && document.body.style.overflow === 'hidden') {
+          return true
+        }
+
+        return false
+      },
     })
 
     lenisRef.current = lenis

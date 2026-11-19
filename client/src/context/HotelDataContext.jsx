@@ -6,6 +6,7 @@ import {
   postFolioCharge,
   patchRoomStatus,
   patchRoomChecklist,
+  patchAdminRoomRate,
   fetchHousekeepingDashboard,
   restockInventoryItem,
   toggleCleaningStep,
@@ -977,33 +978,54 @@ export function HotelDataProvider({ children }) {
 
   /**
    * Action K: Update Base Room Rate (Invoked on /admin)
+   * Updates state optimistically and persists to MongoDB Atlas via PATCH /api/admin/rooms/:id/rate
    */
-  const updateRoomRate = (roomNumber, newRate, actorName = 'General Manager') => {
+  const updateRoomRate = async (roomNumber, newRate, actorName = 'General Manager') => {
+    const rateNum = Number(newRate)
     setRooms((prev) =>
-      prev.map((r) => (r.roomNumber === roomNumber ? { ...r, nightlyRate: Number(newRate) } : r))
+      prev.map((r) => (r.roomNumber === roomNumber ? { ...r, nightlyRate: rateNum } : r))
     )
     addAuditLog(
       'ROOM_RATE_UPDATED',
       'SETTINGS',
-      `Updated ${roomNumber} base nightly tariff to PKR ${Number(newRate).toLocaleString()}.`,
+      `Updated ${roomNumber} base nightly tariff to PKR ${rateNum.toLocaleString()}.`,
       actorName
     )
+
+    try {
+      await patchAdminRoomRate(roomNumber, rateNum)
+    } catch (err) {
+      console.warn('[HotelDataContext.updateRoomRate] Remote sync warning:', err.message)
+    }
   }
 
   /**
    * Action K: Toggle Room Refurbishment Maintenance (Invoked on /admin)
+   * Updates state optimistically and locks/unlocks room in MongoDB Atlas via PATCH /api/rooms/:id/status
    */
-  const toggleRoomMaintenance = (roomNumber, actorName = 'General Manager') => {
+  const toggleRoomMaintenance = async (roomNumber, actorName = 'General Manager') => {
+    let nextStatus = 'MAINTENANCE'
     setRooms((prev) =>
       prev.map((r) => {
         if (r.roomNumber === roomNumber) {
-          const nextStatus = r.status === 'MAINTENANCE' ? 'AVAILABLE' : 'MAINTENANCE'
+          nextStatus = r.status === 'MAINTENANCE' ? 'AVAILABLE' : 'MAINTENANCE'
           return { ...r, status: nextStatus }
         }
         return r
       })
     )
-    addAuditLog('MAINTENANCE_TOGGLED', 'SETTINGS', `Toggled maintenance mode on ${roomNumber}.`, actorName)
+    addAuditLog(
+      'MAINTENANCE_TOGGLED',
+      'SETTINGS',
+      `Toggled maintenance mode on ${roomNumber} (${nextStatus}).`,
+      actorName
+    )
+
+    try {
+      await patchRoomStatus(roomNumber, { status: nextStatus })
+    } catch (err) {
+      console.warn('[HotelDataContext.toggleRoomMaintenance] Remote sync warning:', err.message)
+    }
   }
 
   /**
@@ -1011,6 +1033,11 @@ export function HotelDataProvider({ children }) {
    */
   const updateSettings = (newSettings, actorName = 'General Manager') => {
     setHotelSettings(newSettings)
+    try {
+      localStorage.setItem('stayza_hotel_settings', JSON.stringify(newSettings))
+    } catch (err) {
+      console.warn('[HotelDataContext.updateSettings] LocalStorage error:', err.message)
+    }
     addAuditLog(
       'SYSTEM_SETTINGS_UPDATE',
       'SETTINGS',

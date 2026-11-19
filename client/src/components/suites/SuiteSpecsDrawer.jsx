@@ -117,7 +117,13 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true" aria-labelledby="suite-specs-title">
+    <div 
+      className="fixed inset-0 z-50 overflow-hidden" 
+      role="dialog" 
+      aria-modal="true" 
+      aria-labelledby="suite-specs-title"
+      data-lenis-prevent="true"
+    >
       {/* 1. Backdrop */}
       <div 
         onClick={onClose} 
@@ -125,7 +131,10 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
       />
 
       {/* 2. Slide-Over Panel (Mobile: Bottom Sheet | Desktop: Right Drawer) */}
-      <div className="fixed inset-x-0 bottom-0 md:inset-x-auto md:right-0 md:top-0 md:bottom-0 w-full md:max-w-xl bg-[#FAF8F5] text-slate-900 border-t md:border-t-0 md:border-l border-[#E5DFD5] shadow-2xl flex flex-col max-h-[92vh] md:max-h-full overflow-hidden rounded-t-2xl md:rounded-none animate-in slide-in-from-bottom md:slide-in-from-right duration-400">
+      <div 
+        data-lenis-prevent="true"
+        className="fixed inset-x-0 bottom-0 md:inset-x-auto md:right-0 md:top-0 md:bottom-0 w-full md:max-w-xl bg-[#FAF8F5] text-slate-900 border-t md:border-t-0 md:border-l border-[#E5DFD5] shadow-2xl flex flex-col max-h-[92vh] md:max-h-full overflow-hidden rounded-t-2xl md:rounded-none animate-in slide-in-from-bottom md:slide-in-from-right duration-400"
+      >
         
         {/* Drawer Header */}
         <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5]/90 backdrop-blur-md shrink-0">
@@ -149,7 +158,10 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-6 sm:space-y-8 font-sans-clean">
+        <div 
+          data-lenis-prevent="true"
+          className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-8 space-y-6 sm:space-y-8 font-sans-clean"
+        >
           
           {/* Hero Perspective Photo */}
           <div className="relative aspect-[16/9] w-full rounded-[2px] overflow-hidden bg-slate-900 border border-slate-200 shadow-sm">

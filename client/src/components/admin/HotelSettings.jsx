@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { useToast } from '../../context/ToastContext'
 
 export default function HotelSettings({
   systemSettings,
   onSaveSettings,
 }) {
+  const { showToast } = useToast()
   const [taxRate, setTaxRate] = useState(systemSettings.taxRate || 13)
   const [depositRate, setDepositRate] = useState(systemSettings.depositRate || 30)
   const [checkInTime, setCheckInTime] = useState(systemSettings.checkInTime || '14:00')
@@ -21,6 +23,11 @@ export default function HotelSettings({
       policyNotes,
     })
     setSavedNotice(true)
+    showToast({
+      type: 'success',
+      title: 'Global Settings Saved',
+      message: `Sindh GST set to ${taxRate}% and online deposit split set to ${depositRate}%.`,
+    })
     setTimeout(() => setSavedNotice(false), 3000)
   }
 
