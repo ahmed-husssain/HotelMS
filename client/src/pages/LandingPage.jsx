@@ -48,7 +48,13 @@ export default function LandingPage() {
       <Navbar onOpenDrawer={() => handleOpenReservation(RESIDENCES[0])} />
 
       {/* Parallax Hero Section */}
-      <HeroSection onQuickReserve={() => handleOpenReservation(RESIDENCES[0])} />
+      <HeroSection 
+        onExplore={() => {
+          const el = document.getElementById('residences')
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }}
+        onQuickReserve={() => handleOpenReservation(RESIDENCES[0])} 
+      />
 
       {/* Architectural Residences Showcase */}
       <main id="residences" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 space-y-16 sm:space-y-20 lg:space-y-28 overflow-x-clip">

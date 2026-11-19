@@ -15,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger)
  * - Zero GPU Filter Thrashing: Replaced CSS brightness filter with a zero-cost static tint layer.
  * - Network Efficient: Uses preload="metadata" with high-efficiency WebM & MP4 fallback sources.
  */
-export default function HeroSection({ onQuickReserve }) {
+export default function HeroSection({ onQuickReserve, onExplore }) {
   const heroRef = useRef(null)
   const mediaWrapperRef = useRef(null)
   const videoRef = useRef(null)
@@ -127,13 +127,20 @@ export default function HeroSection({ onQuickReserve }) {
         </p>
       </div>
 
-      {/* Sculptural Arch Stamp — Unique & Minimal Luxury Dock */}
+      {/* Sculptural Arch Stamp — Solution A: Discover Residences Invitation */}
       <div className="relative z-20 w-full px-4 sm:px-6 pb-8 sm:pb-12 flex flex-col items-center">
         <button
           type="button"
-          onClick={onQuickReserve}
+          onClick={() => {
+            if (onExplore) {
+              onExplore()
+            } else {
+              const el = document.getElementById('residences')
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
+          }}
           className="group inline-flex items-center gap-2 p-1.5 pl-4 pr-1.5 bg-[#FAF8F5]/90 hover:bg-[#FAF8F5] backdrop-blur-md rounded-full border border-[#E5DFD5] hover:border-slate-900 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer min-h-[44px] active:scale-[0.98]"
-          aria-label="Book a luxury residence at Stayza"
+          aria-label="Explore luxury ocean suites at Stayza"
         >
           <div className="flex items-center gap-2 font-mono text-xs text-slate-900">
             {/* Stayza Concept 01 Pavilion Emblem — Pure Monochrome Matching Theme */}
@@ -144,20 +151,20 @@ export default function HeroSection({ onQuickReserve }) {
               <line x1="16" y1="78" x2="84" y2="78" strokeWidth="8" />
               <circle cx="50" cy="50" r="7" fill="currentColor" stroke="none" />
             </svg>
-            <span className="font-semibold text-slate-900 tracking-wider">Book a Residence</span>
+            <span className="font-semibold text-slate-900 tracking-wider">Explore Residences</span>
           </div>
 
           <span className="w-[1px] h-4 bg-[#E5DFD5] mx-1" aria-hidden="true" />
 
           {/* Kinetic Arrow Capsule — Theme Monochrome */}
           <div className="px-4 py-2 bg-slate-900 group-hover:bg-slate-800 text-[#FAF8F5] font-mono text-[10px] font-bold uppercase tracking-widest rounded-full transition-colors flex items-center gap-1.5 shadow-xs">
-            <span>Reserve</span>
-            <span className="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+            <span>Discover</span>
+            <span className="transition-transform duration-200 group-hover:translate-y-0.5">&darr;</span>
           </div>
         </button>
 
         <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mt-2.5 block select-none">
-          Scroll to explore residences &darr;
+          Private Ocean Suites &bull; 3 Flagship Keys
         </span>
       </div>
     </section>
