@@ -11,7 +11,7 @@ export default function CleaningQueue({
         <div>
           <h3 className="font-serif-grand text-xl text-slate-900">Room Cleaning &amp; Turnover Queue</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            4-Point Luxury Sanctuary Standard: Linens, Spa Salts, Minibar, and Supervisor Certification
+            4-Step Cleaning Standard: Fresh Linens, Bathroom &amp; Soap, Water &amp; Snacks, and Final Inspection
           </p>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function CleaningQueue({
                       className="w-3.5 h-3.5 rounded-[2px] text-slate-900 focus:ring-0 cursor-pointer"
                     />
                     <span className={tasks.linen ? 'text-slate-900 line-through' : 'text-slate-600'}>
-                      Fresh Egyptian Cotton Linens
+                      Fresh Bed Sheets &amp; Towels
                     </span>
                   </label>
 
@@ -100,7 +100,7 @@ export default function CleaningQueue({
                       className="w-3.5 h-3.5 rounded-[2px] text-slate-900 focus:ring-0 cursor-pointer"
                     />
                     <span className={tasks.bathSalts ? 'text-slate-900 line-through' : 'text-slate-600'}>
-                      Cedar Bath Salts &amp; Jasmine Mist
+                      Bathroom Cleaned &amp; Soaps Restocked
                     </span>
                   </label>
 
@@ -112,7 +112,7 @@ export default function CleaningQueue({
                       className="w-3.5 h-3.5 rounded-[2px] text-slate-900 focus:ring-0 cursor-pointer"
                     />
                     <span className={tasks.minibar ? 'text-slate-900 line-through' : 'text-slate-600'}>
-                      Organic Minibar Restocked
+                      Water Bottles, Tea &amp; Snacks Restocked
                     </span>
                   </label>
 
@@ -124,7 +124,7 @@ export default function CleaningQueue({
                       className="w-3.5 h-3.5 rounded-[2px] text-slate-900 focus:ring-0 cursor-pointer"
                     />
                     <span className={tasks.inspection ? 'text-slate-900 font-bold' : 'text-slate-600'}>
-                      Supervisor Inspection Sign-Off
+                      Supervisor Final Inspection
                     </span>
                   </label>
                 </div>

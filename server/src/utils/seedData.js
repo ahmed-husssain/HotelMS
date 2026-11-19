@@ -6,6 +6,9 @@ const Room = require('../models/Room')
 const Booking = require('../models/Booking')
 const Payment = require('../models/Payment')
 const ActivityLog = require('../models/ActivityLog')
+const InventoryItem = require('../models/InventoryItem')
+const HousekeepingTask = require('../models/HousekeepingTask')
+const MaintenanceRequest = require('../models/MaintenanceRequest')
 
 /**
  * LuxuryStay / Habitas — Rich Database Seed Script
@@ -30,6 +33,9 @@ const seedDatabase = async () => {
       Booking.deleteMany({}),
       Payment.deleteMany({}),
       ActivityLog.deleteMany({}),
+      InventoryItem.deleteMany({}),
+      HousekeepingTask.deleteMany({}),
+      MaintenanceRequest.deleteMany({}),
     ])
     console.log('[Seed] Database cleared.')
 
@@ -423,7 +429,81 @@ const seedDatabase = async () => {
     })
     console.log(`[Seed] Created payment ledger: ${payment.receiptNumber} (PKR ${payment.amount.toLocaleString()})`)
 
-    // 6. Create Initial System Activity Logs
+    // 6. Seed Everyday Hotel Supplies Inventory (7 Core Items)
+    const inventoryItems = await InventoryItem.create([
+      { name: 'Bed Sheets', category: 'linen', inStock: 25, inLaundry: 8, minAlertLevel: 5, unit: 'sets' },
+      { name: 'Bath Towels', category: 'linen', inStock: 40, inLaundry: 12, minAlertLevel: 10, unit: 'sets' },
+      { name: 'Pillows & Blankets', category: 'linen', inStock: 20, inLaundry: 4, minAlertLevel: 5, unit: 'sets' },
+      { name: 'Soap & Shampoo', category: 'consumable', inStock: 50, inLaundry: 0, minAlertLevel: 10, unit: 'bottles' },
+      { name: 'Water Bottles', category: 'consumable', inStock: 60, inLaundry: 0, minAlertLevel: 15, unit: 'bottles' },
+      { name: 'Tea & Coffee Kits', category: 'consumable', inStock: 45, inLaundry: 0, minAlertLevel: 10, unit: 'packs' },
+      { name: 'Snacks', category: 'consumable', inStock: 40, inLaundry: 0, minAlertLevel: 10, unit: 'packs' },
+    ])
+    console.log(`[Seed] Seeded ${inventoryItems.length} everyday hotel supplies & linen inventory items.`)
+
+    // 7. Seed Active Housekeeping Tasks (Turnovers & Tidies)
+    const suite204 = rooms.find((r) => r.roomNumber.toUpperCase().includes('204'))
+    const housekeeperUser = users.find((u) => u.role === 'housekeeping')
+
+    await HousekeepingTask.create([
+      {
+        room: suite204._id,
+        roomNumber: 'Suite 204',
+        assignedTo: housekeeperUser?._id,
+        assignedName: housekeeperUser?.name || 'Bilal Farooq',
+        taskType: 'TURNOVER_CLEAN',
+        priority: 'HIGH',
+        status: 'PENDING',
+        checklist: { linen: false, bathSalts: false, minibar: false, inspection: false },
+        notes: 'Guest checked out at 11:00 AM. Priority turnover for incoming 3:00 PM VIP arrival.',
+      },
+      {
+        room: suite301._id,
+        roomNumber: 'Suite 301',
+        assignedTo: housekeeperUser?._id,
+        assignedName: housekeeperUser?.name || 'Bilal Farooq',
+        taskType: 'DAILY_TIDY',
+        priority: 'NORMAL',
+        status: 'IN_PROGRESS',
+        checklist: { linen: true, bathSalts: true, minibar: false, inspection: false },
+        notes: 'Morning refresh requested by Dr. Tariq Khan.',
+      },
+    ])
+    console.log('[Seed] Created active housekeeping tasks.')
+
+    // 8. Seed Maintenance Tickets
+    const suite201 = rooms.find((r) => r.roomNumber.toUpperCase().includes('201'))
+    const suite102 = rooms.find((r) => r.roomNumber.toUpperCase().includes('102'))
+
+    await MaintenanceRequest.create([
+      {
+        room: suite201._id,
+        roomNumber: 'Suite 201',
+        reportedBy: housekeeperUser?._id,
+        reportedByName: housekeeperUser?.name || 'Bilal Farooq',
+        assignedTechnician: 'Chief Engineer Rashid',
+        issueCategory: 'HVAC_AIR_CONDITIONING',
+        issueDescription: 'Thermostat sensor calibration running 2°C higher than setpoint.',
+        priority: 'MEDIUM',
+        status: 'REPORTED',
+      },
+      {
+        room: suite102._id,
+        roomNumber: 'Suite 102',
+        reportedBy: housekeeperUser?._id,
+        reportedByName: housekeeperUser?.name || 'Bilal Farooq',
+        assignedTechnician: 'Chief Engineer Rashid',
+        issueCategory: 'PLUMBING',
+        issueDescription: 'Balcony plunge pool filtration nozzle pressure check.',
+        priority: 'LOW',
+        status: 'RESOLVED',
+        resolutionNotes: 'Filter flushed and water flow restored to optimal gpm.',
+        resolvedAt: new Date(),
+      },
+    ])
+    console.log('[Seed] Created maintenance requests.')
+
+    // 9. Create Initial System Activity Logs
     await ActivityLog.create([
       {
         userId: guestUser._id,

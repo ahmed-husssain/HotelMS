@@ -65,9 +65,12 @@ async function login(req, res) {
     try {
       await ActivityLog.create({
         userId: user._id,
+        actorName: user.name || 'User',
         action: 'USER_LOGIN',
+        category: 'SECURITY',
+        targetModel: 'User',
         targetId: user._id.toString(),
-        notes: `User ${user.email} (${user.role}) authenticated successfully.`,
+        details: `User ${user.email} (${user.role}) authenticated successfully.`,
       })
     } catch (logErr) {
       console.warn('[Auth] Non-fatal audit log warning:', logErr.message)

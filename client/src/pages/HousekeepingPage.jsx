@@ -7,6 +7,7 @@ import CleaningQueue from '../components/housekeeping/CleaningQueue'
 import GuestRequests from '../components/housekeeping/GuestRequests'
 import MaintenanceList from '../components/housekeeping/MaintenanceList'
 import NewTicketModal from '../components/housekeeping/NewTicketModal'
+import SuppliesInventory from '../components/housekeeping/SuppliesInventory'
 
 export default function HousekeepingPage() {
   const { currentUser, logout } = useAuth()
@@ -14,13 +15,15 @@ export default function HousekeepingPage() {
     rooms,
     guestRequests,
     maintenanceTickets,
+    inventory,
     updateCleaningTask,
     certifyRoomReady,
     markServiceDelivered,
     createMaintenanceTicket,
+    restockInventory,
   } = useHotelData()
 
-  // Navigation Tabs: 'CLEANING' | 'REQUESTS' | 'MAINTENANCE'
+  // Navigation Tabs: 'CLEANING' | 'REQUESTS' | 'MAINTENANCE' | 'SUPPLIES'
   const [activeTab, setActiveTab] = useState('CLEANING')
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false)
 
@@ -139,6 +142,17 @@ export default function HousekeepingPage() {
           >
             Maintenance Tickets ({maintenanceTickets.length})
           </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('SUPPLIES')}
+            className={`px-5 py-3 text-xs font-mono uppercase font-bold tracking-wider cursor-pointer border-b-2 transition-all ${
+              activeTab === 'SUPPLIES'
+                ? 'border-slate-900 text-slate-900'
+                : 'border-transparent text-slate-400 hover:text-slate-700'
+            }`}
+          >
+            Supplies &amp; Linens ({inventory.length || 7})
+          </button>
         </div>
 
         {/* Views */}
@@ -161,6 +175,13 @@ export default function HousekeepingPage() {
           <MaintenanceList
             tickets={maintenanceTickets}
             onOpenModal={() => setIsNewTicketModalOpen(true)}
+          />
+        )}
+
+        {activeTab === 'SUPPLIES' && (
+          <SuppliesInventory
+            inventory={inventory}
+            onRestockItem={restockInventory}
           />
         )}
       </main>

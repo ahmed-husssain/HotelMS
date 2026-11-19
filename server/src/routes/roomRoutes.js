@@ -6,6 +6,8 @@ const {
   updateRoomStatus,
   updateCleaningTask,
 } = require('../controllers/roomController')
+const { protect } = require('../middleware/auth')
+const { authorize } = require('../middleware/rbac')
 
 /**
  * Room Routes — Public Guest & Staff Catalog + Live Operations
@@ -13,8 +15,8 @@ const {
 router.get('/', getAllRooms)
 router.get('/:id', getRoomById)
 
-// Operational Turnover Routes (Staff)
-router.patch('/:id/status', updateRoomStatus)
-router.patch('/:id/checklist', updateCleaningTask)
+// Operational Turnover Routes (Protected for Staff & Management)
+router.patch('/:id/status', protect, authorize('receptionist', 'housekeeping', 'admin'), updateRoomStatus)
+router.patch('/:id/checklist', protect, authorize('receptionist', 'housekeeping', 'admin'), updateCleaningTask)
 
 module.exports = router

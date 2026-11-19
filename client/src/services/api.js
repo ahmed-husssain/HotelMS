@@ -174,3 +174,79 @@ export async function postFolioCharge(bookingRef, payload) {
 export async function fetchCashierShift() {
   return request('/staff/shifts/current')
 }
+
+// 5. Housekeeping, Maintenance & Hotel Supplies
+export async function fetchHousekeepingDashboard() {
+  return request('/housekeeping/dashboard')
+}
+
+export async function toggleCleaningStep(taskId, step, value) {
+  return request(`/housekeeping/tasks/${encodeURIComponent(taskId)}/step`, {
+    method: 'PATCH',
+    body: JSON.stringify({ step, value }),
+  })
+}
+
+export async function certifyHousekeepingRoom(taskId) {
+  return request(`/housekeeping/tasks/${encodeURIComponent(taskId)}/certify`, {
+    method: 'POST',
+  })
+}
+
+export async function createMaintenanceTicketApi(payload) {
+  return request('/housekeeping/maintenance', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function resolveMaintenanceTicketApi(ticketId, resolutionNotes = '') {
+  return request(`/housekeeping/maintenance/${encodeURIComponent(ticketId)}/resolve`, {
+    method: 'PATCH',
+    body: JSON.stringify({ resolutionNotes }),
+  })
+}
+
+export async function restockInventoryItem(itemId, amount = 10, type = 'clean_restock') {
+  return request(`/housekeeping/inventory/${encodeURIComponent(itemId)}/restock`, {
+    method: 'PATCH',
+    body: JSON.stringify({ amount, type }),
+  })
+}
+
+// 6. Admin & General Manager Executive Operations
+export async function fetchAdminAnalytics() {
+  return request('/admin/analytics')
+}
+
+export async function fetchAdminStaff() {
+  return request('/admin/staff')
+}
+
+export async function createAdminStaff(payload) {
+  return request('/admin/staff', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function toggleAdminStaffStatus(id) {
+  return request(`/admin/staff/${encodeURIComponent(id)}/status`, {
+    method: 'PATCH',
+  })
+}
+
+export async function fetchAdminGuests() {
+  return request('/admin/guests')
+}
+
+export async function patchAdminRoomRate(roomIdentifier, nightlyRate) {
+  return request(`/admin/rooms/${encodeURIComponent(roomIdentifier)}/rate`, {
+    method: 'PATCH',
+    body: JSON.stringify({ nightlyRate }),
+  })
+}
+
+export async function fetchAdminAuditLogs() {
+  return request('/admin/audit-logs')
+}

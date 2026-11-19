@@ -6,6 +6,10 @@ import {
   postFolioCharge,
   patchRoomStatus,
   patchRoomChecklist,
+  fetchHousekeepingDashboard,
+  restockInventoryItem,
+  toggleCleaningStep,
+  certifyHousekeepingRoom,
 } from '../services/api'
 import {
   subscribeToRoomUpdates,
@@ -307,10 +311,32 @@ export function HotelDataProvider({ children }) {
     }
   })
 
+  // 7. Hotel Supplies & Linens Inventory (Priority 2)
+  const [inventory, setInventory] = useState(() => {
+    try {
+      const saved = localStorage.getItem('stayza_hotel_inventory')
+      return saved ? JSON.parse(saved) : [
+        { _id: 'inv-1', name: 'Bed Sheets', category: 'linen', inStock: 25, inLaundry: 8, minAlertLevel: 5, unit: 'sets' },
+        { _id: 'inv-2', name: 'Bath Towels', category: 'linen', inStock: 40, inLaundry: 12, minAlertLevel: 10, unit: 'sets' },
+        { _id: 'inv-3', name: 'Pillows & Blankets', category: 'linen', inStock: 20, inLaundry: 4, minAlertLevel: 5, unit: 'sets' },
+        { _id: 'inv-4', name: 'Soap & Shampoo', category: 'consumable', inStock: 50, inLaundry: 0, minAlertLevel: 10, unit: 'bottles' },
+        { _id: 'inv-5', name: 'Water Bottles', category: 'consumable', inStock: 60, inLaundry: 0, minAlertLevel: 15, unit: 'bottles' },
+        { _id: 'inv-6', name: 'Tea & Coffee Kits', category: 'consumable', inStock: 45, inLaundry: 0, minAlertLevel: 10, unit: 'packs' },
+        { _id: 'inv-7', name: 'Snacks', category: 'consumable', inStock: 40, inLaundry: 0, minAlertLevel: 10, unit: 'packs' },
+      ]
+    } catch {
+      return []
+    }
+  })
+
   // Synchronize state changes to localStorage
   useEffect(() => {
     localStorage.setItem('stayza_hotel_rooms', JSON.stringify(rooms))
   }, [rooms])
+
+  useEffect(() => {
+    localStorage.setItem('stayza_hotel_inventory', JSON.stringify(inventory))
+  }, [inventory])
 
   // Live MongoDB Atlas Sync on Mount
   useEffect(() => {
@@ -328,6 +354,31 @@ export function HotelDataProvider({ children }) {
         }
       } catch (err) {
         console.warn('[HotelDataContext] Fallback to cached hotel state:', err.message)
+      }
+
+      try {
+        const hkRes = await fetchHousekeepingDashboard()
+        if (isMounted && hkRes.success && hkRes.data) {
+          if (hkRes.data.inventory && hkRes.data.inventory.length > 0) {
+            setInventory(hkRes.data.inventory)
+          }
+          if (hkRes.data.tickets && hkRes.data.tickets.length > 0) {
+            setMaintenanceTickets(
+              hkRes.data.tickets.map((t) => ({
+                id: t._id,
+                roomNumber: t.roomNumber,
+                category: t.issueCategory,
+                issue: t.issueDescription,
+                urgency: t.priority,
+                reportedAt: new Date(t.createdAt).toLocaleDateString(),
+                assignedTo: t.assignedTechnician,
+                status: t.status,
+              }))
+            )
+          }
+        }
+      } catch (err) {
+        console.warn('[HotelDataContext] Housekeeping sync fallback:', err.message)
       }
     }
     loadLiveDashboard()
@@ -697,7 +748,7 @@ export function HotelDataProvider({ children }) {
    * Optimistically updates checklist and syncs via WebSockets to Front Desk PMS
    */
   const updateCleaningTask = async (roomNumber, taskKey, isComplete, actor = 'Housekeeping Staff') => {
-    // 1. Optimistic UI update
+    // 1. Optimistic UI update for Room
     setRooms((prev) =>
       prev.map((r) => {
         const isMatch =
@@ -716,7 +767,38 @@ export function HotelDataProvider({ children }) {
       })
     )
 
-    // 2. Persist to MongoDB Atlas and broadcast across WebSockets (<40ms)
+    // 2. Auto-deduct inventory supplies if step completed
+    if (isComplete) {
+      setInventory((prev) =>
+        prev.map((item) => {
+          if (taskKey === 'linen') {
+            if (item.name === 'Bed Sheets') {
+              return { ...item, inStock: Math.max(0, item.inStock - 1), inLaundry: (item.inLaundry || 0) + 1 }
+            }
+            if (item.name === 'Bath Towels') {
+              return { ...item, inStock: Math.max(0, item.inStock - 2), inLaundry: (item.inLaundry || 0) + 2 }
+            }
+          } else if (taskKey === 'bathSalts') {
+            if (item.name === 'Soap & Shampoo') {
+              return { ...item, inStock: Math.max(0, item.inStock - 1) }
+            }
+          } else if (taskKey === 'minibar') {
+            if (item.name === 'Water Bottles') {
+              return { ...item, inStock: Math.max(0, item.inStock - 2) }
+            }
+            if (item.name === 'Tea & Coffee Kits') {
+              return { ...item, inStock: Math.max(0, item.inStock - 1) }
+            }
+            if (item.name === 'Snacks') {
+              return { ...item, inStock: Math.max(0, item.inStock - 1) }
+            }
+          }
+          return item
+        })
+      )
+    }
+
+    // 3. Persist to MongoDB Atlas and broadcast across WebSockets (<40ms)
     try {
       await patchRoomChecklist(roomNumber, {
         taskKey,
@@ -815,9 +897,9 @@ export function HotelDataProvider({ children }) {
 
   /**
    * Action I: Log Maintenance Ticket (Invoked on /housekeeping)
-   * If urgency is URGENT, lock room status to MAINTENANCE!
+   * If urgency is URGENT or HIGH, lock room status to MAINTENANCE!
    */
-  const createMaintenanceTicket = (ticketData, reporterName = 'Staff Member') => {
+  const createMaintenanceTicket = async (ticketData, reporterName = 'Staff Member') => {
     const newTicket = {
       id: `TKT-${Math.floor(100 + Math.random() * 900)}`,
       ...ticketData,
@@ -827,7 +909,7 @@ export function HotelDataProvider({ children }) {
 
     setMaintenanceTickets((prev) => [newTicket, ...prev])
 
-    if (ticketData.urgency === 'URGENT') {
+    if (ticketData.urgency === 'URGENT' || ticketData.urgency === 'HIGH') {
       setRooms((prev) =>
         prev.map((r) => (r.roomNumber === ticketData.roomNumber ? { ...r, status: 'MAINTENANCE' } : r))
       )
@@ -839,11 +921,62 @@ export function HotelDataProvider({ children }) {
       `Logged ${ticketData.urgency} ticket for ${ticketData.roomNumber}: ${ticketData.issue}`,
       reporterName
     )
+
+    try {
+      await createMaintenanceTicketApi({
+        roomNumber: ticketData.roomNumber,
+        issueCategory: ticketData.category || 'OTHER',
+        issueDescription: ticketData.issue,
+        priority: ticketData.urgency || 'MEDIUM',
+        lockRoom: ticketData.urgency === 'URGENT' || ticketData.urgency === 'HIGH',
+      })
+    } catch (err) {
+      console.warn('[Maintenance Ticket] Atlas sync warning:', err.message)
+    }
+
     return newTicket
   }
 
   /**
-   * Action J: Update Base Room Rate (Invoked on /admin)
+   * Action J: Restock Supplies or Return Cleaned Linens from Laundry (Priority 2)
+   */
+  const restockInventory = async (itemId, amount = 10, type = 'clean_restock') => {
+    try {
+      const res = await restockInventoryItem(itemId, amount, type)
+      if (res.success && res.data) {
+        if (res.data.inventory) {
+          setInventory(res.data.inventory)
+        }
+        toast?.success?.(res.message || 'Supplies replenished', 'INVENTORY')
+        return res.data
+      }
+    } catch (err) {
+      console.warn('[Inventory Restock] Remote sync fallback:', err.message)
+      setInventory((prev) =>
+        prev.map((item) => {
+          if (item._id === itemId || item.name === itemId) {
+            if (type === 'laundry_return' && item.category === 'linen') {
+              const ret = Math.min(amount, item.inLaundry || 0)
+              return {
+                ...item,
+                inStock: (item.inStock || 0) + ret,
+                inLaundry: Math.max(0, (item.inLaundry || 0) - ret),
+              }
+            }
+            return {
+              ...item,
+              inStock: (item.inStock || 0) + amount,
+            }
+          }
+          return item
+        })
+      )
+      toast?.info?.(`Stock replenished (+${amount})`, 'LOCAL RESTOCK')
+    }
+  }
+
+  /**
+   * Action K: Update Base Room Rate (Invoked on /admin)
    */
   const updateRoomRate = (roomNumber, newRate, actorName = 'General Manager') => {
     setRooms((prev) =>
@@ -891,6 +1024,7 @@ export function HotelDataProvider({ children }) {
     arrivals,
     guestRequests,
     maintenanceTickets,
+    inventory,
     systemSettings,
     auditLogs,
     createReservation,
@@ -902,6 +1036,7 @@ export function HotelDataProvider({ children }) {
     requestGuestService,
     markServiceDelivered,
     createMaintenanceTicket,
+    restockInventory,
     updateRoomRate,
     toggleRoomMaintenance,
     updateSettings,

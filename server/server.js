@@ -1,4 +1,5 @@
-require('dotenv').config()
+const path = require('path')
+require('dotenv').config({ path: path.join(__dirname, '.env') })
 const http = require('http')
 const express = require('express')
 const { Server } = require('socket.io')
@@ -58,11 +59,15 @@ const authRoutes = require('./src/routes/authRoutes')
 const roomRoutes = require('./src/routes/roomRoutes')
 const bookingRoutes = require('./src/routes/bookingRoutes')
 const staffRoutes = require('./src/routes/staffRoutes')
+const housekeepingRoutes = require('./src/routes/housekeepingRoutes')
+const adminRoutes = require('./src/routes/adminRoutes')
 
 app.use('/api/auth', authRoutes)
 app.use('/api/rooms', roomRoutes)
 app.use('/api/bookings', bookingRoutes)
 app.use('/api/staff', staffRoutes)
+app.use('/api/housekeeping', housekeepingRoutes)
+app.use('/api/admin', adminRoutes)
 
 // Health & Status Check Endpoint
 app.get('/api/health', (req, res) => {
