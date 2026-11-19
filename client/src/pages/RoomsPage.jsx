@@ -14,30 +14,26 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 const ARCHITECTURAL_COLLECTIONS = [
   {
     id: 'penthouses',
-    label: 'Penthouses & Duplexes',
+    label: 'Penthouses',
     keys: '2 Keys',
-    tagline: 'Elevated multi-level suites, panoramic horizons, and private rooftop plunge pools.',
     matcher: (r) => r.roomNumber === '301' || r.roomNumber === '302',
   },
   {
     id: 'villas',
-    label: 'Private Villas & Estates',
+    label: 'Private Villas',
     keys: '3 Keys',
-    tagline: 'Secluded garden courtyards, biophilic cenotes, and monolithic volcanic basalt grounds.',
     matcher: (r) => r.roomNumber === '204' || r.roomNumber === '401' || r.roomNumber === '501',
   },
   {
     id: 'overwater',
-    label: 'Overwater & Cliff Sanctuaries',
+    label: 'Overwater & Cliff',
     keys: '2 Keys',
-    tagline: 'Cantilevered bluff views, glass coral viewing floors, and direct ocean tides.',
     matcher: (r) => r.roomNumber === '102' || r.roomNumber === '201',
   },
   {
     id: 'all',
-    label: 'Complete Collection',
+    label: 'All Suites',
     keys: '7 Keys',
-    tagline: 'The complete architectural collection of all seven private keys across the estate.',
     matcher: () => true,
   },
 ]
@@ -97,9 +93,9 @@ export default function RoomsPage() {
             </div>
           </div>
 
-          {/* Quiet Luxury Editorial Navigation Tabs (Zero Clutter, Zero Sticky Overlap) */}
-          <div className="pt-6 border-t border-slate-200/70 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <nav aria-label="Suite Collections" className="flex items-center gap-6 sm:gap-8 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
+          {/* Quiet Luxury Editorial Navigation Tabs (Full Width, Zero Tagline Clutter) */}
+          <div className="pt-6 border-t border-slate-200/70">
+            <nav aria-label="Suite Collections" className="flex items-center gap-4 sm:gap-8 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
               {ARCHITECTURAL_COLLECTIONS.map((col, idx) => {
                 const isActive = selectedCollectionId === col.id
                 return (
@@ -134,11 +130,6 @@ export default function RoomsPage() {
                 )
               })}
             </nav>
-
-            {/* Subtle Active Collection Tagline */}
-            <p className="text-[11px] font-mono text-slate-500 pb-3 hidden md:block max-w-md text-right">
-              {activeCollection.tagline}
-            </p>
           </div>
         </div>
       </header>

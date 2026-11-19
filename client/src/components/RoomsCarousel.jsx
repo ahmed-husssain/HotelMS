@@ -230,23 +230,15 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
       ref={containerRef}
       onMouseEnter={markEngaged}
       onTouchStart={markEngaged}
-      className="group/card relative w-full space-y-6 sm:space-y-8 py-8 sm:py-14 transition-all duration-500 border-b border-slate-200/80 last:border-b-0"
+      className="group/card relative w-full py-4 sm:py-6 transition-all duration-500"
     >
-      {/* 1. Main Architectural Photographic Canvas (Full-Width Cinema Runway) */}
+      {/* Main Architectural Cinema Stage with Integrated Lower-Third Editorial Interface */}
       <div
-        onClick={(e) => {
-          if (!isVisible70) {
-            handleMagneticFocus(e)
-            return
-          }
-          if (onOpenSpecs) onOpenSpecs(residence)
-          else onReserve(residence)
-        }}
-        data-cursor={isVisible70 ? 'Explore Suite' : 'Scroll to Focus'}
-        className="relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[2.1/1] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none cursor-pointer"
+        data-cursor={isVisible70 ? 'Swipe Gallery' : 'Scroll to Focus'}
+        className="relative w-full aspect-[16/11] sm:aspect-[16/10] lg:aspect-[16/9] min-h-[460px] max-h-[82vh] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none"
       >
-        {/* Embla Viewport */}
-        <div ref={shouldInitCarousel ? emblaRef : null} className="overflow-hidden w-full h-full">
+        {/* 1. Embla Viewport — Covers 100% of the stage for full-bleed touch & swipe */}
+        <div ref={shouldInitCarousel ? emblaRef : null} className="absolute inset-0 overflow-hidden w-full h-full">
           <div className="flex w-full h-full touch-pan-y">
             {gallery.map((photo, i) => (
               <CarouselSlide
@@ -260,11 +252,11 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
           </div>
         </div>
 
-        {/* Top Floating Awakening Indicators */}
+        {/* 2. Top Floating Telemetry & Room Emblem */}
         <div className="absolute top-4 sm:top-6 inset-x-4 sm:inset-x-6 flex items-center justify-between pointer-events-none z-20">
           {/* Room Number Badge */}
           <span
-            className={`px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
+            className={`px-3 py-1 bg-[#0E1201]/55 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
               isVisible70 ? 'opacity-100' : 'opacity-40'
             }`}
           >
@@ -273,7 +265,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
 
           {/* Minimalist Slide Counter */}
           <span
-            className={`px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
+            className={`px-3 py-1 bg-[#0E1201]/55 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
               isVisible70 ? 'opacity-100' : 'opacity-40'
             }`}
           >
@@ -281,9 +273,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
           </span>
         </div>
 
-        {/* Awakening Navigation Arrows:
-            - When < 70%: Discreet 25% opacity; clicking glides card into center
-            - When >= 70%: Fully active with responsive hover and click swiping */}
+        {/* 3. Awakening Navigation Arrows (Clickable left & right with 44px+ touch targets) */}
         <div className="absolute inset-y-0 inset-x-2 sm:inset-x-4 flex items-center justify-between pointer-events-none z-20">
           {/* Previous Photo Button */}
           <button
@@ -291,7 +281,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
             onClick={scrollPrev}
             data-cursor-hide="true"
             aria-label="Previous photo"
-            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
+            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/60 hover:bg-[#0E1201]/90 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
               isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
             }`}
           >
@@ -304,7 +294,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
             onClick={scrollNext}
             data-cursor-hide="true"
             aria-label="Next photo"
-            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-9 h-9 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
+            className={`pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-12 sm:h-12 grid place-items-center bg-[#0E1201]/60 hover:bg-[#0E1201]/90 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer ${
               isVisible70 ? 'opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100' : 'opacity-25 hover:opacity-60'
             }`}
           >
@@ -312,8 +302,73 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
           </button>
         </div>
 
-        {/* Minimal 1px Hairline Progress Track */}
-        <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/15 z-20">
+        {/* 4. Unified Lower-Third Editorial Interface (Lives directly on the picture) */}
+        <div className="absolute inset-x-0 bottom-0 z-20 pointer-events-none bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-16 sm:pt-24 pb-5 sm:pb-7 px-5 sm:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
+            
+            {/* Left: Suite Number, Name & Single-line Specs */}
+            <div className="space-y-1.5 max-w-2xl">
+              <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-[#FFF0CA]/90 uppercase block select-none">
+                0{index + 1} &bull; RESIDENCE
+              </span>
+              
+              <h2 className="font-serif-grand text-2xl sm:text-4xl lg:text-5xl text-white font-light tracking-tight leading-none drop-shadow-sm">
+                {residence.name}
+              </h2>
+
+              {/* Single-line Whisper Specs directly on the picture */}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px] sm:text-xs font-mono text-slate-200">
+                {residence.specs.slice(0, 4).map((item, idx) => (
+                  <React.Fragment key={idx}>
+                    {idx > 0 && <span className="text-white/40 select-none">&bull;</span>}
+                    <span>
+                      <span className="text-white/60 font-normal">{item.label} </span>
+                      <strong className="text-white font-semibold">{item.value}</strong>
+                    </span>
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Pricing & Signature Kinetic Reserve Button */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 sm:gap-6 shrink-0 pt-1 md:pt-0">
+              <div className="text-left md:text-right">
+                <div className="flex items-baseline md:justify-end gap-1.5">
+                  <span className="text-xs font-semibold text-slate-300">PKR</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                    {residence.nightlyRate.toLocaleString()}
+                  </span>
+                  <span className="text-xs text-slate-300 font-normal">/ Night</span>
+                </div>
+                <span className="text-[10px] font-mono tracking-wider text-[#FFF0CA] uppercase block mt-0.5">
+                  30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                {onOpenSpecs && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenSpecs(residence)}
+                    className="pointer-events-auto px-3 py-2 text-[10px] font-mono tracking-wider uppercase text-slate-300 hover:text-white underline transition-colors cursor-pointer"
+                  >
+                    Specs
+                  </button>
+                )}
+                <div className="pointer-events-auto">
+                  <AnimatedButton
+                    text="Reserve Key →"
+                    onClick={() => onReserve(residence)}
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* 5. Minimal 1px Hairline Progress Track */}
+        <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/20 z-30">
           <div
             className={`h-full bg-[#FFF0CA] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)] ${
               isVisible70 ? 'opacity-100' : 'opacity-40'
@@ -323,77 +378,6 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
             }}
           />
         </div>
-      </div>
-
-      {/* 2. Quiet Editorial Telemetry Row Below the Image (Zero Clunky White Boxes) */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 px-1">
-        
-        {/* Left: Suite Identity & Clean Single-Line Telemetry */}
-        <div className="space-y-2 max-w-2xl">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono tracking-[0.25em] font-extrabold text-emerald-900 uppercase">
-              0{index + 1} &bull; RESIDENCE
-            </span>
-          </div>
-          
-          <h2 className="font-serif-grand text-3xl sm:text-4xl lg:text-5xl text-slate-900 font-light tracking-tight leading-tight">
-            {residence.name}
-          </h2>
-
-          {/* Single-line Whisper Specs (Zero rectangular cards!) */}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-xs sm:text-sm font-mono text-slate-600">
-            {residence.specs.map((item, idx) => (
-              <React.Fragment key={idx}>
-                {idx > 0 && <span className="text-slate-300 select-none">&bull;</span>}
-                <span>
-                  <span className="text-slate-400 font-normal">{item.label} </span>
-                  <strong className="text-slate-900 font-semibold">{item.value}</strong>
-                </span>
-              </React.Fragment>
-            ))}
-            {residence.amenities && residence.amenities.length > 0 && (
-              <>
-                <span className="text-slate-300 select-none">&bull;</span>
-                <span className="text-emerald-900 font-medium">
-                  {residence.amenities[0]}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Right: Nightly Pricing & Signature Kinetic Reserve Button */}
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-6 sm:gap-8 shrink-0 pt-2 lg:pt-0">
-          <div>
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-xs font-semibold text-slate-600">PKR</span>
-              <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                {residence.nightlyRate.toLocaleString()}
-              </span>
-              <span className="text-xs text-slate-600 font-normal">/ Night</span>
-            </div>
-            <span className="text-[10px] font-mono tracking-wider text-emerald-800 uppercase block mt-0.5">
-              30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {onOpenSpecs && (
-              <button
-                type="button"
-                onClick={() => onOpenSpecs(residence)}
-                className="px-3 py-2 text-[10px] font-mono tracking-wider uppercase text-slate-600 hover:text-slate-950 underline transition-colors cursor-pointer"
-              >
-                Specs Dossier
-              </button>
-            )}
-            <AnimatedButton
-              text="Reserve Key →"
-              onClick={() => onReserve(residence)}
-            />
-          </div>
-        </div>
-
       </div>
     </article>
   )
