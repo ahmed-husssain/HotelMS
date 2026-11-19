@@ -71,8 +71,8 @@ export default function RoomsPage() {
       <Navbar onOpenDrawer={() => handleOpenReservation(RESIDENCES[0])} />
 
       {/* 2. Low-Profile Architectural Masthead (Clean, Poised, Suites Immediately Visible) */}
-      <header className="pt-24 sm:pt-28 pb-4 sm:pb-6 px-6 sm:px-12 border-b border-slate-200/80 bg-gradient-to-b from-white/70 to-transparent">
-        <div className="max-w-7xl mx-auto space-y-4">
+      <header className="pt-24 sm:pt-28 pb-4 sm:pb-6 px-4 sm:px-12 border-b border-slate-200/80 bg-gradient-to-b from-white/70 to-transparent">
+        <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4">
           
           {/* Subtle Monograph Eyebrow */}
           <div className="flex items-center justify-between">
@@ -90,8 +90,8 @@ export default function RoomsPage() {
           </h1>
 
           {/* Quiet Luxury Editorial Navigation Tabs */}
-          <div className="pt-2">
-            <nav aria-label="Suite Collections" className="flex items-center gap-6 sm:gap-10 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
+          <div className="pt-1 sm:pt-2">
+            <nav aria-label="Suite Collections" className="flex items-center gap-4 sm:gap-10 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
               {ARCHITECTURAL_COLLECTIONS.map((col, idx) => {
                 const isActive = selectedCollectionId === col.id
                 return (
@@ -131,7 +131,7 @@ export default function RoomsPage() {
       </header>
 
       {/* 3. The Curated Suites Showcase (Only 2-3 suites per collection, Zero Scroll Fatigue) */}
-      <main className="max-w-7xl mx-auto px-6 py-12 sm:py-16 space-y-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 space-y-12 sm:space-y-16">
         {filteredSuites.map((residence, idx) => (
           <RoomsCarousel
             key={residence.id}
