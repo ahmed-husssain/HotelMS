@@ -11,6 +11,27 @@ export const INCIDENTAL_CATALOG = [
 export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddIncidental }) {
   const [customItem, setCustomItem] = useState('')
   const [customAmount, setCustomAmount] = useState('')
+  const [isRendered, setIsRendered] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Fluid Hardware-Accelerated Mount/Unmount lifecycle
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true)
+      const raf = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true)
+        })
+      })
+      return () => cancelAnimationFrame(raf)
+    } else {
+      setIsVisible(false)
+      const timer = setTimeout(() => {
+        setIsRendered(false)
+      }, 200)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (!isOpen) return
@@ -28,7 +49,7 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
     }
   }, [isOpen, onClose])
 
-  if (!isOpen || !selectedRoom) return null
+  if (!isRendered || !selectedRoom) return null
 
   const handlePostCatalog = (item) => {
     onAddIncidental(selectedRoom.roomNumber, item.title, item.price)
@@ -47,11 +68,19 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
   return (
     <div 
       data-lenis-prevent="true"
-      className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      className={`fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4 transition-opacity duration-200 ease-out cursor-pointer ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
     >
       <div 
         data-lenis-prevent="true"
-        className="bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-6 animate-scale-in"
+        onClick={(e) => e.stopPropagation()}
+        className={`bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-6 will-change-transform transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-default ${
+          isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-2'
+        }`}
       >
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>

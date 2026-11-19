@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function CheckoutInvoiceModal({
   isOpen,
@@ -7,6 +7,28 @@ export default function CheckoutInvoiceModal({
   taxRate = 13,
   onConfirmCheckout,
 }) {
+  const [isRendered, setIsRendered] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Fluid Hardware-Accelerated Mount/Unmount lifecycle
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true)
+      const raf = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true)
+        })
+      })
+      return () => cancelAnimationFrame(raf)
+    } else {
+      setIsVisible(false)
+      const timer = setTimeout(() => {
+        setIsRendered(false)
+      }, 200)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
+
   useEffect(() => {
     if (!isOpen) return
     const originalOverflow = document.body.style.overflow
@@ -23,7 +45,7 @@ export default function CheckoutInvoiceModal({
     }
   }, [isOpen, onClose])
 
-  if (!isOpen || !selectedRoom) return null
+  if (!isRendered || !selectedRoom) return null
 
   const handlePrint = () => {
     window.print()
@@ -45,11 +67,19 @@ export default function CheckoutInvoiceModal({
   return (
     <div 
       data-lenis-prevent="true"
-      className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      className={`fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4 transition-opacity duration-200 ease-out cursor-pointer ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
     >
       <div 
         data-lenis-prevent="true"
-        className="bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-6 animate-scale-in max-h-[90vh] overflow-y-auto overscroll-contain"
+        onClick={(e) => e.stopPropagation()}
+        className={`bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-6 will-change-transform transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] max-h-[90vh] overflow-y-auto overscroll-contain cursor-default ${
+          isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-2'
+        }`}
       >
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>

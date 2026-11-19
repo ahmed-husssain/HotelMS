@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useToast } from '../../context/ToastContext'
 
 export default function StaffList({
@@ -8,6 +8,8 @@ export default function StaffList({
 }) {
   const { showToast } = useToast()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalRendered, setIsModalRendered] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -16,6 +18,41 @@ export default function StaffList({
   const [phone, setPhone] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Fluid Hardware-Accelerated Mount/Unmount lifecycle
+  useEffect(() => {
+    if (isModalOpen) {
+      setIsModalRendered(true)
+      const raf = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsModalVisible(true)
+        })
+      })
+      return () => cancelAnimationFrame(raf)
+    } else {
+      setIsModalVisible(false)
+      const timer = setTimeout(() => {
+        setIsModalRendered(false)
+      }, 200)
+      return () => clearTimeout(timer)
+    }
+  }, [isModalOpen])
+
+  useEffect(() => {
+    if (!isModalOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsModalOpen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isModalOpen])
 
   const handleCreate = async (e) => {
     e.preventDefault()
@@ -160,14 +197,22 @@ export default function StaffList({
       </div>
 
       {/* Add Staff Modal */}
-      {isModalOpen && (
+      {isModalRendered && (
         <div 
           data-lenis-prevent="true"
-          className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false)
+          }}
+          className={`fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4 transition-opacity duration-200 ease-out cursor-pointer ${
+            isModalVisible ? 'opacity-100' : 'opacity-0'
+          }`}
         >
           <div 
             data-lenis-prevent="true"
-            className="bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-5 animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+            className={`bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-5 will-change-transform transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-default ${
+              isModalVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-2'
+            }`}
           >
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="font-serif-grand text-xl text-slate-900">Provision New Staff Account</h3>
