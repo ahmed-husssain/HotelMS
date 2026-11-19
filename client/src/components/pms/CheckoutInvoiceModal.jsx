@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function CheckoutInvoiceModal({
   isOpen,
@@ -7,6 +7,22 @@ export default function CheckoutInvoiceModal({
   taxRate = 13,
   onConfirmCheckout,
 }) {
+  useEffect(() => {
+    if (!isOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen, onClose])
+
   if (!isOpen || !selectedRoom) return null
 
   const handlePrint = () => {
@@ -27,8 +43,14 @@ export default function CheckoutInvoiceModal({
   const balanceDue = grandTotal - paidAdvance
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-6 animate-scale-in max-h-[90vh] overflow-y-auto">
+    <div 
+      data-lenis-prevent="true"
+      className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4"
+    >
+      <div 
+        data-lenis-prevent="true"
+        className="bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-6 animate-scale-in max-h-[90vh] overflow-y-auto overscroll-contain"
+      >
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>
             <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import BrandLogo from '../BrandLogo'
 
 /**
@@ -10,6 +10,23 @@ import BrandLogo from '../BrandLogo'
 export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalInvoice = false }) {
   const invoiceRef = useRef(null)
   const [copied, setCopied] = useState(false)
+
+  // Body scroll lock effect
+  useEffect(() => {
+    if (!isOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen, onClose])
 
   if (!isOpen || !booking) return null
 
@@ -53,7 +70,8 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
 
   return (
     <div 
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/70 p-3 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static"
+      data-lenis-prevent="true"
+      className="fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-black/70 p-3 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static"
       role="dialog"
       aria-modal="true"
       aria-labelledby="invoice-preview-title"
@@ -63,6 +81,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
     >
       {/* Outer Card Container - Natural document flow with zero scroll trapping */}
       <div 
+        data-lenis-prevent="true"
         className="relative w-full max-w-2xl bg-white border border-slate-300 rounded-[2px] shadow-2xl my-3 sm:my-6 flex flex-col print:border-none print:shadow-none print:w-full print:max-w-none print:m-0"
         onClick={(e) => e.stopPropagation()}
       >
