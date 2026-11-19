@@ -629,6 +629,7 @@ export default function GuestPortalPage() {
       {/* ============================================================== */}
       {!isUnlocked ? (
         <BookingLookup
+          currentUser={currentUser}
           bookingCode={bookingCode}
           setBookingCode={setBookingCode}
           guestEmailInput={guestEmailInput}

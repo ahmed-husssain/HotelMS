@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
 import { useAuth } from '../context/AuthContext'
 
@@ -14,6 +14,8 @@ import { useAuth } from '../context/AuthContext'
  */
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectUrl = searchParams.get('redirect')
   const { registerGuest } = useAuth()
 
   const [name, setName] = useState('')
@@ -136,9 +138,9 @@ export default function RegisterPage() {
 
     try {
       await registerGuest({ name, email, password, phone })
-      // Smooth redirect to guest portal
+      // Smooth redirect to suites catalog or requested destination
       setTimeout(() => {
-        navigate('/my-stay')
+        navigate(redirectUrl || '/suites?welcome=true')
       }, 500)
     } catch (err) {
       setApiError(err.message || 'Failed to create guest profile.')

@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import RoomsCarousel from '../components/RoomsCarousel'
 import SuiteSpecsDrawer from '../components/suites/SuiteSpecsDrawer'
 import { RESIDENCES } from '../data/residences'
+import { useAuth } from '../context/AuthContext'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 
 /**
@@ -42,6 +43,7 @@ export default function RoomsPage() {
   useSmoothScroll()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const { currentUser } = useAuth()
   const requestedRoom = searchParams.get('room')
 
   // Architectural Specs Drawer State
@@ -119,6 +121,21 @@ export default function RoomsPage() {
               100% Oceanfront
             </span>
           </div>
+
+          {/* Welcome Banner for Newly Registered Guests */}
+          {searchParams.get('welcome') === 'true' && (
+            <div className="p-3.5 sm:p-4 bg-[#0E1201] text-[#FAF8F5] border border-slate-800 rounded-[2px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono shadow-md">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span>
+                  Welcome to Stayza{currentUser?.name ? `, ${currentUser.name}` : ''}! Choose your preferred residence to begin your reservation.
+                </span>
+              </div>
+              <span className="text-[10px] text-[#FFF0CA] uppercase tracking-widest font-semibold shrink-0">
+                Active Guest Session
+              </span>
+            </div>
+          )}
 
           {/* Grand Architectural Serif Title */}
           <h1 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light tracking-tight leading-tight">

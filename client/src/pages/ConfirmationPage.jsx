@@ -8,6 +8,7 @@ export default function ConfirmationPage() {
   const location = useLocation()
   const { currentUser } = useAuth()
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
   const booking = location.state?.booking || {
     bookingRef: 'ST-301-9041',
     residence: {
@@ -21,6 +22,18 @@ export default function ConfirmationPage() {
     advance: 149160,
     balance: 348040,
     safepayRef: 'SPF-829104',
+  }
+
+  const handleCopyCode = async () => {
+    const code = booking.bookingRef || 'ST-301-9041'
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    } catch {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    }
   }
 
   return (
@@ -43,13 +56,34 @@ export default function ConfirmationPage() {
               <span className="text-[9px] font-mono tracking-[0.2em] text-slate-400 font-bold uppercase block">
                 CONFIRMATION CODE
               </span>
-              <h2 className="font-mono text-sm sm:text-base font-bold text-slate-900 mt-0.5">
-                {booking.bookingRef || 'ST-301-9041'}
-              </h2>
+              <div className="flex items-center gap-2 mt-0.5">
+                <h2 className="font-mono text-sm sm:text-base font-bold text-slate-900 tracking-wider">
+                  {booking.bookingRef || 'ST-301-9041'}
+                </h2>
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  className="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-mono rounded-[2px] transition-colors cursor-pointer flex items-center gap-1 active:scale-95"
+                  title="Copy confirmation code"
+                >
+                  <span>{copied ? '✓ Copied' : '📋 Copy'}</span>
+                </button>
+              </div>
             </div>
             <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-950 text-[9px] font-mono tracking-wider font-bold uppercase rounded-full">
               CONFIRMED
             </span>
+          </div>
+
+          {/* Important Notice Box for the Booking Code */}
+          <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-[2px] text-xs font-mono text-amber-950 space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-slate-900 text-[11px]">
+              <span>🔑</span>
+              <span>Important: Save This Confirmation Code</span>
+            </div>
+            <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
+              Please save or copy this reference code. You will present it at the Front Desk upon arrival to collect your physical RFID keycard, and use it anytime to access your digital room key.
+            </p>
           </div>
 
           {/* Residence Details */}

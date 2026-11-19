@@ -384,6 +384,22 @@ export function AuthProvider({ children }) {
   }
 
   /**
+   * Link an active reservation code to the current logged-in guest session
+   */
+  const linkReservationCode = (code, suiteNumber = null) => {
+    setCurrentUser((prev) => {
+      if (!prev) return prev
+      const updated = {
+        ...prev,
+        activeReservationCode: code,
+        suiteNumber: suiteNumber || prev.suiteNumber,
+      }
+      localStorage.setItem('stayza_auth_user', JSON.stringify(updated))
+      return updated
+    })
+  }
+
+  /**
    * Log out active session & purge JWT tokens
    */
   const logout = () => {
@@ -402,6 +418,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         registerGuest,
+        linkReservationCode,
         createStaffAccount,
         toggleStaffStatus,
         isAuthenticated: !!currentUser,

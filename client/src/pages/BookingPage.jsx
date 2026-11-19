@@ -13,7 +13,7 @@ import { createCheckoutHold, confirmReservation } from '../services/api'
 export default function BookingPage() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { currentUser } = useAuth()
+  const { currentUser, linkReservationCode } = useAuth()
   const { createReservation, systemSettings } = useHotelData()
 
   // 1. Resolve Active Suite (?room=301, ?room=302, etc.)
@@ -202,8 +202,11 @@ export default function BookingPage() {
       createdAt: new Date().toISOString(),
     }
 
-    // Sync into unified hotel state
+    // Sync into unified hotel state & link to active user session
     createReservation(bookingData)
+    if (linkReservationCode) {
+      linkReservationCode(finalBookingRef, selectedResidence.roomNumber)
+    }
 
     navigate('/confirmation', { state: { booking: bookingData } })
   }
