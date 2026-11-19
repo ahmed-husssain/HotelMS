@@ -127,43 +127,38 @@ export default function HeroSection({ onQuickReserve }) {
         </p>
       </div>
 
-      {/* Floating 1-Line Check-In Dock (Harmonious on Mobile, Tablet & Desktop) */}
-      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 w-full pb-8 sm:pb-14">
-        <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl p-3 sm:p-4 rounded-[2px] grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
-          <div className="px-2 sm:px-3 border-r border-slate-200/80">
-            <span className="block text-[9px] tracking-[0.25em] text-slate-400 font-bold uppercase">
-              CHECK-IN
-            </span>
-            <span className="text-xs font-semibold text-slate-800">
-              Nov 24, 2026
-            </span>
+      {/* Sculptural Arch Stamp — Unique & Minimal Luxury Dock */}
+      <div className="relative z-20 w-full px-4 sm:px-6 pb-8 sm:pb-12 flex flex-col items-center">
+        <button
+          type="button"
+          onClick={onQuickReserve}
+          className="group inline-flex items-center gap-2 p-1.5 pl-4 pr-1.5 bg-[#FAF8F5]/90 hover:bg-[#FAF8F5] backdrop-blur-md rounded-full border border-[#E5DFD5] hover:border-slate-900 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer min-h-[44px] active:scale-[0.98]"
+          aria-label="Book a luxury residence at Stayza"
+        >
+          <div className="flex items-center gap-2 font-mono text-xs">
+            {/* Stayza Concept 01 Pavilion Emblem */}
+            <svg className="w-4 h-4 text-[#D4AF37]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M 14 36 L 50 22 L 86 36" strokeWidth="7" />
+              <line x1="28" y1="38" x2="28" y2="78" strokeWidth="6" />
+              <line x1="72" y1="38" x2="72" y2="78" strokeWidth="6" />
+              <line x1="16" y1="78" x2="84" y2="78" strokeWidth="8" />
+              <circle cx="50" cy="50" r="7" fill="#D4AF37" stroke="none" />
+            </svg>
+            <span className="font-semibold text-slate-900 tracking-wider">Book a Residence</span>
           </div>
 
-          <div className="px-2 sm:px-3 md:border-r md:border-slate-200/80">
-            <span className="block text-[9px] tracking-[0.25em] text-slate-400 font-bold uppercase">
-              CHECK-OUT
-            </span>
-            <span className="text-xs font-semibold text-slate-800">
-              Nov 28 (4N)
-            </span>
-          </div>
+          <span className="w-[1px] h-4 bg-[#E5DFD5] mx-1" aria-hidden="true" />
 
-          <div className="col-span-2 md:col-span-1 px-2 sm:px-3 border-t md:border-t-0 md:border-r border-slate-200/80 pt-2 md:pt-0">
-            <span className="block text-[9px] tracking-[0.25em] text-slate-400 font-bold uppercase">
-              SUITE SELECTION
-            </span>
-            <span className="text-xs font-semibold text-slate-800 truncate block">
-              2 Guests &bull; 1 Suite
-            </span>
+          {/* Kinetic Arrow Capsule */}
+          <div className="px-4 py-2 bg-[#0E1201] group-hover:bg-[#D4AF37] group-hover:text-slate-950 text-[#FFF0CA] font-mono text-[10px] font-bold uppercase tracking-widest rounded-full transition-colors flex items-center gap-1.5 shadow-xs">
+            <span>Reserve</span>
+            <span className="transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
           </div>
+        </button>
 
-          <button
-            onClick={onQuickReserve}
-            className="tactile col-span-2 md:col-span-1 w-full py-3 bg-emerald-950 hover:bg-slate-900 text-white text-[10px] tracking-[0.22em] font-bold uppercase transition-colors rounded-[2px] cursor-pointer"
-          >
-            CHECK AVAILABILITY
-          </button>
-        </div>
+        <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mt-2.5 block select-none">
+          Scroll to explore residences &darr;
+        </span>
       </div>
     </section>
   )

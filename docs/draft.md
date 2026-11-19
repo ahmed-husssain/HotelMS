@@ -152,7 +152,7 @@ A room is considered **Blocked / Unavailable** if it has any booking matching:
   * `staffRoutes.js` (`/api/staff/*`) locked down with `protect` and `authorize('receptionist', 'admin')`.
 
 ### 7.2 Remaining Backend Tasks
-* ⏳ **Task 1: Complete RBAC Lockdown on Turnover Routes (`server/src/routes/roomRoutes.js`)** — Attach `protect` and `authorize('receptionist', 'housekeeping', 'admin')` to `PATCH /api/rooms/:id/status` and `PATCH /api/rooms/:id/checklist` to prevent unauthenticated mutation.
+* ✅ **Task 1: Complete RBAC Lockdown on Turnover Routes (`server/src/routes/roomRoutes.js`)** — Attached `protect` and `authorize('receptionist', 'housekeeping', 'admin')` to `PATCH /api/rooms/:id/status` and `PATCH /api/rooms/:id/checklist` to prevent unauthenticated mutation.
 * ⏳ **Task 2: Safepay Hosted Checkout & Webhook Listener (`server/src/controllers/paymentController.js`)** — Initialize sandbox checkout tracker token and verify HMAC SHA-256 webhook signatures.
 * ⏳ **Task 3: Automated PDF Invoicing & Email Receipts** — Server-side PDF generation via `pdfkit` for advance receipts and final settled check-out folios.
 
@@ -160,11 +160,19 @@ A room is considered **Blocked / Unavailable** if it has any booking matching:
 
 ## 8. Brand Identity, Rebrand & Official Typography System (`Stayza`)
 
-### 8.1 Official Brand Rename
+### 8.1 Official Brand Rename & Architectural Emblem
 * **Former Temporary Names:** Habitas / LuxuryStay
 * **Final Chosen Brand Name:** **Stayza**
 * **Brand Positioning:** Contemporary ultra-luxury boutique hospitality. Modern architectural calm, generous negative space, warm organic textures, and zero clutter.
-* **Logo Status:** User is finalizing the vector/raster logo asset; upon delivery, it will be placed across all navigation, drawer, confirmation, and invoice touchpoints.
+* **Official Logo Emblem: Concept 01 — The Cantilevered Pavilion & Horizon (100% Implemented & Deployed):**
+  * *Cantilevered Overhang Roof:* Geometry evoking elevated cliffside suites, generous overhangs, and sheltering modernist wings.
+  * *Monolithic Pylons:* Two vertical monolithic stone columns (`x=26`, `x=74`) communicating structural permanence and guest sanctuary.
+  * *Inner Portal Arch:* Recessed archway opening into the interior sanctum of deep tranquility.
+  * *Travertine Lintel Base:* Horizontal foundation lintel anchoring the architecture to the Sindh coastal bedrock.
+  * *Coastal Horizon Hairline:* Subtle coastal waterline where the resort terraces overlook the Arabian Sea.
+  * *Celestial Dawn Keystone:* A pure gold dot (`#D4AF37`) at the optical center representing the morning sun rising over the ocean.
+  * *Architectural Wordmark:* `STAYZA` set in `Syne` Extrabold with optional `SANCTUARY • RESIDENCES` tracking subtitle in `Inter`.
+  * *Touchpoint Deployment:* Scalable vector SVG live across `BrandLogo.jsx`, `Navbar.jsx`, `Footer.jsx`, `InvoicePreviewModal.jsx`, `DigitalKey.jsx`, `favicon.svg`, and browser tab header icons.
 
 ### 8.2 Official Implemented Typography System: Option 3 • Perfected Sculptural
 * **Status:** **100% IMPLEMENTED & DEPLOYED SITE-WIDE** (Commit `27cfee6`).
@@ -274,14 +282,13 @@ In world-class 5-star hospitality, operational velocity between the **Front Desk
 * ✅ **Guest OS & Self-Service Portal:** Interactive guest portal with live stay details, digital key toggle, in-stay requests, and print-ready tax invoice modal.
 * ✅ **Real-Time WebSockets Synchronization (Socket.io):** Full-duplex WebSocket bus between Front Desk PMS (`/pms`) and Housekeeping (`/housekeeping`), broadcasting room status changes, cleaning checklist updates, folio postings, and check-in/out events with <40ms latency and zero full-page reloads.
 * ✅ **Full-Stack Admin Console & 5-Metric Executive Analytics (PRD Module 6 & 7):** Live `/api/admin` backend aggregating Gross Realized Revenue (30/70 split), Live Occupancy %, ADR & RevPAR yield, 5-Minute Hold Conversion vs Abandonment Rate, and Incidental Folio Upsells, backed by real Staff Governance CRUD and Guest CRM.
+* ✅ **Stayza Official Brand Logo (Concept 01 — Cantilevered Pavilion & Horizon):** Designed and deployed responsive vector SVG emblem, architectural wordmark (`Syne` Extrabold + `Inter` tracking subtitle), and dual favicons across `BrandLogo.jsx`, letterheads, navigation bars, invoices, and HTML meta tags.
 
 ### 10.2 Prioritized Remaining Tasks (Next Sprints)
-1. 🎯 **Priority 1: Safepay Hosted Checkout & Webhook Verification**
-   * Integrate Safepay sandbox checkout session generator and HMAC SHA-256 webhook listener for real test-card payment simulation.
-2. 🎯 **Priority 2: Stayza Official Brand Logo Integration**
-   * Awaiting user's finalized logo asset to place across all brand mark touchpoints (`BrandLogo`, `SplashScreen`, `InvoicePreviewModal`).
-3. 🎯 **Priority 3: Automated PDF Email Receipts**
-   * Implement server-side PDF invoice generation / email dispatch for confirmed bookings and checkout folio settlements.
+1. 🎯 **Priority 1: Safepay Hosted Checkout & Webhook Verification (PRD Module 4)**
+   * Integrate Safepay sandbox checkout session generator (`POST /api/payments/checkout-session`), client-side payment redirect, and HMAC SHA-256 webhook listener (`POST /api/payments/webhook`) for real 30% advance deposit payment processing.
+2. 🎯 **Priority 2: Automated PDF Invoicing & Email Receipts (PRD Module 4.4)**
+   * Implement server-side PDF receipt generation (`pdfkit`) and automated email dispatch for deposit confirmations and final settled check-out folios.
 
 
 

@@ -2,18 +2,22 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 /**
- * BrandLogo — Habitas Architectural Emblem & Wordmark
+ * BrandLogo — Stayza Concept 01: The Cantilevered Pavilion & Horizon
  *
  * Grounded in the architectural ethos of the property:
- * - Monolithic Arch: The portal to absolute privacy and seclusion
- * - Hairline Horizon: Where the Sindh coast meets the Arabian Sea
- * - Celestial Keystone: Gold dawn marker (#D4AF37)
- * - Single-line pure wordmark: HABITAS
+ * - Cantilevered Overhang Roof: Shelter, elevation, and bold modernism
+ * - Monolithic Pylons: Structural permanence and privacy
+ * - Inner Sanctuary Portal Arch: Transition into deep relaxation
+ * - Travertine Lintel Base: Grounded coastal stone foundation
+ * - Ocean Horizon Hairline: The Sindh coast meets the Arabian Sea
+ * - Celestial Gold Keystone: Dawn sun marker (#D4AF37)
+ * - Sculpted Wordmark: STAYZA in Syne Extrabold
  */
 export default function BrandLogo({
   variant = 'full', // 'full' | 'emblem' | 'wordmark'
   theme = 'dark',   // 'dark' (on alabaster/light bg) | 'light' (on obsidian/dark bg)
   size = 'md',      // 'sm' | 'md' | 'lg'
+  showSubtitle = false,
   to = '/',
   className = '',
 }) {
@@ -21,36 +25,60 @@ export default function BrandLogo({
 
   // Size configurations
   const dimensions = {
-    sm: { emblem: 'w-6 h-6', title: 'text-base tracking-[0.22em]' },
-    md: { emblem: 'w-7 h-7 sm:w-8 sm:h-8', title: 'text-lg sm:text-xl tracking-[0.25em]' },
-    lg: { emblem: 'w-10 h-10 sm:w-12 sm:h-12', title: 'text-2xl sm:text-3xl tracking-[0.28em]' },
-  }[size] || dimensions.md
+    sm: {
+      emblem: 'w-6 h-6',
+      title: 'text-base tracking-[0.20em]',
+      subtitle: 'text-[7px] tracking-[0.30em]',
+    },
+    md: {
+      emblem: 'w-7 h-7 sm:w-8 sm:h-8',
+      title: 'text-lg sm:text-xl tracking-[0.22em]',
+      subtitle: 'text-[8px] tracking-[0.34em]',
+    },
+    lg: {
+      emblem: 'w-10 h-10 sm:w-12 sm:h-12',
+      title: 'text-2xl sm:text-3xl tracking-[0.25em]',
+      subtitle: 'text-[10px] tracking-[0.38em]',
+    },
+  }[size] || {
+    emblem: 'w-7 h-7 sm:w-8 sm:h-8',
+    title: 'text-lg sm:text-xl tracking-[0.22em]',
+    subtitle: 'text-[8px] tracking-[0.34em]',
+  }
 
-  const textColor = isLight ? 'text-[#FAF8F5]' : 'text-slate-900'
-  const emblemStroke = isLight ? '#FAF8F5' : '#0F172A'
+  const textColor = isLight ? 'text-[#FAF8F5]' : 'text-[#0E1201]'
+  const subtitleColor = isLight ? 'text-[#A8A29E]' : 'text-[#78716C]'
+  const emblemStroke = isLight ? '#FAF8F5' : '#0E1201'
 
-  // Scalable SVG Architectural Monogram
+  // Concept 01: Scalable SVG Architectural Pavilion & Horizon
   const Emblem = (
     <svg
       viewBox="0 0 100 100"
       className={`${dimensions.emblem} transition-transform duration-500 group-hover:scale-105 shrink-0`}
       fill="none"
       stroke={emblemStroke}
-      strokeWidth="2"
+      strokeWidth="2.2"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {/* Outer Monolithic Portal */}
-      <path d="M 25 76 L 25 45 C 25 31.2 36.2 20 50 20 C 63.8 20 75 31.2 75 45 L 75 76" />
-      {/* Inner Architectural Arch */}
-      <path d="M 35 76 L 35 48 C 35 39.7 41.7 33 50 33 C 58.3 33 65 39.7 65 48 L 65 76" opacity="0.4" strokeWidth="1.6" />
-      {/* Structural Ground Lintel */}
-      <line x1="16" y1="76" x2="84" y2="76" strokeWidth="2.4" />
-      {/* Ocean Horizon Hairline */}
-      <line x1="22" y1="62" x2="78" y2="62" strokeWidth="1.2" opacity="0.35" />
+      {/* Cantilevered Overhang Roof */}
+      <path d="M 12 34 L 50 20 L 88 34" strokeWidth="2.6" />
+      {/* Monolithic Vertical Pylons */}
+      <line x1="26" y1="36" x2="26" y2="78" />
+      <line x1="74" y1="36" x2="74" y2="78" />
+      {/* Inner Sanctuary Portal Arch */}
+      <path
+        d="M 38 78 L 38 52 C 38 45.4 43.4 40 50 40 C 56.6 40 62 45.4 62 52 L 62 78"
+        strokeWidth="1.8"
+        opacity="0.45"
+      />
+      {/* Structural Travertine Lintel Base */}
+      <line x1="16" y1="78" x2="84" y2="78" strokeWidth="3" />
+      {/* Coastal Horizon Line */}
+      <line x1="22" y1="65" x2="78" y2="65" strokeWidth="1" opacity="0.3" />
       {/* Celestial Dawn Keystone */}
-      <circle cx="50" cy="48" r="3" fill="#D4AF37" stroke="none" />
+      <circle cx="50" cy="50" r="3.2" fill="#D4AF37" stroke="none" />
     </svg>
   )
 
@@ -59,9 +87,20 @@ export default function BrandLogo({
       {(variant === 'full' || variant === 'emblem') && Emblem}
 
       {(variant === 'full' || variant === 'wordmark') && (
-        <span className={`font-serif-grand font-bold uppercase tracking-[0.16em] ${dimensions.title} ${textColor} leading-none`}>
-          STAYZA
-        </span>
+        <div className="flex flex-col justify-center">
+          <span
+            className={`font-serif-grand font-extrabold uppercase ${dimensions.title} ${textColor} leading-none`}
+          >
+            STAYZA
+          </span>
+          {showSubtitle && (
+            <span
+              className={`font-sans-clean font-semibold uppercase ${dimensions.subtitle} ${subtitleColor} leading-none pt-1`}
+            >
+              SANCTUARY &bull; RESIDENCES
+            </span>
+          )}
+        </div>
       )}
     </div>
   )

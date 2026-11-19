@@ -34,7 +34,7 @@ export default function BookingLookup({
                 required
                 value={bookingCode}
                 onChange={(e) => setBookingCode(e.target.value)}
-                placeholder="e.g. TH-301-9041"
+                placeholder="e.g. ST-301-9041"
                 className="w-full py-2.5 px-3 bg-slate-50/70 border border-slate-300 focus:border-slate-900 text-sm font-mono uppercase tracking-wider text-slate-900 focus:outline-none transition-colors rounded-[2px]"
               />
             </div>

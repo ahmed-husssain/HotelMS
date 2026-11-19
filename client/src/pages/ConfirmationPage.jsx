@@ -9,7 +9,7 @@ export default function ConfirmationPage() {
   const { currentUser } = useAuth()
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
   const booking = location.state?.booking || {
-    bookingRef: 'TH-301-9041',
+    bookingRef: 'ST-301-9041',
     residence: {
       name: 'The Horizon Penthouse',
       roomNumber: '301',
@@ -44,7 +44,7 @@ export default function ConfirmationPage() {
                 CONFIRMATION CODE
               </span>
               <h2 className="font-mono text-sm sm:text-base font-bold text-slate-900 mt-0.5">
-                {booking.bookingRef || 'TH-301-9041'}
+                {booking.bookingRef || 'ST-301-9041'}
               </h2>
             </div>
             <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-950 text-[9px] font-mono tracking-wider font-bold uppercase rounded-full">
@@ -72,7 +72,7 @@ export default function ConfirmationPage() {
               <span className="font-bold text-slate-900">{booking.safepayRef}</span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>Total Stay Valuation:</span>
+              <span>Total Stay Amount:</span>
               <span className="font-semibold text-slate-900">
                 PKR {booking.total.toLocaleString()}
               </span>
@@ -92,7 +92,7 @@ export default function ConfirmationPage() {
           {/* Action Links */}
           <div className="flex flex-col sm:flex-row gap-2 pt-2 border-t border-slate-100">
             <Link
-              to={`/my-stay?ref=${booking.bookingRef || 'TH-301-9041'}`}
+              to={`/my-stay?ref=${booking.bookingRef || 'ST-301-9041'}`}
               className="tactile flex-1 py-2.5 text-center bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] flex items-center justify-center gap-1 min-h-[44px]"
             >
               <span>Open Guest Portal</span>

@@ -37,7 +37,7 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
 
   const handleCopySummary = () => {
     const summary = `STAYZA LUXURY STAY VOUCHER
-Ref: ${booking.bookingRef || 'TH-301-9041'}
+Ref: ${booking.bookingRef || 'ST-301-9041'}
 Guest: ${booking.guestName || 'Guest'}
 Suite: Room ${residence.roomNumber} - ${residence.name}
 Total: PKR ${totalValuation.toLocaleString()}
@@ -117,7 +117,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
           {/* A. Formal Letterhead */}
           <div className="border-b-2 border-slate-900 pb-3 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2.5">
             <div className="space-y-0.5">
-              <BrandLogo variant="wordmark" theme="dark" size="sm" to="/" />
+              <BrandLogo variant="full" theme="dark" size="sm" showSubtitle={true} to="/" />
               <p className="text-[10px] font-mono text-slate-500 leading-tight max-w-sm pt-1">
                 Cliffs of Sindh Coast (24&deg;48'N, 67&deg;01'E) &bull; Karachi - Thatta Coastal Road, Pakistan
                 <br />
@@ -155,7 +155,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
                 <p>{booking.guestPhone || '+92 300 0000000'}</p>
                 <p>{booking.guestEmail || 'guest@luxury.pk'}</p>
                 <p className="text-[10px] text-slate-500 pt-0.5">
-                  Ref Code: <strong className="text-slate-900">{booking.bookingRef || 'TH-301-9041'}</strong>
+                  Ref Code: <strong className="text-slate-900">{booking.bookingRef || 'ST-301-9041'}</strong>
                 </p>
               </div>
             </div>
@@ -251,7 +251,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
                   &bull; VERIFIED SECURE FOLIO
                 </span>
                 <p className="leading-tight">
-                  Ref: <strong className="text-slate-900">{booking.bookingRef || 'TH-301-9041'}</strong>
+                  Ref: <strong className="text-slate-900">{booking.bookingRef || 'ST-301-9041'}</strong>
                 </p>
                 <span className="text-[9px] text-slate-400 block">
                   Audited on Stayza PMS Network

@@ -117,7 +117,7 @@ export default function Footer() {
           
           {/* Column 1: Brand & Contact */}
           <div className="space-y-3">
-            <BrandLogo variant="full" theme="dark" size="sm" to="/" />
+            <BrandLogo variant="full" theme="dark" size="sm" showSubtitle={true} to="/" />
 
             <p className="text-xs text-[#44403C] leading-relaxed max-w-xs font-light">
               Luxury oceanfront suites and residences with bespoke hospitality.

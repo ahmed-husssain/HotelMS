@@ -149,7 +149,7 @@ export default function BookingPage() {
 
     setIsProcessing(true)
 
-    let finalBookingRef = `TH-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
+    let finalBookingRef = `ST-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
 
     // Attempt live atomic hold & confirmation in MongoDB Atlas
     try {

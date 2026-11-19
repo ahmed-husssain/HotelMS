@@ -17,7 +17,7 @@ import {
 
 // Demo Stay Record for Suite 301
 const DEMO_BOOKING = {
-  bookingRef: 'TH-301-9041',
+  bookingRef: 'ST-301-9041',
   roomNumber: 'Suite 301',
   residence: RESIDENCES[0],
   guestName: 'Dr. Tariq Khan',
@@ -355,20 +355,20 @@ export default function GuestPortalPage() {
       // Graceful fallback to demo
     }
 
-    if (cleanCode === 'TH-301-9041' || cleanCode.startsWith('TH-') || cleanCode.startsWith('LX-') || cleanEmail.includes('@')) {
+    if (cleanCode === 'ST-301-9041' || cleanCode === 'TH-301-9041' || cleanCode.startsWith('ST-') || cleanCode.startsWith('TH-') || cleanCode.startsWith('LX-') || cleanEmail.includes('@')) {
       setIsUnlocked(true)
     } else {
-      setSearchError('Reservation reference not found. Try demo reference TH-301-9041.')
+      setSearchError('Reservation reference not found. Try demo reference ST-301-9041.')
     }
   }
 
   const handleLoadDemo = async () => {
-    setBookingCode('TH-301-9041')
+    setBookingCode('ST-301-9041')
     setGuestEmailInput('tariq.khan@luxury.pk')
     setSearchError('')
     setIsLoadingStay(true)
     try {
-      const res = await lookupStay('TH-301-9041')
+      const res = await lookupStay('ST-301-9041')
       if (res.success && res.data) {
         const b = res.data
         const matchedRes = RESIDENCES.find((r) => r.roomNumber === '301') || RESIDENCES[0]
@@ -445,7 +445,7 @@ export default function GuestPortalPage() {
     )
 
     setServiceFeedbackNotice(`Dispatched to estate concierge: "${service.title}" added to bill.`)
-    toast.success(`"${service.title}" dispatched & added to folio`, 'CONCIERGE DISPATCH')
+    toast.success(`"${service.title}" dispatched & added to folio`, 'Concierge Request')
     setTimeout(() => setServiceFeedbackNotice(''), 4500)
   }
 
@@ -468,7 +468,7 @@ export default function GuestPortalPage() {
     setTimeout(() => {
       setIsKeyUnlocking(false)
       setKeyUnlockedToast(true)
-      toast.success(`${currentBooking.roomNumber || 'Suite 301'} NFC Electronic Lock Engaged`, 'DOOR UNLOCKED')
+      toast.success(`${currentBooking.roomNumber || 'Suite 301'} lock disengaged`, 'Door Unlocked')
       setTimeout(() => setKeyUnlockedToast(false), 8000)
     }, 1200)
   }
@@ -479,7 +479,7 @@ export default function GuestPortalPage() {
       navigator.clipboard.writeText('pacific2026')
     }
     setWifiCopied(true)
-    toast.success('Stayza 1Gbps Wi-Fi key copied to clipboard', 'NETWORK KEY COPIED')
+    toast.success('Wi-Fi password copied to clipboard', 'Password Copied')
     setTimeout(() => setWifiCopied(false), 2500)
   }
 
@@ -493,7 +493,7 @@ export default function GuestPortalPage() {
       0,
       'Front Desk'
     )
-    toast.info('Express check-out dispatched to Front Desk', 'CHECKOUT REQUESTED')
+    toast.info('Front desk notified for departure and valet assistance', 'Checkout Requested')
     setTimeout(() => setExpressCheckoutNotice(false), 7000)
   }
 
@@ -738,10 +738,10 @@ export default function GuestPortalPage() {
                 <div className="lg:col-span-5 space-y-3.5">
                   <div>
                     <span className="text-[9px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
-                      IN-RESIDENCE CREDENTIALS
+                      Suite Essentials
                     </span>
                     <h3 className="type-h2 text-xl sm:text-2xl text-slate-900 mt-0.5">
-                      Suite Controls &amp; Valet
+                      Room Info
                     </h3>
                   </div>
 
