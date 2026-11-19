@@ -65,8 +65,18 @@ export default function LoginPage() {
     }
   }
 
+  // Preload corresponding panel chunk in background to eliminate navigation latency
+  const preloadPanel = (roleEmail = '') => {
+    const clean = roleEmail.toLowerCase()
+    if (clean.includes('cleaning') || clean.includes('housekeep')) import('./HousekeepingPage')
+    else if (clean.includes('reception') || clean.includes('pms')) import('./FrontDeskPage')
+    else if (clean.includes('admin') || clean.includes('manager')) import('./AdminPage')
+    else if (clean.includes('guest')) import('./GuestPortalPage')
+  }
+
   // 1-Click Role Quick Fill for testing
   const handleQuickFill = (roleEmail) => {
+    preloadPanel(roleEmail)
     setEmail(roleEmail)
     setPassword('Password123!')
     setErrorMsg('')
@@ -92,6 +102,9 @@ export default function LoginPage() {
     setIsSubmitting(true)
 
     try {
+      // Trigger preload based on email right as login begins
+      preloadPanel(email)
+
       const user = await login(email, password)
       
       const roleDestinations = {
@@ -102,15 +115,13 @@ export default function LoginPage() {
       }
 
       const target = roleDestinations[user.role] || roleDestinations.guest
-      setSuccessMsg(`Welcome, ${user.name}. Identified as ${user.roleLabel}. Redirecting...`)
 
-      setTimeout(() => {
-        if (redirectUrl) {
-          navigate(redirectUrl)
-        } else {
-          navigate(target.path)
-        }
-      }, 500)
+      // Navigate immediately without artificial 500ms delay (Apple HIG: Kill Latency)
+      if (redirectUrl) {
+        navigate(redirectUrl)
+      } else {
+        navigate(target.path)
+      }
     } catch (err) {
       setErrorMsg(err.message || 'Invalid credentials. Please verify your email and password.')
       setIsSubmitting(false)
