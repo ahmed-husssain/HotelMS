@@ -4,12 +4,12 @@ import BrandLogo from '../components/BrandLogo'
 import { useAuth } from '../context/AuthContext'
 
 /**
- * GUEST REGISTRATION PAGE (/register) — ZERO-SCROLL RESPONSIVE ARCHITECTURE
+ * GUEST REGISTRATION PAGE (/register)
  * 
- * - Mobile: Aman x Bulgari Editorial Split (Top 32% Suite Aperture + Bottom 68% Alabaster Canvas)
- * - Tablet & Desktop: Centered luxury split-screen card locked within 100dvh
- * - 100% Zero-Scroll across every screen dimension (Mobile, Tablet, Laptop, Monitor)
+ * - Desktop: Architectural split-card with local hero imagery
+ * - Mobile: Clean responsive layout with zero cut-off elements
  * - Provisions strict role: 'guest' in compliance with Aptech Module 1 & 7
+ * - Pure theme monochrome (zero yellowish accents)
  */
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -58,10 +58,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen min-h-dvh overflow-y-auto bg-[#0E1201] text-slate-800 p-0 sm:p-3 md:p-5 lg:p-7 flex flex-col justify-between selection:bg-[#D4AF37] selection:text-slate-900">
+    <div className="min-h-screen min-h-dvh bg-[#0E1201] text-slate-800 p-3 sm:p-5 md:p-8 flex flex-col justify-center selection:bg-slate-700 selection:text-white">
       
-      {/* Top Desktop Brand Bar (Hidden on Mobile) */}
-      <header className="hidden md:flex max-w-5xl w-full mx-auto mb-2 shrink-0 items-center justify-between">
+      {/* Top Desktop Brand Bar */}
+      <header className="max-w-5xl w-full mx-auto mb-3 sm:mb-4 flex items-center justify-between">
         <Link to="/" className="inline-block">
           <BrandLogo variant="full" theme="light" size="sm" />
         </Link>
@@ -73,22 +73,22 @@ export default function RegisterPage() {
         </Link>
       </header>
 
-      {/* Main Luxury Split Card (Zero-Scroll Container) */}
-      <main className="flex-1 min-h-0 w-full max-w-5xl mx-auto bg-[#FAF8F5] sm:border sm:border-slate-300/80 sm:shadow-2xl sm:rounded-[3px] overflow-hidden flex flex-col md:grid md:grid-cols-12">
+      {/* Main Luxury Split Card */}
+      <main className="w-full max-w-5xl mx-auto bg-[#FAF8F5] sm:border sm:border-slate-300/80 sm:shadow-2xl sm:rounded-[3px] overflow-hidden flex flex-col md:grid md:grid-cols-12">
         
-        {/* 1. MOBILE-ONLY TOP BANNER (< md) */}
-        <div className="md:hidden relative w-full h-[180px] shrink-0 overflow-hidden bg-slate-900">
+        {/* 1. MOBILE TOP APERTURE (< md) */}
+        <div className="md:hidden relative w-full h-[140px] shrink-0 overflow-hidden bg-[#0E1201]">
           <img
-            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=85"
-            alt="Stayza Luxury Experience"
-            className="w-full h-full object-cover filter brightness-[0.72] contrast-[1.08]"
+            src="/assets/hero-drone-poster.webp"
+            alt="Stayza Architecture"
+            className="w-full h-full object-cover filter brightness-[0.6] contrast-[1.08]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-black/50" />
 
           {/* Integrated Mobile Brand Header */}
           <div className="absolute top-3.5 inset-x-0 px-5 flex items-center justify-between text-white z-20">
             <Link to="/" className="flex items-center gap-1.5">
-              <span className="font-serif-grand text-base font-light tracking-[0.25em] text-[#FFF0CA]">STAYZA</span>
+              <span className="font-serif-grand text-base font-bold tracking-[0.25em] text-[#FAF8F5]">STAYZA</span>
             </Link>
             <Link
               to="/"
@@ -99,67 +99,56 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* 2. DESKTOP/TABLET LEFT 5 COLUMNS (>= md) */}
+        {/* 2. DESKTOP LEFT 5 COLUMNS — Local Photographic Stage */}
         <aside className="hidden md:flex md:col-span-5 bg-[#0E1201] text-[#FAF8F5] relative overflow-hidden flex-col justify-between p-8 lg:p-10 border-r border-slate-800 shrink-0">
           <img
-            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85"
-            alt="Stayza Luxury Experience"
-            className="absolute inset-0 w-full h-full object-cover filter brightness-[0.45] contrast-[1.1] scale-105"
+            src="/assets/hero-drone-poster.webp"
+            alt="Stayza Architecture"
+            className="absolute inset-0 w-full h-full object-cover filter brightness-[0.5] contrast-[1.08] scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0E1201] via-[#0E1201]/40 to-transparent" />
 
           <div className="relative z-10">
-            <span className="font-serif-grand text-2xl font-light tracking-[0.2em] text-[#FFF0CA] block">
+            <span className="font-serif-grand text-2xl font-extrabold tracking-[0.24em] text-[#FAF8F5] block">
               STAYZA
             </span>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-300 block mt-1">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[#A8A29E] block mt-1">
               Sindh Coast &bull; Pakistan
             </span>
           </div>
 
-          <div className="relative z-10 text-[10px] font-mono text-slate-400 tracking-wider">
+          <div className="relative z-10 text-[10px] font-mono text-[#A8A29E] tracking-wider">
             Private Suites &bull; Coastal Sanctuary
           </div>
         </aside>
 
-        {/* 3. RIGHT FORM PANEL (Aman Alabaster Surface, Zero-Scroll) */}
-        <section className="flex-1 min-h-0 md:col-span-7 p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-between bg-[#FAF8F5] overflow-y-auto">
+        {/* 3. RIGHT FORM PANEL — Clean Minimalist Registration Form */}
+        <section className="md:col-span-7 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center bg-[#FAF8F5] space-y-4">
           
-          {/* Desktop/Tablet Header (Hidden on Mobile) */}
-          <div className="hidden md:block">
-            <h1 className="font-serif-grand text-3xl sm:text-4xl text-slate-900 font-light tracking-tight">
+          <div>
+            <h1 className="font-serif-grand text-3xl sm:text-4xl text-slate-900 font-bold tracking-tight">
               Create Account
             </h1>
-            <p className="text-xs text-slate-500 font-mono mt-1.5">
+            <p className="text-xs text-slate-500 font-mono mt-1">
               Join Stayza to manage your reservations and hotel services
-            </p>
-          </div>
-
-          {/* Mobile Subtitle (< md) */}
-          <div className="md:hidden">
-            <h1 className="font-serif-grand text-2xl text-slate-900 font-light tracking-tight">
-              Create Account
-            </h1>
-            <p className="text-xs text-stone-600 font-mono mt-1">
-              Manage your reservations and hotel services
             </p>
           </div>
 
           {/* Error Banner */}
           {errorMsg && (
-            <div className="p-2 sm:p-2.5 bg-red-50 border border-red-200 text-red-900 text-xs font-mono rounded-[2px]">
+            <div className="p-3 bg-red-50 border border-red-200 text-red-900 text-xs font-mono rounded-[2px]">
               {errorMsg}
             </div>
           )}
 
           {/* The Registration Form */}
-          <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-3 my-auto py-1">
+          <form onSubmit={handleSubmit} className="space-y-3">
             
             {/* Full Name */}
             <div>
               <label
                 htmlFor="reg-name"
-                className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 font-semibold block mb-0.5"
+                className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block mb-1"
               >
                 Full Legal Name
               </label>
@@ -170,16 +159,16 @@ export default function RegisterPage() {
                 placeholder="e.g. Tariq Khan"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full py-1.5 sm:py-2 px-0 bg-transparent border-b border-stone-300 focus:border-slate-900 text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none transition-colors"
+                className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm font-medium text-slate-900 focus:outline-none transition-colors"
               />
             </div>
 
             {/* Email & Phone Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label
                   htmlFor="reg-email"
-                  className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 font-semibold block mb-0.5"
+                  className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block mb-1"
                 >
                   Email Address
                 </label>
@@ -187,17 +176,17 @@ export default function RegisterPage() {
                   id="reg-email"
                   type="email"
                   required
-                  placeholder="tariq@luxury.pk"
+                  placeholder="tariq@stayza.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full py-1.5 sm:py-2 px-0 bg-transparent border-b border-stone-300 focus:border-slate-900 text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="reg-phone"
-                  className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 font-semibold block mb-0.5"
+                  className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block mb-1"
                 >
                   Contact Phone
                 </label>
@@ -208,17 +197,17 @@ export default function RegisterPage() {
                   placeholder="+92 300 1234567"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full py-1.5 sm:py-2 px-0 bg-transparent border-b border-stone-300 focus:border-slate-900 text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
                 />
               </div>
             </div>
 
             {/* Passcode & Confirm Passcode Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label
                   htmlFor="reg-pass"
-                  className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-semibold block mb-0.5"
+                  className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block mb-1"
                 >
                   Password
                 </label>
@@ -229,14 +218,14 @@ export default function RegisterPage() {
                   placeholder="Min 6 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full py-1.5 sm:py-2 px-0 bg-transparent border-b border-stone-300 focus:border-slate-900 text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="reg-confirm"
-                  className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-semibold block mb-0.5"
+                  className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block mb-1"
                 >
                   Confirm Password
                 </label>
@@ -247,13 +236,13 @@ export default function RegisterPage() {
                   placeholder="Re-type password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full py-1.5 sm:py-2 px-0 bg-transparent border-b border-stone-300 focus:border-slate-900 text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
+                  className="w-full py-2 px-3 bg-white border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono"
                 />
               </div>
             </div>
 
             {/* Terms & Conditions */}
-            <div className="flex items-start gap-2 pt-0.5">
+            <div className="flex items-start gap-2 pt-1">
               <input
                 id="reg-terms"
                 type="checkbox"
@@ -262,7 +251,7 @@ export default function RegisterPage() {
                 onChange={(e) => setAgreeTerms(e.target.checked)}
                 className="mt-0.5 accent-slate-950 cursor-pointer"
               />
-              <label htmlFor="reg-terms" className="text-[10px] sm:text-xs text-stone-600 cursor-pointer select-none leading-tight">
+              <label htmlFor="reg-terms" className="text-[10px] sm:text-xs text-slate-600 cursor-pointer select-none leading-tight">
                 I agree to the Terms of Service and Privacy Policy.
               </label>
             </div>
@@ -271,7 +260,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative w-full py-3 sm:py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-1 overflow-hidden flex items-center justify-center gap-2 disabled:opacity-50"
+              className="group relative w-full py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-2 flex items-center justify-center gap-2 disabled:opacity-50 min-h-[44px]"
             >
               <span>{isSubmitting ? 'Creating Account...' : 'Create Account'}</span>
               <span className="text-xs">&rarr;</span>
@@ -284,7 +273,7 @@ export default function RegisterPage() {
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="text-slate-900 font-bold underline hover:text-amber-900 cursor-pointer ml-1"
+                className="text-slate-900 font-bold underline hover:text-stone-700 cursor-pointer ml-1"
               >
                 Sign In &rarr;
               </Link>
@@ -294,11 +283,6 @@ export default function RegisterPage() {
         </section>
 
       </main>
-
-      {/* Desktop Footer (Hidden on Mobile) */}
-      <footer className="hidden md:block max-w-5xl w-full mx-auto mt-2 text-center font-mono text-[9px] text-slate-500 shrink-0">
-        &copy; {new Date().getFullYear()} Stayza Hotel &bull; All rights reserved.
-      </footer>
 
     </div>
   )
