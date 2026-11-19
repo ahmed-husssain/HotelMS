@@ -198,17 +198,16 @@ export default function NavMenu({
           </nav>
 
           {/* Bottom Telemetry & Metadata Strip */}
-          <div className="border-t border-slate-200/80 pt-3 text-[10px] font-mono text-slate-500 space-y-1 shrink-0">
+          <div className="border-t border-slate-200/80 pt-3 text-[10px] font-mono text-slate-500 space-y-1.5 shrink-0">
             <div className="flex justify-between items-center text-slate-800">
               <span className="uppercase tracking-widest">Active Vacation Dates</span>
               <span className="font-semibold">{fullDateLabel}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span>LAT: 24&deg;48&apos;N &middot; THERMAL: 41.5&deg;C</span>
               <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
-            </div>
-            <div className="text-slate-400 pt-0.5 text-[9px] uppercase tracking-wider">
-              Stayza &middot; Safepay 30% Advance &middot; 5-Min Reservation Hold
+              <span className="text-slate-400 text-[9px] uppercase tracking-wider">
+                Stayza &middot; 5-Min Reservation Hold
+              </span>
             </div>
           </div>
         </div>

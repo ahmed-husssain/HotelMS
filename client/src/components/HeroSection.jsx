@@ -117,12 +117,7 @@ export default function HeroSection({ onQuickReserve }) {
       </div>
 
       {/* Hero Editorial Header */}
-      <div ref={titleRef} className="relative z-10 max-w-7xl mx-auto px-6 pt-16 w-full text-center">
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1 mb-6 rounded-full bg-white/95 backdrop-blur-md border border-slate-300/80 text-slate-800 text-[10px] tracking-[0.28em] font-semibold uppercase shadow-xs">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-          Winter 2026 Bookings Open
-        </div>
-
+      <div ref={titleRef} className="relative z-10 max-w-7xl mx-auto px-6 pt-16 sm:pt-20 w-full text-center">
         <h1 className="font-serif-grand text-4xl sm:text-6xl md:text-7xl font-bold tracking-[0.02em] text-slate-900 leading-[1.08] max-w-4xl mx-auto">
           Where Architecture Meets Silence.
         </h1>
