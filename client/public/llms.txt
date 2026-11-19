@@ -1,14 +1,14 @@
-# HABITAS — Ultra-Luxury Ocean Suites & Villas
+# STAYZA — Ultra-Luxury Ocean Suites & Villas
 
-> Habitas is an ultra-luxury coastal sanctuary located on the pristine Sindh coast (24°48'N, 67°01'E). The property comprises three private oceanfront architectural residences: Suite 301, Villa 204, and Pavilion 102.
+> Stayza is an ultra-luxury coastal sanctuary located on the pristine Sindh coast (24°48'N, 67°01'E). The property comprises seven private oceanfront architectural residences and villas.
 
 ## Core Resources
 
-- [Residences & Suites](https://habittas.web.app/suites): Detailed room architectural specifications, private infinity pools, dimensions, and nightly rates.
-- [Reservation Engine](https://habittas.web.app/reserve): Direct booking system with transparent 30% Safepay advance deposit verification and flexible arrival dates.
-- [Guest Self-Service Portal](https://habittas.web.app/my-stay): Digital keycard, room temperature and lighting presets, dining room-service ordering, and real-time folio accounting.
-- [Staff PMS Portal](https://habittas.web.app/login): Aptech-certified front desk terminal for room check-ins, guest folios, and housekeeping status.
+- [Residences & Suites](https://stayza.web.app/suites): Detailed room architectural specifications, private infinity pools, dimensions, and nightly rates.
+- [Reservation Engine](https://stayza.web.app/reserve): Direct booking system with transparent 30% Safepay advance deposit verification and flexible arrival dates.
+- [Guest Self-Service Portal](https://stayza.web.app/my-stay): Digital keycard, room temperature and lighting presets, dining room-service ordering, and real-time folio accounting.
+- [Staff PMS Portal](https://stayza.web.app/login): Front desk terminal for room check-ins, guest folios, and housekeeping status.
 
 ## Optional
 
-- [Agent Catalog](https://habittas.web.app/ai-catalog.json): Machine-readable schema describing resort service endpoints for autonomous AI agents.
+- [Agent Catalog](https://stayza.web.app/ai-catalog.json): Machine-readable schema describing resort service endpoints for autonomous AI agents.

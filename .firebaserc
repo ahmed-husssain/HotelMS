@@ -8,6 +8,9 @@
       "hosting": {
         "habittas": [
           "habittas"
+        ],
+        "stayza": [
+          "stayza"
         ]
       }
     }
