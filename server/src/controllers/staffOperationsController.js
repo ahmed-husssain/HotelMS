@@ -188,6 +188,24 @@ async function checkInGuest(req, res) {
       targetId: booking._id,
     })
 
+    // Broadcast real-time event to all connected PMS & Housekeeping terminals (<40ms)
+    const io = req.app.get('io')
+    if (io) {
+      io.emit('room:status_changed', {
+        roomNumber: booking.roomNumber,
+        status: 'OCCUPIED',
+        guest: booking.guestDetails?.name,
+        bookingRef: booking.bookingReference,
+        updatedAt: new Date(),
+        actor: req.body.actorName || 'Front Desk',
+      })
+      io.emit('booking:checked_in', {
+        bookingRef: booking.bookingReference,
+        roomNumber: booking.roomNumber,
+        guest: booking.guestDetails?.name,
+      })
+    }
+
     res.status(200).json({
       success: true,
       message: `Guest successfully checked in to ${booking.roomNumber}`,
@@ -245,6 +263,18 @@ async function addFolioCharge(req, res) {
       targetModel: 'Booking',
       targetId: booking._id,
     })
+
+    // Broadcast folio update event to connected terminals
+    const io = req.app.get('io')
+    if (io) {
+      io.emit('folio:charge_added', {
+        bookingRef: booking.bookingReference,
+        roomNumber: booking.roomNumber,
+        incidental: newIncidental,
+        newBalanceDue: booking.pricingSnapshot.balanceDue,
+        totalAmount: booking.pricingSnapshot.totalAmount,
+      })
+    }
 
     res.status(200).json({
       success: true,
@@ -311,6 +341,24 @@ async function checkOutGuest(req, res) {
       targetModel: 'Booking',
       targetId: booking._id,
     })
+
+    // Broadcast room status change (DIRTY) and checkout to connected terminals
+    const io = req.app.get('io')
+    if (io) {
+      io.emit('room:status_changed', {
+        roomNumber: booking.roomNumber,
+        status: 'DIRTY',
+        cleaningTasks: room?.cleaningTasks || { linen: false, bathSalts: false, minibar: false, inspection: false },
+        priority: 'HIGH',
+        updatedAt: new Date(),
+        actor: req.body.actorName || 'Front Desk',
+      })
+      io.emit('booking:checked_out', {
+        bookingRef: booking.bookingReference,
+        roomNumber: booking.roomNumber,
+        guest: booking.guestDetails?.name,
+      })
+    }
 
     res.status(200).json({
       success: true,

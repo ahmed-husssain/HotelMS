@@ -101,11 +101,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <HotelDataProvider>
-          <ToastProvider>
+        <ToastProvider>
+          <HotelDataProvider>
             <AppRoutes />
-          </ToastProvider>
-        </HotelDataProvider>
+          </HotelDataProvider>
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   )

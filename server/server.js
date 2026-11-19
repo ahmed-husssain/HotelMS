@@ -1,18 +1,48 @@
 require('dotenv').config()
+const http = require('http')
 const express = require('express')
+const { Server } = require('socket.io')
 const cors = require('cors')
 const morgan = require('morgan')
 const connectDB = require('./src/config/db')
 
 const app = express()
+const server = http.createServer(app)
 const PORT = process.env.PORT || 5000
 
 // 1. Database Connection
 connectDB()
 
-// 2. Global Middleware
+// 2. Real-Time Socket.io Initialization
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || '*',
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+    credentials: true,
+  },
+})
+
+// Attach io to Express so any controller can access via req.app.get('io')
+app.set('io', io)
+
+// Real-Time Staff & Guest Event Routing
+io.on('connection', (socket) => {
+  console.log(`[Socket.io] Staff / Guest terminal connected: ${socket.id}`)
+
+  // Support targeted room or channel subscription
+  socket.on('join:channel', (channel) => {
+    socket.join(channel)
+    console.log(`[Socket.io] ${socket.id} joined channel: ${channel}`)
+  })
+
+  socket.on('disconnect', () => {
+    console.log(`[Socket.io] Terminal disconnected: ${socket.id}`)
+  })
+})
+
+// 3. Global Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: process.env.CLIENT_URL || '*',
   credentials: true,
 }))
 app.use(express.json())
@@ -23,7 +53,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 
-// 3. API Routes
+// 4. API Routes
 const authRoutes = require('./src/routes/authRoutes')
 const roomRoutes = require('./src/routes/roomRoutes')
 const bookingRoutes = require('./src/routes/bookingRoutes')
@@ -40,12 +70,13 @@ app.get('/api/health', (req, res) => {
     success: true,
     service: 'Stayza HMS API',
     status: 'OPERATIONAL',
+    socketio: 'ENABLED',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
   })
 })
 
-// 4. 404 Route Handler
+// 5. 404 Route Handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -53,7 +84,7 @@ app.use((req, res) => {
   })
 })
 
-// 5. Global Error Handling Middleware
+// 6. Global Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error(`[Server Error] ${err.stack || err.message}`)
   res.status(err.status || 500).json({
@@ -62,9 +93,9 @@ app.use((err, req, res, next) => {
   })
 })
 
-// 6. Start HTTP Server
-app.listen(PORT, () => {
-  console.log(`[LuxuryStay HMS] Server listening on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`)
+// 7. Start HTTP Server with WebSockets
+server.listen(PORT, () => {
+  console.log(`[Stayza HMS] Server listening on port ${PORT} with Socket.io in ${process.env.NODE_ENV || 'development'} mode`)
 })
 
-module.exports = app
+module.exports = { app, server, io }

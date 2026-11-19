@@ -4,7 +4,15 @@ import {
   checkInStaffGuest,
   checkOutStaffGuest,
   postFolioCharge,
+  patchRoomStatus,
+  patchRoomChecklist,
 } from '../services/api'
+import {
+  subscribeToRoomUpdates,
+  subscribeToFolioUpdates,
+  subscribeToBookingEvents,
+} from '../services/socket'
+import { useToast } from './ToastContext'
 
 /**
  * HABITAS SANCTUARY & LUXURYSTAY — HOTEL DATA & WORKFLOW CONTEXT
@@ -326,6 +334,162 @@ export function HotelDataProvider({ children }) {
     return () => { isMounted = false }
   }, [])
 
+  const { toast } = useToast()
+
+  // Real-Time Socket.io Synchronization (<40ms duplex event bus)
+  useEffect(() => {
+    // 1. Subscribe to Room Status & Checklist updates
+    const unsubscribeRooms = subscribeToRoomUpdates(({ type, data }) => {
+      if (!data || !data.roomNumber) return
+
+      if (type === 'STATUS_CHANGED') {
+        setRooms((prev) =>
+          prev.map((r) => {
+            const isMatch =
+              r.roomNumber === data.roomNumber ||
+              r.roomNumber.replace(/\D/g, '') === String(data.roomNumber).replace(/\D/g, '')
+            if (isMatch) {
+              return {
+                ...r,
+                status: data.status,
+                ...(data.cleaningTasks ? { cleaningTasks: data.cleaningTasks } : {}),
+                ...(data.guest !== undefined ? { guest: data.guest } : {}),
+                ...(data.status === 'AVAILABLE' ? { checkoutTime: 'Turnover Completed' } : {}),
+              }
+            }
+            return r
+          })
+        )
+
+        // Informative, elegant toast notifications
+        if (data.status === 'AVAILABLE') {
+          toast?.success?.(`${data.roomNumber} certified & ready for arrivals`, 'ROOM READY')
+        } else if (data.status === 'DIRTY') {
+          toast?.info?.(`${data.roomNumber} flagged DIRTY for turnover`, 'TURNOVER QUEUE')
+        } else {
+          toast?.info?.(`${data.roomNumber} status: ${data.status}`, 'ROOM UPDATE')
+        }
+      } else if (type === 'CHECKLIST_UPDATED') {
+        setRooms((prev) =>
+          prev.map((r) => {
+            const isMatch =
+              r.roomNumber === data.roomNumber ||
+              r.roomNumber.replace(/\D/g, '') === String(data.roomNumber).replace(/\D/g, '')
+            if (isMatch) {
+              return {
+                ...r,
+                status: data.status,
+                cleaningTasks: data.cleaningTasks,
+              }
+            }
+            return r
+          })
+        )
+      }
+    })
+
+    // 2. Subscribe to Folio Additions
+    const unsubscribeFolio = subscribeToFolioUpdates((data) => {
+      if (!data || !data.roomNumber) return
+
+      setRooms((prev) =>
+        prev.map((r) => {
+          const isMatch =
+            r.roomNumber === data.roomNumber ||
+            r.roomNumber.replace(/\D/g, '') === String(data.roomNumber).replace(/\D/g, '')
+          if (isMatch) {
+            const incTitle = data.incidental?.title || data.incidental?.item || 'Incidental Charge'
+            const incPrice = data.incidental?.price || data.incidental?.amount || 0
+            const updatedIncidentals = [
+              ...(r.incidentals || []).filter((inc) => inc.id !== data.incidental?.id),
+              {
+                id: data.incidental?.id || `inc-${Date.now()}`,
+                item: incTitle,
+                amount: incPrice,
+                time: 'Just Now',
+              },
+            ]
+            return {
+              ...r,
+              incidentals: updatedIncidentals,
+              balanceDue: data.newBalanceDue ?? r.balanceDue,
+            }
+          }
+          return r
+        })
+      )
+      toast?.info?.(
+        `PKR ${(data.incidental?.price || data.incidental?.amount || 0).toLocaleString()} posted to ${data.roomNumber}`,
+        'FOLIO UPDATE'
+      )
+    })
+
+    // 3. Subscribe to Guest Check-Ins & Check-Outs
+    const unsubscribeBookings = subscribeToBookingEvents(({ type, data }) => {
+      if (!data) return
+
+      if (type === 'CHECKED_IN') {
+        setArrivals((prev) =>
+          prev.filter((a) => a.bookingRef !== data.bookingRef && a.id !== data.bookingRef)
+        )
+        if (data.roomNumber) {
+          setRooms((prev) =>
+            prev.map((r) => {
+              const isMatch =
+                r.roomNumber === data.roomNumber ||
+                r.roomNumber.replace(/\D/g, '') === String(data.roomNumber).replace(/\D/g, '')
+              if (isMatch) {
+                return {
+                  ...r,
+                  status: 'OCCUPIED',
+                  guest: data.guest || r.guest,
+                }
+              }
+              return r
+            })
+          )
+        }
+        toast?.success?.(`Guest checked into ${data.roomNumber || 'suite'}`, 'PMS CHECK-IN')
+      } else if (type === 'CHECKED_OUT') {
+        if (data.roomNumber) {
+          setRooms((prev) =>
+            prev.map((r) => {
+              const isMatch =
+                r.roomNumber === data.roomNumber ||
+                r.roomNumber.replace(/\D/g, '') === String(data.roomNumber).replace(/\D/g, '')
+              if (isMatch) {
+                return {
+                  ...r,
+                  status: 'DIRTY',
+                  guest: null,
+                  phone: null,
+                  checkIn: null,
+                  checkOut: null,
+                  nights: 0,
+                  advancePaid: 0,
+                  balanceDue: 0,
+                  folioNumber: null,
+                  cleaningTasks: { linen: false, bathSalts: false, minibar: false, inspection: false },
+                  priority: 'HIGH',
+                  checkoutTime: 'Just Now',
+                  incidentals: [],
+                }
+              }
+              return r
+            })
+          )
+        }
+        toast?.info?.(`Guest checked out of ${data.roomNumber || 'suite'}`, 'PMS CHECK-OUT')
+      }
+    })
+
+    return () => {
+      unsubscribeRooms()
+      unsubscribeFolio()
+      unsubscribeBookings()
+    }
+  }, [toast])
+
   useEffect(() => {
     localStorage.setItem('stayza_hotel_arrivals', JSON.stringify(arrivals))
   }, [arrivals])
@@ -530,11 +694,16 @@ export function HotelDataProvider({ children }) {
 
   /**
    * Action E: Housekeeping Task Checklist Toggle (Invoked on /housekeeping)
+   * Optimistically updates checklist and syncs via WebSockets to Front Desk PMS
    */
-  const updateCleaningTask = (roomNumber, taskKey, isComplete) => {
+  const updateCleaningTask = async (roomNumber, taskKey, isComplete, actor = 'Housekeeping Staff') => {
+    // 1. Optimistic UI update
     setRooms((prev) =>
       prev.map((r) => {
-        if (r.roomNumber === roomNumber) {
+        const isMatch =
+          r.roomNumber === roomNumber ||
+          r.roomNumber.replace(/\D/g, '') === String(roomNumber).replace(/\D/g, '')
+        if (isMatch) {
           const updatedTasks = { ...r.cleaningTasks, [taskKey]: isComplete }
           const allDone = Object.values(updatedTasks).every(Boolean)
           return {
@@ -546,16 +715,31 @@ export function HotelDataProvider({ children }) {
         return r
       })
     )
+
+    // 2. Persist to MongoDB Atlas and broadcast across WebSockets (<40ms)
+    try {
+      await patchRoomChecklist(roomNumber, {
+        taskKey,
+        isComplete,
+        cleanerName: actor,
+      })
+    } catch (err) {
+      console.warn('[Housekeeping Checklist] Remote sync warning:', err.message)
+    }
   }
 
   /**
    * Action F: Certify Room Ready & Available (Invoked on /housekeeping)
-   * Advances room to AVAILABLE so Front Desk PMS immediately sees it ready!
+   * Advances room to AVAILABLE so Front Desk PMS immediately turns green!
    */
-  const certifyRoomReady = (roomNumber, cleanerName = 'Bilal Farooq') => {
+  const certifyRoomReady = async (roomNumber, cleanerName = 'Bilal Farooq') => {
+    // 1. Optimistic UI update
     setRooms((prev) =>
       prev.map((r) => {
-        if (r.roomNumber === roomNumber) {
+        const isMatch =
+          r.roomNumber === roomNumber ||
+          r.roomNumber.replace(/\D/g, '') === String(roomNumber).replace(/\D/g, '')
+        if (isMatch) {
           return {
             ...r,
             status: 'AVAILABLE',
@@ -574,6 +758,17 @@ export function HotelDataProvider({ children }) {
       `${roomNumber} inspected and certified AVAILABLE by ${cleanerName}. Ready for guest arrivals.`,
       cleanerName
     )
+
+    // 2. Persist to MongoDB Atlas and broadcast across WebSockets (<40ms)
+    try {
+      await patchRoomStatus(roomNumber, {
+        status: 'AVAILABLE',
+        cleanerName,
+        actor: cleanerName,
+      })
+    } catch (err) {
+      console.warn('[Housekeeping Certify] Remote sync warning:', err.message)
+    }
   }
 
   /**

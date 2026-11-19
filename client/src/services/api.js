@@ -136,6 +136,20 @@ export async function fetchStaffDashboard() {
   return request('/staff/dashboard')
 }
 
+export async function patchRoomStatus(roomIdentifier, payload) {
+  return request(`/rooms/${encodeURIComponent(roomIdentifier)}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function patchRoomChecklist(roomIdentifier, payload) {
+  return request(`/rooms/${encodeURIComponent(roomIdentifier)}/checklist`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+
 export async function checkInStaffGuest(bookingRef, payload = {}) {
   return request(`/staff/check-in/${encodeURIComponent(bookingRef)}`, {
     method: 'POST',
