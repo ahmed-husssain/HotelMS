@@ -91,7 +91,9 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
   return (
     <div 
       data-lenis-prevent="true"
-      className="fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-black/70 p-3 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static"
+      className={`fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-black/70 p-3 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static transition-opacity duration-250 ease-out ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="invoice-preview-title"
@@ -102,7 +104,9 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
       {/* Outer Card Container - Natural document flow with zero scroll trapping */}
       <div 
         data-lenis-prevent="true"
-        className="relative w-full max-w-2xl bg-white border border-slate-300 rounded-[2px] shadow-2xl my-3 sm:my-6 flex flex-col print:border-none print:shadow-none print:w-full print:max-w-none print:m-0"
+        className={`relative w-full max-w-2xl bg-white border border-slate-300 rounded-[2px] shadow-2xl my-3 sm:my-6 flex flex-col will-change-transform transition-all duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] print:border-none print:shadow-none print:w-full print:max-w-none print:m-0 ${
+          isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         
