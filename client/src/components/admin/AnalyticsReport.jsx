@@ -54,7 +54,12 @@ export default function AnalyticsReport({ rooms }) {
     )
   }
 
-  const { revenue, occupancy, pricingYield, bookingFunnel, incidentals } = analytics
+  const revenue = analytics?.revenue || { grossRevenue: 0, advanceTotal: 0, balanceTotal: 0, extrasTotal: 0, channels: { safepayOnline: 0, deskCash: 0, deskCard: 0 } }
+  const occupancy = analytics?.occupancy || { occupancyRate: 0, totalRooms: 0, occupiedCount: 0, availableCount: 0, dirtyCount: 0, maintenanceCount: 0 }
+  const pricingYield = analytics?.pricingYield || { adr: 0, revPar: 0, totalRoomNights: 0, totalRoomRevenue: 0 }
+  const bookingFunnel = analytics?.bookingFunnel || { conversionRate: 0, abandonmentRate: 0, confirmedStays: 0, totalHoldsInitiated: 0 }
+  const incidentals = analytics?.incidentals || { totalIncidentalRevenue: 0, ancillaryShare: 0, topServices: [] }
+  const channels = revenue.channels || { safepayOnline: 0, deskCash: 0, deskCard: 0 }
 
   return (
     <div className="space-y-8">
@@ -272,7 +277,7 @@ export default function AnalyticsReport({ rooms }) {
                 <span className="text-[10px] text-slate-500">Automated Webhook Guaranteed</span>
               </div>
               <strong className="text-emerald-900 font-bold">
-                PKR {revenue.channels.safepayOnline.toLocaleString()}
+                PKR {(channels.safepayOnline || 0).toLocaleString()}
               </strong>
             </div>
 
@@ -282,7 +287,7 @@ export default function AnalyticsReport({ rooms }) {
                 <span className="text-[10px] text-slate-500">Physical Register Drawer</span>
               </div>
               <strong className="text-slate-900 font-bold">
-                PKR {revenue.channels.deskCash.toLocaleString()}
+                PKR {(channels.deskCash || 0).toLocaleString()}
               </strong>
             </div>
 
@@ -292,7 +297,7 @@ export default function AnalyticsReport({ rooms }) {
                 <span className="text-[10px] text-slate-500">Credit / Debit Merchant Terminal</span>
               </div>
               <strong className="text-slate-900 font-bold">
-                PKR {revenue.channels.deskCard.toLocaleString()}
+                PKR {(channels.deskCard || 0).toLocaleString()}
               </strong>
             </div>
 

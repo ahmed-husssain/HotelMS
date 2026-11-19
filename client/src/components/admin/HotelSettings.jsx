@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { useToast } from '../../context/ToastContext'
 
 export default function HotelSettings({
-  systemSettings,
+  systemSettings = {},
   onSaveSettings,
 }) {
   const { showToast } = useToast()
-  const [taxRate, setTaxRate] = useState(systemSettings.taxRate || 13)
-  const [depositRate, setDepositRate] = useState(systemSettings.depositRate || 30)
-  const [checkInTime, setCheckInTime] = useState(systemSettings.checkInTime || '14:00')
-  const [checkOutTime, setCheckOutTime] = useState(systemSettings.checkOutTime || '11:00')
-  const [policyNotes, setPolicyNotes] = useState(systemSettings.policyNotes || '')
+  const [taxRate, setTaxRate] = useState(systemSettings?.taxRate || 13)
+  const [depositRate, setDepositRate] = useState(systemSettings?.depositRate || 30)
+  const [checkInTime, setCheckInTime] = useState(systemSettings?.checkInTime || '14:00')
+  const [checkOutTime, setCheckOutTime] = useState(systemSettings?.checkOutTime || '11:00')
+  const [policyNotes, setPolicyNotes] = useState(systemSettings?.policyNotes || '')
   const [savedNotice, setSavedNotice] = useState(false)
 
   const handleSubmit = (e) => {

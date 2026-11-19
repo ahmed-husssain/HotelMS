@@ -77,10 +77,10 @@ export default function RegisterPage() {
       <main className="flex-1 min-h-0 w-full max-w-5xl mx-auto bg-[#FAF8F5] sm:border sm:border-slate-300/80 sm:shadow-2xl sm:rounded-[3px] overflow-hidden flex flex-col md:grid md:grid-cols-12">
         
         {/* 1. MOBILE-ONLY TOP BANNER (< md) */}
-        <div className="md:hidden relative w-full h-[215px] sm:h-[235px] shrink-0 overflow-hidden bg-slate-900">
+        <div className="md:hidden relative w-full h-[180px] shrink-0 overflow-hidden bg-slate-900">
           <img
             src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=85"
-            alt="Habitas Luxury Experience"
+            alt="Stayza Luxury Experience"
             className="w-full h-full object-cover filter brightness-[0.72] contrast-[1.08]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-black/50" />
@@ -89,9 +89,6 @@ export default function RegisterPage() {
           <div className="absolute top-3.5 inset-x-0 px-5 flex items-center justify-between text-white z-20">
             <Link to="/" className="flex items-center gap-1.5">
               <span className="font-serif-grand text-base font-light tracking-[0.25em] text-[#FFF0CA]">STAYZA</span>
-              <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/70 border-l border-white/25 pl-1.5">
-                HOTEL
-              </span>
             </Link>
             <Link
               to="/"
@@ -100,25 +97,10 @@ export default function RegisterPage() {
               <span>&larr;</span> Home
             </Link>
           </div>
-
-          {/* Mobile Threshold Title */}
-          <div className="absolute bottom-2.5 inset-x-0 px-5 z-20">
-            <div className="flex items-center justify-between mb-0.5">
-              <span className="text-[9px] font-mono tracking-wider text-[#8C6D15] uppercase font-bold">
-                Account Registration
-              </span>
-              <span className="text-[9px] font-mono text-stone-500 uppercase">
-                Portal
-              </span>
-            </div>
-            <h1 className="font-serif-grand text-2xl font-light text-slate-900 leading-tight">
-              Create an Account.
-            </h1>
-          </div>
         </div>
 
         {/* 2. DESKTOP/TABLET LEFT 5 COLUMNS (>= md) */}
-        <aside className="hidden md:flex md:col-span-5 bg-[#0E1201] text-[#FAF8F5] relative overflow-hidden flex-col justify-between p-6 sm:p-8 lg:p-10 border-r border-slate-800 shrink-0">
+        <aside className="hidden md:flex md:col-span-5 bg-[#0E1201] text-[#FAF8F5] relative overflow-hidden flex-col justify-between p-8 lg:p-10 border-r border-slate-800 shrink-0">
           <img
             src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85"
             alt="Stayza Luxury Experience"
@@ -130,20 +112,13 @@ export default function RegisterPage() {
             <span className="font-serif-grand text-2xl font-light tracking-[0.2em] text-[#FFF0CA] block">
               STAYZA
             </span>
-            <span className="text-[11px] uppercase tracking-wider text-slate-300 block mt-1 font-sans">
-              Hotel &amp; Residences
+            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-300 block mt-1">
+              Sindh Coast &bull; Pakistan
             </span>
           </div>
 
-          <div className="relative z-10 my-auto py-4">
-            <p className="font-serif text-base lg:text-lg text-slate-200 leading-relaxed font-light">
-              Book your stay, access your digital room key, and manage hotel services.
-            </p>
-          </div>
-
-          <div className="relative z-10 pt-3 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
-            <span>Guest Registration</span>
-            <span>Secure Access</span>
+          <div className="relative z-10 text-[10px] font-mono text-slate-400 tracking-wider">
+            Private Suites &bull; Coastal Sanctuary
           </div>
         </aside>
 
@@ -152,21 +127,23 @@ export default function RegisterPage() {
           
           {/* Desktop/Tablet Header (Hidden on Mobile) */}
           <div className="hidden md:block">
-            <span className="text-[10px] font-mono tracking-wider text-slate-500 uppercase font-semibold">
-              Account Registration
-            </span>
-            <h1 className="font-serif-grand text-2xl lg:text-3xl text-slate-900 font-light mt-1">
-              Register as a Guest
+            <h1 className="font-serif-grand text-3xl sm:text-4xl text-slate-900 font-light tracking-tight">
+              Create Account
             </h1>
-            <p className="text-xs text-slate-600 mt-1 leading-relaxed font-normal">
-              Create your profile to manage active stays, access your digital key, and request hotel services.
+            <p className="text-xs text-slate-500 font-mono mt-1.5">
+              Join Stayza to manage your reservations and hotel services
             </p>
           </div>
 
           {/* Mobile Subtitle (< md) */}
-          <p className="md:hidden text-xs text-stone-600 leading-tight">
-            Create an account to manage your reservations, digital room keys, and hotel services.
-          </p>
+          <div className="md:hidden">
+            <h1 className="font-serif-grand text-2xl text-slate-900 font-light tracking-tight">
+              Create Account
+            </h1>
+            <p className="text-xs text-stone-600 font-mono mt-1">
+              Manage your reservations and hotel services
+            </p>
+          </div>
 
           {/* Error Banner */}
           {errorMsg && (
@@ -301,28 +278,17 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          {/* Security Notice & Switch to Login */}
-          <div className="pt-2 border-t border-stone-200/80 space-y-2">
-            <div className="p-2 bg-stone-100 border border-stone-200 rounded-[2px] text-[10px] font-mono text-stone-700 space-y-0.5">
-              <div className="font-bold text-slate-900 flex items-center gap-1">
-                <span>🔒</span> Public Registration creates a Guest Profile
-              </div>
-              <p className="text-[9px] text-stone-500 leading-tight">
-                For Admin (GM), Front Desk PMS, or Housekeeping panel access, sign in using authorized staff credentials on the Sign In page.
-              </p>
-            </div>
-
-            <div className="text-center pt-0.5">
-              <p className="text-xs text-stone-600 font-normal">
-                Need Admin or Staff access?{' '}
-                <Link
-                  to="/login"
-                  className="text-slate-900 font-bold underline hover:text-stone-700 cursor-pointer ml-1"
-                >
-                  Sign In to Panel &rarr;
-                </Link>
-              </p>
-            </div>
+          {/* Switch to Sign In */}
+          <div className="pt-3 border-t border-slate-200/80 text-center">
+            <p className="text-xs text-slate-600 font-normal">
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className="text-slate-900 font-bold underline hover:text-amber-900 cursor-pointer ml-1"
+              >
+                Sign In &rarr;
+              </Link>
+            </p>
           </div>
 
         </section>

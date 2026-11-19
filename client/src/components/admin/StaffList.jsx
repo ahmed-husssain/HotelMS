@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useToast } from '../../context/ToastContext'
 
 export default function StaffList({
-  staffAccounts,
+  staffAccounts = [],
   onCreateStaff,
   onToggleStatus,
 }) {

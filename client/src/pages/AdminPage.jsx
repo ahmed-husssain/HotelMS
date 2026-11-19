@@ -72,7 +72,7 @@ export default function AdminPage() {
         <div className="flex border-b border-slate-200 overflow-x-auto text-xs font-mono">
           {[
             { id: 'ANALYTICS', label: 'Executive Analytics' },
-            { id: 'STAFF', label: `Staff Governance (${staffAccounts.length})` },
+            { id: 'STAFF', label: `Staff Governance (${staffAccounts?.length || 0})` },
             { id: 'GUESTS', label: 'Guest Directory' },
             { id: 'RESIDENCES', label: 'Tariffs & Inventory' },
             { id: 'SETTINGS', label: 'Tax & Settings' },
