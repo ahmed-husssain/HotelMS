@@ -19,7 +19,7 @@ function CasaMomoSlideArrow({ left = false }) {
       viewBox="0 0 14 12"
       fill="none"
       aria-hidden="true"
-      className={`text-[#FFF0CA] block transition-transform duration-200 ${
+      className={`text-[#FAF8F5] block transition-transform duration-200 ${
         left ? 'rotate-180' : ''
       }`}
     >
@@ -65,7 +65,7 @@ function CarouselSlide({ photo, residenceName, isEager }) {
       {/* Clean Loading... feedback */}
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-900/60 backdrop-blur-[2px] z-10 transition-opacity duration-300">
-          <span className="text-[#FFF0CA] font-mono text-xs tracking-[0.25em] uppercase animate-pulse select-none">
+          <span className="text-[#FAF8F5] font-mono text-xs tracking-[0.25em] uppercase animate-pulse select-none">
             Loading...
           </span>
         </div>
@@ -219,31 +219,31 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
           </div>
 
           {/* Top Floating Telemetry & Perspective Indicator */}
-          <div className="absolute top-3.5 sm:top-4 inset-x-3.5 sm:inset-x-4 flex items-center justify-between pointer-events-none z-20">
+          <div className="absolute top-3 sm:top-4 inset-x-3 sm:inset-x-4 flex items-center justify-between pointer-events-none z-20">
             {/* Room Number Emblem */}
-            <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs">
+            <span className="px-2.5 sm:px-3 py-1 bg-[#0E1201]/55 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FAF8F5] uppercase border border-white/10 rounded-[2px] shadow-xs">
               SUITE {residence.roomNumber}
             </span>
 
             {/* Current Perspective Tag & Slide Counter */}
-            <span className="px-3 py-1 bg-[#0E1201]/45 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-medium text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs flex items-center gap-2">
+            <span className="px-2.5 sm:px-3 py-1 bg-[#0E1201]/55 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-medium text-[#FAF8F5] uppercase border border-white/10 rounded-[2px] shadow-xs flex items-center gap-2">
               <span>
                 {String(selectedIndex + 1).padStart(2, '0')} / {String(gallery.length).padStart(2, '0')}
               </span>
-              <span className="w-1 h-1 rounded-full bg-[#FFF0CA]/50" />
+              <span className="w-1 h-1 rounded-full bg-[#FAF8F5]/60" />
               <span>{activeSlide.tag}</span>
             </span>
           </div>
 
-          {/* Casa Momo Frosted Glass Slide Navigation Arrows */}
-          <div className="absolute inset-y-0 inset-x-2 sm:inset-x-3 flex items-center justify-between pointer-events-none z-20">
+          {/* Casa Momo Slide Navigation Arrows (Desktop hover, swipe-first on mobile) */}
+          <div className="hidden sm:flex absolute inset-y-0 inset-x-3 items-center justify-between pointer-events-none z-20">
             {/* Previous Photo Button */}
             <button
               type="button"
               onClick={scrollPrev}
               data-cursor-hide="true"
               aria-label="Previous photo"
-              className="pointer-events-auto opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-11 sm:h-11 min-h-[44px] min-w-[44px] grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer"
+              className="pointer-events-auto opacity-0 group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-11 h-11 min-h-[44px] min-w-[44px] grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FAF8F5] shadow-xl cursor-pointer"
             >
               <CasaMomoSlideArrow left />
             </button>
@@ -254,16 +254,16 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
               onClick={scrollNext}
               data-cursor-hide="true"
               aria-label="Next photo"
-              className="pointer-events-auto opacity-90 sm:opacity-0 sm:group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-10 h-10 sm:w-11 sm:h-11 min-h-[44px] min-w-[44px] grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FFF0CA] shadow-xl cursor-pointer"
+              className="pointer-events-auto opacity-0 group-hover/card:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.52,0,0,1)] w-11 h-11 min-h-[44px] min-w-[44px] grid place-items-center bg-[#0E1201]/55 hover:bg-[#0E1201]/85 hover:scale-105 active:scale-95 backdrop-blur-md border border-white/20 rounded-[2px] text-[#FAF8F5] shadow-xl cursor-pointer"
             >
               <CasaMomoSlideArrow />
             </button>
           </div>
 
           {/* Minimal 1px Hairline Progress Track */}
-          <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/15 z-20">
+          <div className="absolute bottom-0 inset-x-0 h-[2px] bg-white/20 z-20">
             <div
-              className="h-full bg-[#FFF0CA] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)]"
+              className="h-full bg-[#FAF8F5] transition-all duration-400 ease-[cubic-bezier(0.52,0,0,1)]"
               style={{
                 width: `${((selectedIndex + 1) / gallery.length) * 100}%`,
               }}
@@ -291,7 +291,7 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
       </div>
 
       {/* Telemetry Monograph Column (5 cols) */}
-      <div className={`${isReversed ? 'lg:col-start-1 lg:col-span-5' : 'lg:col-span-5'} space-y-5 sm:space-y-6`}>
+      <div className={`${isReversed ? 'lg:col-start-1 lg:col-span-5' : 'lg:col-span-5'} space-y-3.5 sm:space-y-6`}>
         {/* Tier & Number Header */}
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -299,13 +299,22 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
               ROOM {residence.roomNumber} &bull; {residence.tier}
             </span>
           </div>
-          <h2 className="font-serif-grand text-3xl sm:text-4xl text-slate-900 font-normal leading-tight">
+          <h2 className="font-serif-grand text-2xl sm:text-4xl text-slate-900 font-normal leading-tight">
             {residence.name}
           </h2>
         </div>
 
-        {/* Minimalist 3-Metric Editorial Grid */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 pt-1">
+        {/* Mobile Compact Editorial Specs Pill Bar (< sm) */}
+        <div className="sm:hidden flex items-center justify-between py-2 px-3 bg-white border border-slate-200/90 rounded-[2px] font-mono text-[10px] text-slate-800 shadow-2xs">
+          <span className="font-semibold">{residence.specs?.find(s => s.label === 'AREA')?.value || '210 M²'}</span>
+          <span className="text-slate-300">&bull;</span>
+          <span className="truncate max-w-[125px] font-semibold">{residence.specs?.find(s => s.label === 'VIEW')?.value || '360° Ocean'}</span>
+          <span className="text-slate-300">&bull;</span>
+          <span className="font-semibold">{residence.specs?.find(s => s.label === 'BED')?.value || 'Super King'}</span>
+        </div>
+
+        {/* Desktop 3-Metric Editorial Grid (>= sm) */}
+        <div className="hidden sm:grid sm:grid-cols-3 gap-2.5 sm:gap-3 pt-1">
           {residence.specs.slice(0, 3).map((item, idx) => (
             <div
               key={idx}
@@ -322,31 +331,55 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
         </div>
 
         {/* Curated Amenities List (Clean 2 Key Highlights) */}
-        <ul className="space-y-2 pt-1 text-xs text-slate-600 font-medium">
+        <ul className="space-y-1.5 sm:space-y-2 pt-0.5 sm:pt-1 text-xs text-slate-600 font-medium">
           {residence.amenities.slice(0, 2).map((amenity, i) => (
-            <li key={i} className="flex items-center gap-2.5">
+            <li key={i} className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-800/60 shrink-0" />
               <span>{amenity}</span>
             </li>
           ))}
         </ul>
 
-        {/* Pricing & Signature Rolling-Text CTA Button */}
-        <div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-xs font-semibold text-slate-500">PKR</span>
-              <span className="text-2xl font-bold text-slate-900 tracking-tight">
-                {residence.nightlyRate.toLocaleString()}
+        {/* Pricing & Action Bar */}
+        <div className="pt-3 sm:pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center justify-between sm:block">
+            <div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xs font-semibold text-slate-500">PKR</span>
+                <span className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                  {residence.nightlyRate.toLocaleString()}
+                </span>
+                <span className="text-xs text-slate-500 font-normal">/ Night</span>
+              </div>
+              <span className="text-[10px] tracking-[0.14em] sm:tracking-[0.18em] text-emerald-800 font-semibold uppercase block mt-0.5">
+                30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
               </span>
-              <span className="text-xs text-slate-500 font-normal">/ Night</span>
             </div>
-            <span className="text-[10px] tracking-[0.18em] text-emerald-800 font-semibold uppercase block mt-0.5">
-              30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
-            </span>
+
+            {/* Mobile-Only Book Button */}
+            <div className="sm:hidden flex items-center gap-1.5">
+              {onOpenSpecs && (
+                <button
+                  type="button"
+                  onClick={() => onOpenSpecs(residence)}
+                  className="px-2 py-2 text-[10px] font-mono text-slate-600 underline min-h-[44px] flex items-center"
+                >
+                  Specs
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => onReserve(residence)}
+                className="px-4 py-2.5 bg-slate-900 text-[#FAF8F5] font-mono text-[11px] font-bold uppercase tracking-wider rounded-[2px] min-h-[44px] flex items-center gap-1 shadow-sm active:scale-95"
+              >
+                <span>Book</span>
+                <span>&rarr;</span>
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Desktop Buttons (>= sm) */}
+          <div className="hidden sm:flex items-center gap-2">
             {onOpenSpecs && (
               <button
                 type="button"

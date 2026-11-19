@@ -332,6 +332,7 @@ export default function RegisterPage() {
                 <input
                   id="reg-pass"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="Min 6 characters"
                   value={password}
                   onChange={(e) => handleChange('password', e.target.value)}
@@ -359,6 +360,7 @@ export default function RegisterPage() {
                 <input
                   id="reg-confirm"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="Re-type password"
                   value={confirmPassword}
                   onChange={(e) => handleChange('confirmPassword', e.target.value)}

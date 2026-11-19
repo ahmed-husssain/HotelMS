@@ -83,14 +83,14 @@ export default function NavMenu({
             </button>
           </div>
 
-          {/* Navigation Links with Dynamic Hover Trigger */}
-          <nav className="my-auto py-2 sm:py-4 space-y-2.5 sm:space-y-3" aria-label="Menu Items">
+          {/* Navigation Links with Proportional Luxury Spacing */}
+          <nav className="my-auto py-4 sm:py-6 space-y-4 sm:space-y-3.5 flex-1 flex flex-col justify-center max-h-[520px]" aria-label="Menu Items">
             {navItems.map((item) => {
               const linkContent = (
                 <div
                   onMouseEnter={() => setActivePreview(item.preview)}
                   onClick={onClose}
-                  className="group block border-b border-slate-200/70 pb-2 sm:pb-2.5 hover:border-slate-900 transition-colors cursor-pointer"
+                  className="group block border-b border-slate-200/80 pb-3 sm:pb-2.5 hover:border-slate-900 transition-colors cursor-pointer"
                 >
                   <div className="flex items-baseline gap-3 sm:gap-4">
                     <span className="font-mono text-xs text-slate-400 group-hover:text-emerald-800 transition-colors">
@@ -100,7 +100,7 @@ export default function NavMenu({
                       {item.label}
                     </span>
                   </div>
-                  <span className="font-mono text-[11px] sm:text-xs text-slate-500 tracking-wider block mt-0.5 pl-7 sm:pl-9">
+                  <span className="font-mono text-[11px] sm:text-xs text-slate-500 tracking-wider block mt-1 pl-7 sm:pl-9">
                     {item.desc}
                   </span>
                 </div>
@@ -118,14 +118,14 @@ export default function NavMenu({
             })}
 
             {/* Direct Reserve Sanctuary CTA */}
-            <div className="pt-2 sm:pt-3">
+            <div className="pt-3 sm:pt-4">
               <button
                 type="button"
                 onClick={() => {
                   onClose()
                   onOpenDrawer()
                 }}
-                className="w-full py-3 sm:py-3.5 px-5 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.25em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98] shadow-md"
+                className="w-full py-3.5 px-5 bg-slate-900 text-[#FAF8F5] text-xs font-mono uppercase tracking-[0.25em] font-semibold hover:bg-emerald-950 transition-colors flex items-center justify-between cursor-pointer active:scale-[0.98] shadow-md min-h-[44px]"
               >
                 <span>Reserve a Suite (30% Deposit)</span>
                 <span>&rarr;</span>

@@ -54,6 +54,18 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 
+// Serverless URL normalizer for Vercel rewrites:
+// When Vercel rewrites requests to server.js or api/index.js, ensure originalUrl and url
+// point to the actual requested route (preserved in headers x-matched-path or x-forwarded-uri)
+app.use((req, res, next) => {
+  const matched = req.headers['x-matched-path'] || req.headers['x-forwarded-uri']
+  if (matched && (req.url === '/server.js' || req.url.startsWith('/server.js') || req.url === '/api/index.js' || req.url.startsWith('/api/index.js'))) {
+    req.url = matched
+    req.originalUrl = matched
+  }
+  next()
+})
+
 // 4. API Routes
 const authRoutes = require('./src/routes/authRoutes')
 const roomRoutes = require('./src/routes/roomRoutes')
@@ -63,7 +75,7 @@ const housekeepingRoutes = require('./src/routes/housekeepingRoutes')
 const adminRoutes = require('./src/routes/adminRoutes')
 
 // Welcome & Healthcheck Endpoints
-app.get('/', (req, res) => {
+app.get(['/', '/api'], (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Stayza Hotel Management System API is live on Vercel',
@@ -83,32 +95,24 @@ app.get('/', (req, res) => {
   })
 })
 
-app.get('/health', (req, res) => {
+app.get(['/health', '/api/health'], (req, res) => {
   res.status(200).json({
-    status: 'healthy',
+    success: true,
+    service: 'Stayza HMS API',
+    status: 'OPERATIONAL',
+    version: '1.0.0',
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
   })
 })
 
-app.use('/api/auth', authRoutes)
-app.use('/api/rooms', roomRoutes)
-app.use('/api/bookings', bookingRoutes)
-app.use('/api/staff', staffRoutes)
-app.use('/api/housekeeping', housekeepingRoutes)
-app.use('/api/admin', adminRoutes)
+app.use(['/api/auth', '/auth'], authRoutes)
+app.use(['/api/rooms', '/rooms'], roomRoutes)
+app.use(['/api/bookings', '/bookings'], bookingRoutes)
+app.use(['/api/staff', '/staff'], staffRoutes)
+app.use(['/api/housekeeping', '/housekeeping'], housekeepingRoutes)
+app.use(['/api/admin', '/admin'], adminRoutes)
 
-// Health & Status Check Endpoint
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    service: 'Stayza HMS API',
-    status: 'OPERATIONAL',
-    socketio: 'ENABLED',
-    version: '1.0.0',
-    timestamp: new Date().toISOString(),
-  })
-})
 
 // 5. 404 Route Handler
 app.use((req, res) => {

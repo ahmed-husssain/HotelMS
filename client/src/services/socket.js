@@ -15,17 +15,33 @@ let socket = null
 export function getSocket() {
   if (!socket) {
     // Determine backend socket server URL
-    // In dev: proxy via /socket.io or fallback to http://localhost:5000
-    // In prod: VITE_SOCKET_URL or current host origin
+    // In dev: proxy via http://localhost:5000
+    // In prod: VITE_SOCKET_URL if a dedicated WebSocket cluster exists
     const SOCKET_URL =
       import.meta.env.VITE_SOCKET_URL ||
-      (import.meta.env.DEV ? 'http://localhost:5000' : window.location.origin)
+      (import.meta.env.DEV ? 'http://localhost:5000' : null)
+
+    // In serverless / static CDN production where WebSockets are not hosted on the static domain,
+    // gracefully fall back to a silent mock emitter so Live Heartbeat polling handles sync
+    if (!SOCKET_URL) {
+      const noop = () => {}
+      socket = {
+        id: 'serverless-poll-mode',
+        connected: false,
+        on: noop,
+        off: noop,
+        emit: noop,
+        connect: noop,
+        disconnect: noop,
+      }
+      return socket
+    }
 
     socket = io(SOCKET_URL, {
       autoConnect: true,
       reconnection: true,
-      reconnectionAttempts: 10,
-      reconnectionDelay: 1000,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
       transports: ['websocket', 'polling'], // Fallback gracefully if WebSockets are restricted
     })
 

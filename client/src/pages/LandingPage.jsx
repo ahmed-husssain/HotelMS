@@ -56,14 +56,14 @@ export default function LandingPage() {
         onQuickReserve={() => handleOpenReservation(RESIDENCES[0])} 
       />
 
-      {/* Architectural Residences Showcase */}
-      <main id="residences" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 space-y-16 sm:space-y-20 lg:space-y-28 overflow-x-clip">
-        <div className="border-b border-slate-200/80 pb-5 sm:pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      {/* Architectural Residences Showcase — Tight Luxury Editorial Cadence */}
+      <main id="residences" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 space-y-10 sm:space-y-14 lg:space-y-18 overflow-x-clip">
+        <div className="border-b border-slate-200/80 pb-4 sm:pb-5 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <span className="text-[10px] tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
               OUR LUXURY SUITES &amp; VILLAS
             </span>
-            <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light mt-1">
+            <h2 className="font-serif-grand text-2xl sm:text-4xl lg:text-5xl text-slate-900 font-light mt-1">
               Featured Suites &amp; Villas
             </h2>
           </div>

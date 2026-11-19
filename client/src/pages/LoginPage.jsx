@@ -250,6 +250,7 @@ export default function LoginPage() {
                 <input
                   id="login-pass"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
                   placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => handlePasswordChange(e.target.value)}

@@ -53,10 +53,10 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#FAF8F5] text-[#121619] border-t border-[#E5DFD5] font-sans-clean select-none relative overflow-hidden">
       
-      {/* Subtle Architectural Watermark Monogram */}
+      {/* Subtle Architectural Watermark Monogram (Desktop & Tablet only to prevent mobile clutter) */}
       <div 
         aria-hidden="true" 
-        className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[120px] sm:text-[140px] font-serif-grand font-bold text-slate-900/[0.025] tracking-[0.25em] pointer-events-none select-none whitespace-nowrap"
+        className="hidden sm:block absolute -bottom-6 left-1/2 -translate-x-1/2 text-[120px] sm:text-[140px] font-serif-grand font-bold text-slate-900/[0.02] tracking-[0.25em] pointer-events-none select-none whitespace-nowrap"
       >
         STAYZA
       </div>
@@ -112,8 +112,8 @@ export default function Footer() {
       {/* ============================================================== */}
       {/* 2. CORE DIRECTORY & INTEGRATED BASELINE */}
       {/* ============================================================== */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-8 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10 items-start">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-6 sm:py-8 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 items-start">
           
           {/* Column 1: Brand & Contact */}
           <div className="space-y-3">
