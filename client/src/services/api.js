@@ -9,8 +9,14 @@ const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 async function request(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`
+  const token =
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('stayza_auth_token') || localStorage.getItem('habitas_auth_token')
+      : null
+
   const headers = {
     'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {}),
   }
 
@@ -25,6 +31,25 @@ async function request(endpoint, options = {}) {
     console.warn(`[API] ${options.method || 'GET'} ${endpoint} error:`, err.message)
     throw err
   }
+}
+
+// 0. Authentication API
+export async function loginUser(credentials) {
+  return request('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })
+}
+
+export async function registerUser(payload) {
+  return request('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function fetchCurrentUser() {
+  return request('/auth/me')
 }
 
 // 1. Suite Inventory

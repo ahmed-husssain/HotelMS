@@ -33,7 +33,7 @@ const seedDatabase = async () => {
     ])
     console.log('[Seed] Database cleared.')
 
-    // 2. Create the 4 Canonical Stakeholder Accounts
+    // 2. Create the Canonical Stakeholder Accounts
     // Passwords are automatically hashed by User.js pre-save hook
     const users = await User.create([
       {
@@ -47,11 +47,29 @@ const seedDatabase = async () => {
         preferences: { pillowType: 'Feather & Down', climatePreference: '21°C' },
       },
       {
+        name: 'Dr. Tariq Khan',
+        email: 'tariq@luxury.pk',
+        password: 'Password123!',
+        role: 'guest',
+        phone: '+92 300 8921455',
+        address: 'Defence Phase VIII, Karachi, Pakistan',
+        activeReservationCode: 'TH-301-9041',
+        preferences: { pillowType: 'Feather & Down', climatePreference: '21°C' },
+      },
+      {
         name: 'Ali Raza',
         email: 'reception@stayza.com',
         password: 'Password123!',
         role: 'receptionist',
         phone: '+92 321 4458921',
+        address: 'Clifton Block 4, Karachi, Pakistan',
+      },
+      {
+        name: 'Sara Ahmed',
+        email: 'reception@habitas.com',
+        password: 'Password123!',
+        role: 'receptionist',
+        phone: '+92 321 4455667',
         address: 'Clifton Block 4, Karachi, Pakistan',
       },
       {
@@ -63,12 +81,28 @@ const seedDatabase = async () => {
         address: 'PECHS Block 2, Karachi, Pakistan',
       },
       {
+        name: 'Bilal Farooq',
+        email: 'cleaning@habitas.com',
+        password: 'Password123!',
+        role: 'housekeeping',
+        phone: '+92 333 1122334',
+        address: 'PECHS Block 2, Karachi, Pakistan',
+      },
+      {
         name: 'General Manager Tariq J.',
         email: 'admin@stayza.com',
         password: 'Password123!',
         role: 'admin',
         phone: '+92 300 8921455',
         address: 'Stayza Sanctuary Headquarters, Sindh Coast',
+      },
+      {
+        name: 'Karim Mansoor',
+        email: 'admin@habitas.com',
+        password: 'Password123!',
+        role: 'admin',
+        phone: '+92 300 0001122',
+        address: 'Habitas Executive Operations, Sindh Coast',
       },
     ])
     console.log(`[Seed] Created ${users.length} stakeholder accounts with encrypted passwords.`)

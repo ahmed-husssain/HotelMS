@@ -24,7 +24,7 @@ export default function RegisterPage() {
   const [errorMsg, setErrorMsg] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMsg('')
 
@@ -46,7 +46,7 @@ export default function RegisterPage() {
     setIsSubmitting(true)
 
     try {
-      registerGuest({ name, email, phone })
+      await registerGuest({ name, email, password, phone })
       // Smooth redirect to guest portal
       setTimeout(() => {
         navigate('/my-stay')

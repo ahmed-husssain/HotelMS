@@ -18,7 +18,7 @@ export default function LoginPage() {
   const { login } = useAuth()
 
   const [email, setEmail] = useState('tariq@luxury.pk')
-  const [password, setPassword] = useState('password123')
+  const [password, setPassword] = useState('Password123!')
   const [showPassword, setShowPassword] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
@@ -27,19 +27,19 @@ export default function LoginPage() {
   // 1-Click Role Quick Fill for testing
   const handleQuickFill = (roleEmail) => {
     setEmail(roleEmail)
-    setPassword('password123')
+    setPassword('Password123!')
     setErrorMsg('')
     setSuccessMsg('')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMsg('')
     setSuccessMsg('')
     setIsSubmitting(true)
 
     try {
-      const user = login(email, password)
+      const user = await login(email, password)
       
       const roleDestinations = {
         guest: { path: '/my-stay', label: 'Guest Portal & Key' },
@@ -59,7 +59,7 @@ export default function LoginPage() {
         }
       }, 700)
     } catch (err) {
-      setErrorMsg(err.message || 'Invalid credentials. Please verify your email.')
+      setErrorMsg(err.message || 'Invalid credentials. Please verify your email and password.')
       setIsSubmitting(false)
     }
   }

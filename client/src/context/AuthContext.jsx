@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { loginUser, registerUser } from '../services/api'
 
 /**
  * HABITAS SANCTUARY & LUXURYSTAY — AUTHENTICATION & RBAC CONTEXT
@@ -96,15 +97,56 @@ export function AuthProvider({ children }) {
   }, [staffAccounts])
 
   /**
-   * Login function with AUTOMATIC ROLE DETECTION.
-   * Matches email against staff registry or defaults to guest.
+   * Login function with Server-Side JWT Authentication & Automatic Role Detection.
+   * Calls Express POST /api/auth/login and securely persists JWT.
    */
-  const login = (email, _password) => {
-    const cleanEmail = email.trim().toLowerCase().replace('@habitas.com', '@stayza.com')
-    
-    // Check known accounts
+  const login = async (email, password = 'Password123!') => {
+    const cleanEmail = email.trim().toLowerCase()
+
+    try {
+      // 1. Attempt Real Server-Side JWT Authentication (Priority 1)
+      const res = await loginUser({ email: cleanEmail, password })
+      if (res.success && res.data) {
+        const { token, user } = res.data
+
+        // Store JWT token for all subsequent authenticated API calls
+        localStorage.setItem('stayza_auth_token', token)
+        localStorage.setItem('habitas_auth_token', token)
+
+        const roleLabels = {
+          guest: 'Verified Guest',
+          receptionist: 'Front Desk Receptionist',
+          housekeeping: 'Housekeeping Lead',
+          admin: 'General Manager',
+        }
+
+        const userSession = {
+          id: user.id || user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          roleLabel: roleLabels[user.role] || user.role,
+          phone: user.phone || '',
+          activeReservationCode: user.activeReservationCode || 'TH-301-9041',
+          suiteNumber: user.role === 'guest' ? 'Suite 301' : null,
+          token,
+          lastLogin: new Date().toISOString(),
+        }
+
+        setCurrentUser(userSession)
+        return userSession
+      }
+    } catch (apiErr) {
+      // If server returned an explicit auth rejection (e.g. 401 invalid password), throw it!
+      if (apiErr.message && !apiErr.message.toLowerCase().includes('failed to fetch')) {
+        throw apiErr
+      }
+      console.warn('[AuthContext] Backend API unreachable, falling back to cached registry:', apiErr.message)
+    }
+
+    // 2. Offline / Cached local fallback
     const matchedAccount = staffAccounts.find(
-      (acc) => acc.email.toLowerCase() === cleanEmail
+      (acc) => acc.email.toLowerCase() === cleanEmail || acc.email.toLowerCase() === cleanEmail.replace('@habitas.com', '@stayza.com')
     )
 
     if (matchedAccount) {
@@ -138,12 +180,44 @@ export function AuthProvider({ children }) {
   }
 
   /**
-   * Public Registration (Strictly creates role: 'guest')
+   * Public Registration (Strictly creates role: 'guest' in MongoDB Atlas)
    */
-  const registerGuest = ({ name, email, phone }) => {
-    const cleanEmail = email.trim().toLowerCase().replace('@habitas.com', '@stayza.com')
-    
-    // Check if email already exists
+  const registerGuest = async ({ name, email, password = 'Password123!', phone }) => {
+    const cleanEmail = email.trim().toLowerCase()
+
+    try {
+      // 1. Attempt Server-Side Registration
+      const res = await registerUser({ name, email: cleanEmail, password, phone })
+      if (res.success && res.data) {
+        const { token, user } = res.data
+        localStorage.setItem('stayza_auth_token', token)
+        localStorage.setItem('habitas_auth_token', token)
+
+        const userSession = {
+          id: user.id || user._id,
+          name: user.name,
+          email: user.email,
+          role: 'guest',
+          roleLabel: 'Registered Guest',
+          phone: user.phone || phone || '',
+          activeReservationCode: null,
+          suiteNumber: null,
+          token,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+        }
+
+        setCurrentUser(userSession)
+        return userSession
+      }
+    } catch (apiErr) {
+      if (apiErr.message && !apiErr.message.toLowerCase().includes('failed to fetch')) {
+        throw apiErr
+      }
+      console.warn('[AuthContext] Backend unreachable, falling back to local registration:', apiErr.message)
+    }
+
+    // 2. Offline fallback
     const exists = staffAccounts.some((acc) => acc.email.toLowerCase() === cleanEmail)
     if (exists) {
       throw new Error('An account with this email address already exists. Please sign in.')
@@ -163,7 +237,6 @@ export function AuthProvider({ children }) {
       lastLogin: new Date().toISOString(),
     }
 
-    // Save into accounts and log in immediately
     setStaffAccounts((prev) => [...prev, newGuest])
     setCurrentUser(newGuest)
     return newGuest
@@ -217,10 +290,14 @@ export function AuthProvider({ children }) {
   }
 
   /**
-   * Log out active session
+   * Log out active session & purge JWT tokens
    */
   const logout = () => {
     setCurrentUser(null)
+    localStorage.removeItem('stayza_auth_user')
+    localStorage.removeItem('habitas_auth_user')
+    localStorage.removeItem('stayza_auth_token')
+    localStorage.removeItem('habitas_auth_token')
   }
 
   return (
