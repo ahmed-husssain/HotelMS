@@ -33,37 +33,77 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
   // Calculate advance deposit preview
   const advanceDepositPreview = Math.round(residence.nightlyRate * 0.3)
 
-  // Architectural specifications mapped by suite tier
+  // Architectural specifications mapped by suite tier for all 7 keys
   const specs = {
     '301': {
-      interiorArea: '185 m² (1,991 sq ft)',
-      terraceArea: '65 m² cantilevered deck',
+      interiorArea: '210 m² (2,260 sq ft)',
+      terraceArea: '65 m² cantilevered rooftop deck',
       ceilingHeight: '4.2m monolithic limestone',
-      plungePool: '14 m² heated mineral pool (28°C)',
-      orientation: '24°48\'N, 67°01\'E • 180° Arabian Sunset',
-      acoustics: 'STC 64 triple-glazed ocean isolation',
-      valetBay: 'Subterranean Bay #301 (EV Ultra-Fast 150kW)',
-      maxOccupancy: '2 Adults • Complete Seclusion',
+      plungePool: '14 m² heated mineral infinity pool (28°C)',
+      orientation: '180° Arabian Sunset & Ocean Panorama',
+      acoustics: 'STC 64 triple-glazed ocean acoustic isolation',
+      valetBay: 'Dedicated Bay #301 (EV Ultra-Fast 150kW)',
+      maxOccupancy: '4 Guests • Presidential Seclusion',
+    },
+    '302': {
+      interiorArea: '240 m² (2,583 sq ft) duplex',
+      terraceArea: '70 m² dual-level terrace',
+      ceilingHeight: '5.5m double-height sculptural atrium',
+      plungePool: '15 m² private thermal plunge pool',
+      orientation: 'Arabian Sea Panorama & Palm Garden',
+      acoustics: 'STC 62 luxury sound-damped glazing',
+      valetBay: 'Dedicated Bay #302 (EV Ready)',
+      maxOccupancy: '2 Guests • Royal Privacy',
     },
     '204': {
       interiorArea: '140 m² (1,506 sq ft)',
-      terraceArea: '48 m² enclosed garden court',
+      terraceArea: '48 m² enclosed basalt garden court',
       ceilingHeight: '3.8m acoustic cedar beams',
       plungePool: '10 m² heated cedar hydrotherapy tub',
       orientation: 'East-Facing Cliff & Courtyard Garden',
       acoustics: 'STC 60 tranquil courtyard barrier',
-      valetBay: 'Subterranean Bay #204 (EV Ready)',
-      maxOccupancy: '2 Adults • Garden Courtyard',
+      valetBay: 'Dedicated Bay #204 (EV Ready)',
+      maxOccupancy: '2 Guests • Garden Courtyard',
+    },
+    '401': {
+      interiorArea: '175 m² (1,883 sq ft)',
+      terraceArea: '58 m² biophilic jungle canopy deck',
+      ceilingHeight: '4.0m warm teak & volcanic stone',
+      plungePool: '12 m² natural freshwater stone plunge',
+      orientation: 'Coastal Flora Canopy & Garden Views',
+      acoustics: 'STC 62 organic sound isolation',
+      valetBay: 'Dedicated Bay #401 (EV Ready)',
+      maxOccupancy: '4 Guests • Biophilic Seclusion',
+    },
+    '501': {
+      interiorArea: '290 m² (3,121 sq ft) estate',
+      terraceArea: '95 m² basalt terrace with fire basin',
+      ceilingHeight: '4.5m charred timber & travertine',
+      plungePool: '25 m² private Olympic-grade lap pool',
+      orientation: '360° Uninterrupted Coastline & Horizon',
+      acoustics: 'STC 66 ultra-quiet acoustic sanctuary',
+      valetBay: 'Dual Bays #501A & #501B (Dual EV Fast-Charge)',
+      maxOccupancy: '4 Guests • Estate Autonomy',
     },
     '102': {
       interiorArea: '160 m² (1,722 sq ft)',
       terraceArea: '55 m² tide-line stone terrace',
       ceilingHeight: '4.0m architectural travertine',
       plungePool: '12 m² tidal infinity plunge pool',
-      orientation: 'Direct Sea Level Water Edge',
+      orientation: 'Direct Sea-Level Ocean Edge',
       acoustics: 'STC 62 marine acoustic glazing',
-      valetBay: 'Subterranean Bay #102 (EV Ready)',
-      maxOccupancy: '2 Adults • Sea-Level Pavilion',
+      valetBay: 'Dedicated Bay #102 (EV Ready)',
+      maxOccupancy: '3 Guests • Sea-Level Pavilion',
+    },
+    '201': {
+      interiorArea: '180 m² (1,937 sq ft)',
+      terraceArea: '60 m² suspended clifftop overlook',
+      ceilingHeight: '3.9m driftwood & fair-faced concrete',
+      plungePool: '13 m² heated glass-edge cliff plunge',
+      orientation: 'Dramatic Clifftop Ocean Panorama',
+      acoustics: 'STC 64 high-wind acoustic isolation',
+      valetBay: 'Dedicated Bay #201 (EV Ready)',
+      maxOccupancy: '4 Guests • Clifftop Sanctuary',
     },
   }[residence.roomNumber] || {
     interiorArea: '160 m² (1,722 sq ft)',
@@ -71,8 +111,8 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
     ceilingHeight: '4.0m basalt concrete',
     plungePool: '12 m² heated saltwater plunge',
     orientation: 'Arabian Coastal Panorama',
-    acoustics: 'STC 62 luxury noise barrier',
-    valetBay: 'Subterranean Dedicated Bay',
+    acoustics: 'Acoustic privacy barrier',
+    valetBay: 'Dedicated Guest Bay',
     maxOccupancy: '2 Adults',
   }
 
@@ -91,7 +131,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
         <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5]/90 backdrop-blur-md shrink-0">
           <div>
             <span className="text-[9px] font-mono tracking-[0.25em] font-bold text-emerald-900 uppercase">
-              ARCHITECTURAL SPECIFICATION &bull; SUITE {residence.roomNumber}
+              SUITE SPECIFICATIONS &bull; SUITE {residence.roomNumber}
             </span>
             <h2 id="suite-specs-title" className="font-serif-grand text-xl sm:text-2xl text-slate-900 mt-0.5">
               {residence.name}
@@ -138,7 +178,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-[#E5DFD5] pb-2">
               <span className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold text-slate-900">
-                01 &bull; ARCHITECTURAL DIMENSIONS &amp; ACOUSTICS
+                DIMENSIONS &amp; FEATURES
               </span>
               <span className="text-[9px] font-mono text-slate-400">UNITS: METRIC / IMPERIAL</span>
             </div>

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useMemo, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RoomsCarousel from '../components/RoomsCarousel'
@@ -41,12 +41,48 @@ const ARCHITECTURAL_COLLECTIONS = [
 export default function RoomsPage() {
   useSmoothScroll()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const requestedRoom = searchParams.get('room')
 
   // Architectural Specs Drawer State
   const [activeSpecsSuite, setActiveSpecsSuite] = useState(null)
 
-  // Curated Collection Setting (Option A: Defaults to Penthouses, 2 keys per view)
-  const [selectedCollectionId, setSelectedCollectionId] = useState('penthouses')
+  // Auto-resolve collection if deep-linked via ?room=XXX
+  const initialCollectionId = useMemo(() => {
+    if (!requestedRoom) return 'penthouses'
+    const found = ARCHITECTURAL_COLLECTIONS.find((c) =>
+      c.id !== 'all' && RESIDENCES.filter(c.matcher).some((r) => r.roomNumber === requestedRoom)
+    )
+    return found ? found.id : 'all'
+  }, [requestedRoom])
+
+  // Curated Collection Setting (2-3 keys per view)
+  const [selectedCollectionId, setSelectedCollectionId] = useState(initialCollectionId)
+
+  // Sync collection state dynamically if query param changes
+  useEffect(() => {
+    if (requestedRoom) {
+      const match = ARCHITECTURAL_COLLECTIONS.find((c) =>
+        c.id !== 'all' && RESIDENCES.filter(c.matcher).some((r) => r.roomNumber === requestedRoom)
+      )
+      if (match) {
+        setSelectedCollectionId(match.id)
+      }
+    }
+  }, [requestedRoom])
+
+  // Smooth scroll requested suite into view
+  useEffect(() => {
+    if (requestedRoom) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(`suite-card-${requestedRoom}`)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [requestedRoom, selectedCollectionId])
 
   const activeCollection = useMemo(() => {
     return (
@@ -133,13 +169,14 @@ export default function RoomsPage() {
       {/* 3. The Curated Suites Showcase (Only 2-3 suites per collection, Zero Scroll Fatigue) */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 space-y-12 sm:space-y-16">
         {filteredSuites.map((residence, idx) => (
-          <RoomsCarousel
-            key={residence.id}
-            residence={residence}
-            index={idx}
-            onReserve={(res) => handleOpenReservation(res)}
-            onOpenSpecs={(res) => setActiveSpecsSuite(res)}
-          />
+          <div key={residence.id} id={`suite-card-${residence.roomNumber}`}>
+            <RoomsCarousel
+              residence={residence}
+              index={idx}
+              onReserve={(res) => handleOpenReservation(res)}
+              onOpenSpecs={(res) => setActiveSpecsSuite(res)}
+            />
+          </div>
         ))}
       </main>
 

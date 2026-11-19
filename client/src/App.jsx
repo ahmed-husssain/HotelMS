@@ -45,6 +45,7 @@ function AppRoutes() {
           {/* Dedicated Suites & Residences Catalog */}
           <Route path="/suites" element={<RoomsPage />} />
           <Route path="/residences" element={<RoomsPage />} />
+          <Route path="/rooms" element={<RoomsPage />} />
 
           {/* Dedicated 2-Column Luxury Reservation Flow */}
           <Route path="/reserve" element={<BookingPage />} />

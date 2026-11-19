@@ -5,10 +5,14 @@ import HeroSection from '../components/HeroSection'
 import Navbar from '../components/Navbar'
 import RoomsCarousel from '../components/RoomsCarousel'
 import SplashScreen from '../components/SplashScreen'
+import SuiteSpecsDrawer from '../components/suites/SuiteSpecsDrawer'
 import { RESIDENCES } from '../data/residences'
 
 export default function LandingPage() {
   const navigate = useNavigate()
+
+  // Architectural Specs Drawer State
+  const [activeSpecsSuite, setActiveSpecsSuite] = useState(null)
 
   // Cinematic opening sequence state
   const [showSplash, setShowSplash] = useState(() => {
@@ -64,6 +68,7 @@ export default function LandingPage() {
             residence={residence}
             index={idx}
             onReserve={(res) => handleOpenReservation(res)}
+            onOpenSpecs={(res) => setActiveSpecsSuite(res)}
           />
         ))}
 
@@ -130,6 +135,13 @@ export default function LandingPage() {
 
       {/* Architectural Luxury Footer */}
       <Footer />
+
+      {/* Architectural Specification Dossier Drawer */}
+      <SuiteSpecsDrawer
+        residence={activeSpecsSuite}
+        isOpen={Boolean(activeSpecsSuite)}
+        onClose={() => setActiveSpecsSuite(null)}
+      />
     </div>
   )
 }
