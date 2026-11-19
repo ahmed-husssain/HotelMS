@@ -5,9 +5,9 @@ export default function GuestRequests({ requests, onMarkDelivered }) {
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs overflow-hidden">
       <div className="p-5 border-b border-slate-100 flex items-center justify-between">
         <div>
-          <h3 className="font-serif-grand text-xl text-slate-900">In-Stay Guest Requests (Doc FR-57)</h3>
+          <h3 className="font-serif-grand text-xl text-slate-900">In-Stay Guest Requests</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            Live requests submitted by guests via their personal digital stay dossier
+            Live requests submitted by guests via the guest portal
           </p>
         </div>
         <span className="px-3 py-1 bg-amber-50 text-amber-900 text-xs font-mono font-bold rounded-full">

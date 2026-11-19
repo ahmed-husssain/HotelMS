@@ -374,7 +374,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
                 onClick={() => onOpenSpecs(residence)}
                 className="px-2.5 py-2 text-[10px] font-mono tracking-wider uppercase text-slate-500 hover:text-slate-950 underline transition-colors cursor-pointer min-h-[44px] flex items-center"
               >
-                Specs Dossier
+                Suite Details
               </button>
             )}
             <AnimatedButton

@@ -189,10 +189,10 @@ export default function Navbar({ onOpenDrawer }) {
                 }
                 className="group relative h-9 px-2.5 flex items-center gap-1.5 border border-slate-300 rounded-[2px] hover:border-slate-900 transition-colors bg-[#FAF8F5]"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
                 <span className="font-semibold text-slate-900">{currentUser.name.split(' ')[0]}</span>
                 <span className="text-[9px] text-slate-500 uppercase tracking-wider">
-                  [{currentUser.role.slice(0, 4)}]
+                  &bull; {currentUser.role}
                 </span>
               </Link>
               <button
@@ -244,7 +244,7 @@ export default function Navbar({ onOpenDrawer }) {
         }`}
       >
         <div className="flex items-center gap-2 bg-[#FAF8F5]/95 border border-slate-300/80 p-1.5 pl-3.5 rounded-full shadow-md">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
           <span className="font-mono text-[11px] uppercase tracking-wider text-slate-800">
             {dateLabel}
           </span>

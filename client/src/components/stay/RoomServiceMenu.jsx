@@ -44,14 +44,14 @@ export default function RoomServiceMenu({ orderedServices, onRequestService }) {
       <div className="border-b border-slate-200/80 pb-2.5 flex items-center justify-between">
         <div>
           <span className="text-xs font-mono font-bold tracking-[0.2em] text-slate-900 uppercase">
-            02 &bull; In-Stay Guest Services
+            In-Suite Guest Services
           </span>
           <span className="block text-[10px] text-slate-400 mt-0.5">
-            Request room service, extra housekeeping, or private transport directly to your suite
+            Request dining, extra housekeeping, or private transport directly to your suite
           </span>
         </div>
         <span className="text-[10px] font-mono text-emerald-800 uppercase font-semibold">
-          Doc FR-57 Compliant
+          Complimentary Delivery
         </span>
       </div>
 

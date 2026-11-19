@@ -20,18 +20,13 @@ export default function ReviewForm({ guestName }) {
 
   return (
     <section className="bg-white border border-slate-200/90 rounded-[2px] p-6 sm:p-8 space-y-6 shadow-xs">
-      <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-        <div>
-          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-slate-400 uppercase">
-            03 &bull; GUEST EXPERIENCE FEEDBACK
-          </span>
-          <h3 className="font-serif-grand text-xl text-slate-900">
-            Rate Your Stay with STAYZA
-          </h3>
-        </div>
-        <span className="text-[10px] font-mono text-emerald-800 uppercase font-semibold">
-          Doc FR-56
+      <div className="border-b border-slate-100 pb-3">
+        <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-slate-400 uppercase">
+          Guest Feedback
         </span>
+        <h3 className="font-serif-grand text-xl text-slate-900 mt-0.5">
+          Rate Your Stay with STAYZA
+        </h3>
       </div>
 
       {reviewSubmitted ? (

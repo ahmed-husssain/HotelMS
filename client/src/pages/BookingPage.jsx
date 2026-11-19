@@ -224,9 +224,9 @@ export default function BookingPage() {
         <BrandLogo variant="wordmark" theme="dark" size="sm" />
 
         <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-700 animate-pulse" />
-          <span>Room {selectedResidence.roomNumber}</span>
-          <span className="hidden sm:inline">&bull; 256-Bit SSL</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
+          <span>Suite {selectedResidence.roomNumber}</span>
+          <span className="hidden sm:inline">&bull; Secure Checkout</span>
         </div>
       </header>
 

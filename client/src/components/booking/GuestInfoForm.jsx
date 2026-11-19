@@ -45,7 +45,7 @@ export default function GuestInfoForm({
     <section className="space-y-6">
       <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
         <span className="text-xs font-mono font-bold tracking-[0.2em] text-slate-900 uppercase">
-          02 &bull; Guest Information &bull; ID Verification
+          Guest Information &amp; Identification
         </span>
         {currentUser ? (
           <span className="text-[10px] font-mono text-emerald-800 uppercase font-semibold flex items-center gap-1.5">

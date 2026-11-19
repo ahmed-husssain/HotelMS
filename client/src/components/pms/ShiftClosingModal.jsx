@@ -27,7 +27,7 @@ export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>
             <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
-              // CASHIER SHIFT CLOSING (DOC FR-5.1)
+              Cashier Shift Closing
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
               Shift Z-Report Handover

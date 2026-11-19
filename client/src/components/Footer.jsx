@@ -68,9 +68,9 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           
           <div className="flex items-center gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse shrink-0"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-700 shrink-0"></span>
             <span className="font-mono text-[11px] tracking-[0.2em] uppercase font-bold text-[#121619]">
-              Private Guest Ledger
+              Stayza Newsletter
             </span>
             <span className="text-[#57534E] font-mono text-[10px]">&bull;</span>
             <span className="text-[#44403C] text-xs font-light">
@@ -82,7 +82,7 @@ export default function Footer() {
             {isSubmitted ? (
               <div className="text-xs font-mono text-emerald-900 flex items-center gap-2 py-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                <span>Email recorded in private ledger.</span>
+                <span>Thank you — you have been added to our private guest list.</span>
               </div>
             ) : (
               <form onSubmit={handleInquirySubmit} className="flex items-center gap-2 w-full sm:w-80 relative">
@@ -145,7 +145,6 @@ export default function Footer() {
                     <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors">
                       Suite 301 &bull; Penthouse
                     </span>
-                    <span className="text-[10px] font-mono text-[#57534E]">[TH-301]</span>
                   </div>
                   <span className="text-[11px] text-[#57534E] font-mono block mt-0.5">
                     PKR 110,000 / night
@@ -158,7 +157,6 @@ export default function Footer() {
                     <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors">
                       Villa 204 &bull; Courtyard
                     </span>
-                    <span className="text-[10px] font-mono text-[#57534E]">[TH-204]</span>
                   </div>
                   <span className="text-[11px] text-[#57534E] font-mono block mt-0.5">
                     PKR 75,000 / night
@@ -171,7 +169,6 @@ export default function Footer() {
                     <span className="font-medium text-[#121619] group-hover:text-amber-800 transition-colors">
                       Pavilion 102 &bull; Ocean
                     </span>
-                    <span className="text-[10px] font-mono text-[#57534E]">[TH-102]</span>
                   </div>
                   <span className="text-[11px] text-[#57534E] font-mono block mt-0.5">
                     PKR 95,000 / night
@@ -268,7 +265,7 @@ export default function Footer() {
         <div className="pt-6 mt-6 border-t border-[#E5DFD5] flex items-center justify-between text-xs font-mono text-[#44403C]">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 font-semibold text-[#121619]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-700"></span>
               <span>{estateTime || '17:28:00 PKT'}</span>
             </span>
             <span>&bull;</span>

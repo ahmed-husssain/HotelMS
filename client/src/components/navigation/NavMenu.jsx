@@ -66,7 +66,7 @@ export default function NavMenu({
           {/* Top Bar: Clean Branding & Dedicated Close Button */}
           <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest border-b border-slate-200/80 pb-3 shrink-0">
             <div className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
               <span className="text-slate-900 font-semibold tracking-wider">Navigation</span>
               <span className="text-slate-300 hidden sm:inline">&middot;</span>
               <span className="text-slate-500 hidden sm:inline text-[10px]">Hotel &amp; Residences</span>
@@ -147,7 +147,7 @@ export default function NavMenu({
                   className="w-full py-2.5 px-4 bg-emerald-950 text-emerald-200 border border-emerald-800/80 text-xs font-mono uppercase tracking-wider flex items-center justify-between hover:bg-emerald-900 transition-colors rounded-[2px]"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     <span>Open {currentUser.roleLabel || 'Staff'} Workspace</span>
                   </span>
                   <span>&rarr;</span>

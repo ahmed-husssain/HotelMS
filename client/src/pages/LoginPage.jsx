@@ -255,52 +255,42 @@ export default function LoginPage() {
           {/* Quick Test Roles & Switch to Register */}
           <div className="pt-2 sm:pt-3 border-t border-stone-200/80 space-y-2">
             
-            {/* Quick Demo Chips */}
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-[9px] font-mono text-stone-500 uppercase tracking-wider font-semibold">
-                  Demo Accounts:
-                </span>
-                <span className="text-[8px] font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-bold">
-                  Auto-Role Detect
-                </span>
-              </div>
-
-              <div className="grid grid-cols-4 gap-1.5 text-center font-mono text-xs">
+            {/* Discreet Testing Credentials */}
+            <div className="pt-2 border-t border-stone-200/80 text-center font-mono">
+              <span className="text-[10px] text-stone-400 block mb-1">
+                Quick Test Fill:
+              </span>
+              <div className="flex items-center justify-center gap-3 text-xs">
                 <button
                   type="button"
                   onClick={() => handleQuickFill('tariq@luxury.pk')}
-                  className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
+                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
-                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Guest</span>
+                  Guest
                 </button>
-
+                <span className="text-stone-300">&bull;</span>
                 <button
                   type="button"
                   onClick={() => handleQuickFill('reception@stayza.com')}
-                  className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
+                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
-                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Reception</span>
+                  Reception
                 </button>
-
+                <span className="text-stone-300">&bull;</span>
                 <button
                   type="button"
                   onClick={() => handleQuickFill('cleaning@stayza.com')}
-                  className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
+                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
-                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Cleaning</span>
+                  Cleaning
                 </button>
-
+                <span className="text-stone-300">&bull;</span>
                 <button
                   type="button"
                   onClick={() => handleQuickFill('admin@stayza.com')}
-                  className="py-1 px-1 bg-white border border-stone-200 hover:border-slate-900 rounded-[2px] transition-all cursor-pointer group"
+                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
                 >
-                  <span className="block text-[7px] text-stone-400 group-hover:text-slate-900">DEMO</span>
-                  <span className="font-bold text-slate-800 block text-[9px] sm:text-[10px]">Admin</span>
+                  Admin
                 </button>
               </div>
             </div>
