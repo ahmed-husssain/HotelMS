@@ -207,12 +207,13 @@ export function AuthProvider({ children }) {
         throw new Error('This account has been deactivated by the General Manager.')
       }
 
-      // Loosely check testing passwords in client mode so Password123!, password123, 123 all work seamlessly
+      // Check password: match registered password if present, or standard test passwords
       const normalizedPass = (password || '').trim().toLowerCase()
-      if (
-        normalizedPass &&
-        !['password123!', 'password123', '123', 'admin', '123456', 'pass'].includes(normalizedPass)
-      ) {
+      const isPasswordValid = matchedAccount.password
+        ? matchedAccount.password === password || normalizedPass === matchedAccount.password.toLowerCase()
+        : !normalizedPass || ['password123!', 'password123', '123', 'admin', '123456', 'pass'].includes(normalizedPass)
+
+      if (!isPasswordValid) {
         throw new Error('Invalid credentials. Password is Password123!')
       }
 
@@ -273,7 +274,16 @@ export function AuthProvider({ children }) {
         return userSession
       }
     } catch (apiErr) {
-      if (apiErr.message && !apiErr.message.toLowerCase().includes('failed to fetch')) {
+      const isNetworkOrProxyFailure =
+        !apiErr.message ||
+        apiErr.message.toLowerCase().includes('failed to fetch') ||
+        apiErr.message.toLowerCase().includes('networkerror') ||
+        apiErr.message.toLowerCase().includes('backend api unavailable') ||
+        apiErr.message.toLowerCase().includes('non-json') ||
+        apiErr.message.toLowerCase().includes('unexpected token') ||
+        apiErr.message.includes('<!doctype')
+
+      if (!isNetworkOrProxyFailure) {
         throw apiErr
       }
       console.warn('[AuthContext] Backend unreachable, falling back to local registration:', apiErr.message)
@@ -289,6 +299,7 @@ export function AuthProvider({ children }) {
       id: `usr-guest-${Date.now().toString().slice(-4)}`,
       name: name.trim(),
       email: cleanEmail,
+      password: password,
       phone: phone || '+92 300 0000000',
       role: 'guest',
       roleLabel: 'Registered Guest',

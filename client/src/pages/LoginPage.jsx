@@ -17,7 +17,7 @@ export default function LoginPage() {
   const redirectUrl = searchParams.get('redirect')
   const { login } = useAuth()
 
-  const [email, setEmail] = useState('tariq@luxury.pk')
+  const [email, setEmail] = useState('admin@stayza.com')
   const [password, setPassword] = useState('Password123!')
   const [showPassword, setShowPassword] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
@@ -255,42 +255,55 @@ export default function LoginPage() {
           {/* Quick Test Roles & Switch to Register */}
           <div className="pt-2 sm:pt-3 border-t border-stone-200/80 space-y-2">
             
-            {/* Discreet Testing Credentials */}
-            <div className="pt-2 border-t border-stone-200/80 text-center font-mono">
-              <span className="text-[10px] text-stone-400 block mb-1">
-                Quick Test Fill:
+            {/* Quick 1-Click Role Testing Badges */}
+            <div className="pt-1 text-center font-mono">
+              <span className="text-[10px] text-stone-400 block mb-1.5 uppercase tracking-widest font-bold">
+                1-Click Panel Quick Fill:
               </span>
-              <div className="flex items-center justify-center gap-3 text-xs">
-                <button
-                  type="button"
-                  onClick={() => handleQuickFill('guest@stayza.com')}
-                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
-                >
-                  Guest
-                </button>
-                <span className="text-stone-300">&bull;</span>
-                <button
-                  type="button"
-                  onClick={() => handleQuickFill('reception@stayza.com')}
-                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
-                >
-                  Reception
-                </button>
-                <span className="text-stone-300">&bull;</span>
-                <button
-                  type="button"
-                  onClick={() => handleQuickFill('cleaning@stayza.com')}
-                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
-                >
-                  Cleaning
-                </button>
-                <span className="text-stone-300">&bull;</span>
+              <div className="flex flex-wrap items-center justify-center gap-1.5 text-[11px]">
                 <button
                   type="button"
                   onClick={() => handleQuickFill('admin@stayza.com')}
-                  className="text-stone-600 hover:text-slate-900 underline hover:font-bold transition-all cursor-pointer py-1"
+                  className={`px-2.5 py-1 rounded-[2px] transition-all cursor-pointer font-bold ${
+                    email === 'admin@stayza.com'
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                  }`}
                 >
-                  Admin
+                  Admin (GM)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickFill('reception@stayza.com')}
+                  className={`px-2.5 py-1 rounded-[2px] transition-all cursor-pointer font-bold ${
+                    email === 'reception@stayza.com'
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                  }`}
+                >
+                  Reception
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickFill('cleaning@stayza.com')}
+                  className={`px-2.5 py-1 rounded-[2px] transition-all cursor-pointer font-bold ${
+                    email === 'cleaning@stayza.com'
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                  }`}
+                >
+                  Housekeeping
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickFill('guest@stayza.com')}
+                  className={`px-2.5 py-1 rounded-[2px] transition-all cursor-pointer font-bold ${
+                    email === 'guest@stayza.com'
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                  }`}
+                >
+                  Guest
                 </button>
               </div>
             </div>

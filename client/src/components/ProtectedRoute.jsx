@@ -34,7 +34,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
     }
 
     return (
-      <div className="min-h-screen bg-[#0E1201] text-[#FAF8F5] p-6 sm:p-12 flex flex-col justify-between selection:bg-[#D4AF37] selection:text-slate-900">
+      <div className="min-h-screen bg-[#0E1201] text-[#FAF8F5] p-6 sm:p-12 flex flex-col justify-between selection:bg-slate-700 selection:text-white">
         <header className="max-w-4xl w-full mx-auto flex items-center justify-between">
           <Link to="/" className="inline-block">
             <BrandLogo variant="full" theme="light" size="sm" />
@@ -57,14 +57,14 @@ export default function ProtectedRoute({ allowedRoles, children }) {
             </p>
           </div>
 
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-[2px] text-xs font-mono text-amber-900">
+          <div className="p-3 bg-stone-100 border border-stone-200 rounded-[2px] text-xs font-mono text-stone-800">
             <strong>Required Authorization:</strong> {allowedRoles.join(' or ').toUpperCase()} privileges.
           </div>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 font-mono text-xs">
             <Link
               to={authorizedWorkspace.path}
-              className="w-full sm:w-auto flex-1 text-center py-3 px-4 bg-[#0E1201] text-[#FFF0CA] font-bold uppercase tracking-wider rounded-[2px] hover:bg-slate-900 transition-colors"
+              className="w-full sm:w-auto flex-1 text-center py-3 px-4 bg-[#0E1201] text-[#FAF8F5] font-bold uppercase tracking-wider rounded-[2px] hover:bg-slate-900 transition-colors"
             >
               Return to Your Workspace ({authorizedWorkspace.label}) &rarr;
             </Link>

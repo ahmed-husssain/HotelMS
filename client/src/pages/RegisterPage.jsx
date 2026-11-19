@@ -294,7 +294,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative w-full py-3 sm:py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FFF0CA] font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-1 overflow-hidden flex items-center justify-center gap-2 disabled:opacity-50"
+              className="group relative w-full py-3 sm:py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] transition-all cursor-pointer shadow-md hover:shadow-xl active:scale-[0.98] mt-1 overflow-hidden flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <span>{isSubmitting ? 'Creating Account...' : 'Create Account'}</span>
               <span className="text-xs">&rarr;</span>
@@ -302,20 +302,24 @@ export default function RegisterPage() {
           </form>
 
           {/* Security Notice & Switch to Login */}
-          <div className="pt-2 border-t border-stone-200/80 space-y-1.5">
-            <div className="px-2.5 py-1 bg-amber-50/90 border border-amber-200/80 rounded text-[9px] font-mono text-amber-900 flex items-center gap-1.5">
-              <span>🔒</span>
-              <span className="truncate">Public signup provisions <strong>role: 'guest'</strong>. Staff accounts via GM.</span>
+          <div className="pt-2 border-t border-stone-200/80 space-y-2">
+            <div className="p-2 bg-stone-100 border border-stone-200 rounded-[2px] text-[10px] font-mono text-stone-700 space-y-0.5">
+              <div className="font-bold text-slate-900 flex items-center gap-1">
+                <span>🔒</span> Public Registration creates a Guest Profile
+              </div>
+              <p className="text-[9px] text-stone-500 leading-tight">
+                For Admin (GM), Front Desk PMS, or Housekeeping panel access, sign in using authorized staff credentials on the Sign In page.
+              </p>
             </div>
 
             <div className="text-center pt-0.5">
               <p className="text-xs text-stone-600 font-normal">
-                Already have an account?{' '}
+                Need Admin or Staff access?{' '}
                 <Link
                   to="/login"
-                  className="text-slate-900 font-bold underline hover:text-amber-900 cursor-pointer ml-1"
+                  className="text-slate-900 font-bold underline hover:text-stone-700 cursor-pointer ml-1"
                 >
-                  Sign In &rarr;
+                  Sign In to Panel &rarr;
                 </Link>
               </p>
             </div>
