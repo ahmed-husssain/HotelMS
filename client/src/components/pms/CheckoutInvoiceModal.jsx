@@ -32,7 +32,7 @@ export default function CheckoutInvoiceModal({
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>
             <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
-              // OFFICIAL TAX INVOICE &bull; STAYZA SANCTUARY
+              OFFICIAL TAX INVOICE &bull; STAYZA SANCTUARY
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
               Settlement &amp; Check-out
@@ -55,7 +55,7 @@ export default function CheckoutInvoiceModal({
             <div className="text-[11px] text-slate-500">{selectedRoom.phone}</div>
           </div>
           <div className="text-right">
-            <span className="text-slate-400 uppercase text-[9px] block">Folio Number:</span>
+            <span className="text-slate-400 uppercase text-[9px] block">Bill Number:</span>
             <strong className="text-slate-900">{selectedRoom.folioNumber}</strong>
             <div className="text-[11px] text-slate-500">NTN: 8941203-9</div>
           </div>

@@ -499,9 +499,7 @@ export default function GuestPortalPage() {
 
   return (
     <div
-      className={`${
-        !isUnlocked ? 'h-[100dvh] max-h-[100dvh] overflow-hidden' : 'min-h-screen overflow-x-hidden'
-      } bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between`}
+      className="min-h-screen overflow-x-hidden bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between"
     >
       {/* ============================================================== */}
       {/* 1. TOP ESSENTIAL APP DOCK (ZERO CLUTTER, 44PX TARGETS)        */}
@@ -602,7 +600,7 @@ export default function GuestPortalPage() {
                 { id: 'dining', label: 'In-Suite Dining', icon: '🍽️' },
                 { id: 'spa', label: 'Cedar Spa & Linens', icon: '🌿' },
                 { id: 'concierge', label: 'Butler & Services', icon: '🛎️' },
-                { id: 'folio', label: 'Folio & Checkout', icon: '🧾' },
+                { id: 'folio', label: 'Room Bill & Checkout', icon: '🧾' },
               ].map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
@@ -1115,10 +1113,10 @@ export default function GuestPortalPage() {
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 pb-4">
                 <div>
                   <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
-                    BILLING &amp; FOLIO
+                    BILLING &amp; ROOM CHARGES
                   </span>
                   <h2 className="font-serif-grand text-2xl sm:text-3xl text-slate-900 mt-0.5">
-                    Live Stay Folio &amp; Invoice
+                    Live Room Bill &amp; Invoice
                   </h2>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1299,7 +1297,7 @@ export default function GuestPortalPage() {
       {isUnlocked && (
         <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2 px-4 sm:px-8">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-500">
-            <span className="uppercase tracking-widest text-[9px] text-slate-400">STAYZA IN-RESIDENCE GUEST FOLIO</span>
+            <span className="uppercase tracking-widest text-[9px] text-slate-400">STAYZA IN-RESIDENCE ROOM BILL</span>
             <div className="flex items-center gap-4">
               <button
                 type="button"

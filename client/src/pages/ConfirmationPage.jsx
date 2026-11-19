@@ -24,7 +24,7 @@ export default function ConfirmationPage() {
   }
 
   return (
-    <div className="h-screen h-[100dvh] max-h-[100dvh] overflow-hidden bg-[#FAF8F5] text-slate-900 font-sans-clean flex flex-col justify-between py-2 sm:py-3 px-3 sm:px-6 antialiased selection:bg-emerald-100 selection:text-emerald-950">
+    <div className="min-h-screen min-h-dvh overflow-y-auto bg-[#FAF8F5] text-slate-900 font-sans-clean flex flex-col justify-between py-6 sm:py-10 px-3 sm:px-6 antialiased selection:bg-emerald-100 selection:text-emerald-950">
       <div className="max-w-lg mx-auto w-full my-auto space-y-2.5 sm:space-y-3.5">
         {/* Brand Header */}
         <div className="text-center space-y-1">

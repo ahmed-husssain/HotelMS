@@ -136,7 +136,7 @@ export default function Footer() {
           {/* Column 2: Residences & Rates */}
           <div className="space-y-3">
             <span className="text-[10px] font-mono tracking-[0.2em] font-bold text-[#121619] uppercase block pb-1 border-b border-[#E5DFD5]">
-              01 &bull; RESIDENCES
+              Residences
             </span>
             <ul className="space-y-2 text-xs">
               <li>
@@ -181,7 +181,7 @@ export default function Footer() {
           {/* Column 3: Experiences */}
           <div className="space-y-3">
             <span className="text-[10px] font-mono tracking-[0.2em] font-bold text-[#121619] uppercase block pb-1 border-b border-[#E5DFD5]">
-              02 &bull; EXPERIENCES
+              The Estate
             </span>
             <ul className="space-y-1 text-xs">
               <li>
@@ -210,7 +210,7 @@ export default function Footer() {
           {/* Column 4: Portals & Access */}
           <div className="space-y-3">
             <span className="text-[10px] font-mono tracking-[0.2em] font-bold text-[#121619] uppercase block pb-1 border-b border-[#E5DFD5]">
-              03 &bull; PORTALS &amp; ACCESS
+              Portals &amp; Access
             </span>
             <div className="space-y-2 text-xs">
               <Link

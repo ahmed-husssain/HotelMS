@@ -357,7 +357,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
                 )}
                 <div className="pointer-events-auto">
                   <AnimatedButton
-                    text="Reserve Key"
+                    text="Book Suite"
                     onClick={() => onReserve(residence)}
                   />
                 </div>

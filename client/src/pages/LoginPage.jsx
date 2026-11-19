@@ -65,7 +65,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="h-screen h-dvh max-h-dvh overflow-hidden bg-[#0E1201] text-slate-800 p-0 sm:p-3 md:p-5 lg:p-7 flex flex-col justify-between selection:bg-[#D4AF37] selection:text-slate-900">
+    <div className="min-h-screen min-h-dvh overflow-y-auto bg-[#0E1201] text-slate-800 p-0 sm:p-3 md:p-5 lg:p-7 flex flex-col justify-between selection:bg-[#D4AF37] selection:text-slate-900">
       
       {/* Top Desktop Brand Bar (Hidden on Mobile) */}
       <header className="hidden md:flex max-w-5xl w-full mx-auto mb-2 shrink-0 items-center justify-between">

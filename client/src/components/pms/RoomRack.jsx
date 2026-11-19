@@ -98,7 +98,7 @@ export default function RoomRack({
                 {isOccupied ? (
                   <>
                     <div className="text-slate-900 font-bold truncate">{room.guest}</div>
-                    <div className="text-[10px] text-slate-500">Folio: {room.folioNumber}</div>
+                    <div className="text-[10px] text-slate-500">Bill #: {room.folioNumber}</div>
                     <div className="text-[10px] text-amber-900 font-semibold pt-1 border-t border-slate-200 flex justify-between">
                       <span>Due at Checkout:</span>
                       <span>PKR {room.balanceDue?.toLocaleString()}</span>
@@ -120,7 +120,7 @@ export default function RoomRack({
                       onClick={() => onOpenFolio(room)}
                       className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[10px] font-mono uppercase tracking-wider font-bold rounded-[2px] transition-colors cursor-pointer"
                     >
-                      + Incidental
+                      + Add Charge
                     </button>
                     <button
                       type="button"

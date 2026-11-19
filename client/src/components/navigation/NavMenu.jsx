@@ -206,7 +206,7 @@ export default function NavMenu({
             <div className="flex justify-between items-center">
               <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
               <span className="text-slate-400 text-[9px] uppercase tracking-wider">
-                Stayza &middot; 5-Min Reservation Hold
+                Stayza Sanctuary &middot; Sindh Coast
               </span>
             </div>
           </div>

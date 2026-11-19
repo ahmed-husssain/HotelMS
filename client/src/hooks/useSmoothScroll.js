@@ -36,8 +36,10 @@ export function useSmoothScroll() {
     const isTouchDevice = window.matchMedia('(pointer: coarse), (hover: none)').matches
     if (isTouchDevice) return
 
-    // 3. Operational Route Guard: Staff PMS terminal runs at raw native speed
-    if (location.pathname === '/pms') return
+    // 3. Route Guard: Smooth virtual scroll runs ONLY on marketing showcase pages ('/', '/rooms', '/suites', '/residences').
+    // All operational terminals, portals, forms, and modals run at 100% native browser speed.
+    const isMarketingPage = ['/', '/suites', '/residences', '/rooms'].includes(location.pathname)
+    if (!isMarketingPage) return
 
     // 4. Initialize Lenis with snappy, non-sluggish luxury physics (0.85s duration)
     const lenis = new Lenis({

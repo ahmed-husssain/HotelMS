@@ -96,8 +96,8 @@ export default function LandingPage() {
       <section id="experience" className="bg-white border-y border-slate-200/80 py-14 sm:py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 text-slate-600">
           <div className="space-y-3">
-            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-600 uppercase">
-              01 &bull; TOTAL RELAXATION
+            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-500 uppercase">
+              Wellness &amp; Springs
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
               Cedar Spa &amp; Hot Springs
@@ -108,8 +108,8 @@ export default function LandingPage() {
           </div>
 
           <div className="space-y-3">
-            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-600 uppercase">
-              02 &bull; DINING
+            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-500 uppercase">
+              Coastal Dining
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
               The Harvest Pavilion
@@ -120,8 +120,8 @@ export default function LandingPage() {
           </div>
 
           <div className="space-y-3">
-            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-600 uppercase">
-              03 &bull; PRIVACY
+            <span className="text-[10px] tracking-[0.25em] font-bold text-slate-500 uppercase">
+              Private Arrival
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 font-normal">
               Private Underground Valet

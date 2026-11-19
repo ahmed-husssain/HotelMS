@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 export const INCIDENTAL_CATALOG = [
-  { title: 'In-Suite Champagne & Caviar Tasting', price: 28000 },
-  { title: 'Executive Coastal Chauffeur Service', price: 15000 },
-  { title: 'Express Silk Garment Laundry', price: 6500 },
-  { title: 'Estate Private Dining Dinner', price: 18000 },
-  { title: 'Sommelier Wine Reserve Selection', price: 32000 },
+  { title: 'Room Service Dinner', price: 15000 },
+  { title: 'Airport Chauffeur Transfer', price: 12000 },
+  { title: 'Laundry & Dry Cleaning', price: 5500 },
+  { title: 'Minibar Snacks & Drinks', price: 4500 },
+  { title: 'Spa & Wellness Treatment', price: 22000 },
 ]
 
 export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddIncidental }) {
@@ -30,14 +30,14 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 animate-scale-in">
+      <div className="bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 animate-scale-in">
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>
             <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
-              Incidental Room Charge
+              Add Extra Room Charge
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
-              Post Charge &bull; {selectedRoom.roomNumber}
+              Post to Bill &bull; {selectedRoom.roomNumber}
             </h3>
           </div>
           <button
@@ -50,14 +50,14 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
         </div>
 
         <div className="text-xs font-mono text-slate-600">
-          Guest: <strong className="text-slate-900">{selectedRoom.guest}</strong> &bull; Folio:{' '}
+          Guest: <strong className="text-slate-900">{selectedRoom.guest}</strong> &bull; Bill #:{' '}
           <strong>{selectedRoom.folioNumber}</strong>
         </div>
 
         {/* Quick Catalog */}
         <div className="space-y-2">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
-            Concierge Standard Catalog:
+            Everyday Hotel Services:
           </span>
           <div className="space-y-1.5 max-h-48 overflow-y-auto">
             {INCIDENTAL_CATALOG.map((item) => (
@@ -99,7 +99,7 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
             type="submit"
             className="w-full py-2 bg-slate-900 hover:bg-slate-950 text-white text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
           >
-            Post Custom Charge to Folio
+            Add Charge to Room Bill
           </button>
         </form>
       </div>
