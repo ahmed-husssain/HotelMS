@@ -339,22 +339,49 @@ export function HotelDataProvider({ children }) {
     localStorage.setItem('stayza_hotel_inventory', JSON.stringify(inventory))
   }, [inventory])
 
-  // Live MongoDB Atlas Sync on Mount
+  const { toast } = useToast()
+
+  // Live MongoDB Atlas Sync on Mount + Smart Live Heartbeat (Every 3.5s for zero-refresh updates)
   useEffect(() => {
     let isMounted = true
-    async function loadLiveDashboard() {
+
+    async function syncLiveDashboard(isInitial = false) {
+      // Only poll when page/tab is active/visible
+      if (typeof document !== 'undefined' && document.hidden) return
+
       try {
         const res = await fetchStaffDashboard()
         if (isMounted && res.success && res.data) {
           if (res.data.rooms && res.data.rooms.length > 0) {
-            setRooms(res.data.rooms)
+            setRooms((prev) => {
+              // Check if any room status changed to trigger live notification
+              if (!isInitial && Array.isArray(prev)) {
+                res.data.rooms.forEach((newRoom) => {
+                  const oldRoom = prev.find((r) => r.roomNumber === newRoom.roomNumber)
+                  if (oldRoom && oldRoom.status !== newRoom.status) {
+                    if (newRoom.status === 'AVAILABLE') {
+                      toast?.success?.(`${newRoom.roomNumber} certified & ready for arrivals`, 'ROOM READY')
+                    } else if (newRoom.status === 'DIRTY') {
+                      toast?.info?.(`${newRoom.roomNumber} flagged DIRTY for turnover`, 'TURNOVER QUEUE')
+                    } else if (newRoom.status === 'OCCUPIED') {
+                      toast?.info?.(`${newRoom.roomNumber} checked in: ${newRoom.guest || 'Guest'}`, 'CHECK-IN')
+                    } else if (newRoom.status === 'MAINTENANCE') {
+                      toast?.warning?.(`${newRoom.roomNumber} locked for maintenance`, 'MAINTENANCE')
+                    }
+                  }
+                })
+              }
+              return res.data.rooms
+            })
           }
           if (res.data.arrivals && res.data.arrivals.length > 0) {
             setArrivals(res.data.arrivals)
           }
         }
       } catch (err) {
-        console.warn('[HotelDataContext] Fallback to cached hotel state:', err.message)
+        if (isInitial) {
+          console.warn('[HotelDataContext] Fallback to cached hotel state:', err.message)
+        }
       }
 
       try {
@@ -379,14 +406,25 @@ export function HotelDataProvider({ children }) {
           }
         }
       } catch (err) {
-        console.warn('[HotelDataContext] Housekeeping sync fallback:', err.message)
+        if (isInitial) {
+          console.warn('[HotelDataContext] Housekeeping sync fallback:', err.message)
+        }
       }
     }
-    loadLiveDashboard()
-    return () => { isMounted = false }
-  }, [])
 
-  const { toast } = useToast()
+    // 1. Initial mount load
+    syncLiveDashboard(true)
+
+    // 2. Smart Background Heartbeat (every 3.5s): auto-syncs so changes reflect across devices without manual refresh
+    const heartbeatInterval = setInterval(() => {
+      syncLiveDashboard(false)
+    }, 3500)
+
+    return () => {
+      isMounted = false
+      clearInterval(heartbeatInterval)
+    }
+  }, [toast])
 
   // Real-Time Socket.io Synchronization (<40ms duplex event bus)
   useEffect(() => {

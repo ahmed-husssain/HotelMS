@@ -5,6 +5,11 @@ const mongoose = require('mongoose')
  * Connects via Mongoose with auto-reconnect, exponential backoff, and graceful error handling.
  */
 const connectDB = async (retries = 3, delay = 2000) => {
+  // Reuse existing connection if already connected (Vercel serverless optimization)
+  if (mongoose.connection && mongoose.connection.readyState >= 1) {
+    return mongoose.connection
+  }
+
   const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/luxurystay'
 
   for (let attempt = 1; attempt <= retries; attempt++) {

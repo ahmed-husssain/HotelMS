@@ -1,10 +1,9 @@
 {
-  "buildCommand": "npm --prefix client run build",
-  "outputDirectory": "client/dist",
+  "version": 2,
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/server/server.js"
     }
   ]
 }

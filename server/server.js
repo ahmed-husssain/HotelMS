@@ -98,9 +98,14 @@ app.use((err, req, res, next) => {
   })
 })
 
-// 7. Start HTTP Server with WebSockets
-server.listen(PORT, () => {
-  console.log(`[Stayza HMS] Server listening on port ${PORT} with Socket.io in ${process.env.NODE_ENV || 'development'} mode`)
-})
+// 7. Start HTTP Server with WebSockets (Standalone container / local mode)
+if (!process.env.VERCEL) {
+  server.listen(PORT, () => {
+    console.log(`[Stayza HMS] Server listening on port ${PORT} with Socket.io in ${process.env.NODE_ENV || 'development'} mode`)
+  })
+}
 
-module.exports = { app, server, io }
+// Export Express app directly for Vercel Serverless Functions
+app.server = server
+app.io = io
+module.exports = app
