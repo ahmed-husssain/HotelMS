@@ -5,7 +5,7 @@ const ToastContext = createContext(null)
 /**
  * ToastProvider
  * 
- * Luxury Travertine Notification System for Habitas HMS:
+ * Luxury Travertine Notification System for Stayza HMS:
  * - Subtle bottom-right floating cards (mobile: centered bottom sheet toast)
  * - Restrained typography (Space Grotesk for telemetry, Inter for body)
  * - Auto-dismiss with smooth exit animation

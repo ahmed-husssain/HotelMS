@@ -208,7 +208,7 @@ export default function GuestPortalPage() {
               id: b.room?._id || matchedRes.id,
               roomNumber: b.roomNumber?.replace(/\D/g, '') || matchedRes.roomNumber,
               nightlyRate: b.pricingSnapshot?.nightlyRate || matchedRes.nightlyRate,
-              credentials: b.room?.credentials || { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+              credentials: b.room?.credentials || { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
               valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
               assignedButler: b.room?.assignedButler || 'Tariq J.',
             },
@@ -328,7 +328,7 @@ export default function GuestPortalPage() {
             id: b.room?._id || matchedRes.id,
             roomNumber: b.roomNumber?.replace(/\D/g, '') || matchedRes.roomNumber,
             nightlyRate: b.pricingSnapshot?.nightlyRate || matchedRes.nightlyRate,
-            credentials: b.room?.credentials || { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+            credentials: b.room?.credentials || { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
             valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
             assignedButler: b.room?.assignedButler || 'Tariq J.',
           },
@@ -378,7 +378,7 @@ export default function GuestPortalPage() {
           residence: {
             ...matchedRes,
             id: b.room?._id || matchedRes.id,
-            credentials: b.room?.credentials || { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+            credentials: b.room?.credentials || { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
             valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
             assignedButler: b.room?.assignedButler || 'Tariq J.',
           },
@@ -479,7 +479,7 @@ export default function GuestPortalPage() {
       navigator.clipboard.writeText('pacific2026')
     }
     setWifiCopied(true)
-    toast.success('Habitas 1Gbps Wi-Fi key copied to clipboard', 'NETWORK KEY COPIED')
+    toast.success('Stayza 1Gbps Wi-Fi key copied to clipboard', 'NETWORK KEY COPIED')
     setTimeout(() => setWifiCopied(false), 2500)
   }
 
@@ -760,7 +760,7 @@ export default function GuestPortalPage() {
                         </button>
                       </div>
                       <span className="font-mono text-xs font-bold text-slate-900 block truncate">
-                        Habitas_Guest
+                        Stayza_Guest
                       </span>
                       <span className="text-[10px] text-slate-500 font-mono block">Pass: pacific2026</span>
                     </div>
@@ -1223,7 +1223,7 @@ export default function GuestPortalPage() {
                       GUEST SATISFACTION
                     </span>
                     <h3 className="font-serif-grand text-xl text-slate-900 mt-0.5">
-                      Rate Your Stay with HABITAS
+                      Rate Your Stay with STAYZA
                     </h3>
                   </div>
                   <span className="text-[10px] font-mono text-slate-400 uppercase">
@@ -1304,7 +1304,7 @@ export default function GuestPortalPage() {
       {isUnlocked && (
         <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2 px-4 sm:px-8">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-500">
-            <span className="uppercase tracking-widest text-[9px] text-slate-400">HABITAS IN-RESIDENCE GUEST FOLIO</span>
+            <span className="uppercase tracking-widest text-[9px] text-slate-400">STAYZA IN-RESIDENCE GUEST FOLIO</span>
             <div className="flex items-center gap-4">
               <button
                 type="button"

@@ -13,7 +13,7 @@ export default function LandingPage() {
   // Cinematic opening sequence state
   const [showSplash, setShowSplash] = useState(() => {
     if (typeof window !== 'undefined') {
-      const hasSeen = sessionStorage.getItem('habitas_splash_seen')
+      const hasSeen = sessionStorage.getItem('stayza_splash_seen') || sessionStorage.getItem('habitas_splash_seen')
       const forceIntro = new URLSearchParams(window.location.search).get('intro') === 'true'
       return !hasSeen || forceIntro
     }
@@ -21,7 +21,7 @@ export default function LandingPage() {
   })
 
   const handleSplashComplete = () => {
-    sessionStorage.setItem('habitas_splash_seen', 'true')
+    sessionStorage.setItem('stayza_splash_seen', 'true')
     setShowSplash(false)
   }
 

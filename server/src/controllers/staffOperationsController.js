@@ -148,7 +148,7 @@ async function checkInGuest(req, res) {
         numberOfNights: 1,
         guestDetails: {
           name: req.body.guestName || 'Walk-In Guest',
-          email: req.body.guestEmail || 'walkin@habitas.com',
+          email: req.body.guestEmail || 'walkin@stayza.com',
           phone: req.body.guestPhone || '+92 300 0000000',
         },
         pricingSnapshot: {

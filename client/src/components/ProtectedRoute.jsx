@@ -80,7 +80,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
         </main>
 
         <footer className="max-w-4xl w-full mx-auto text-center font-mono text-[10px] text-slate-500">
-          HABITAS HOTEL &bull; ROLE-BASED ACCESS CONTROL
+          STAYZA HOTEL &bull; ROLE-BASED ACCESS CONTROL
         </footer>
       </div>
     )

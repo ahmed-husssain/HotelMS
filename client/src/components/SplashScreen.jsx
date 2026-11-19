@@ -82,7 +82,7 @@ export default function SplashScreen({ onComplete }) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Habitas Opening Sequence"
+      aria-label="Stayza Opening Sequence"
       className={`fixed inset-0 z-[9999] bg-[#070B14] flex items-center justify-center select-none overflow-hidden transition-opacity duration-1200 ease-[cubic-bezier(0.22,1,0.36,1)] ${
         isCurtainDissolved ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
       }`}
@@ -180,7 +180,7 @@ export default function SplashScreen({ onComplete }) {
           className="text-center mt-5"
         >
           <div className="font-serif-grand text-xl sm:text-2xl font-bold tracking-[0.35em] text-[#FAF8F5]">
-            HABITAS
+            STAYZA
           </div>
           <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.35em] text-amber-500/85 uppercase mt-1.5 font-light">
             HOTEL &bull; RESIDENCES

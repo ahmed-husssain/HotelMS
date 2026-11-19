@@ -88,7 +88,7 @@ export default function RegisterPage() {
           {/* Integrated Mobile Brand Header */}
           <div className="absolute top-3.5 inset-x-0 px-5 flex items-center justify-between text-white z-20">
             <Link to="/" className="flex items-center gap-1.5">
-              <span className="font-serif-grand text-base font-light tracking-[0.25em] text-[#FFF0CA]">HABITAS</span>
+              <span className="font-serif-grand text-base font-light tracking-[0.25em] text-[#FFF0CA]">STAYZA</span>
               <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/70 border-l border-white/25 pl-1.5">
                 HOTEL
               </span>
@@ -121,14 +121,14 @@ export default function RegisterPage() {
         <aside className="hidden md:flex md:col-span-5 bg-[#0E1201] text-[#FAF8F5] relative overflow-hidden flex-col justify-between p-6 sm:p-8 lg:p-10 border-r border-slate-800 shrink-0">
           <img
             src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=85"
-            alt="Habitas Luxury Experience"
+            alt="Stayza Luxury Experience"
             className="absolute inset-0 w-full h-full object-cover filter brightness-[0.45] contrast-[1.1] scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0E1201] via-[#0E1201]/40 to-transparent" />
 
           <div className="relative z-10">
             <span className="font-serif-grand text-2xl font-light tracking-[0.2em] text-[#FFF0CA] block">
-              HABITAS
+              STAYZA
             </span>
             <span className="text-[11px] uppercase tracking-wider text-slate-300 block mt-1 font-sans">
               Hotel &amp; Residences
@@ -327,7 +327,7 @@ export default function RegisterPage() {
 
       {/* Desktop Footer (Hidden on Mobile) */}
       <footer className="hidden md:block max-w-5xl w-full mx-auto mt-2 text-center font-mono text-[9px] text-slate-500 shrink-0">
-        &copy; {new Date().getFullYear()} Habitas Hotel &bull; All rights reserved.
+        &copy; {new Date().getFullYear()} Stayza Hotel &bull; All rights reserved.
       </footer>
 
     </div>

@@ -228,7 +228,7 @@ export function HotelDataProvider({ children }) {
   // 1. Rooms Inventory
   const [rooms, setRooms] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_hotel_rooms')
+      const saved = localStorage.getItem('stayza_hotel_rooms') || localStorage.getItem('habitas_hotel_rooms')
       return saved ? JSON.parse(saved) : INITIAL_ROOMS
     } catch {
       return INITIAL_ROOMS
@@ -238,7 +238,7 @@ export function HotelDataProvider({ children }) {
   // 2. Expected Arrivals
   const [arrivals, setArrivals] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_hotel_arrivals')
+      const saved = localStorage.getItem('stayza_hotel_arrivals') || localStorage.getItem('habitas_hotel_arrivals')
       return saved ? JSON.parse(saved) : INITIAL_ARRIVALS
     } catch {
       return INITIAL_ARRIVALS
@@ -248,7 +248,7 @@ export function HotelDataProvider({ children }) {
   // 3. Guest Service Requests
   const [guestRequests, setGuestRequests] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_hotel_requests')
+      const saved = localStorage.getItem('stayza_hotel_requests') || localStorage.getItem('habitas_hotel_requests')
       return saved ? JSON.parse(saved) : INITIAL_GUEST_REQUESTS
     } catch {
       return INITIAL_GUEST_REQUESTS
@@ -258,7 +258,7 @@ export function HotelDataProvider({ children }) {
   // 4. Maintenance Work Orders
   const [maintenanceTickets, setMaintenanceTickets] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_hotel_tickets')
+      const saved = localStorage.getItem('stayza_hotel_tickets') || localStorage.getItem('habitas_hotel_tickets')
       return saved ? JSON.parse(saved) : INITIAL_MAINTENANCE_TICKETS
     } catch {
       return INITIAL_MAINTENANCE_TICKETS
@@ -268,7 +268,7 @@ export function HotelDataProvider({ children }) {
   // 5. System Settings
   const [systemSettings, setHotelSettings] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_hotel_settings')
+      const saved = localStorage.getItem('stayza_hotel_settings') || localStorage.getItem('habitas_hotel_settings')
       return saved ? JSON.parse(saved) : {
         taxRate: 13,
         depositRate: 30,
@@ -292,7 +292,7 @@ export function HotelDataProvider({ children }) {
   // 6. Audit Trail
   const [auditLogs, setAuditLogs] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_hotel_audit')
+      const saved = localStorage.getItem('stayza_hotel_audit') || localStorage.getItem('habitas_hotel_audit')
       return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS
     } catch {
       return INITIAL_AUDIT_LOGS
@@ -301,7 +301,7 @@ export function HotelDataProvider({ children }) {
 
   // Synchronize state changes to localStorage
   useEffect(() => {
-    localStorage.setItem('habitas_hotel_rooms', JSON.stringify(rooms))
+    localStorage.setItem('stayza_hotel_rooms', JSON.stringify(rooms))
   }, [rooms])
 
   // Live MongoDB Atlas Sync on Mount
@@ -327,23 +327,23 @@ export function HotelDataProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('habitas_hotel_arrivals', JSON.stringify(arrivals))
+    localStorage.setItem('stayza_hotel_arrivals', JSON.stringify(arrivals))
   }, [arrivals])
 
   useEffect(() => {
-    localStorage.setItem('habitas_hotel_requests', JSON.stringify(guestRequests))
+    localStorage.setItem('stayza_hotel_requests', JSON.stringify(guestRequests))
   }, [guestRequests])
 
   useEffect(() => {
-    localStorage.setItem('habitas_hotel_tickets', JSON.stringify(maintenanceTickets))
+    localStorage.setItem('stayza_hotel_tickets', JSON.stringify(maintenanceTickets))
   }, [maintenanceTickets])
 
   useEffect(() => {
-    localStorage.setItem('habitas_hotel_settings', JSON.stringify(systemSettings))
+    localStorage.setItem('stayza_hotel_settings', JSON.stringify(systemSettings))
   }, [systemSettings])
 
   useEffect(() => {
-    localStorage.setItem('habitas_hotel_audit', JSON.stringify(auditLogs))
+    localStorage.setItem('stayza_hotel_audit', JSON.stringify(auditLogs))
   }, [auditLogs])
 
   // Helper: Append Audit Log

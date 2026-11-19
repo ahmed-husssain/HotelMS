@@ -126,64 +126,47 @@ A room is considered **Blocked / Unavailable** if it has any booking matching:
 
 ---
 
-## 7. Phase 1 Backend Architecture Plan (Parked for Execution After Frontend)
+## 7. Backend Architecture Status & Milestones
 
-* **Status:** Fully specified & parked. Deferred to execute after completing the world-class frontend.
-* **Component 1: Database Setup (`server/src/config/db.js`):**
-  * Minimal Mongoose connection with error handling and environment fallback.
-* **Component 2: The 9 Mongoose Models (`server/src/models/`):**
+### 7.1 Completed & Operational Components
+* ✅ **Component 1: Database Setup (`server/src/config/db.js`):**
+  * Robust Mongoose connection to MongoDB Atlas with environment fallback and error handling.
+* ✅ **Component 2: Core Mongoose Data Models (`server/src/models/`):**
   1. `User.js` — Guest, Receptionist, Housekeeping, Admin roles. Pre-save bcrypt hashing (cost 10).
   2. `Room.js` — Unified room model (roomNumber, roomType, floor, baseNightlyRate, amenities, images, status).
   3. `Booking.js` — Reference, guestId, roomId, checkIn, checkOut, pricingSnapshot (frozen), 5-min holdExpiresAt.
   4. `Payment.js` — Double-entry audit ledger with `safepayReference` and `idempotencyKey`.
-  5. `FolioItem.js` — Incidental charges (Food, Laundry, Minibar, Spa).
-  6. `Invoice.js` — Advance receipts & final stay tax invoices.
-  7. `HousekeepingTask.js` — Room turnover and cleaning queues.
-  8. `MaintenanceRequest.js` — Facilities repair tickets with urgency tiers.
-  9. `CashierShift.js` — Front-desk cash drawer balancing and Z-Report handover.
-  10. `ActivityLog.js` — System audit trail.
-* **Component 3: Database Seeder (`server/src/utils/seedData.js`):**
+  5. `ActivityLog.js` — System audit trail for administrative, front-desk, and turnover actions.
+* ✅ **Component 3: Database Seeder (`server/src/utils/seedData.js`):**
   * One-command population of 4 role test accounts (`Password123!`), 8 physical luxury rooms, and realistic sample reservations.
-* **Component 4: Unit Test Suite:**
-  * Adversarial unit tests for schema validation, enum restrictions, and password encryption.
+* ✅ **Component 4: Backend Business Services & Controllers:**
+  * `server/src/services/pricingService.js` — Server-authoritative Zero-Trust pricing (13% Sindh tax, 30% advance split, 70% balance).
+  * `server/src/services/availabilityService.js` — Atomic calendar overlap checking and pessimistic hold validation.
+  * `server/src/controllers/bookingController.js` — Holds, quotes, confirmations, guest lookups, digital keys.
+  * `server/src/controllers/staffOperationsController.js` — Live PMS dashboard, check-ins, incidental posting, check-outs, cashier shifts (Z-Report).
+
+### 7.2 Remaining Backend Tasks
+* ⏳ **Task 1: WebSockets Real-Time Sync (`Socket.io`)** — Wrap HTTP server with Socket.io in `server/server.js` and connect to `HotelDataContext.jsx` for live 0-latency room turnover events.
+* ⏳ **Task 2: JWT Authentication & RBAC Middleware (`server/src/middleware/auth.js`)** — Enforce server-side token verification on staff routes (`receptionist`, `housekeeping`, `admin`).
+* ⏳ **Task 3: Safepay Webhook & Hosted Checkout (`server/src/controllers/paymentController.js`)** — Production HMAC SHA-256 signature verification.
 
 ---
 
-## 8. Brand Identity, Rebrand & Modern Typography Research (`Stayza`)
+## 8. Brand Identity, Rebrand & Official Typography System (`Stayza`)
 
 ### 8.1 Official Brand Rename
-* **Former Temporary Name:** Habitas / LuxuryStay
+* **Former Temporary Names:** Habitas / LuxuryStay
 * **Final Chosen Brand Name:** **Stayza**
 * **Brand Positioning:** Contemporary ultra-luxury boutique hospitality. Modern architectural calm, generous negative space, warm organic textures, and zero clutter.
-* **Logo Transition:** User is finalizing the vector/raster logo asset; upon delivery, it will be placed across all navigation, drawer, confirmation, and invoice touchpoints.
+* **Logo Status:** User is finalizing the vector/raster logo asset; upon delivery, it will be placed across all navigation, drawer, confirmation, and invoice touchpoints.
 
-### 8.2 Modern Typography System: Research & Architectural Direction
-* **Key Finding:** Traditional high-contrast serif typefaces (Playfair Display, Bodoni, Fraunces) often look dated, ornate, or like wedding invitations. Modern 5-star architectural hotels (Aman, EDITION, Nobu, Santa Monica Proper) use disciplined, high-end sans-serif and grotesque type systems characterized by wide horizontal proportions, geometric clarity, and high legibility.
-* **The 4 Researched Typography Directions:**
-
-1. **System A: Swiss Architectural (Minimalist Brutalism / Tadao Ando Aesthetic)**
-   * **Headings:** `Space Grotesk` (Bold/Medium, wide geometric stance, architectural authority)
-   * **Body & UI:** `Inter` (Neutral, hyper-legible, smooth line-height for descriptions and long copy)
-   * **Pricing & Meta:** `DM Mono` (Crisp, tabular precision for room rates, dates, and specs)
-   * *Best For:* Clean architectural lines, concrete/stone palettes, serene brutalist luxury.
-
-2. **System B: High-Fashion Minimalist (Parisian Luxury / Saint Laurent Style)**
-   * **Headings:** `Raleway` (Light 300 / Regular 400 in all-caps with generous letter-spacing `tracking-[0.25em]`)
-   * **Body & UI:** `Plus Jakarta Sans` (Contemporary geometric humanist, effortless reading)
-   * **Pricing & Meta:** `JetBrains Mono` (Modern clean mono numerals)
-   * *Best For:* Ultra-refined, light, breathable editorial luxury with haute-couture restraint.
-
-3. **System C: Perfected Sculptural (The Refined Contemporary Edition)**
-   * **Headings:** `Syne` (Uppercase, weight 600, letter-spacing `0.15em`, sculptural curves paired with structural rigor)
-   * **Body & UI:** `Inter` (Balanced, familiar, highly readable text rhythm)
-   * **Pricing & Meta:** `Space Grotesk` (Distinct modern numerals with tabular clarity)
-   * *Best For:* Awwwards Site-of-the-Year boutique hotels, avant-garde interior architecture.
-
-4. **System D: Nordic Sanctuary (Japandi Warmth & Organic Modernism)**
-   * **Headings:** `Urbanist` (Soft geometric sans, warm modern curves)
-   * **Body & UI:** `DM Sans` (Approachable, human, premium editorial warmth)
-   * **Pricing & Meta:** `DM Mono` (Understated elegance)
-   * *Best For:* Natural cedar, linen textures, wellness and coastal retreat ambiance.
+### 8.2 Official Implemented Typography System: Option 3 • Perfected Sculptural
+* **Status:** **100% IMPLEMENTED & DEPLOYED SITE-WIDE** (Commit `27cfee6`).
+* **Legacy Font Eradication:** `Playfair Display`, `Cinzel`, `Plus Jakarta Sans`, and `JetBrains Mono` were completely removed and deleted from all HTML, CSS, component files, and project rules.
+* **The Final Approved 3-Font Hierarchy:**
+  1. **Architectural Display & Headings:** `Syne` (Weights 600, 700, 800) — Hero title, section headers, suite names, brand monograms.
+  2. **Clean UI & Editorial Body:** `Inter` (Weights 300, 400, 500, 600) — All body paragraphs, guest forms, navigation links, buttons, drawer specs, staff tables.
+  3. **Architectural Numerals & Metrics:** `Space Grotesk` (Weights 500, 600, 700, `tabular-nums`) — Room rates (`PKR 145,000`), check-in dates, suite dimensions, invoice line items.
 
 ### 8.3 Live Visual Preview Tool
 * A dedicated interactive visual testing tool is available in `client/public/typography-lab.html` and deployed live at `https://habittas.web.app/typography-lab.html` allowing side-by-side comparison of heading hierarchy, room rates, body copy, and button micro-interactions.
@@ -272,6 +255,32 @@ In world-class 5-star hospitality, operational velocity between the **Front Desk
      }, [])
      ```
    * Result: Immediate, synchronized 0-latency UI updates across Front Desk (`/pms`) and Housekeeping (`/housekeeping`) with zero full-page reloads.
+
+---
+
+## 10. Codebase Audit & High-Priority Next Roadmap
+
+### 10.1 Completed & Deployed Milestones
+* ✅ **Frontend Aesthetics & Humanization:** Removed all robotic/AI jargon (`//`, `Dossier`, `Coordinates Uncharted`) across all pages.
+* ✅ **Cross-Device Performance:** Optimized drone video from 3.7MB to 1.59MB with WebM/MP4, responsive WebP poster preload, decoupled hardware transforms, and `IntersectionObserver` auto-pause.
+* ✅ **Unified Typography System:** Adopted Option 3 (`Syne` + `Inter` + `Space Grotesk`) across 100% of the site and eradicated old serifs/legacy fonts.
+* ✅ **Core Backend Architecture:** MongoDB Atlas connection, 5 core Mongoose models, DB seeder, Zero-Trust pricing engine, availability overlap service, and PMS staff controllers.
+* ✅ **Guest OS & Self-Service Portal:** Interactive guest portal with live stay details, digital key toggle, in-stay requests, and print-ready tax invoice modal.
+
+### 10.2 Prioritized Remaining Tasks (Next Sprints)
+1. 🎯 **Priority 1 (Highest Impact): Real-Time WebSockets Integration (Socket.io)**
+   * Wrap Express in `http.createServer(app)` in `server/server.js`.
+   * Broadcast `room:status_changed` whenever housekeeping certifies a room or front desk checks in/out a guest.
+   * Connect `client/src/context/HotelDataContext.jsx` to live socket events for instant zero-reload synchronization between `/pms` and `/housekeeping`.
+2. 🎯 **Priority 2: Server-Side Authentication & JWT Security Middleware**
+   * Implement `POST /api/auth/login` and `POST /api/auth/register` with JWT cookies/headers.
+   * Protect staff endpoints (`/api/staff/*`) with `verifyToken` and `requireRole(['admin', 'receptionist', 'housekeeping'])`.
+3. 🎯 **Priority 3: Safepay Hosted Checkout & Webhook Verification**
+   * Integrate Safepay sandbox checkout session generator and HMAC SHA-256 webhook listener for real test-card payment simulation.
+4. 🎯 **Priority 4: Stayza Official Brand Logo Integration**
+   * Awaiting user's finalized logo asset to place across all brand mark touchpoints (`BrandLogo`, `SplashScreen`, `InvoicePreviewModal`).
+5. 🎯 **Priority 5: Automated PDF Email Receipts**
+   * Implement server-side PDF invoice generation / email dispatch for confirmed bookings and checkout folio settlements.
 
 
 

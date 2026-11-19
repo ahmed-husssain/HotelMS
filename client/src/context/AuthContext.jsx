@@ -26,7 +26,7 @@ export const INITIAL_STAFF_ACCOUNTS = [
   {
     id: 'usr-rec-002',
     name: 'Sara Ahmed',
-    email: 'reception@habitas.com',
+    email: 'reception@stayza.com',
     role: 'receptionist',
     roleLabel: 'Front Desk Receptionist',
     phone: '+92 321 4455667',
@@ -36,7 +36,7 @@ export const INITIAL_STAFF_ACCOUNTS = [
   {
     id: 'usr-hk-003',
     name: 'Bilal Farooq',
-    email: 'cleaning@habitas.com',
+    email: 'cleaning@stayza.com',
     role: 'housekeeping',
     roleLabel: 'Housekeeping Lead',
     phone: '+92 333 1122334',
@@ -46,7 +46,7 @@ export const INITIAL_STAFF_ACCOUNTS = [
   {
     id: 'usr-adm-004',
     name: 'Karim Mansoor',
-    email: 'admin@habitas.com',
+    email: 'admin@stayza.com',
     role: 'admin',
     roleLabel: 'General Manager',
     phone: '+92 300 0001122',
@@ -58,10 +58,10 @@ export const INITIAL_STAFF_ACCOUNTS = [
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  // 1. Load active user session from localStorage
+  // 1. Load active user session from localStorage (with legacy migration fallback)
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_auth_user')
+      const saved = localStorage.getItem('stayza_auth_user') || localStorage.getItem('habitas_auth_user')
       return saved ? JSON.parse(saved) : null
     } catch {
       return null
@@ -71,7 +71,7 @@ export function AuthProvider({ children }) {
   // 2. Load staff registry (allows Admin to add/deactivate accounts in-memory + localStorage)
   const [staffAccounts, setStaffAccounts] = useState(() => {
     try {
-      const saved = localStorage.getItem('habitas_staff_registry')
+      const saved = localStorage.getItem('stayza_staff_registry') || localStorage.getItem('habitas_staff_registry')
       return saved ? JSON.parse(saved) : INITIAL_STAFF_ACCOUNTS
     } catch {
       return INITIAL_STAFF_ACCOUNTS
@@ -81,15 +81,18 @@ export function AuthProvider({ children }) {
   // Persist session changes
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('habitas_auth_user', JSON.stringify(currentUser))
+      localStorage.setItem('stayza_auth_user', JSON.stringify(currentUser))
+      localStorage.removeItem('habitas_auth_user')
     } else {
+      localStorage.removeItem('stayza_auth_user')
       localStorage.removeItem('habitas_auth_user')
     }
   }, [currentUser])
 
   // Persist staff accounts
   useEffect(() => {
-    localStorage.setItem('habitas_staff_registry', JSON.stringify(staffAccounts))
+    localStorage.setItem('stayza_staff_registry', JSON.stringify(staffAccounts))
+    localStorage.removeItem('habitas_staff_registry')
   }, [staffAccounts])
 
   /**
@@ -97,7 +100,7 @@ export function AuthProvider({ children }) {
    * Matches email against staff registry or defaults to guest.
    */
   const login = (email, _password) => {
-    const cleanEmail = email.trim().toLowerCase()
+    const cleanEmail = email.trim().toLowerCase().replace('@habitas.com', '@stayza.com')
     
     // Check known accounts
     const matchedAccount = staffAccounts.find(
@@ -138,7 +141,7 @@ export function AuthProvider({ children }) {
    * Public Registration (Strictly creates role: 'guest')
    */
   const registerGuest = ({ name, email, phone }) => {
-    const cleanEmail = email.trim().toLowerCase()
+    const cleanEmail = email.trim().toLowerCase().replace('@habitas.com', '@stayza.com')
     
     // Check if email already exists
     const exists = staffAccounts.some((acc) => acc.email.toLowerCase() === cleanEmail)
@@ -170,7 +173,7 @@ export function AuthProvider({ children }) {
    * Admin Function: Create new staff member
    */
   const createStaffAccount = ({ name, email, role, phone }) => {
-    const cleanEmail = email.trim().toLowerCase()
+    const cleanEmail = email.trim().toLowerCase().replace('@habitas.com', '@stayza.com')
     
     if (staffAccounts.some((acc) => acc.email.toLowerCase() === cleanEmail)) {
       throw new Error('An account with this email already exists.')

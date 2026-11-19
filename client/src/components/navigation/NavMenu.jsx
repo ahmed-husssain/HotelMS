@@ -208,7 +208,7 @@ export default function NavMenu({
               <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
             </div>
             <div className="text-slate-400 pt-0.5 text-[9px] uppercase tracking-wider">
-              Habitas &middot; Safepay 30% Advance &middot; 5-Min Reservation Hold
+              Stayza &middot; Safepay 30% Advance &middot; 5-Min Reservation Hold
             </div>
           </div>
         </div>

@@ -64,7 +64,7 @@ export default function NotFoundPage() {
 
       {/* Clean, Unobtrusive Footer */}
       <footer className="max-w-6xl w-full mx-auto text-center text-xs text-slate-400 border-t border-slate-200/80 pt-4">
-        &copy; {new Date().getFullYear()} Habitas. All rights reserved.
+        &copy; {new Date().getFullYear()} Stayza. All rights reserved.
       </footer>
 
     </div>

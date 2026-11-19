@@ -26,7 +26,7 @@ export default function ReviewForm({ guestName }) {
             03 &bull; GUEST EXPERIENCE FEEDBACK
           </span>
           <h3 className="font-serif-grand text-xl text-slate-900">
-            Rate Your Stay with HABITAS
+            Rate Your Stay with STAYZA
           </h3>
         </div>
         <span className="text-[10px] font-mono text-emerald-800 uppercase font-semibold">

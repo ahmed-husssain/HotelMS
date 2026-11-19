@@ -129,7 +129,7 @@ export default function ConfirmationPage() {
       </div>
 
       <footer className="text-center text-[9px] font-mono text-slate-400 tracking-[0.2em] uppercase shrink-0 py-1">
-        Habitas Hotel &bull; LuxuryStay HMS &bull; Sindh Coast, Pakistan
+        Stayza Hotel &bull; Luxury Residences &bull; Sindh Coast, Pakistan
       </footer>
     </div>
   )

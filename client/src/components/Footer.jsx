@@ -58,7 +58,7 @@ export default function Footer() {
         aria-hidden="true" 
         className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[120px] sm:text-[140px] font-serif-grand font-bold text-slate-900/[0.025] tracking-[0.25em] pointer-events-none select-none whitespace-nowrap"
       >
-        HABITAS
+        STAYZA
       </div>
 
       {/* ============================================================== */}
@@ -127,8 +127,8 @@ export default function Footer() {
               <a href="tel:+922138900000" className="inline-flex items-center min-h-[28px] py-1 font-semibold text-[#121619] hover:text-amber-800 transition-colors">
                 +92 21 3890 0000
               </a>
-              <a href="mailto:concierge@habitas.pk" className="inline-flex items-center min-h-[28px] py-1 text-[11px] text-[#44403C] hover:text-[#121619] transition-colors">
-                concierge@habitas.pk
+              <a href="mailto:concierge@stayza.pk" className="inline-flex items-center min-h-[28px] py-1 text-[11px] text-[#44403C] hover:text-[#121619] transition-colors">
+                concierge@stayza.pk
               </a>
             </div>
           </div>

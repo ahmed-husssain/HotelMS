@@ -59,8 +59,8 @@ export default function BrandLogo({
       {(variant === 'full' || variant === 'emblem') && Emblem}
 
       {(variant === 'full' || variant === 'wordmark') && (
-        <span className={`font-serif-grand font-bold uppercase tracking-[0.12em] ${dimensions.title} ${textColor} leading-none`}>
-          HABITAS
+        <span className={`font-serif-grand font-bold uppercase tracking-[0.16em] ${dimensions.title} ${textColor} leading-none`}>
+          STAYZA
         </span>
       )}
     </div>
@@ -71,7 +71,7 @@ export default function BrandLogo({
       <Link
         to={to}
         className="group inline-flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-800 transition-opacity hover:opacity-90 active:scale-[0.98]"
-        aria-label="Habitas — Return to home"
+        aria-label="Stayza — Return to home"
       >
         {content}
       </Link>

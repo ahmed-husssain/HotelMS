@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 /**
- * MongoDB Connection Utility for LuxuryStay / Habitas
+ * MongoDB Connection Utility for Stayza HMS
  * Connects via Mongoose with auto-reconnect and graceful error handling.
  */
 const connectDB = async () => {

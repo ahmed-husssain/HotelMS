@@ -36,7 +36,7 @@ app.use('/api/staff', staffRoutes)
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
-    service: 'LuxuryStay / Habitas HMS API',
+    service: 'Stayza HMS API',
     status: 'OPERATIONAL',
     version: '1.0.0',
     timestamp: new Date().toISOString(),

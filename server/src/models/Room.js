@@ -75,7 +75,7 @@ const roomSchema = new mongoose.Schema(
 
     // In-Residence Credentials for /my-stay Guest OS
     credentials: {
-      wifiNetwork: { type: String, default: 'Habitas_Guest' },
+      wifiNetwork: { type: String, default: 'Stayza_Guest' },
       wifiPassword: { type: String, default: 'pacific2026' },
     },
     valetBay: {

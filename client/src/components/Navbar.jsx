@@ -162,7 +162,7 @@ export default function Navbar({ onOpenDrawer }) {
               className="group flex items-center gap-1.5 h-10 text-xs font-mono tracking-tight text-slate-900 focus-visible:outline-none"
             >
               <span className="whitespace-nowrap leading-none text-slate-900 font-medium tracking-wider">
-                HABITAS &bull; 2026
+                STAYZA &bull; 2026
               </span>
             </Link>
           </div>

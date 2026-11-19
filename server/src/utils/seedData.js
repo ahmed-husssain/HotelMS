@@ -38,7 +38,7 @@ const seedDatabase = async () => {
     const users = await User.create([
       {
         name: 'Dr. Tariq Khan',
-        email: 'guest@habitas.com',
+        email: 'guest@stayza.com',
         password: 'Password123!',
         role: 'guest',
         phone: '+92 300 8219401',
@@ -48,7 +48,7 @@ const seedDatabase = async () => {
       },
       {
         name: 'Ali Raza',
-        email: 'reception@habitas.com',
+        email: 'reception@stayza.com',
         password: 'Password123!',
         role: 'receptionist',
         phone: '+92 321 4458921',
@@ -56,7 +56,7 @@ const seedDatabase = async () => {
       },
       {
         name: 'Bilal Farooq',
-        email: 'cleaning@habitas.com',
+        email: 'cleaning@stayza.com',
         password: 'Password123!',
         role: 'housekeeping',
         phone: '+92 333 9012488',
@@ -64,11 +64,11 @@ const seedDatabase = async () => {
       },
       {
         name: 'General Manager Tariq J.',
-        email: 'admin@habitas.com',
+        email: 'admin@stayza.com',
         password: 'Password123!',
         role: 'admin',
         phone: '+92 300 8921455',
-        address: 'Habitas Estate Headquarters, Sindh Coast',
+        address: 'Stayza Sanctuary Headquarters, Sindh Coast',
       },
     ])
     console.log(`[Seed] Created ${users.length} stakeholder accounts with encrypted passwords.`)
@@ -105,7 +105,7 @@ const seedDatabase = async () => {
         ],
         description: 'Perched on the highest bluff overlooking the Arabian Sea, the Horizon Penthouse features 210 square meters of serene private living with a cliffside plunge pool and dedicated butler.',
         status: 'OCCUPIED',
-        credentials: { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+        credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
         valetBay: 'Bay #301 (Subterranean Lift)',
         assignedButler: 'Tariq J.',
         cleaningTasks: { linen: true, bathSalts: true, minibar: false, inspection: false },
@@ -137,7 +137,7 @@ const seedDatabase = async () => {
         ],
         description: 'Enclosed within ancient limestone walls, the Courtyard Villa centers around an open-air reflecting pool, private garden pavilion, and sunken aromatic cedar bath.',
         status: 'DIRTY',
-        credentials: { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+        credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
         valetBay: 'Bay #204',
         assignedButler: 'Zubair Shah',
         cleaningTasks: { linen: false, bathSalts: false, minibar: false, inspection: false },
@@ -168,7 +168,7 @@ const seedDatabase = async () => {
         ],
         description: 'Featuring floor-to-ceiling glass that opens directly to the coastal ocean breeze, overwater sundeck, and bespoke artisan interiors.',
         status: 'AVAILABLE',
-        credentials: { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+        credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
         valetBay: 'Bay #102',
         assignedButler: 'Kamran Malik',
         cleaningTasks: { linen: true, bathSalts: true, minibar: true, inspection: true },
@@ -198,7 +198,7 @@ const seedDatabase = async () => {
         ],
         description: 'Built into sheer limestone bluffs, offering an immersive sanctuary experience, double master suites, and panoramic views of the coastal tides.',
         status: 'AVAILABLE',
-        credentials: { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+        credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
         valetBay: 'Bay #201',
         assignedButler: 'Kamran Malik',
         cleaningTasks: { linen: true, bathSalts: true, minibar: true, inspection: true },
@@ -226,7 +226,7 @@ const seedDatabase = async () => {
         ],
         description: 'The epitome of coastal architectural luxury, featuring double-height ceiling voids, bespoke Italian craftsmanship, and uninterrupted horizon views.',
         status: 'AVAILABLE',
-        credentials: { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+        credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
         valetBay: 'Bay #302',
         assignedButler: 'Tariq J.',
         cleaningTasks: { linen: true, bathSalts: true, minibar: true, inspection: true },
@@ -256,7 +256,7 @@ const seedDatabase = async () => {
         ],
         description: 'Immersed in native coastal flora, featuring organic chukum plaster curves, private freshwater cenote bath, and seamless biophilic living.',
         status: 'AVAILABLE',
-        credentials: { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+        credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
         valetBay: 'Bay #401',
         assignedButler: 'Zubair Shah',
         cleaningTasks: { linen: true, bathSalts: true, minibar: true, inspection: true },
@@ -286,7 +286,7 @@ const seedDatabase = async () => {
         ],
         description: 'Perched on high volcanic bluff outcroppings, featuring chiseled black basalt stone, charred cedar timber decks, and 360-degree caldera horizon panoramas.',
         status: 'AVAILABLE',
-        credentials: { wifiNetwork: 'Habitas_Guest', wifiPassword: 'pacific2026' },
+        credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
         valetBay: 'Bay #501 (Helipad Access)',
         assignedButler: 'Tariq J.',
         cleaningTasks: { linen: true, bathSalts: true, minibar: true, inspection: true },
@@ -425,10 +425,10 @@ const seedDatabase = async () => {
     console.log('✅ DATABASE SEED COMPLETE!')
     console.log('------------------------------------------------------')
     console.log('Demo Credentials for Viva / Examiner Testing:')
-    console.log('1. Guest:        guest@habitas.com      / Password123!')
-    console.log('2. Front Desk:   reception@habitas.com  / Password123!')
-    console.log('3. Housekeeping: cleaning@habitas.com   / Password123!')
-    console.log('4. Admin / GM:   admin@habitas.com      / Password123!')
+    console.log('1. Guest:        guest@stayza.com      / Password123!')
+    console.log('2. Front Desk:   reception@stayza.com  / Password123!')
+    console.log('3. Housekeeping: cleaning@stayza.com   / Password123!')
+    console.log('4. Admin / GM:   admin@stayza.com      / Password123!')
     console.log('Active Stay Ref: TH-301-9041 (Suite 301)')
     console.log('======================================================\n')
 

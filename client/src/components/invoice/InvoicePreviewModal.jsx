@@ -36,7 +36,7 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
   }
 
   const handleCopySummary = () => {
-    const summary = `HABITAS LUXURY STAY VOUCHER
+    const summary = `STAYZA LUXURY STAY VOUCHER
 Ref: ${booking.bookingRef || 'TH-301-9041'}
 Guest: ${booking.guestName || 'Guest'}
 Suite: Room ${residence.roomNumber} - ${residence.name}
@@ -121,7 +121,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
               <p className="text-[10px] font-mono text-slate-500 leading-tight max-w-sm pt-1">
                 Cliffs of Sindh Coast (24&deg;48'N, 67&deg;01'E) &bull; Karachi - Thatta Coastal Road, Pakistan
                 <br />
-                Concierge Desk: +92 21 3890 0000 &bull; concierge@habitas.pk
+                Concierge Desk: +92 21 3890 0000 &bull; concierge@stayza.pk
               </p>
             </div>
 
@@ -254,7 +254,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
                   Ref: <strong className="text-slate-900">{booking.bookingRef || 'TH-301-9041'}</strong>
                 </p>
                 <span className="text-[9px] text-slate-400 block">
-                  Audited on Habitas PMS Network
+                  Audited on Stayza PMS Network
                 </span>
               </div>
             </div>

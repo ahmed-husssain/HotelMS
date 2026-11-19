@@ -5,7 +5,7 @@ import { getOptimizedImageUrl } from '../../utils/cloudinary'
 /**
  * SuiteSpecsDrawer
  * 
- * Architectural Specification Dossier for Habitas Residences:
+ * Architectural Specification Dossier for Stayza Residences:
  * - Mobile-First: Bottom-sheet on mobile (< 768px), elegant slide-over drawer on desktop
  * - Full architectural telemetry: square meters, ceiling heights, heated plunge pool specs, acoustics
  * - Direct luxury booking CTA with 30% deposit calculation

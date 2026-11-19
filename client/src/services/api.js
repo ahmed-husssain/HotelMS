@@ -1,5 +1,5 @@
 /**
- * LuxuryStay / Habitas — Client API Service
+ * Stayza Hospitality — Client API Service
  * 
  * Centralized, minimal native fetch client for communicating with Express backend.
  * Zero external libraries (KISS & Viva Defense compliant).

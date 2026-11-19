@@ -22,7 +22,7 @@ export default function ActivityLog({ auditLogs }) {
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = `habitas_audit_log_${new Date().toISOString().slice(0, 10)}.csv`
+    link.download = `stayza_audit_log_${new Date().toISOString().slice(0, 10)}.csv`
     link.click()
   }
 
