@@ -82,28 +82,8 @@ export default function BookingPage() {
     }
   }, [currentUser])
 
-  // 4. Atomic 5-Minute Inventory Hold (300 seconds)
-  const [secondsLeft, setSecondsLeft] = useState(300)
+  // 4. Processing State
   const [isProcessing, setIsProcessing] = useState(false)
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [selectedResidence.id])
-
-  const formatTimer = (sec) => {
-    const m = Math.floor(sec / 60)
-    const s = sec % 60
-    return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`
-  }
 
   const toggleAddon = (addonId) => {
     setSelectedAddons((prev) =>
@@ -131,7 +111,6 @@ export default function BookingPage() {
   // 6. Confirm Booking & Post to Shared Arrivals Queue
   const handleConfirmReservation = async (e) => {
     e.preventDefault()
-    if (secondsLeft === 0) return
 
     // Run strict validation against all fields
     const errors = validateForm()
@@ -364,8 +343,6 @@ export default function BookingPage() {
               totalValuation={totalValuation}
               advanceDeposit={advanceDeposit}
               remainingBalance={remainingBalance}
-              secondsLeft={secondsLeft}
-              formatTimer={formatTimer}
               isProcessing={isProcessing}
               taxRate={taxRate}
               depositRate={depositRate}

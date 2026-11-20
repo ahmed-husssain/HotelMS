@@ -15,6 +15,64 @@ import {
   submitStayFeedback,
 } from '../services/api'
 
+// Bespoke Luxury SVG Icons for Portal Navigation & Services
+const KeyIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 2l-2 2m-1.5 1.5L16 7l-2-2m-3.5 3.5a5 5 0 1 0-7.07 7.07 5 5 0 0 0 7.07-7.07z" />
+  </svg>
+)
+
+const DiningIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 19h18M4 15h16a8 8 0 0 0-16 0zM12 4v3" />
+  </svg>
+)
+
+const SpaIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 22c5.523 0 10-4.477 10-10a10 10 0 0 0-10-10C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10z" />
+    <path d="M7 12c3.5 0 6-2.5 6-6 0 3.5 2.5 6 6 6-3.5 0-6 2.5-6 6 0-3.5-2.5-6-6-6z" />
+  </svg>
+)
+
+const ButlerIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    <path d="M12 2v2" />
+  </svg>
+)
+
+const FolioIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+  </svg>
+)
+
+const BedIcon = ({ className = "w-5 h-5 text-amber-800" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9" />
+  </svg>
+)
+
+const CandleIcon = ({ className = "w-5 h-5 text-amber-800" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 2s-3 3.5-3 6a3 3 0 0 0 6 0c0-2.5-3-6-3-6z" />
+    <path d="M6 13v8a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8" />
+    <line x1="6" y1="13" x2="18" y2="13" />
+  </svg>
+)
+
+const SpinnerIcon = ({ className = "w-4 h-4 animate-spin" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" />
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+  </svg>
+)
+
 // Demo Stay Record for Suite 301
 const DEMO_BOOKING = {
   bookingRef: 'ST-301-9041',
@@ -209,7 +267,7 @@ export default function GuestPortalPage() {
               roomNumber: b.roomNumber?.replace(/\D/g, '') || matchedRes.roomNumber,
               nightlyRate: b.pricingSnapshot?.nightlyRate || matchedRes.nightlyRate,
               credentials: b.room?.credentials || { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
-              valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
+              valetBay: b.room?.valetBay || 'Bay #301 (Underground Parking)',
               assignedButler: b.room?.assignedButler || 'Tariq J.',
             },
             guestName: b.guestDetails?.name || 'In-House Guest',
@@ -329,7 +387,7 @@ export default function GuestPortalPage() {
             roomNumber: b.roomNumber?.replace(/\D/g, '') || matchedRes.roomNumber,
             nightlyRate: b.pricingSnapshot?.nightlyRate || matchedRes.nightlyRate,
             credentials: b.room?.credentials || { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
-            valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
+            valetBay: b.room?.valetBay || 'Bay #301 (Underground Parking)',
             assignedButler: b.room?.assignedButler || 'Tariq J.',
           },
           guestName: b.guestDetails?.name || 'In-House Guest',
@@ -379,7 +437,7 @@ export default function GuestPortalPage() {
             ...matchedRes,
             id: b.room?._id || matchedRes.id,
             credentials: b.room?.credentials || { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
-            valetBay: b.room?.valetBay || 'Bay #301 (Subterranean Lift)',
+            valetBay: b.room?.valetBay || 'Bay #301 (Underground Parking)',
             assignedButler: b.room?.assignedButler || 'Tariq J.',
           },
           guestName: b.guestDetails?.name || 'Dr. Tariq Khan',
@@ -526,13 +584,13 @@ export default function GuestPortalPage() {
           {/* Center: Suite Identifier & Live Dot (Zero Huge Banner) */}
           {isUnlocked && (
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
-              <div className="flex items-baseline gap-1.5 font-mono text-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
+              <div className="flex items-baseline gap-1.5 font-mono text-xs sm:text-sm">
                 <span className="font-bold text-slate-900 uppercase tracking-wider">
                   {currentBooking.roomNumber || 'Suite 301'}
                 </span>
-                <span className="hidden sm:inline text-slate-500 text-[11px] tracking-wide">
-                  &bull; In Residence
+                <span className="hidden sm:inline text-slate-500 text-xs tracking-wide">
+                  &bull; Checked In
                 </span>
               </div>
             </div>
@@ -546,7 +604,7 @@ export default function GuestPortalPage() {
                 <button
                   type="button"
                   onClick={() => setIsDND((prev) => !prev)}
-                  className={`touch-target px-2.5 py-1 text-[11px] font-mono font-bold rounded-[2px] transition-all cursor-pointer border ${
+                  className={`touch-target px-3 py-1.5 text-xs font-mono font-bold rounded-[2px] transition-all cursor-pointer border ${
                     isDND
                       ? 'bg-rose-900 text-rose-100 border-rose-950 shadow-xs'
                       : 'bg-white text-slate-700 border-slate-200 hover:border-slate-900'
@@ -561,7 +619,7 @@ export default function GuestPortalPage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab('folio')}
-                  className="touch-target px-3 py-1 bg-slate-900 text-[#FFF0CA] font-mono text-[11px] font-bold uppercase tracking-wider rounded-[2px] hover:bg-slate-800 transition-all cursor-pointer active:scale-95 shadow-xs"
+                  className="touch-target px-3.5 py-1.5 bg-slate-900 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] hover:bg-slate-800 transition-all cursor-pointer active:scale-95 shadow-xs"
                 >
                   <span className="hidden sm:inline">Bill: </span>
                   <span>PKR {Math.round(financials.totalStayAmount / 1000)}k &rarr;</span>
@@ -573,14 +631,14 @@ export default function GuestPortalPage() {
               <button
                 type="button"
                 onClick={logout}
-                className="touch-target px-2 text-[10px] font-mono text-slate-500 hover:text-slate-900 uppercase transition-colors"
+                className="touch-target px-2 text-xs font-mono text-slate-500 hover:text-slate-900 uppercase transition-colors"
               >
                 Sign Out
               </button>
             ) : (
               <Link
                 to="/login?redirect=/my-stay"
-                className="touch-target text-[10px] font-mono text-emerald-900 font-bold uppercase tracking-widest underline"
+                className="touch-target text-xs font-mono text-emerald-900 font-bold uppercase tracking-widest underline"
               >
                 Sign In
               </Link>
@@ -593,28 +651,29 @@ export default function GuestPortalPage() {
           <div className="border-t border-slate-200/60 bg-[#FAF8F5]">
             <nav
               aria-label="Guest Operations Navigation"
-              className="max-w-7xl mx-auto px-4 sm:px-8 py-1.5 flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2.5 overflow-x-auto scrollbar-none"
+              className="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none"
             >
               {[
-                { id: 'suite', label: 'My Suite & Key', icon: '🔑' },
-                { id: 'dining', label: 'In-Suite Dining', icon: '🍽️' },
-                { id: 'spa', label: 'Cedar Spa & Linens', icon: '🌿' },
-                { id: 'concierge', label: 'Butler & Services', icon: '🛎️' },
-                { id: 'folio', label: 'Room Bill & Checkout', icon: '🧾' },
+                { id: 'suite', label: 'My Suite & Key', Icon: KeyIcon },
+                { id: 'dining', label: 'In-Suite Dining', Icon: DiningIcon },
+                { id: 'spa', label: 'Cedar Spa & Linens', Icon: SpaIcon },
+                { id: 'concierge', label: 'Butler & Services', Icon: ButlerIcon },
+                { id: 'folio', label: 'Room Bill & Checkout', Icon: FolioIcon },
               ].map((tab) => {
                 const isActive = activeTab === tab.id
+                const TabIcon = tab.Icon
                 return (
                   <button
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`touch-target px-3.5 sm:px-4 py-1.5 rounded-full font-mono text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+                    className={`touch-target px-4 sm:px-5 py-2.5 rounded-full font-mono text-xs sm:text-[13px] font-semibold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
                       isActive
                         ? 'bg-slate-900 text-[#FFF0CA] shadow-sm'
                         : 'bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80'
                     }`}
                   >
-                    <span>{tab.icon}</span>
+                    <TabIcon className="w-4 h-4" />
                     <span>{tab.label}</span>
                   </button>
                 )
@@ -683,11 +742,11 @@ export default function GuestPortalPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/35" />
 
                     {/* Top Overlay Badges */}
-                    <div className="absolute top-3 inset-x-3 sm:top-4 sm:inset-x-4 flex items-center justify-between font-mono text-[10px] text-white">
-                      <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-[2px] border border-white/15 tracking-widest uppercase text-[#FFF0CA] font-bold">
+                    <div className="absolute top-3 inset-x-3 sm:top-4 sm:inset-x-4 flex items-center justify-between font-mono text-xs text-white">
+                      <span className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-[2px] border border-white/15 tracking-widest uppercase text-[#FFF0CA] font-bold">
                         {currentBooking.roomNumber || 'Suite 301'} &bull; 210 m²
                       </span>
-                      <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-[2px] border border-white/15 text-slate-300 tracking-wider">
+                      <span className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-[2px] border border-white/15 text-slate-300 tracking-wider">
                         {currentBooking.checkIn} – {currentBooking.checkOut}
                       </span>
                     </div>
@@ -695,10 +754,10 @@ export default function GuestPortalPage() {
                     {/* Bottom Digital Key Trigger */}
                     <div className="absolute bottom-4 inset-x-4 sm:bottom-5 sm:inset-x-5 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                       <div>
-                        <span className="text-[9px] font-mono tracking-[0.25em] text-amber-400 uppercase block font-bold">
+                        <span className="text-[11px] font-mono tracking-[0.25em] text-amber-400 uppercase block font-bold">
                           ROOM KEY &bull; DIGITAL ACCESS
                         </span>
-                        <h2 className="font-serif-grand text-xl sm:text-2xl text-white block mt-0.5">
+                        <h2 className="font-serif-grand text-2xl sm:text-3xl text-white block mt-1">
                           {currentBooking.residence?.name || 'The Horizon Penthouse'}
                         </h2>
                       </div>
@@ -707,13 +766,17 @@ export default function GuestPortalPage() {
                         type="button"
                         onClick={handleTriggerDigitalKey}
                         disabled={isKeyUnlocking}
-                        className={`touch-target px-5 py-3 font-mono text-xs font-bold uppercase tracking-widest rounded-full shadow-2xl flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 active:scale-95 ${
+                        className={`touch-target px-6 py-3.5 font-mono text-xs sm:text-[13px] font-bold uppercase tracking-widest rounded-full shadow-2xl flex items-center justify-center gap-2.5 transition-all cursor-pointer shrink-0 active:scale-95 ${
                           isKeyUnlocking
                             ? 'bg-amber-400 text-slate-950 scale-102 ring-4 ring-amber-300/40'
                             : 'bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-slate-950 hover:brightness-105'
                         }`}
                       >
-                        <span className="text-sm">{isKeyUnlocking ? '⚙️' : '🔑'}</span>
+                        {isKeyUnlocking ? (
+                          <SpinnerIcon className="w-4 h-4 text-slate-950 animate-spin" />
+                        ) : (
+                          <KeyIcon className="w-4 h-4 text-slate-950" />
+                        )}
                         <span>{isKeyUnlocking ? 'Unlocking Door...' : 'Unlock Suite Door'}</span>
                       </button>
                     </div>
@@ -721,12 +784,12 @@ export default function GuestPortalPage() {
 
                   {/* Key Unlock Feedback Toast */}
                   {keyUnlockedToast && (
-                    <div className="p-3 bg-emerald-950 text-emerald-200 border border-emerald-800 rounded-[2px] font-mono text-xs flex items-center justify-between shadow-md animate-fade-in">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <div className="p-3.5 bg-emerald-950 text-emerald-200 border border-emerald-800 rounded-[2px] font-mono text-xs sm:text-sm flex items-center justify-between shadow-md animate-fade-in">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
                         <span>Suite 301 lock disengaged. Welcome inside, {currentBooking.guestName}.</span>
                       </div>
-                      <span className="text-[10px] text-emerald-400 uppercase font-bold">
+                      <span className="text-[11px] text-emerald-400 uppercase font-bold">
                         UNLOCKED (15S)
                       </span>
                     </div>
@@ -734,70 +797,70 @@ export default function GuestPortalPage() {
                 </div>
 
                 {/* Right: In-Room Amenities & Tactile Controls */}
-                <div className="lg:col-span-5 space-y-3.5">
+                <div className="lg:col-span-5 space-y-4">
                   <div>
-                    <span className="text-[9px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
+                    <span className="text-[11px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
                       Suite Essentials
                     </span>
-                    <h3 className="type-h2 text-xl sm:text-2xl text-slate-900 mt-0.5">
+                    <h3 className="type-h2 text-2xl sm:text-3xl text-slate-900 mt-0.5">
                       Room Info
                     </h3>
                   </div>
 
                   {/* 3 Metric Control Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {/* Wi-Fi Card */}
-                    <div className="p-3 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
+                    <div className="p-3.5 sm:p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-mono text-slate-400 uppercase font-bold">WI-FI</span>
+                        <span className="text-[11px] font-mono text-slate-400 uppercase font-bold">WI-FI</span>
                         <button
                           type="button"
                           onClick={handleCopyWifi}
-                          className="text-[9px] font-mono text-emerald-900 uppercase font-bold hover:underline cursor-pointer"
+                          className="text-[11px] font-mono text-emerald-900 uppercase font-bold hover:underline cursor-pointer"
                         >
                           {wifiCopied ? 'Copied!' : 'Copy'}
                         </button>
                       </div>
-                      <span className="font-mono text-xs font-bold text-slate-900 block truncate">
+                      <span className="font-mono text-sm font-bold text-slate-900 block truncate">
                         Stayza_Guest
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono block">Pass: pacific2026</span>
+                      <span className="text-xs text-slate-500 font-mono block">Pass: pacific2026</span>
                     </div>
 
                     {/* Climate Card */}
-                    <div className="p-3 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
+                    <div className="p-3.5 sm:p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-mono text-slate-400 uppercase font-bold">CLIMATE</span>
+                        <span className="text-[11px] font-mono text-slate-400 uppercase font-bold">CLIMATE</span>
                         <button
                           type="button"
                           onClick={() => setClimateMode((prev) => (prev === 'ocean' ? 'cedar' : 'ocean'))}
-                          className="text-[9px] font-mono text-slate-900 font-bold hover:underline cursor-pointer"
+                          className="text-[11px] font-mono text-slate-900 font-bold hover:underline cursor-pointer"
                         >
                           Toggle
                         </button>
                       </div>
-                      <span className="font-mono text-xs font-bold text-slate-900 block">
+                      <span className="font-mono text-sm font-bold text-slate-900 block">
                         {climateMode === 'ocean' ? '21°C • Ocean' : '24°C • Cedar'}
                       </span>
-                      <span className="text-[10px] text-emerald-800 font-mono block">Automated</span>
+                      <span className="text-xs text-emerald-800 font-mono block">Automated</span>
                     </div>
 
                     {/* Valet Bay Card */}
-                    <div className="p-3 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
-                      <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">VALET</span>
-                      <span className="font-mono text-xs font-bold text-slate-900 block">
+                    <div className="p-3.5 sm:p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
+                      <span className="text-[11px] font-mono text-slate-400 uppercase block font-bold">VALET</span>
+                      <span className="font-mono text-sm font-bold text-slate-900 block">
                         Bay #301
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono block">Subterranean Lift</span>
+                      <span className="text-xs text-slate-500 font-mono block">Underground Parking</span>
                     </div>
                   </div>
 
                   {/* Private Butler & Residence Features */}
-                  <div className="p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-2.5 shadow-xs text-xs text-slate-600">
-                    <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div className="p-4 sm:p-5 bg-white border border-slate-200/90 rounded-[2px] space-y-3 shadow-xs text-sm text-slate-600">
+                    <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
                       <div>
-                        <span className="font-bold text-slate-900 block">Private Butler on Duty</span>
-                        <span className="text-[11px] text-slate-500 font-mono">Tariq J. &bull; In-House</span>
+                        <span className="font-bold text-slate-900 block text-sm">Private Butler on Duty</span>
+                        <span className="text-xs text-slate-500 font-mono">Tariq J. &bull; In-House</span>
                       </div>
                       <button
                         type="button"
@@ -807,29 +870,29 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Front Desk',
                         })}
-                        className="touch-target px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-900 font-mono text-[10px] uppercase font-bold rounded-[2px] transition-colors cursor-pointer"
+                        className="touch-target px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-900 font-mono text-xs uppercase font-bold rounded-[2px] transition-colors cursor-pointer"
                       >
                         Request Butler &rarr;
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
                       <span className="font-medium text-slate-800">Private Oceanfront Pool</span>
-                      <span className="font-mono text-emerald-900 font-semibold text-[11px]">Heated &bull; 28°C</span>
+                      <span className="font-mono text-emerald-900 font-semibold text-xs">Heated &bull; 28°C</span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-slate-800">Reservation Reference</span>
-                      <span className="font-mono text-slate-900 font-bold text-[11px]">{currentBooking.bookingRef}</span>
+                      <span className="font-mono text-slate-900 font-bold text-xs">{currentBooking.bookingRef}</span>
                     </div>
                   </div>
 
                   {/* Quick Housekeeping Triggers */}
-                  <div className="space-y-1.5">
-                    <span className="text-[9px] font-mono tracking-wider font-bold text-slate-400 uppercase block">
-                      QUICK REQUESTS &bull; 1-TOUCH DISPATCH
+                  <div className="space-y-2">
+                    <span className="text-[11px] font-mono tracking-wider font-bold text-slate-400 uppercase block">
+                      QUICK ROOM SERVICES &bull; 1-TOUCH REQUEST
                     </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => handleRequestService({
@@ -838,12 +901,12 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-2"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs sm:text-sm transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
                       >
-                        <span className="text-base">🛏️</span>
+                        <BedIcon className="w-5 h-5 text-amber-800 shrink-0" />
                         <div>
-                          <span className="font-bold text-slate-900 block text-[11px]">Fresh Linens</span>
-                          <span className="text-[9px] text-slate-500">Complimentary</span>
+                          <span className="font-bold text-slate-900 block text-xs sm:text-sm">Fresh Linens</span>
+                          <span className="text-[11px] text-slate-500">Complimentary</span>
                         </div>
                       </button>
 
@@ -855,12 +918,12 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-2"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs sm:text-sm transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
                       >
-                        <span className="text-base">🕯️</span>
+                        <CandleIcon className="w-5 h-5 text-amber-800 shrink-0" />
                         <div>
-                          <span className="font-bold text-slate-900 block text-[11px]">Turn-Down Setup</span>
-                          <span className="text-[9px] text-slate-500">Cedar Mist &bull; Free</span>
+                          <span className="font-bold text-slate-900 block text-xs sm:text-sm">Turn-Down Setup</span>
+                          <span className="text-[11px] text-slate-500">Cedar Mist &bull; Free</span>
                         </div>
                       </button>
                     </div>
@@ -885,7 +948,7 @@ export default function GuestPortalPage() {
                   </h2>
                 </div>
                 <span className="text-xs font-mono text-slate-500">
-                  Served in {currentBooking.roomNumber || 'Suite 301'} &bull; Charges post to active folio
+                  Served in {currentBooking.roomNumber || 'Suite 301'} &bull; Added to your room bill
                 </span>
               </div>
 

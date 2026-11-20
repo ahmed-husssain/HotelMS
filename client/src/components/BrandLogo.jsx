@@ -110,7 +110,7 @@ export default function BrandLogo({
       <Link
         to={to}
         className="group inline-flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-800 transition-opacity hover:opacity-90 active:scale-[0.98]"
-        aria-label="Stayza — Return to home"
+        aria-label="Stayza - Return to home"
       >
         {content}
       </Link>

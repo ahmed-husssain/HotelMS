@@ -48,7 +48,7 @@ export default function Navbar({ onOpenDrawer }) {
   const navItems = useMemo(() => [
     {
       num: '01',
-      label: 'Residences',
+      label: 'Rooms & Suites',
       href: '/suites',
       isRouter: true,
       desc: 'Luxury Ocean Suites & Villas',
@@ -61,7 +61,7 @@ export default function Navbar({ onOpenDrawer }) {
     },
     {
       num: '02',
-      label: 'The Estate',
+      label: 'Dining & Spa',
       href: '#experience',
       desc: 'Mineral Hot Springs & Dining',
       preview: {
@@ -140,13 +140,13 @@ export default function Navbar({ onOpenDrawer }) {
               to="/suites"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <StaggeredWaveText text="Residences" />
+              <StaggeredWaveText text="Rooms & Suites" />
             </Link>
             <a
               href="#experience"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <StaggeredWaveText text="The Estate" />
+              <StaggeredWaveText text="Dining & Spa" />
             </a>
           </nav>
 

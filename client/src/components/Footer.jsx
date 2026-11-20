@@ -133,10 +133,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Residences & Rates */}
+          {/* Column 2: Rooms & Suites Rates */}
           <div className="space-y-3">
             <span className="text-[10px] font-mono tracking-[0.2em] font-bold text-[#121619] uppercase block pb-1 border-b border-[#E5DFD5]">
-              Residences
+              Rooms &amp; Suites
             </span>
             <ul className="space-y-2 text-xs">
               <li>
@@ -246,7 +246,7 @@ export default function Footer() {
                 <div className="flex items-center justify-between text-[#44403C]">
                   <span className="text-[11px] font-mono group-hover:text-[#121619] transition-colors flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-500 group-hover:bg-emerald-600 transition-colors" />
-                    Staff Operations Terminal
+                    Staff Portal
                   </span>
                   <span className="font-mono text-xs text-[#57534E] group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </div>

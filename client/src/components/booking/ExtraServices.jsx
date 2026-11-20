@@ -22,11 +22,11 @@ export default function ExtraServices({ selectedAddons, toggleAddon }) {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-        <span className="text-xs font-mono font-bold tracking-[0.2em] text-slate-900 uppercase">
-          03 &bull; Concierge Experiences
+        <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.15em] text-slate-900 uppercase">
+          3. Optional Services
         </span>
-        <span className="text-[10px] font-mono text-slate-400 uppercase">
-          Optional Add-ons
+        <span className="text-[11px] font-mono text-slate-500 uppercase">
+          Optional Extras
         </span>
       </div>
 

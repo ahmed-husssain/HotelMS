@@ -45,7 +45,7 @@ export default function ConfirmationPage() {
             <BrandLogo variant="full" theme="dark" size="sm" />
           </div>
           <span className="block text-[8px] sm:text-[9px] tracking-[0.25em] text-emerald-800 font-semibold uppercase font-mono">
-            RESERVATION GUARANTEED &bull; SAFEPAY VERIFIED
+            RESERVATION CONFIRMED &bull; SAFEPAY VERIFIED
           </span>
         </div>
 
@@ -66,7 +66,7 @@ export default function ConfirmationPage() {
                   className="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-mono rounded-[2px] transition-colors cursor-pointer flex items-center gap-1 active:scale-95"
                   title="Copy confirmation code"
                 >
-                  <span>{copied ? '✓ Copied' : '📋 Copy'}</span>
+                  <span>{copied ? '✓ Copied' : 'Copy'}</span>
                 </button>
               </div>
             </div>
@@ -78,7 +78,9 @@ export default function ConfirmationPage() {
           {/* Important Notice Box for the Booking Code */}
           <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-[2px] text-xs font-mono text-amber-950 space-y-1">
             <div className="flex items-center gap-1.5 font-bold text-slate-900 text-[11px]">
-              <span>🔑</span>
+              <svg className="w-3.5 h-3.5 text-amber-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 2l-2 2m-1.5 1.5L16 7l-2-2m-3.5 3.5a5 5 0 1 0-7.07 7.07 5 5 0 0 0 7.07-7.07z" />
+              </svg>
               <span>Important: Save This Confirmation Code</span>
             </div>
             <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
@@ -129,7 +131,7 @@ export default function ConfirmationPage() {
               to={`/my-stay?ref=${booking.bookingRef || 'ST-301-9041'}`}
               className="tactile flex-1 py-2.5 text-center bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] flex items-center justify-center gap-1 min-h-[44px]"
             >
-              <span>Open Guest Portal</span>
+              <span>Open My Room &amp; Digital Key</span>
               <span>&rarr;</span>
             </Link>
             {currentUser && (currentUser.role === 'admin' || currentUser.role === 'receptionist') ? (
