@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import CustomCursor from './components/CustomCursor'
 import ErrorBoundary from './components/ErrorBoundary'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
@@ -36,9 +35,6 @@ function AppRoutes() {
 
   return (
     <>
-      {/* Magnetic Architectural Cursor Follower (Disabled on Touch) */}
-      <CustomCursor />
-
       <Suspense fallback={<PageFallback />}>
         <Routes>
           {/* Guest Public Luxury Experience */}
