@@ -1,26 +1,58 @@
-import React, { Suspense, lazy } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import React, { Suspense, lazy, useEffect } from 'react'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import ErrorBoundary from './components/ErrorBoundary'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { HotelDataProvider } from './context/HotelDataContext'
 import { ToastProvider } from './context/ToastContext'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
-import LandingPage from './pages/LandingPage'
 
-// Lazy-loaded auxiliary routes for ultra-low initial bundle weight
-const RoomsPage = lazy(() => import('./pages/RoomsPage'))
-const EstatePage = lazy(() => import('./pages/EstatePage'))
-const BookingPage = lazy(() => import('./pages/BookingPage'))
-const GuestPortalPage = lazy(() => import('./pages/GuestPortalPage'))
-const ConfirmationPage = lazy(() => import('./pages/ConfirmationPage'))
-const PaymentVerifyPage = lazy(() => import('./pages/PaymentVerifyPage'))
-const LoginPage = lazy(() => import('./pages/LoginPage'))
-const RegisterPage = lazy(() => import('./pages/RegisterPage'))
-const FrontDeskPage = lazy(() => import('./pages/FrontDeskPage'))
-const HousekeepingPage = lazy(() => import('./pages/HousekeepingPage'))
-const AdminPage = lazy(() => import('./pages/AdminPage'))
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+// Direct Core Route Imports: Instant 0ms transition without chunk lag
+import LandingPage from './pages/LandingPage'
+import RoomsPage from './pages/RoomsPage'
+import EstatePage from './pages/EstatePage'
+import BookingPage from './pages/BookingPage'
+
+// Safe Lazy Helper: Automatically reloads if a new deployment changed chunk hashes
+function safeLazy(importer) {
+  return lazy(() =>
+    importer().catch((error) => {
+      console.warn('[Stayza Router] Stale deploy chunk detected. Reloading latest bundle:', error.message)
+      const key = `stayza_chunk_retry_${window.location.pathname}`
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, '1')
+        window.location.reload()
+      }
+      throw error
+    })
+  )
+}
+
+// Lazy-loaded auxiliary routes with auto-recovery
+const GuestPortalPage = safeLazy(() => import('./pages/GuestPortalPage'))
+const ConfirmationPage = safeLazy(() => import('./pages/ConfirmationPage'))
+const PaymentVerifyPage = safeLazy(() => import('./pages/PaymentVerifyPage'))
+const LoginPage = safeLazy(() => import('./pages/LoginPage'))
+const RegisterPage = safeLazy(() => import('./pages/RegisterPage'))
+const FrontDeskPage = safeLazy(() => import('./pages/FrontDeskPage'))
+const HousekeepingPage = safeLazy(() => import('./pages/HousekeepingPage'))
+const AdminPage = safeLazy(() => import('./pages/AdminPage'))
+const NotFoundPage = safeLazy(() => import('./pages/NotFoundPage'))
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    try {
+      sessionStorage.removeItem(`stayza_chunk_retry_${pathname}`)
+    } catch {
+      // Ignore storage errors
+    }
+  }, [pathname])
+
+  return null
+}
 
 function PageFallback() {
   return (
@@ -36,6 +68,7 @@ function AppRoutes() {
 
   return (
     <>
+      <ScrollToTop />
       <Suspense fallback={<PageFallback />}>
         <Routes>
           {/* Guest Public Luxury Experience */}

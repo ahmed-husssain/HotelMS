@@ -6,7 +6,6 @@ import RoomsCarousel from '../components/RoomsCarousel'
 import SuiteSpecsDrawer from '../components/suites/SuiteSpecsDrawer'
 import { RESIDENCES } from '../data/residences'
 import { useAuth } from '../context/AuthContext'
-import { useSmoothScroll } from '../hooks/useSmoothScroll'
 
 /**
  * Curated Architectural Collections (Doc Option A)
@@ -40,7 +39,6 @@ const ARCHITECTURAL_COLLECTIONS = [
 ]
 
 export default function RoomsPage() {
-  useSmoothScroll()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { currentUser } = useAuth()
