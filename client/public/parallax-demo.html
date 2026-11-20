@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stayza — True Parallax Interactive Engineering Demo</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- GSAP & Lenis Smooth Scroll CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Syne', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Space Grotesk', 'monospace'],
+          },
+          colors: {
+            alabaster: '#FAF8F5',
+            obsidian: '#0E1201',
+            accent: '#FFF0CA',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #0E1201;
+      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+    .hud-glass {
+      background: rgba(14, 18, 1, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 240, 202, 0.2);
+    }
+    .grid-lines {
+      background-size: 60px 60px;
+      background-image: 
+        linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="selection:bg-emerald-900 selection:text-white">
+
+  <!-- ================================================================= -->
+  <!-- FLOATING INTERACTIVE TELEMETRY HUD (SWITCH BETWEEN MODES)         -->
+  <!-- ================================================================= -->
+  <div class="fixed bottom-6 right-6 z-50 hud-glass text-[#FAF8F5] p-5 rounded-[4px] shadow-2xl max-w-sm w-full font-mono text-xs select-none">
+    <div class="flex items-center justify-between border-b border-white/15 pb-3 mb-3">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span class="font-bold tracking-widest uppercase text-[11px] text-emerald-300">PARALLAX PHYSICS HUD</span>
+      </div>
+      <span id="hud-fps" class="text-white/60 text-[10px]">60 FPS</span>
+    </div>
+
+    <!-- Mode Selector Toggle -->
+    <div class="mb-4">
+      <label class="text-[10px] text-white/50 uppercase tracking-widest block mb-1.5">PARALLAX ENGINE MODE:</label>
+      <div class="grid grid-cols-2 gap-1.5 p-1 bg-black/40 rounded border border-white/10">
+        <button id="btn-true-parallax" onclick="switchMode('true')" class="py-2 px-2.5 text-center text-[10px] font-bold rounded transition-all bg-emerald-600 text-white shadow">
+          1. True Multi-Speed
+        </button>
+        <button id="btn-fake-parallax" onclick="switchMode('fake')" class="py-2 px-2.5 text-center text-[10px] font-bold rounded transition-all text-white/60 hover:text-white">
+          2. Fake Static Glass
+        </button>
+      </div>
+      <p id="mode-explainer" class="text-[10px] text-emerald-300/90 mt-2 leading-tight">
+        Active: Layers move at 0.20x, 0.45x, 1.0x, and 1.35x differential velocities. Optical depth is active.
+      </p>
+    </div>
+
+    <!-- Live Telemetry Readout -->
+    <div class="space-y-1.5 text-[10px] bg-black/30 p-2.5 rounded border border-white/5">
+      <div class="flex justify-between">
+        <span class="text-white/50">Scroll Position:</span>
+        <span id="tel-scroll" class="text-white font-bold">0 px</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-white/50">Layer 1 (Horizon Sky @ 0.20x):</span>
+        <span id="tel-l1" class="text-cyan-300">0.0 px</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-white/50">Layer 2 (Cliff Villa @ 0.45x):</span>
+        <span id="tel-l2" class="text-emerald-300">0.0 px</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-white/50">Layer 3 (Foreground Text @ 1.00x):</span>
+        <span id="tel-l3" class="text-[#FFF0CA]">0.0 px</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-white/50">Layer 4 (Floating Badge @ 1.35x):</span>
+        <span id="tel-l4" class="text-purple-300">0.0 px</span>
+      </div>
+    </div>
+
+    <div class="mt-3 pt-2 border-t border-white/10 flex justify-between items-center text-[9px] text-white/40">
+      <span>Scroll mouse wheel to test</span>
+      <span class="text-emerald-400 font-bold">GPU ACCELERATED</span>
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- DEMO HERO: 3-PLANE 3D DIFFERENTIAL VELOCITY SECTION                -->
+  <!-- ================================================================= -->
+  <section id="hero-container" class="relative h-[115vh] w-full overflow-hidden bg-slate-950 flex flex-col justify-between pt-24 pb-16 px-6 sm:px-16">
+    
+    <!-- PLANE 1: Deep Horizon & Ocean Sky (Slowest Velocity: 0.20x) -->
+    <div id="plane-1" class="absolute inset-0 w-full h-[140%] -top-[20%] pointer-events-none will-change-transform z-0">
+      <img 
+        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85" 
+        alt="Distant Arabian sea ocean horizon" 
+        class="w-full h-full object-cover brightness-[0.70] contrast-[1.1]"
+      />
+      <!-- Depth Tint -->
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+    </div>
+
+    <!-- PLANE 2: Midground Cliffside Architecture (Medium Velocity: 0.45x) -->
+    <div id="plane-2" class="absolute inset-x-0 bottom-0 h-[85%] pointer-events-none will-change-transform z-10 flex items-end justify-center">
+      <div class="w-full max-w-6xl mx-auto px-4 h-full relative">
+        <img 
+          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=85" 
+          alt="Cliffside architectural resort residence" 
+          class="w-full h-full object-cover object-bottom rounded-t-[6px] shadow-2xl brightness-95"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+        <div class="absolute top-6 left-10 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded text-[10px] font-mono text-emerald-400 border border-emerald-500/30">
+          MIDGROUND PLANE (0.45× VELOCITY)
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANE 3: Foreground Content & Editorial Badges (Full Velocity: 1.00x) -->
+    <div id="plane-3" class="relative z-20 max-w-5xl mx-auto w-full my-auto text-center space-y-6 pt-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-xs font-mono tracking-widest text-[#FFF0CA] uppercase">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span>OPTICAL PARALLAX IN ACTION &bull; 42 ACRES</span>
+      </div>
+
+      <h1 class="font-serif text-5xl sm:text-7xl lg:text-8xl text-[#FAF8F5] font-light leading-[1.02] tracking-tight">
+        Architecture in Motion.
+      </h1>
+
+      <p class="text-sm sm:text-lg text-slate-200 max-w-xl mx-auto font-light leading-relaxed">
+        Watch how the deep ocean horizon, the cliffside villa, and this text move at three distinct physical velocities as you scroll down.
+      </p>
+
+      <div class="pt-4 flex items-center justify-center gap-4 text-xs font-mono">
+        <span class="px-5 py-3 bg-[#FFF0CA] text-slate-950 font-bold uppercase tracking-wider rounded-[2px] shadow-lg">
+          Scroll Down to Inspect &darr;
+        </span>
+      </div>
+    </div>
+
+    <!-- PLANE 4: Floating Hyper-Speed Callout Badge (High Velocity: 1.35x) -->
+    <div id="plane-4" class="absolute bottom-24 right-12 z-30 hidden lg:block will-change-transform">
+      <div class="p-4 hud-glass rounded border border-purple-400/30 text-left space-y-1 w-64 shadow-2xl">
+        <span class="text-[9px] font-mono uppercase text-purple-300 font-bold block">FOREGROUND ACCELERATOR (1.35×)</span>
+        <strong class="font-serif text-sm text-white block">Drifts Faster Than Page</strong>
+        <p class="text-[10px] text-slate-300 font-sans leading-tight">
+          This badge sweeps upward faster than normal text, popping out towards the viewer's eye.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom Indicator -->
+    <div class="relative z-20 max-w-6xl w-full mx-auto flex items-center justify-between text-[11px] font-mono text-white/60 border-t border-white/10 pt-4">
+      <span>PLANE 1 (0.20x)</span>
+      <span class="text-emerald-400 font-bold animate-pulse">TRUE DEPTH PERCEPTION ACTIVE</span>
+      <span>PLANE 4 (1.35x)</span>
+    </div>
+  </section>
+
+
+  <!-- ================================================================= -->
+  <!-- DEMO SECTION 2: THE "WINDOW DRIFT" (CAMERA PAN INSIDE A FRAME)     -->
+  <!-- ================================================================= -->
+  <section class="py-24 sm:py-32 px-6 sm:px-16 max-w-6xl mx-auto space-y-16">
+    <div class="border-b border-slate-300 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div>
+        <span class="text-xs font-mono uppercase tracking-[0.25em] text-emerald-800 font-bold block">
+          PARALLAX TECHNIQUE 02
+        </span>
+        <h2 class="font-serif text-3xl sm:text-5xl text-slate-900 font-light mt-1">
+          The Architectural Window Drift
+        </h2>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-600 max-w-md font-sans leading-relaxed">
+        Notice the image container stays in place, but the photograph inside slowly glides downwards. This creates the optical sensation of looking through a camera viewfinder panning across the coast.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <!-- Left Narrative -->
+      <div class="lg:col-span-5 space-y-6">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">THE HARVEST PAVILION</span>
+        <h3 class="font-serif text-2xl sm:text-3xl text-slate-900 leading-tight">
+          Seaside Dining Glides Inside Its Frame.
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
+          In standard web design, an image is glued statically to its box. In genuine parallax, the box acts as a window into a larger world. As you scroll past, the camera perspective shifts by 25% inside the frame.
+        </p>
+        <div class="p-4 bg-white border border-slate-200 rounded-[2px] font-mono text-xs space-y-2">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Container Bounds:</span>
+            <strong>overflow: hidden</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Image Scale:</span>
+            <strong>125% Height</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Internal Translation:</span>
+            <strong class="text-emerald-700">-15% &rarr; +15% Y</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Window Drift Frame -->
+      <div class="lg:col-span-7">
+        <div class="relative h-96 sm:h-[480px] w-full rounded-[4px] overflow-hidden bg-slate-950 shadow-2xl border border-slate-200">
+          <!-- The Drift Image (Scaled 125%, Translates on Scrub) -->
+          <img 
+            id="drift-img-1" 
+            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2000&q=85" 
+            alt="Oceanfront dining table at dusk" 
+            class="absolute inset-0 w-full h-[130%] -top-[15%] object-cover will-change-transform"
+          />
+          <!-- Frame Label Overlay -->
+          <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded text-[10px] font-mono text-white border border-white/10">
+            INTERNAL DRIFT SPEED: 0.30×
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================================================= -->
+  <!-- DEMO SECTION 3: ASYMMETRIC 2-COLUMN PARALLAX                       -->
+  <!-- ================================================================= -->
+  <section class="py-24 bg-white border-y border-slate-200 px-6 sm:px-16">
+    <div class="max-w-6xl mx-auto space-y-16">
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <span class="text-xs font-mono uppercase tracking-[0.25em] text-emerald-800 font-bold block">
+          PARALLAX TECHNIQUE 03
+        </span>
+        <h2 class="font-serif text-3xl sm:text-5xl text-slate-900 font-light">
+          Asymmetric Dual-Column Velocity
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 font-sans">
+          Left column moves at normal 1.0x scroll speed. Right column moves at 0.70x offset speed, letting images float past each other smoothly.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-start">
+        
+        <!-- Column 1: Normal 1.0x Speed -->
+        <div class="space-y-12">
+          <div class="p-8 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-4">
+            <span class="text-[10px] font-mono text-emerald-900 uppercase font-bold tracking-widest block">COLUMN A (1.00× STANDARD)</span>
+            <h3 class="font-serif text-2xl text-slate-900">Geothermal Coastal Springs</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-sans">
+              Natural 38°C thermal mineral water pools carved directly from the coastal travertine stone overlooking the Arabian Sea waves.
+            </p>
+            <div class="h-64 rounded-[2px] overflow-hidden bg-slate-900 shadow">
+              <img 
+                src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1400&q=85" 
+                alt="Mineral hot springs" 
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div class="p-8 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-4">
+            <span class="text-[10px] font-mono text-emerald-900 uppercase font-bold tracking-widest block">SUITE 301 (HORIZON PENTHOUSE)</span>
+            <h3 class="font-serif text-2xl text-slate-900">Private Infinity Plunge</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-sans">
+              Panoramic master bedroom with private heated travertine plunge pool suspended 60 feet over the breaking surf.
+            </p>
+          </div>
+        </div>
+
+        <!-- Column 2: Accelerated/Offset Column (0.75x or Float Offset) -->
+        <div id="asymmetric-col-2" class="space-y-12 will-change-transform md:pt-16">
+          <div class="p-8 bg-slate-900 text-white rounded-[2px] space-y-4 shadow-xl">
+            <span class="text-[10px] font-mono text-emerald-300 uppercase font-bold tracking-widest block">COLUMN B (OFFSET FLOAT VELOCITY)</span>
+            <h3 class="font-serif text-2xl text-[#FAF8F5]">Floating Editorial Card</h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-sans">
+              Because this column scrolls at a delayed/differential rate, it doesn't align statically with Column A. It slides across it with natural spatial depth.
+            </p>
+            <div class="h-64 rounded-[2px] overflow-hidden bg-slate-800 shadow">
+              <img 
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=85" 
+                alt="Architecture entrance" 
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div class="p-6 bg-emerald-950 text-[#FAF8F5] rounded-[2px] space-y-2 border border-emerald-800">
+            <span class="text-[9px] font-mono uppercase text-emerald-300 font-bold">PHYSICAL SEPARATION</span>
+            <strong class="font-serif text-lg block">Real Depth, Zero Static Illusions</strong>
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              Every element on this page moves in accordance with real-world optics: layers closer to you move faster, while distant layers drift calmly.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================================================= -->
+  <!-- JAVASCRIPT: LENIS SMOOTH ENGINE + GSAP DIFFERENTIAL VELOCITY      -->
+  <!-- ================================================================= -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 1. Initialize Lenis Smooth Scroll Engine
+    const lenis = new Lenis({
+      duration: 1.0,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // 2. Telemetry and State Management
+    let currentMode = 'true'; // 'true' vs 'fake'
+    let parallaxTimelines = [];
+
+    // DOM Elements for Telemetry
+    const telScroll = document.getElementById('tel-scroll');
+    const telL1 = document.getElementById('tel-l1');
+    const telL2 = document.getElementById('tel-l2');
+    const telL3 = document.getElementById('tel-l3');
+    const telL4 = document.getElementById('tel-l4');
+    const hudFps = document.getElementById('hud-fps');
+    const modeExplainer = document.getElementById('mode-explainer');
+    const btnTrue = document.getElementById('btn-true-parallax');
+    const btnFake = document.getElementById('btn-fake-parallax');
+
+    // FPS Meter
+    let frameCount = 0;
+    let lastTime = performance.now();
+    function updateFPS() {
+      frameCount++;
+      const now = performance.now();
+      if (now - lastTime >= 1000) {
+        hudFps.innerText = `${frameCount} FPS`;
+        frameCount = 0;
+        lastTime = now;
+      }
+      requestAnimationFrame(updateFPS);
+    }
+    updateFPS();
+
+    // 3. Setup Parallax Engine (True vs Fake)
+    function buildParallax() {
+      // Clear existing ScrollTriggers
+      parallaxTimelines.forEach(tl => tl.kill());
+      parallaxTimelines = [];
+      ScrollTrigger.getAll().forEach(st => st.kill());
+
+      const heroEl = document.getElementById('hero-container');
+      const plane1 = document.getElementById('plane-1');
+      const plane2 = document.getElementById('plane-2');
+      const plane3 = document.getElementById('plane-3');
+      const plane4 = document.getElementById('plane-4');
+      const driftImg = document.getElementById('drift-img-1');
+      const col2 = document.getElementById('asymmetric-col-2');
+
+      if (currentMode === 'true') {
+        // =======================================================
+        // TRUE MULTI-LAYER DIFFERENTIAL PARALLAX (THE REAL THING)
+        // =======================================================
+        
+        // Plane 1 (Deep Sky): Moves at 0.20x speed
+        const tl1 = gsap.to(plane1, {
+          yPercent: 25,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroEl,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          }
+        });
+        parallaxTimelines.push(tl1);
+
+        // Plane 2 (Cliff Villa Architecture): Moves at 0.45x speed
+        const tl2 = gsap.to(plane2, {
+          yPercent: 45,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroEl,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          }
+        });
+        parallaxTimelines.push(tl2);
+
+        // Plane 3 (Foreground Headline): Moves at 1.0x (normal + subtle fade)
+        const tl3 = gsap.to(plane3, {
+          yPercent: -20,
+          opacity: 0.15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroEl,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          }
+        });
+        parallaxTimelines.push(tl3);
+
+        // Plane 4 (Floating Accelerator Badge): Moves at 1.35x speed
+        const tl4 = gsap.to(plane4, {
+          yPercent: -80,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroEl,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          }
+        });
+        parallaxTimelines.push(tl4);
+
+        // Window Drift 1: Internal camera pan from -15% to +15%
+        const tlDrift = gsap.fromTo(driftImg, 
+          { yPercent: -15 },
+          {
+            yPercent: 15,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: driftImg.parentElement,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            }
+          }
+        );
+        parallaxTimelines.push(tlDrift);
+
+        // Asymmetric Column 2: 0.70x offset glide
+        const tlCol = gsap.to(col2, {
+          yPercent: -18,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: col2.parentElement,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          }
+        });
+        parallaxTimelines.push(tlCol);
+
+      } else {
+        // =======================================================
+        // FAKE STATIC GLASS MODE (THE WORKAROUND YOU CALLED OUT)
+        // All layers locked at 0 relative speed (completely frozen)
+        // =======================================================
+        gsap.set([plane1, plane2, plane4, driftImg, col2], {
+          yPercent: 0,
+          y: 0,
+          clearProps: 'transform'
+        });
+        gsap.set(plane3, { opacity: 1, yPercent: 0 });
+      }
+
+      ScrollTrigger.refresh();
+    }
+
+    // Initialize on load
+    buildParallax();
+
+    // 4. Mode Switcher
+    window.switchMode = function(mode) {
+      currentMode = mode;
+      if (mode === 'true') {
+        btnTrue.className = 'py-2 px-2.5 text-center text-[10px] font-bold rounded transition-all bg-emerald-600 text-white shadow';
+        btnFake.className = 'py-2 px-2.5 text-center text-[10px] font-bold rounded transition-all text-white/60 hover:text-white';
+        modeExplainer.innerText = 'Active: Layers move at 0.20x, 0.45x, 1.0x, and 1.35x differential velocities. True optical 3D depth.';
+        modeExplainer.className = 'text-[10px] text-emerald-300 mt-2 leading-tight';
+      } else {
+        btnFake.className = 'py-2 px-2.5 text-center text-[10px] font-bold rounded transition-all bg-red-600 text-white shadow';
+        btnTrue.className = 'py-2 px-2.5 text-center text-[10px] font-bold rounded transition-all text-white/60 hover:text-white';
+        modeExplainer.innerText = 'Active: Fake static background (0x velocity). The background is frozen dead. Notice how depth disappears.';
+        modeExplainer.className = 'text-[10px] text-red-300 mt-2 leading-tight';
+      }
+      buildParallax();
+    };
+
+    // 5. Update Telemetry HUD during scroll
+    lenis.on('scroll', (e) => {
+      const scrollY = Math.round(e.scroll);
+      telScroll.innerText = `${scrollY} px`;
+
+      if (currentMode === 'true') {
+        telL1.innerText = `${(scrollY * 0.20).toFixed(1)} px (0.20x)`;
+        telL2.innerText = `${(scrollY * 0.45).toFixed(1)} px (0.45x)`;
+        telL3.innerText = `${scrollY} px (1.00x)`;
+        telL4.innerText = `${(scrollY * 1.35).toFixed(1)} px (1.35x)`;
+      } else {
+        telL1.innerText = `0.0 px (FROZEN 0x)`;
+        telL2.innerText = `0.0 px (FROZEN 0x)`;
+        telL3.innerText = `${scrollY} px (1.00x)`;
+        telL4.innerText = `0.0 px (FROZEN 0x)`;
+      }
+    });
+  </script>
+</body>
+</html>
