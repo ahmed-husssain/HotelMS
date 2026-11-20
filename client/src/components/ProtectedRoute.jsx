@@ -23,7 +23,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
     const roleWorkspaces = {
       guest: { path: '/my-stay', label: 'Guest Portal & Key' },
-      receptionist: { path: '/pms', label: 'Front Desk PMS Terminal' },
+      receptionist: { path: '/reception', label: 'Reception Terminal' },
       housekeeping: { path: '/housekeeping', label: 'Housekeeping & Maintenance' },
       admin: { path: '/admin', label: 'General Manager Console' },
     }

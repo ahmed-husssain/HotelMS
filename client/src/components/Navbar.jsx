@@ -182,7 +182,7 @@ export default function Navbar({ onOpenDrawer }) {
                   currentUser.role === 'admin'
                     ? '/admin'
                     : currentUser.role === 'receptionist'
-                    ? '/pms'
+                    ? '/reception'
                     : currentUser.role === 'housekeeping'
                     ? '/housekeeping'
                     : '/my-stay'

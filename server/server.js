@@ -46,7 +46,12 @@ app.use(cors({
   origin: process.env.CLIENT_URL || '*',
   credentials: true,
 }))
-app.use(express.json())
+app.use(express.json({
+  verify: (req, res, buf) => {
+    // Preserve raw buffer for cryptographic webhook HMAC SHA-256 signature verification
+    req.rawBody = buf
+  },
+}))
 app.use(express.urlencoded({ extended: true }))
 
 // Logging in development
@@ -73,6 +78,7 @@ const bookingRoutes = require('./src/routes/bookingRoutes')
 const staffRoutes = require('./src/routes/staffRoutes')
 const housekeepingRoutes = require('./src/routes/housekeepingRoutes')
 const adminRoutes = require('./src/routes/adminRoutes')
+const paymentRoutes = require('./src/routes/paymentRoutes')
 
 // Welcome & Healthcheck Endpoints
 app.get(['/', '/api'], (req, res) => {
@@ -89,6 +95,7 @@ app.get(['/', '/api'], (req, res) => {
       staff: '/api/staff',
       housekeeping: '/api/housekeeping',
       admin: '/api/admin',
+      payments: '/api/payments',
       health: '/api/health',
     },
     timestamp: new Date().toISOString(),
@@ -112,6 +119,7 @@ app.use(['/api/bookings', '/bookings'], bookingRoutes)
 app.use(['/api/staff', '/staff'], staffRoutes)
 app.use(['/api/housekeeping', '/housekeeping'], housekeepingRoutes)
 app.use(['/api/admin', '/admin'], adminRoutes)
+app.use(['/api/payments', '/payments'], paymentRoutes)
 
 
 // 5. 404 Route Handler

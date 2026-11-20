@@ -47,10 +47,10 @@ export default function AdminPage() {
 
         <div className="flex items-center gap-3">
           <Link
-            to="/pms"
+            to="/reception"
             className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[10px] font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors"
           >
-            Front Desk PMS &rarr;
+            Reception &rarr;
           </Link>
 
           <div className="hidden sm:flex items-center gap-2 pl-3 border-l border-slate-300 text-xs font-mono">

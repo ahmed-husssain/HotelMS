@@ -260,3 +260,25 @@ export async function patchAdminRoomRate(roomIdentifier, nightlyRate) {
 export async function fetchAdminAuditLogs() {
   return request('/admin/audit-logs')
 }
+
+// 7. Safepay Payment Gateway & Ledger API
+export async function createPaymentSession(bookingReference, successUrl, cancelUrl) {
+  return request('/payments/checkout-session', {
+    method: 'POST',
+    body: JSON.stringify({ bookingReference, successUrl, cancelUrl }),
+  })
+}
+
+export async function verifyPaymentSession(bookingReference, trackerToken) {
+  return request('/payments/verify-session', {
+    method: 'POST',
+    body: JSON.stringify({ bookingReference, trackerToken }),
+  })
+}
+
+export async function cancelPaymentSession(bookingReference) {
+  return request('/payments/cancel-session', {
+    method: 'POST',
+    body: JSON.stringify({ bookingReference }),
+  })
+}

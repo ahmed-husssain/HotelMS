@@ -140,7 +140,7 @@ export default function NavMenu({
                     currentUser.role === 'admin'
                       ? '/admin'
                       : currentUser.role === 'receptionist'
-                      ? '/pms'
+                      ? '/reception'
                       : '/housekeeping'
                   }
                   onClick={onClose}

@@ -280,7 +280,7 @@ export default function StaffList({
                   onChange={(e) => setRole(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"
                 >
-                  <option value="receptionist">Front Desk Receptionist (/pms)</option>
+                  <option value="receptionist">Front Desk Receptionist (/reception)</option>
                   <option value="housekeeping">Housekeeping Operations (/housekeeping)</option>
                   <option value="admin">Operations Manager (/admin)</option>
                 </select>

@@ -136,10 +136,10 @@ export default function ConfirmationPage() {
             </Link>
             {currentUser && (currentUser.role === 'admin' || currentUser.role === 'receptionist') ? (
               <Link
-                to="/pms"
+                to="/reception"
                 className="tactile flex-1 py-2.5 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] flex items-center justify-center gap-1 min-h-[44px]"
               >
-                <span>View Staff PMS</span>
+                <span>View Reception</span>
                 <span>&rarr;</span>
               </Link>
             ) : (

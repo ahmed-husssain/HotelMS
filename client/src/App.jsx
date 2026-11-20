@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
 import ErrorBoundary from './components/ErrorBoundary'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -14,6 +14,7 @@ const RoomsPage = lazy(() => import('./pages/RoomsPage'))
 const BookingPage = lazy(() => import('./pages/BookingPage'))
 const GuestPortalPage = lazy(() => import('./pages/GuestPortalPage'))
 const ConfirmationPage = lazy(() => import('./pages/ConfirmationPage'))
+const PaymentVerifyPage = lazy(() => import('./pages/PaymentVerifyPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const FrontDeskPage = lazy(() => import('./pages/FrontDeskPage'))
@@ -57,19 +58,25 @@ function AppRoutes() {
           {/* Post-Reservation Confirmation Receipt */}
           <Route path="/confirmation" element={<ConfirmationPage />} />
 
+          {/* Authoritative Safepay S2S Payment Verification */}
+          <Route path="/payment/verify" element={<PaymentVerifyPage />} />
+
           {/* Unified Authentication (Zero Toggles, 100% Auto-Detect) */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Aptech Curriculum Front-Desk Staff PMS & Folio Terminal (Receptionist & Admin) */}
+          {/* Reception & Front Desk Staff Terminal (Receptionist & Admin) */}
           <Route
-            path="/pms"
+            path="/reception"
             element={
               <ProtectedRoute allowedRoles={['receptionist', 'admin']}>
                 <FrontDeskPage />
               </ProtectedRoute>
             }
           />
+          {/* Clean Aliases for Convenience & Backward Compatibility */}
+          <Route path="/front-desk" element={<Navigate to="/reception" replace />} />
+          <Route path="/pms" element={<Navigate to="/reception" replace />} />
 
           {/* Housekeeping & Maintenance Management Queue (Housekeeping & Admin) */}
           <Route

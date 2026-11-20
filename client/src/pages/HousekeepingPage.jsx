@@ -74,10 +74,10 @@ export default function HousekeepingPage() {
         <div className="flex items-center gap-4">
           {currentUser?.role === 'admin' && (
             <Link
-              to="/pms"
+              to="/reception"
               className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors"
             >
-              PMS Front Desk
+              Reception
             </Link>
           )}
 

@@ -69,7 +69,7 @@ export default function LoginPage() {
   const preloadPanel = (roleEmail = '') => {
     const clean = roleEmail.toLowerCase()
     if (clean.includes('cleaning') || clean.includes('housekeep')) import('./HousekeepingPage')
-    else if (clean.includes('reception') || clean.includes('pms')) import('./FrontDeskPage')
+    else if (clean.includes('reception') || clean.includes('pms') || clean.includes('desk')) import('./FrontDeskPage')
     else if (clean.includes('admin') || clean.includes('manager')) import('./AdminPage')
     else if (clean.includes('guest')) import('./GuestPortalPage')
   }
@@ -109,15 +109,21 @@ export default function LoginPage() {
       
       const roleDestinations = {
         guest: { path: '/my-stay', label: 'Guest Portal & Key' },
-        receptionist: { path: '/pms', label: 'Front Desk PMS Terminal' },
+        receptionist: { path: '/reception', label: 'Reception Terminal' },
         housekeeping: { path: '/housekeeping', label: 'Housekeeping & Maintenance' },
         admin: { path: '/admin', label: 'General Manager Console' },
       }
 
       const target = roleDestinations[user.role] || roleDestinations.guest
 
-      // Navigate immediately without artificial 500ms delay (Apple HIG: Kill Latency)
-      if (redirectUrl) {
+      // Direct staff to their respective role terminals; guests to their destination or /my-stay
+      if (user.role === 'admin') {
+        navigate('/admin')
+      } else if (user.role === 'receptionist') {
+        navigate('/reception')
+      } else if (user.role === 'housekeeping') {
+        navigate('/housekeeping')
+      } else if (redirectUrl && !['/admin', '/reception', '/housekeeping', '/pms'].includes(redirectUrl)) {
         navigate(redirectUrl)
       } else {
         navigate(target.path)

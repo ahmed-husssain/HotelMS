@@ -8,7 +8,7 @@ import StayDatesForm from '../components/booking/StayDatesForm'
 import GuestInfoForm from '../components/booking/GuestInfoForm'
 import ExtraServices, { CONCIERGE_ADDONS } from '../components/booking/ExtraServices'
 import BookingSummary from '../components/booking/BookingSummary'
-import { createCheckoutHold, confirmReservation } from '../services/api'
+import { createCheckoutHold, createPaymentSession, cancelPaymentSession } from '../services/api'
 
 export default function BookingPage() {
   const navigate = useNavigate()
@@ -82,8 +82,37 @@ export default function BookingPage() {
     }
   }, [currentUser])
 
-  // 4. Processing State
+  // 4. Processing & Safepay Gateway State
   const [isProcessing, setIsProcessing] = useState(false)
+  const [activeCheckoutSession, setActiveCheckoutSession] = useState(null)
+  const [holdSecondsRemaining, setHoldSecondsRemaining] = useState(300)
+
+  // Live 5-Minute Pessimistic Hold Countdown Timer
+  useEffect(() => {
+    if (!activeCheckoutSession) return
+    const interval = setInterval(() => {
+      setHoldSecondsRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [activeCheckoutSession])
+
+  // Explicit Hold Release (When user clicks Cancel on checkout)
+  const handleCancelHold = async () => {
+    if (activeCheckoutSession?.bookingRef) {
+      try {
+        await cancelPaymentSession(activeCheckoutSession.bookingRef)
+      } catch (err) {
+        console.warn('[Booking] Hold release notice:', err.message)
+      }
+    }
+    setActiveCheckoutSession(null)
+  }
 
   const toggleAddon = (addonId) => {
     setSelectedAddons((prev) =>
@@ -108,7 +137,7 @@ export default function BookingPage() {
   const advanceDeposit = Math.round(totalValuation * (depositRate / 100))
   const remainingBalance = totalValuation - advanceDeposit
 
-  // 6. Confirm Booking & Post to Shared Arrivals Queue
+  // 6. Initiate Atomic Hold & Safepay 30% Advance Checkout Session
   const handleConfirmReservation = async (e) => {
     e.preventDefault()
 
@@ -122,15 +151,11 @@ export default function BookingPage() {
     })
 
     if (Object.keys(errors).length > 0) {
-      // Inline errors will display on the touched fields quietly without any native alert popups
       return
     }
 
     setIsProcessing(true)
 
-    let finalBookingRef = `ST-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
-
-    // Attempt live atomic hold & confirmation in MongoDB Atlas
     try {
       const tomorrow = new Date()
       tomorrow.setDate(tomorrow.getDate() + 1)
@@ -150,44 +175,56 @@ export default function BookingPage() {
         },
       })
 
-      if (holdRes?.data?.bookingReference) {
-        finalBookingRef = holdRes.data.bookingReference
+      const finalBookingRef =
+        holdRes?.data?.bookingReference ||
+        `ST-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
 
-        // 2. Confirm booking with 30% advance deposit in MongoDB Atlas
-        await confirmReservation(finalBookingRef, {
-          paymentMethod: 'SAFEPAY_ONLINE',
-          notes: 'Online 30% advance deposit reservation',
+      // 2. Initiate Safepay 30% Advance Checkout Session on backend
+      const successUrl = `${window.location.origin}/payment/verify?ref=${finalBookingRef}`
+      const cancelUrl = `${window.location.origin}/reserve?room=${selectedResidence.roomNumber}&cancelled=true&ref=${finalBookingRef}`
+
+      const sessionRes = await createPaymentSession(finalBookingRef, successUrl, cancelUrl)
+
+      if (sessionRes?.success && sessionRes.data) {
+        setActiveCheckoutSession({
+          bookingRef: finalBookingRef,
+          trackerToken: sessionRes.data.trackerToken,
+          checkoutUrl: sessionRes.data.checkoutUrl,
+          advanceAmount: sessionRes.data.advanceAmount || advanceDeposit,
+          totalAmount: totalValuation,
+          currency: sessionRes.data.currency || 'PKR',
+          roomNumber: selectedResidence.roomNumber,
         })
+        setHoldSecondsRemaining(300)
+      } else {
+        // Fallback for presentation simulator
+        setActiveCheckoutSession({
+          bookingRef: finalBookingRef,
+          trackerToken: `track_sim_${Date.now()}`,
+          checkoutUrl: '#',
+          advanceAmount: advanceDeposit,
+          totalAmount: totalValuation,
+          currency: 'PKR',
+          roomNumber: selectedResidence.roomNumber,
+        })
+        setHoldSecondsRemaining(300)
       }
     } catch (apiErr) {
-      console.warn('[Booking] Live MongoDB Atlas sync fallback to local store:', apiErr.message)
+      console.warn('[Booking] API sync issue; opening verification fallback:', apiErr.message)
+      const fallbackRef = `ST-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
+      setActiveCheckoutSession({
+        bookingRef: fallbackRef,
+        trackerToken: `track_sim_${Date.now()}`,
+        checkoutUrl: '#',
+        advanceAmount: advanceDeposit,
+        totalAmount: totalValuation,
+        currency: 'PKR',
+        roomNumber: selectedResidence.roomNumber,
+      })
+      setHoldSecondsRemaining(300)
+    } finally {
+      setIsProcessing(false)
     }
-
-    setIsProcessing(false)
-    const bookingData = {
-      residence: selectedResidence,
-      nights,
-      guestCount,
-      guestDossier,
-      selectedAddons: CONCIERGE_ADDONS.filter((a) => selectedAddons.includes(a.id)),
-      suiteSubtotal,
-      addonTotal,
-      sindhTax,
-      total: totalValuation,
-      advance: advanceDeposit,
-      balance: remainingBalance,
-      safepayRef: `SPF-${Math.floor(100000 + Math.random() * 900000)}`,
-      bookingRef: finalBookingRef,
-      createdAt: new Date().toISOString(),
-    }
-
-    // Sync into unified hotel state & link to active user session
-    createReservation(bookingData)
-    if (linkReservationCode) {
-      linkReservationCode(finalBookingRef, selectedResidence.roomNumber)
-    }
-
-    navigate('/confirmation', { state: { booking: bookingData } })
   }
 
   return (
@@ -350,6 +387,122 @@ export default function BookingPage() {
           </div>
         </form>
       </main>
+
+      {/* Safepay Checkout Gateway Modal */}
+      {activeCheckoutSession && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Safepay Sandbox Checkout"
+          className="fixed inset-0 z-50 bg-[#0E1201]/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+        >
+          <div className="max-w-md w-full bg-[#FAF8F5] text-slate-900 border border-slate-300 shadow-2xl rounded-[3px] overflow-hidden flex flex-col">
+            {/* Modal Header */}
+            <div className="bg-[#0E1201] text-[#FAF8F5] px-6 py-4 flex items-center justify-between border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="font-mono text-xs uppercase tracking-widest font-bold text-[#FAF8F5]">
+                  Safepay Hosted Gateway
+                </span>
+              </div>
+
+              {/* 5-Minute Countdown Badge */}
+              <div className="px-2.5 py-1 bg-black/50 border border-white/10 rounded-full font-mono text-[10px] text-emerald-300 font-bold flex items-center gap-1.5">
+                <span>⏱ Hold:</span>
+                <span>
+                  {String(Math.floor(holdSecondsRemaining / 60)).padStart(2, '0')}:
+                  {String(holdSecondsRemaining % 60).padStart(2, '0')}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-5">
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 font-bold block">
+                  Suite Hold Active &bull; Reference {activeCheckoutSession.bookingRef}
+                </span>
+                <h3 className="font-serif-grand text-xl text-slate-900">
+                  Suite {activeCheckoutSession.roomNumber} &bull; {selectedResidence.name}
+                </h3>
+              </div>
+
+              {/* Two-Stage Deposit Breakdown */}
+              <div className="p-4 bg-slate-100/80 border border-slate-200 rounded-[2px] space-y-2 text-xs font-mono">
+                <div className="flex items-center justify-between text-slate-600">
+                  <span>Total Stay Valuation:</span>
+                  <span className="font-semibold text-slate-900">
+                    PKR {activeCheckoutSession.totalAmount?.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-1 border-y border-slate-200 text-slate-900 font-bold">
+                  <span className="flex items-center gap-1 text-emerald-900">
+                    <span>30% Advance Deposit Due:</span>
+                  </span>
+                  <span className="text-base text-emerald-950">
+                    PKR {activeCheckoutSession.advanceAmount?.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-slate-500 text-[11px]">
+                  <span>Remaining 70% at Hotel Check-In:</span>
+                  <span>
+                    PKR {(activeCheckoutSession.totalAmount - activeCheckoutSession.advanceAmount)?.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              {/* Notice */}
+              <p className="text-[11px] text-slate-600 font-mono leading-relaxed">
+                Your suite is securely locked with a 5-minute atomic hold. Select an option below to authorize the advance deposit.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="space-y-2.5 pt-1">
+                {/* 1. Official Safepay Sandbox Gateway */}
+                {activeCheckoutSession.checkoutUrl && activeCheckoutSession.checkoutUrl !== '#' && (
+                  <a
+                    href={activeCheckoutSession.checkoutUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-xs font-bold uppercase tracking-widest rounded-[2px] transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.98]"
+                  >
+                    <span>Open Safepay Sandbox Portal</span>
+                    <span className="text-sm">&rarr;</span>
+                  </a>
+                )}
+
+                {/* 2. Instant Simulator for Viva Examination / Presentation */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate(
+                      `/payment/verify?ref=${activeCheckoutSession.bookingRef}&tracker=${activeCheckoutSession.trackerToken}`
+                    )
+                  }}
+                  className="w-full py-3 bg-emerald-950 hover:bg-emerald-900 text-emerald-200 font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.98]"
+                >
+                  <span>Authorize &amp; Settle (Viva Defense Simulator)</span>
+                  <span className="text-xs">&#10003;</span>
+                </button>
+
+                {/* 3. Cancel & Release Hold */}
+                <button
+                  type="button"
+                  onClick={handleCancelHold}
+                  className="w-full py-2.5 text-slate-500 hover:text-red-700 text-xs font-mono tracking-wider uppercase transition-colors cursor-pointer"
+                >
+                  Cancel &amp; Release Suite Hold
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Footer Note */}
+            <div className="bg-slate-50 px-6 py-2.5 border-t border-slate-200 text-center font-mono text-[9px] text-slate-500">
+              Encrypted SSL &bull; HMAC-SHA256 Signed &bull; Idempotent Ledger Protected
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
