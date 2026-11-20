@@ -53,7 +53,7 @@ export default function RoomRack({
       case 'CLEANING':
         return <span className="font-semibold text-amber-900">Cleaning in Progress</span>
       case 'DIRTY':
-        return <span className="font-semibold text-rose-900">Dirty (Turnover Queue)</span>
+        return <span className="font-semibold text-rose-900">Needs Cleaning</span>
       case 'MAINTENANCE':
         return <span className="text-slate-500 font-semibold">Maintenance Hold</span>
       default:
@@ -108,7 +108,7 @@ export default function RoomRack({
                 : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-400'
             }`}
           >
-            Turnover ({turnoverCount})
+            Needs Cleaning ({turnoverCount})
           </button>
           <button
             type="button"
@@ -208,7 +208,7 @@ export default function RoomRack({
                         )}
                         {room.status === 'DIRTY' && (
                           <span className="text-rose-900">
-                            Turnover Queue &bull; Awaiting Cleaning
+                            Needs Cleaning &bull; Awaiting Housekeeping
                           </span>
                         )}
                         {room.status === 'MAINTENANCE' && (
@@ -247,7 +247,7 @@ export default function RoomRack({
                         )}
                         {!isOccupied && !isAvailable && (
                           <span className="text-[11px] font-mono uppercase text-slate-400 font-bold tracking-wider">
-                            {room.status === 'CLEANING' ? 'In Cleaning' : room.status === 'DIRTY' ? 'In Turnover' : 'PMS Locked'}
+                            {room.status === 'CLEANING' ? 'In Cleaning' : room.status === 'DIRTY' ? 'Needs Cleaning' : 'Locked'}
                           </span>
                         )}
                       </td>

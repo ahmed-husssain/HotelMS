@@ -580,7 +580,7 @@ export default function GuestPortalPage() {
   const handleRequestService = async (service) => {
     const alreadyOrdered = orderedServices.some((s) => s.id === service.id || s.title === service.title)
     if (alreadyOrdered) {
-      setServiceFeedbackNotice(`"${service.title}" is already on your active folio.`)
+      setServiceFeedbackNotice(`"${service.title}" is already added to your bill.`)
       setTimeout(() => setServiceFeedbackNotice(''), 3500)
       return
     }
@@ -613,8 +613,8 @@ export default function GuestPortalPage() {
       service.category
     )
 
-    setServiceFeedbackNotice(`Dispatched to estate concierge: "${service.title}" added to bill.`)
-    toast.success(`"${service.title}" dispatched & added to folio`, 'Concierge Request')
+    setServiceFeedbackNotice(`Request sent to front desk: "${service.title}" added to your bill.`)
+    toast.success(`"${service.title}" added to your room bill`, 'Service Requested')
     setTimeout(() => setServiceFeedbackNotice(''), 4500)
   }
 

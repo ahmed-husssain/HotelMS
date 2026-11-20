@@ -59,9 +59,9 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs overflow-hidden">
       <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="font-serif-grand text-xl text-slate-900">Immutable Activity Audit Trail</h3>
+          <h3 className="font-serif-grand text-xl text-slate-900">Staff Activity Log</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            Cryptographic ledger of staff operations, rate adjustments, check-ins, and settlements
+            Recent staff activity and booking updates.
           </p>
         </div>
 

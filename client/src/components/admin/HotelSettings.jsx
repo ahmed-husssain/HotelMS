@@ -74,7 +74,7 @@ export default function HotelSettings({
               onChange={(e) => setDepositRate(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"
             />
-            <span className="text-[10px] text-slate-400 mt-1 block">Safepay Online Escrow: 30%</span>
+            <span className="text-[10px] text-slate-400 mt-1 block">Online Advance Deposit: 30%</span>
           </div>
 
           <div>

@@ -182,7 +182,7 @@ export default function CleaningQueue({
                       ? 'Ready for Guest Check-In'
                       : room.guest
                       ? 'Guest Staying Today (Refresh Service)'
-                      : 'Guest Checked Out (Full Turnover)'
+                      : 'Guest Checked Out (Deep Clean)'
 
                     return (
                       <div
@@ -386,7 +386,7 @@ export default function CleaningQueue({
               {/* Mini-Fridge Consumable Checklist */}
               <div className="space-y-2">
                 <span className="text-xs font-mono uppercase text-slate-600 font-bold tracking-wider block">
-                  Mini-Fridge &amp; Refreshment Audit
+                  Check Mini-Fridge &amp; Snacks
                 </span>
                 <div className="bg-white border border-slate-200 p-4 rounded-[2px] text-xs font-mono space-y-1.5 text-slate-700">
                   <div className="flex justify-between">

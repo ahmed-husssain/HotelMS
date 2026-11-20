@@ -168,7 +168,7 @@ export default function ArrivalsList({
                           {room.roomNumber}
                         </span>
                         <span className="text-[11px] text-slate-500">
-                          Folio: {room.folioNumber || 'FOL-OPEN'}
+                          Bill #: {room.folioNumber || 'OPEN'}
                         </span>
                       </td>
                       <td className="py-4 px-4">

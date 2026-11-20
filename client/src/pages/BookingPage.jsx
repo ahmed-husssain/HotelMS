@@ -27,7 +27,7 @@ export default function BookingPage() {
   // 2. Stay Parameters
   const [nights, setNights] = useState(4)
   const [guestCount, setGuestCount] = useState(2)
-  const [selectedAddons, setSelectedAddons] = useState(['helipad'])
+  const [selectedAddons, setSelectedAddons] = useState([])
 
   // 3. Guest Information (Empty by default unless authenticated)
   const [guestDossier, setGuestDossier] = useState(() => ({

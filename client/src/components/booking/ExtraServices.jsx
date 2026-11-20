@@ -2,19 +2,19 @@ import React from 'react'
 
 export const CONCIERGE_ADDONS = [
   {
-    id: 'helipad',
-    title: 'Private Coastal Helipad VIP Transfer',
-    price: 25000,
+    id: 'airport_transfer',
+    title: 'Airport Pick & Drop Service',
+    price: 8000,
   },
   {
-    id: 'onsen_spa',
-    title: 'Private Cedar Hot Tub & Spa Experience',
-    price: 18000,
+    id: 'breakfast',
+    title: 'Daily Buffet Breakfast for Guests',
+    price: 5000,
   },
   {
-    id: 'tasting_menu',
-    title: "Chef's Fresh Seafood & Farm-to-Table Dinner",
-    price: 15000,
+    id: 'spa_pass',
+    title: 'Spa & Thermal Wellness Pass',
+    price: 6500,
   },
 ]
 

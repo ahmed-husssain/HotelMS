@@ -73,7 +73,7 @@ export default function SuppliesInventory({
             Hotel Supplies &amp; Linens Inventory
           </h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            Real-time counts for everyday room turnover supplies. Auto-deducted when rooms are cleaned.
+            Cleaning supplies and guest amenities in stock.
           </p>
         </div>
 

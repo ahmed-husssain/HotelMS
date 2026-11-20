@@ -174,7 +174,7 @@ export default function PaymentVerifyPage() {
             
             <div className="space-y-1.5">
               <span className="text-[10px] font-mono tracking-[0.25em] font-extrabold text-slate-500 uppercase block">
-                Cryptographic Handshake
+                Verifying Payment...
               </span>
               <h1 className="font-serif-grand text-2xl font-normal text-slate-900">
                 Verifying Advance Deposit...

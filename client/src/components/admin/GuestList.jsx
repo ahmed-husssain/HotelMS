@@ -99,7 +99,7 @@ export default function GuestList() {
             <option value="ALL">All Tiers</option>
             <option value="PLATINUM">Platinum VIP</option>
             <option value="DIPLOMATIC">Diplomatic VIP</option>
-            <option value="RESIDENT">Estate Resident</option>
+            <option value="RESIDENT">Registered Guest</option>
             <option value="STANDARD">Standard Guest</option>
           </select>
 

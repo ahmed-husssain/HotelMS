@@ -16,19 +16,18 @@ const CHAPTERS = [
   { id: 'architecture', num: '02', title: 'Architecture' },
   { id: 'culinary', num: '03', title: 'The Harvest Table' },
   { id: 'wellness', num: '04', title: 'Thermal Springs' },
-  { id: 'grounds', num: '05', title: 'The Coastline' },
-  { id: 'arrival', num: '06', title: 'Arrival Sanctuary' },
+  { id: 'arrival', num: '05', title: 'Arrival Sanctuary' },
 ]
 
 /**
- * EstatePage — The Estate & Sanctuary (Awwwards Parallax Edition)
+ * EstatePage — The Estate & Sanctuary (Awwwards Master Parallax Edition)
  * 
- * Implements premier luxury resort web design (Aman / Habitas / Belmond caliber):
- * - Authentic, grounded architectural photography (real physical geology & materials)
- * - Dual-speed parallax "window" frames with GSAP ScrollTrigger & Lenis 120 FPS
- * - Asymmetrical counter-scrolling editorial plates (FIG. 01, FIG. 02)
- * - Sticky hairline chapter index with active scroll tracking
- * - 100% mobile-compliant (touch target >= 44px, zero horizontal overflow)
+ * Signature Awwwards Luxury Hotel Techniques:
+ * 1. Pinned Split-Screen Storytelling (Pinned text column + full-height gliding photography)
+ * 2. Full-bleed Fixed-Depth Parallax Curtain Windows (250px+ travel displacement)
+ * 3. Scroll-Driven Horizontal Kinetic Typography Ribbons
+ * 4. Dual-speed Asymmetrical Counter-scrolling Editorial Badges
+ * 5. Authentic real-world architectural photography with true physical lighting & geology
  */
 export default function EstatePage() {
   useSmoothScroll()
@@ -36,25 +35,26 @@ export default function EstatePage() {
   const containerRef = useRef(null)
   const [activeChapter, setActiveChapter] = useState('land')
 
-  // Initialize GSAP Parallax & Chapter Tracking
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) return
+    // Refresh ScrollTrigger once DOM layout stabilizes
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 200)
 
-    const isTouch = window.matchMedia('(pointer: coarse), (hover: none)').matches
-    const parallaxDistance = isTouch ? 6 : 14
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return () => clearTimeout(refreshTimer)
 
     const ctx = gsap.context(() => {
-      // 1. Hero Zoom & Slow Parallax Drop
+      // 1. HERO PARALLAX: Deep Background Drop on Scroll
       gsap.fromTo(
-        '.hero-parallax-img',
-        { yPercent: -6, scale: 1.08 },
+        '.awwwards-hero-img',
+        { y: 0, scale: 1.1 },
         {
-          yPercent: 12,
+          y: 220,
           scale: 1.0,
           ease: 'none',
           scrollTrigger: {
-            trigger: '.hero-parallax-container',
+            trigger: '.awwwards-hero-container',
             start: 'top top',
             end: 'bottom top',
             scrub: true,
@@ -62,17 +62,56 @@ export default function EstatePage() {
         }
       )
 
-      // 2. Dual-Speed Parallax Images (Looking through architectural windows)
-      gsap.utils.toArray('.awwwards-parallax-img').forEach((img) => {
+      // Hero Text Fade & Rise
+      gsap.to('.awwwards-hero-text', {
+        y: -120,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.awwwards-hero-container',
+          start: 'top top',
+          end: '80% top',
+          scrub: true,
+        },
+      })
+
+      // 2. KINETIC HORIZONTAL TYPOGRAPHY RIBBON (Moves across screen driven by scroll)
+      gsap.to('.kinetic-ribbon-text-1', {
+        xPercent: -35,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.kinetic-ribbon-1',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.3,
+        },
+      })
+
+      gsap.to('.kinetic-ribbon-text-2', {
+        xPercent: 30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.kinetic-ribbon-2',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.3,
+        },
+      })
+
+      // 3. DRAMATIC DUAL-SPEED PARALLAX WINDOWS (200px+ true travel displacement)
+      gsap.utils.toArray('.awwwards-parallax-window').forEach((windowEl) => {
+        const img = windowEl.querySelector('img')
+        if (!img) return
+
         gsap.fromTo(
           img,
-          { yPercent: -parallaxDistance, scale: 1.08 },
+          { y: -140, scale: 1.15 },
           {
-            yPercent: parallaxDistance,
+            y: 140,
             scale: 1.0,
             ease: 'none',
             scrollTrigger: {
-              trigger: img.parentElement,
+              trigger: windowEl,
               start: 'top bottom',
               end: 'bottom top',
               scrub: true,
@@ -81,13 +120,13 @@ export default function EstatePage() {
         )
       })
 
-      // 3. Counter-scrolling Floating Editorial Plates (Moves faster in opposite direction)
-      gsap.utils.toArray('.counter-scroll-plate').forEach((plate) => {
+      // 4. COUNTER-SCROLLING PLATES (Moves in opposite direction for 3D depth)
+      gsap.utils.toArray('.awwwards-counter-plate').forEach((plate) => {
         gsap.fromTo(
           plate,
-          { yPercent: 18 },
+          { y: 90 },
           {
-            yPercent: -18,
+            y: -90,
             ease: 'none',
             scrollTrigger: {
               trigger: plate.parentElement,
@@ -99,22 +138,24 @@ export default function EstatePage() {
         )
       })
 
-      // 4. Track Active Chapter on Scroll
+      // 5. Track Active Chapter based on scroll trigger
       CHAPTERS.forEach((ch) => {
         ScrollTrigger.create({
           trigger: `#${ch.id}`,
-          start: 'top center',
-          end: 'bottom center',
+          start: 'top 40%',
+          end: 'bottom 40%',
           onEnter: () => setActiveChapter(ch.id),
           onEnterBack: () => setActiveChapter(ch.id),
         })
       })
     }, containerRef)
 
-    return () => ctx.revert()
+    return () => {
+      clearTimeout(refreshTimer)
+      ctx.revert()
+    }
   }, [])
 
-  // Smooth jump to chapter
   const scrollToChapter = (id) => {
     const el = document.getElementById(id)
     if (el) {
@@ -128,63 +169,71 @@ export default function EstatePage() {
       ref={containerRef}
       className="min-h-screen bg-[#FAF8F5] text-slate-900 selection:bg-emerald-100 selection:text-emerald-950 font-sans-clean overflow-x-hidden"
     >
-      {/* 1. Primary Fixed Header Navigation */}
+      {/* 1. Header Navigation */}
       <Navbar onOpenDrawer={() => navigate('/reserve')} />
 
-      {/* 2. Hero Section: The Monumental Fullscreen Opening */}
-      <section className="hero-parallax-container relative min-h-[92vh] sm:min-h-screen flex flex-col justify-between pt-28 sm:pt-36 pb-8 px-4 sm:px-8 lg:px-14 border-b border-slate-200/80 overflow-hidden">
-        {/* Top Monograph Eyebrow */}
-        <div className="max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono uppercase tracking-[0.28em] text-slate-600 z-10 shrink-0">
-          <div className="flex items-center gap-2 text-emerald-950 font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
+      {/* 2. HERO: FULLSCREEN MONUMENTAL PARALLAX OPENING */}
+      <section className="awwwards-hero-container relative h-screen w-full overflow-hidden flex flex-col justify-between pt-28 pb-12 px-5 sm:px-10 lg:px-16 select-none bg-slate-950">
+        {/* Deep Fixed-Layer Parallax Background Photo */}
+        <div className="absolute inset-0 w-full h-[130%] -top-[15%] pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2400&q=85"
+            alt="Stayza Sanctuary perched on the Sindh Coastline"
+            className="awwwards-hero-img w-full h-full object-cover filter brightness-[0.75] contrast-[1.05] will-change-transform"
+          />
+          {/* Subtle Film Grain Vignette */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/60" />
+        </div>
+
+        {/* Hero Top Eyebrow */}
+        <div className="relative z-10 max-w-7xl w-full mx-auto flex items-center justify-between text-xs font-mono uppercase tracking-[0.3em] text-[#FFF0CA]">
+          <div className="flex items-center gap-2 font-bold">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>THE SANCTUARY ESTATE &bull; SINDH COAST</span>
           </div>
-          <span className="text-slate-400 font-normal tracking-widest text-[11px]">
+          <span className="hidden sm:inline-block text-white/70 font-normal">
             24° 51' 14" N &bull; 67° 00' 42" E
           </span>
         </div>
 
-        {/* Center Editorial Title */}
-        <div className="max-w-5xl w-full mx-auto my-auto py-10 sm:py-16 space-y-6 z-10">
-          <span className="font-mono text-[10px] sm:text-xs text-emerald-900 uppercase tracking-[0.35em] font-semibold block">
-            AN ARCHITECTURAL MONOGRAPH &bull; 42 ACRES
+        {/* Hero Center Monumental Typography (Glides up and fades on scroll) */}
+        <div className="awwwards-hero-text relative z-10 max-w-5xl w-full mx-auto my-auto text-center space-y-6 will-change-transform">
+          <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.45em] text-emerald-300 font-semibold block">
+            AN ARCHITECTURAL MONOGRAPH &bull; 42 OCEANFRONT ACRES
           </span>
-          <h1 className="font-serif-grand text-4xl sm:text-7xl lg:text-8xl font-light text-slate-900 tracking-tight leading-[1.02]">
+          <h1 className="font-serif-grand text-4xl sm:text-7xl lg:text-8xl font-light text-[#FAF8F5] tracking-tight leading-[1.03]">
             An Untouched Coastline Between Bedrock and Sky.
           </h1>
-          <p className="text-sm sm:text-lg text-slate-600 max-w-2xl leading-relaxed font-normal">
-            Sculpted directly into the coastal sandstone cliffs of the Arabian Sea. Seven private cliffside residences, geothermal mineral springs, organic farm-to-table dining, and a kilometer of secluded tidal sand.
+          <p className="text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-light font-sans">
+            Sculpted into the sandstone cliffs above the Arabian Sea. Seven cantilevered suites, geothermal mineral hot springs, and farm-to-table coastal cuisine.
           </p>
+          <div className="pt-4 flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => scrollToChapter('land')}
+              className="px-6 py-3 bg-[#FAF8F5] hover:bg-white text-slate-950 font-mono text-xs font-bold uppercase tracking-widest rounded-[2px] transition-all cursor-pointer shadow-lg active:scale-95"
+            >
+              Explore The Estate &darr;
+            </button>
+          </div>
         </div>
 
-        {/* Full-Bleed Parallax Cinematic Window */}
-        <div className="max-w-7xl w-full mx-auto relative h-[45vh] sm:h-[60vh] rounded-[2px] overflow-hidden shadow-2xl bg-slate-950 shrink-0">
-          <img
-            src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2200&q=85"
-            alt="The cliffside estate and Arabian Sea horizon at Stayza"
-            className="hero-parallax-img absolute inset-0 w-full h-[120%] object-cover filter brightness-[0.9] will-change-transform"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex items-end p-6 sm:p-10 pointer-events-none">
-            <div className="text-white space-y-1">
-              <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-300 font-bold block">
-                PLATE I &bull; ELEVATION 38 METERS
-              </span>
-              <p className="font-serif-grand text-xl sm:text-2xl font-light text-white">
-                The cliffside pavilion suspended above the morning tide.
-              </p>
-            </div>
-          </div>
+        {/* Hero Bottom Telemetry Strip */}
+        <div className="relative z-10 max-w-7xl w-full mx-auto flex items-center justify-between text-[11px] font-mono text-white/60 border-t border-white/15 pt-4">
+          <span>7 PRIVATE KEYS</span>
+          <span className="animate-bounce text-white">SCROLL TO DISCOVER &darr;</span>
+          <span>1,200M SECLUDED BEACH</span>
         </div>
       </section>
 
-      {/* 3. Sticky Hairline Chapter Navigation Bar */}
+      {/* 3. STICKY HAIRLINE CHAPTER NAVIGATION BAR */}
       <nav
         aria-label="Estate Chapters"
-        className="sticky top-0 z-30 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 lg:px-14 py-3 overflow-x-auto no-scrollbar"
+        className="sticky top-0 z-30 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 lg:px-14 py-3 shadow-xs"
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-6 min-w-max text-xs font-mono uppercase tracking-wider">
-          <div className="flex items-center gap-6 sm:gap-8">
-            <span className="text-[10px] text-slate-400 tracking-widest hidden lg:inline-block">CHAPTERS:</span>
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-6 overflow-x-auto no-scrollbar text-xs font-mono uppercase tracking-wider">
+          <div className="flex items-center gap-6 sm:gap-8 min-w-max">
+            <span className="text-[10px] text-slate-400 tracking-widest hidden md:inline-block">CHAPTERS:</span>
             {CHAPTERS.map((ch) => {
               const isActive = activeChapter === ch.id
               return (
@@ -210,7 +259,7 @@ export default function EstatePage() {
 
           <Link
             to="/suites"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0E1201] text-[#FFF0CA] text-[11px] font-bold rounded-[2px] hover:bg-slate-900 transition-colors shrink-0"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#0E1201] text-[#FFF0CA] text-[11px] font-bold rounded-[2px] hover:bg-slate-900 transition-colors shrink-0"
           >
             <span>View 7 Suites</span>
             <span>&rarr;</span>
@@ -218,401 +267,316 @@ export default function EstatePage() {
         </div>
       </nav>
 
-      {/* 4. CHAPTER 01: THE LAND & NATURAL GEOGRAPHY */}
-      <section id="land" className="py-20 sm:py-32 px-4 sm:px-8 lg:px-14 border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-16">
-          {/* Chapter Header */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-baseline">
-            <div className="lg:col-span-4 space-y-2">
-              <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-900 font-bold block">
+      {/* 4. CHAPTER 01: THE LAND (PINNED SPLIT-SCREEN PARALLAX) */}
+      <section id="land" className="relative py-16 sm:py-28 px-4 sm:px-8 lg:px-14 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* LEFT: Pinned Sticky Column (Locks in place while user scrolls through photos) */}
+          <div className="lg:col-span-5 lg:sticky lg:top-28 space-y-8">
+            <div className="space-y-3">
+              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-emerald-900 font-bold block">
                 CHAPTER 01 &bull; GEOGRAPHY
               </span>
-              <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
+              <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-[1.08]">
                 Forty-Two Acres of Undisturbed Shoreline.
               </h2>
             </div>
-            <div className="lg:col-span-8 lg:pl-12 space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-              <p>
-                Situated along a remote coastal stretch seventy-five minutes from the city, the estate encompasses high sandstone bluffs, coastal scrub, and a kilometer of secluded beach. Here, the desert meets the Indian Ocean with zero light pollution, zero commercial neighbors, and undisturbed privacy.
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-4 border-t border-slate-200 text-slate-900 font-mono text-xs">
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Terrain</span>
-                  <strong>Sandstone Bluff</strong>
-                </div>
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Coastline</span>
-                  <strong>1,200m Private</strong>
-                </div>
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Orientation</span>
-                  <strong>Due West (Sunset)</strong>
-                </div>
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Climate</span>
-                  <strong>Temperate Coastal</strong>
-                </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              Situated along an untouched coastal bluff seventy-five minutes from the city, the estate encompasses dramatic sandstone cliffs, indigenous scrub, and a kilometer of secluded beach. Here, desert bedrock meets the Indian Ocean with zero light pollution and total silence.
+            </p>
+
+            {/* Architectural Data Ribbon */}
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200 font-mono text-xs">
+              <div className="p-3 bg-white border border-slate-200/80 rounded-[2px]">
+                <span className="text-[10px] text-slate-400 block uppercase">Elevation</span>
+                <strong className="text-slate-900 text-sm">38m Sea Bluff</strong>
               </div>
+              <div className="p-3 bg-white border border-slate-200/80 rounded-[2px]">
+                <span className="text-[10px] text-slate-400 block uppercase">Shoreline</span>
+                <strong className="text-slate-900 text-sm">1.2 km Private</strong>
+              </div>
+              <div className="p-3 bg-white border border-slate-200/80 rounded-[2px]">
+                <span className="text-[10px] text-slate-400 block uppercase">Sun Exposure</span>
+                <strong className="text-slate-900 text-sm">Due West Sunset</strong>
+              </div>
+              <div className="p-3 bg-white border border-slate-200/80 rounded-[2px]">
+                <span className="text-[10px] text-slate-400 block uppercase">Density</span>
+                <strong className="text-slate-900 text-sm">7 Suites Only</strong>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block mb-1">
+                COORDINATES:
+              </span>
+              <span className="font-mono text-xs text-slate-700">
+                24° 51' 14.2" N &bull; 67° 00' 42.8" E &bull; SINDH PROVINCE
+              </span>
             </div>
           </div>
 
-          {/* Asymmetrical Dual-Parallax Spread */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Tall Parallax Window */}
-            <div className="lg:col-span-7 relative h-[55vh] sm:h-[75vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-lg">
+          {/* RIGHT: High-Velocity Gliding Photo Column */}
+          <div className="lg:col-span-7 space-y-16">
+            {/* Parallax Photo 1: Sandstone Coastline */}
+            <div className="awwwards-parallax-window relative h-[60vh] sm:h-[80vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
               <img
                 src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=85"
-                alt="Secluded beach and untouched sandstone cliffs on the Sindh Coast"
-                className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover will-change-transform"
+                alt="Secluded sandstone coast and turquoise Arabian Sea"
+                className="absolute inset-0 w-full h-[140%] object-cover will-change-transform"
               />
-              <div className="counter-scroll-plate absolute bottom-6 right-6 p-4 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 text-xs font-mono rounded-[2px] max-w-xs shadow-xl hidden sm:block will-change-transform">
-                <span className="text-[10px] text-emerald-900 font-bold block uppercase tracking-wider">
-                  FIG. 01 &bull; TIDAL REEF
+              <div className="awwwards-counter-plate absolute bottom-8 right-8 p-5 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 text-xs font-mono rounded-[2px] max-w-xs shadow-2xl hidden sm:block will-change-transform">
+                <span className="text-[10px] text-emerald-900 font-bold block uppercase tracking-wider mb-1">
+                  FIG. 01 &bull; THE TIDAL REEF
                 </span>
-                <span className="text-slate-600 mt-1 block">
-                  Natural limestone tide pools form at low tide directly below the residential ridge.
-                </span>
+                <p className="text-slate-600 font-sans text-xs leading-relaxed">
+                  Natural limestone tide pools form at low tide directly below the residential cliff ridge.
+                </p>
               </div>
             </div>
 
-            {/* Right Offset Architectural Inset */}
-            <div className="lg:col-span-5 space-y-8 lg:pl-6">
-              <div className="relative h-64 sm:h-80 rounded-[2px] overflow-hidden bg-slate-900 shadow-md">
-                <img
-                  src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=85"
-                  alt="Low-slung cantilevered villa overlooking the ocean"
-                  className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover will-change-transform"
-                />
-              </div>
-              <div className="space-y-3">
-                <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest block font-bold">
-                  PASSIVE MICROCLIMATE
+            {/* Parallax Photo 2: Cantilevered Residence Terrace */}
+            <div className="awwwards-parallax-window relative h-[50vh] sm:h-[70vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
+              <img
+                src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=85"
+                alt="Cantilevered suite balcony suspended over the ocean"
+                className="absolute inset-0 w-full h-[140%] object-cover will-change-transform"
+              />
+              <div className="awwwards-counter-plate absolute top-8 left-8 p-5 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 text-xs font-mono rounded-[2px] max-w-xs shadow-2xl hidden sm:block will-change-transform">
+                <span className="text-[10px] text-emerald-900 font-bold block uppercase tracking-wider mb-1">
+                  FIG. 02 &bull; CLIFFSIDE TERRACES
                 </span>
-                <h3 className="font-serif-grand text-2xl text-slate-900 font-light">
-                  Sea Breeze Thermal Cooling
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                  The architecture harnesses natural afternoon sea thermal winds that rise up the cliff faces, directing constant ocean breezes through slatted timber pergolas and shaded basalt stone courtyards.
+                <p className="text-slate-600 font-sans text-xs leading-relaxed">
+                  Low-slung architecture built directly into the bedrock with zero vertical towers.
                 </p>
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
-      {/* 5. CHAPTER 02: ARCHITECTURE & RAW MATERIALS */}
-      <section id="architecture" className="py-20 sm:py-32 px-4 sm:px-8 lg:px-14 bg-white border-b border-slate-200/80">
+      {/* 5. KINETIC SCROLL-DRIVEN HORIZONTAL TYPOGRAPHY RIBBON #1 */}
+      <section className="kinetic-ribbon-1 py-10 sm:py-16 bg-[#0E1201] text-[#FAF8F5] overflow-hidden border-y border-slate-800 select-none">
+        <div className="kinetic-ribbon-text-1 flex items-center whitespace-nowrap text-3xl sm:text-6xl font-serif-grand font-light tracking-[0.2em] text-[#FFF0CA] will-change-transform">
+          <span>&bull; SINDH COASTLINE &bull; 42 PRIVATE ACRES &bull; MONOLITHIC TRAVERTINE &bull; 100% OCEANFRONT &bull; NATURAL GEOTHERMAL SPRINGS &bull; SECLUDED BEACH</span>
+          <span className="ml-8">&bull; SINDH COASTLINE &bull; 42 PRIVATE ACRES &bull; MONOLITHIC TRAVERTINE &bull; 100% OCEANFRONT &bull; NATURAL GEOTHERMAL SPRINGS &bull; SECLUDED BEACH</span>
+        </div>
+      </section>
+
+      {/* 6. CHAPTER 02: ARCHITECTURE & RAW MATERIALS */}
+      <section id="architecture" className="relative py-16 sm:py-28 px-4 sm:px-8 lg:px-14 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto space-y-16">
-          <div className="max-w-3xl space-y-3">
-            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-900 font-bold block">
-              CHAPTER 02 &bull; THE CRAFT
+          <div className="max-w-3xl space-y-4">
+            <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-emerald-900 font-bold block">
+              CHAPTER 02 &bull; THE ARCHITECTURE
             </span>
             <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
-              Raw Limestone, Teak Timber &amp; Basalt Stone.
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              We chose not to build standard concrete towers. Instead, every structure was hand-chiseled from regional Sindh travertine stone that absorbs the desert heat by day and gently radiates warmth after twilight.
-            </p>
-          </div>
-
-          {/* Split Velocity Parallax Photography Pair */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Vertical Architectural Detail */}
-            <div className="lg:col-span-5 relative h-[60vh] sm:h-[80vh] rounded-[2px] overflow-hidden bg-slate-900 shadow-xl">
-              <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
-                alt="Hand-chiseled travertine limestone walls and teak slatted screens"
-                className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover will-change-transform"
-              />
-              <div className="absolute top-6 left-6 p-3 bg-slate-950/85 backdrop-blur-md text-white text-[10px] font-mono uppercase tracking-widest rounded-[2px]">
-                TRAVERTINE &bull; 120MM SLABS
-              </div>
-            </div>
-
-            {/* Right Architectural Monograph Details */}
-            <div className="lg:col-span-7 space-y-8 lg:pl-8">
-              <div className="relative h-72 sm:h-96 rounded-[2px] overflow-hidden bg-slate-900 shadow-xl">
-                <img
-                  src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=85"
-                  alt="Minimalist cantilevered pavilion overlooking the water"
-                  className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover will-change-transform"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 text-xs font-mono text-slate-700">
-                <div className="p-5 bg-[#FAF8F5] border border-slate-200/90 rounded-[2px] space-y-2">
-                  <strong className="text-slate-900 block uppercase font-bold text-[11px]">
-                    Cantilevered Roof Pylons
-                  </strong>
-                  <p className="text-slate-600 font-sans text-xs leading-relaxed">
-                    Overhanging eaves extend four meters out, casting continuous natural shade over private plunge decks.
-                  </p>
-                </div>
-                <div className="p-5 bg-[#FAF8F5] border border-slate-200/90 rounded-[2px] space-y-2">
-                  <strong className="text-slate-900 block uppercase font-bold text-[11px]">
-                    Black Basalt Water Pools
-                  </strong>
-                  <p className="text-slate-600 font-sans text-xs leading-relaxed">
-                    Dark volcanic stone naturally retains sun warmth, keeping plunge pools comfortable well into the cool evening.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. CHAPTER 03: THE CULINARY HARVEST TABLE (DINING) */}
-      <section id="culinary" className="py-20 sm:py-32 px-4 sm:px-8 lg:px-14 border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-16">
-          {/* Chapter Header */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-baseline">
-            <div className="lg:col-span-5 space-y-2">
-              <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-900 font-bold block">
-                CHAPTER 03 &bull; THE HARVEST TABLE
-              </span>
-              <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
-                Farm-to-Table Coastal Dining &amp; Open Fire.
-              </h2>
-            </div>
-            <div className="lg:col-span-7 space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-              <p>
-                At <strong>The Harvest Pavilion</strong>, cuisine is rooted in simplicity and coastal abundance. Every morning at dawn, local artisanal fishermen land wild red snapper, gulf prawns, and sea bass directly on our beach. Our culinary team pairs the morning catch with heirloom vegetables harvested daily from the estate organic garden.
-              </p>
-              <div className="flex items-center gap-6 pt-2 font-mono text-xs">
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Breakfast</span>
-                  <strong>07:00 &ndash; 11:00</strong>
-                </div>
-                <div className="border-l border-slate-200 pl-6">
-                  <span className="text-slate-400 block text-[10px] uppercase">All-Day Dining</span>
-                  <strong>12:00 &ndash; 22:30</strong>
-                </div>
-                <div className="border-l border-slate-200 pl-6">
-                  <span className="text-slate-400 block text-[10px] uppercase">Service</span>
-                  <strong>Pavilion &bull; In-Suite</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Full-Width Parallax Dining Spread */}
-          <div className="relative h-[50vh] sm:h-[65vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2000&q=85"
-              alt="Open-air seaside dining at The Harvest Pavilion at dusk"
-              className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover filter brightness-[0.85] will-change-transform"
-            />
-            {/* Floating Counter-Scroll Menu Plate */}
-            <div className="counter-scroll-plate absolute top-8 left-8 sm:top-12 sm:left-12 p-6 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 rounded-[2px] max-w-sm shadow-2xl hidden sm:block will-change-transform">
-              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-emerald-900 font-bold block mb-1">
-                FIG. 02 &bull; THE HARVEST MENU
-              </span>
-              <h4 className="font-serif-grand text-xl text-slate-900 font-light mb-2">
-                Charcoal-Grilled Red Snapper
-              </h4>
-              <p className="text-xs text-slate-600 font-sans leading-relaxed">
-                Salt-crusted, served over heirloom tomatoes, hand-picked coastal herbs, and cold-pressed citrus vinaigrette.
-              </p>
-            </div>
-          </div>
-
-          {/* Asymmetrical Culinary Photography Pair */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-            <div className="space-y-3">
-              <div className="h-60 rounded-[2px] overflow-hidden bg-slate-900 shadow-md">
-                <img
-                  src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=85"
-                  alt="Fresh organic estate produce and morning harvest"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <strong className="text-xs font-mono uppercase text-slate-900 block">Estate Organic Garden</strong>
-              <p className="text-xs text-slate-600 font-sans leading-relaxed">
-                Herbs, heirloom produce, and wild greens cultivated on the sunlit plateau above the villas.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="h-60 rounded-[2px] overflow-hidden bg-slate-900 shadow-md">
-                <img
-                  src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=85"
-                  alt="Candlelit private chef dinner on ocean terrace"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <strong className="text-xs font-mono uppercase text-slate-900 block">In-Suite Private Dining</strong>
-              <p className="text-xs text-slate-600 font-sans leading-relaxed">
-                Multi-course tasting menus prepared live by private chefs on your residence terrace.
-              </p>
-            </div>
-
-            <div className="space-y-3 sm:col-span-2 lg:col-span-1">
-              <div className="h-60 rounded-[2px] overflow-hidden bg-slate-900 shadow-md">
-                <img
-                  src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=85"
-                  alt="Artisanal cardamom chai and cellar selections at sunset"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <strong className="text-xs font-mono uppercase text-slate-900 block">The Lookout Lounge</strong>
-              <p className="text-xs text-slate-600 font-sans leading-relaxed">
-                Slow-brewed cardamom chai and curated cellar selections on cantilevered daybeds at dusk.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. CHAPTER 04: WELLNESS & THERMAL SPRINGS */}
-      <section id="wellness" className="py-20 sm:py-32 px-4 sm:px-8 lg:px-14 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Vertical Parallax Detail */}
-            <div className="lg:col-span-5 relative h-[55vh] sm:h-[75vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-xl">
-              <img
-                src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1200&q=85"
-                alt="Outdoor thermal hot spring pool overlooking the ocean surf"
-                className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover will-change-transform"
-              />
-              <div className="counter-scroll-plate absolute top-6 right-6 p-4 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 text-xs font-mono rounded-[2px] max-w-xs shadow-xl hidden sm:block will-change-transform">
-                <span className="text-[10px] text-emerald-900 font-bold block uppercase tracking-wider">
-                  FIG. 03 &bull; THERMAL BATHS
-                </span>
-                <span className="text-slate-600 mt-1 block">
-                  Natural saline mineral waters maintained at 38°C perched above the tide.
-                </span>
-              </div>
-            </div>
-
-            {/* Right Editorial Story */}
-            <div className="lg:col-span-7 space-y-6 lg:pl-8">
-              <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-900 font-bold block">
-                CHAPTER 04 &bull; RESTORATIVE WATERS
-              </span>
-              <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
-                Mineral Hot Springs &amp; Cedar Wood Baths.
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                Tapping deep coastal aquifers, our mineral baths provide geothermal therapeutic waters rich in sulfur, magnesium, and sea minerals. Positioned on open rock terraces facing the sea, steam rises into the cool evening air while the tide crashes beneath your feet.
-              </p>
-
-              <div className="space-y-4 pt-2">
-                <div className="p-4 bg-[#FAF8F5] border border-slate-200 rounded-[2px] flex items-start gap-4">
-                  <span className="font-mono text-xs text-emerald-900 font-bold mt-0.5">38°C</span>
-                  <div>
-                    <strong className="text-slate-900 block font-mono text-xs uppercase">Saline Mineral Hot Tubs</strong>
-                    <span className="text-xs text-slate-600">Deep muscle relaxation overlooking the Arabian sea horizon.</span>
-                  </div>
-                </div>
-                <div className="p-4 bg-[#FAF8F5] border border-slate-200 rounded-[2px] flex items-start gap-4">
-                  <span className="font-mono text-xs text-emerald-900 font-bold mt-0.5">CEDAR</span>
-                  <div>
-                    <strong className="text-slate-900 block font-mono text-xs uppercase">Panoramic Dry Saunas</strong>
-                    <span className="text-xs text-slate-600">Weathered timber rooms infused with wild coastal thyme.</span>
-                  </div>
-                </div>
-                <div className="p-4 bg-[#FAF8F5] border border-slate-200 rounded-[2px] flex items-start gap-4">
-                  <span className="font-mono text-xs text-emerald-900 font-bold mt-0.5">SALT</span>
-                  <div>
-                    <strong className="text-slate-900 block font-mono text-xs uppercase">Marine Exfoliation Rituals</strong>
-                    <span className="text-xs text-slate-600">Natural sea minerals and cold plunge stone pools.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. CHAPTER 05: SECLUDED COASTLINE & GROUNDS */}
-      <section id="grounds" className="py-20 sm:py-32 px-4 sm:px-8 lg:px-14 border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="max-w-3xl space-y-3">
-            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-900 font-bold block">
-              CHAPTER 05 &bull; THE COASTLINE
-            </span>
-            <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
-              One Kilometer of Private Sand &amp; Sea.
+              Hand-Chiseled Travertine &amp; Volcanic Basalt.
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-              Unlike crowded public beaches, Stayza's coastline is completely enclosed by surrounding cliffs. Solitary teak daybeds and linen sun canopies offer quiet shelter along pristine sands.
+              Every wall is formed from 120mm slabs of regional Sindh limestone. Deep cantilevered roof overhangs cut solar heat gain by 65%, while open slatted teak screens channel continuous sea breezes throughout the living spaces.
             </p>
           </div>
 
-          {/* Panoramic Coastline Parallax Window */}
-          <div className="relative h-[50vh] sm:h-[65vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
+          {/* Full-Bleed Parallax Architecture Window */}
+          <div className="awwwards-parallax-window relative h-[55vh] sm:h-[75vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=85"
-              alt="Pristine coastal shoreline and private beach at Stayza"
-              className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover will-change-transform"
+              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85"
+              alt="Hand-chiseled travertine walls and architectural terraces"
+              className="absolute inset-0 w-full h-[140%] object-cover will-change-transform"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-6 sm:p-10 pointer-events-none">
-              <div className="text-white space-y-1">
-                <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-300 font-bold block">
-                  PLATE IV &bull; SINDH TIDAL REACH
-                </span>
-                <p className="font-serif-grand text-xl sm:text-2xl font-light text-white">
-                  Secluded beach access with private catamaran charters available daily.
-                </p>
-              </div>
+            <div className="awwwards-counter-plate absolute bottom-8 left-8 p-6 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 rounded-[2px] max-w-sm shadow-2xl hidden sm:block will-change-transform">
+              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-emerald-900 font-bold block mb-1">
+                FIG. 03 &bull; PASSIVE THERMAL MASS
+              </span>
+              <h4 className="font-serif-grand text-xl text-slate-900 font-light mb-2">
+                120mm Travertine Slabs
+              </h4>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">
+                Dense natural limestone absorbs desert sunlight by day and gently radiates natural warmth after twilight.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 9. CHAPTER 06: PRIVATE UNDERGROUND ARRIVAL SANCTUARY */}
-      <section id="arrival" className="py-20 sm:py-32 px-4 sm:px-8 lg:px-14 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-6 space-y-6">
-              <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-emerald-900 font-bold block">
-                CHAPTER 06 &bull; ARRIVAL SANCTUARY
+      {/* 7. CHAPTER 03: THE HARVEST TABLE (PINNED SPLIT-SCREEN DINING) */}
+      <section id="culinary" className="relative py-16 sm:py-28 px-4 sm:px-8 lg:px-14 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* RIGHT: Pinned Sticky Dining Monograph */}
+          <div className="lg:col-span-5 lg:order-2 lg:sticky lg:top-28 space-y-8">
+            <div className="space-y-3">
+              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-emerald-900 font-bold block">
+                CHAPTER 03 &bull; THE HARVEST TABLE
               </span>
-              <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
-                Discreet Valet &amp; Zero Crowded Lobbies.
+              <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-[1.08]">
+                Farm-to-Table Coastal Cuisine &amp; Open Fire.
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                True luxury is the absence of queues, lobbies, and noise. Upon arrival at the estate gates, vehicles descend smoothly into a quiet underground travertine portal. A private subterranean elevator brings you directly into your residence, where in-suite check-in takes place in complete peace.
-              </p>
-              <div className="space-y-3 pt-2 text-xs font-mono">
-                <div className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
-                  <span>Private Chauffeur Transfers from Karachi (75 Minutes)</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
-                  <span>Helipad Coordinates: 24° 51' 14" N &bull; 67° 00' 42" E</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
-                  <span>Underground Valet &amp; 100% In-Suite Check-In</span>
-                </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              At <strong>The Harvest Pavilion</strong>, food is simple, seasonal, and hyper-local. Every dawn, local fishermen land red snapper and gulf prawns directly on our beach. Our kitchen pairs the catch with organic heirloom vegetables harvested daily from the estate garden.
+            </p>
+
+            <div className="p-5 bg-white border border-slate-200/90 rounded-[2px] space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                <span className="text-slate-500 uppercase text-[10px]">Open-Air Breakfast</span>
+                <strong>07:00 &ndash; 11:00</strong>
+              </div>
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                <span className="text-slate-500 uppercase text-[10px]">All-Day Coastal Dining</span>
+                <strong>12:00 &ndash; 22:30</strong>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 uppercase text-[10px]">In-Suite Private Chef</span>
+                <strong>By Request (Live Deck Grill)</strong>
               </div>
             </div>
 
-            <div className="lg:col-span-6 relative h-72 sm:h-96 rounded-[2px] overflow-hidden bg-slate-900 shadow-xl">
+            <div className="p-4 bg-emerald-50 border border-emerald-200/80 rounded-[2px] text-xs text-emerald-950 font-mono">
+              <strong>Signature Catch:</strong> Whole salt-crusted red snapper grilled over charred tamarind wood with cold-pressed citrus oil.
+            </div>
+          </div>
+
+          {/* LEFT: Scrolling High-Impact Culinary Photos */}
+          <div className="lg:col-span-7 lg:order-1 space-y-16">
+            {/* Dining Photo 1: Oceanfront Table */}
+            <div className="awwwards-parallax-window relative h-[60vh] sm:h-[80vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=85"
-                alt="Underground valet and private residence arrival portal"
-                className="awwwards-parallax-img absolute inset-0 w-full h-[125%] object-cover will-change-transform"
+                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1800&q=85"
+                alt="Open-air oceanfront dining table at dusk"
+                className="absolute inset-0 w-full h-[140%] object-cover will-change-transform filter brightness-[0.85]"
+              />
+              <div className="awwwards-counter-plate absolute bottom-8 left-8 p-5 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 text-xs font-mono rounded-[2px] max-w-xs shadow-2xl hidden sm:block will-change-transform">
+                <span className="text-[10px] text-emerald-900 font-bold block uppercase tracking-wider mb-1">
+                  FIG. 04 &bull; THE PAVILION DECK
+                </span>
+                <p className="text-slate-600 font-sans text-xs leading-relaxed">
+                  Open-air candlelight dining above the breaking surf.
+                </p>
+              </div>
+            </div>
+
+            {/* Dining Photo 2: Fresh Morning Harvest */}
+            <div className="awwwards-parallax-window relative h-[50vh] sm:h-[70vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
+              <img
+                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=85"
+                alt="Fresh organic estate vegetables and fresh herbs"
+                className="absolute inset-0 w-full h-[140%] object-cover will-change-transform"
+              />
+              <div className="awwwards-counter-plate absolute top-8 right-8 p-5 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 text-xs font-mono rounded-[2px] max-w-xs shadow-2xl hidden sm:block will-change-transform">
+                <span className="text-[10px] text-emerald-900 font-bold block uppercase tracking-wider mb-1">
+                  FIG. 05 &bull; ORGANIC HARVEST
+                </span>
+                <p className="text-slate-600 font-sans text-xs leading-relaxed">
+                  Heirloom produce picked daily from our coastal garden beds.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 8. KINETIC SCROLL-DRIVEN HORIZONTAL TYPOGRAPHY RIBBON #2 */}
+      <section className="kinetic-ribbon-2 py-10 sm:py-16 bg-[#0E1201] text-[#FAF8F5] overflow-hidden border-y border-slate-800 select-none">
+        <div className="kinetic-ribbon-text-2 flex items-center whitespace-nowrap text-3xl sm:text-6xl font-serif-grand font-light tracking-[0.2em] text-[#FFF0CA] will-change-transform -translate-x-1/3">
+          <span>&bull; GEOTHERMAL SALINE POOLS &bull; 38°C THERMAL BATHS &bull; PANORAMIC CEDAR SAUNAS &bull; UNDERGROUND VALET PORTAL &bull; PRIVATE SUITE CHECK-IN</span>
+          <span className="ml-8">&bull; GEOTHERMAL SALINE POOLS &bull; 38°C THERMAL BATHS &bull; PANORAMIC CEDAR SAUNAS &bull; UNDERGROUND VALET PORTAL &bull; PRIVATE SUITE CHECK-IN</span>
+        </div>
+      </section>
+
+      {/* 9. CHAPTER 04: WELLNESS & THERMAL SPRINGS */}
+      <section id="wellness" className="relative py-16 sm:py-28 px-4 sm:px-8 lg:px-14 bg-white border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="max-w-3xl space-y-4">
+            <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-emerald-900 font-bold block">
+              CHAPTER 04 &bull; RESTORATIVE WATERS
+            </span>
+            <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
+              38°C Mineral Springs &amp; Sea Salt Cedar Baths.
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              Sourced from geothermal coastal aquifers, our thermal stone baths are naturally rich in sulfur, magnesium, and marine trace elements. Steam gently rises into the crisp sea air as the waves break beneath your terrace.
+            </p>
+          </div>
+
+          {/* Full-Bleed Parallax Thermal Pool Window */}
+          <div className="awwwards-parallax-window relative h-[60vh] sm:h-[80vh] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=2200&q=85"
+              alt="Outdoor thermal hot spring pool overlooking the ocean surf"
+              className="absolute inset-0 w-full h-[140%] object-cover will-change-transform"
+            />
+            <div className="awwwards-counter-plate absolute top-8 right-8 p-6 bg-[#FAF8F5]/95 backdrop-blur-md border border-slate-300 rounded-[2px] max-w-sm shadow-2xl hidden sm:block will-change-transform">
+              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-emerald-900 font-bold block mb-1">
+                FIG. 06 &bull; THERMAL BATHS
+              </span>
+              <h4 className="font-serif-grand text-xl text-slate-900 font-light mb-2">
+                Naturally Heated Saline Aquifer
+              </h4>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">
+                Carved into bedrock terraces perched above the surf.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. CHAPTER 05: UNDERGROUND VALET ARRIVAL SANCTUARY */}
+      <section id="arrival" className="relative py-16 sm:py-28 px-4 sm:px-8 lg:px-14 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div className="lg:col-span-6 space-y-6">
+            <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-emerald-900 font-bold block">
+              CHAPTER 05 &bull; THE ARRIVAL
+            </span>
+            <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
+              Subterranean Valet &amp; Zero Hotel Lobbies.
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              True luxury is the complete absence of noise, queues, and crowded lobbies. Upon arriving at the estate gates, vehicles descend smoothly into a quiet underground travertine portal. A private elevator ascends directly into your suite, where in-residence check-in takes place in absolute peace.
+            </p>
+            <div className="space-y-3 pt-2 text-xs font-mono">
+              <div className="p-3 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-emerald-700" />
+                <span>Chauffeur Transfers from Karachi (75 Minutes)</span>
+              </div>
+              <div className="p-3 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-emerald-700" />
+                <span>Private Helipad: 24° 51' 14" N &bull; 67° 00' 42" E</span>
+              </div>
+              <div className="p-3 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-emerald-700" />
+                <span>Underground Valet &bull; 100% In-Suite Check-In</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6">
+            <div className="awwwards-parallax-window relative h-80 sm:h-[500px] rounded-[2px] overflow-hidden bg-slate-950 shadow-2xl">
+              <img
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=85"
+                alt="Underground valet portal and private residence entrance"
+                className="absolute inset-0 w-full h-[140%] object-cover will-change-transform"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 10. The Closing Monograph & Reservation Deck */}
-      <section className="py-24 sm:py-32 px-4 sm:px-8 lg:px-14 bg-[#0E1201] text-[#FAF8F5] text-center relative overflow-hidden">
+      {/* 11. CLOSING MONOGRAPH & RESERVATION DECK */}
+      <section className="py-24 sm:py-36 px-4 sm:px-8 lg:px-14 bg-[#0E1201] text-[#FAF8F5] text-center relative overflow-hidden select-none">
         <div className="max-w-3xl mx-auto space-y-8 relative z-10">
-          <span className="text-[10px] font-mono uppercase tracking-[0.32em] text-[#FFF0CA] font-bold block">
-            STAYZA RESIDENCES &bull; 7 PRIVATE KEYS
+          <span className="text-[10px] font-mono uppercase tracking-[0.35em] text-[#FFF0CA] font-bold block">
+            STAYZA RESIDENCES &bull; 7 PRIVATE SUITES
           </span>
           <h2 className="font-serif-grand text-3xl sm:text-6xl font-light tracking-tight text-white leading-tight">
             Begin Your Journey to the Sindh Coast.
           </h2>
           <p className="text-xs sm:text-base text-slate-400 max-w-xl mx-auto leading-relaxed font-normal">
-            Experience the tranquility of our cliffside residences, mineral hot springs, and coastal dining. Secure your suite with a 30% advance deposit.
+            Experience the quiet luxury of our cliffside residences, geothermal mineral springs, and farm-to-table coastal cuisine. Secure your suite with a 30% advance deposit.
           </p>
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 text-xs font-mono">
             <Link
@@ -631,7 +595,7 @@ export default function EstatePage() {
         </div>
       </section>
 
-      {/* 11. Architectural Footer */}
+      {/* 12. Architectural Footer */}
       <Footer />
     </div>
   )

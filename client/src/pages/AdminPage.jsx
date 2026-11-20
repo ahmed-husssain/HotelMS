@@ -76,7 +76,7 @@ export default function AdminPage() {
             { id: 'GUESTS', label: 'Guest Directory' },
             { id: 'RESIDENCES', label: 'Tariffs & Inventory' },
             { id: 'SETTINGS', label: 'Tax & Settings' },
-            { id: 'AUDIT', label: 'Activity Audit Trail' },
+            { id: 'AUDIT', label: 'Activity Log' },
           ].map((tab) => (
             <button
               key={tab.id}
