@@ -3,6 +3,8 @@ import {
   fetchStaffDashboard,
   checkInStaffGuest,
   checkOutStaffGuest,
+  markNoShowStaffGuest,
+  fetchShiftSummary,
   postFolioCharge,
   patchRoomStatus,
   patchRoomChecklist,
@@ -339,6 +341,69 @@ export function HotelDataProvider({ children }) {
     localStorage.setItem('stayza_hotel_inventory', JSON.stringify(inventory))
   }, [inventory])
 
+  // 8. Front Desk Cashier Payments & Collections (Priority 3 Drawer Balancing)
+  const [deskPayments, setDeskPayments] = useState(() => {
+    try {
+      const saved = localStorage.getItem('stayza_hotel_desk_payments')
+      return saved ? JSON.parse(saved) : [
+        {
+          id: 'PAY-1001',
+          time: '09:30 AM',
+          type: 'INCIDENTAL_SETTLEMENT',
+          method: 'CASH',
+          amount: 25000,
+          roomNumber: 'Suite 301',
+          guest: 'Dr. Tariq Khan',
+          notes: 'Helipad chauffeur transfer cash settlement',
+        },
+        {
+          id: 'PAY-1002',
+          time: '11:15 AM',
+          type: 'CHECKOUT_SETTLEMENT',
+          method: 'CARD_POS',
+          amount: 65000,
+          roomNumber: 'Suite 202',
+          guest: 'Faraz Ahmed',
+          notes: 'Standard suite checkout card settlement',
+        },
+      ]
+    } catch {
+      return []
+    }
+  })
+
+  useEffect(() => {
+    localStorage.setItem('stayza_hotel_desk_payments', JSON.stringify(deskPayments))
+  }, [deskPayments])
+
+  const openingFloat = 50000
+  const cashCollected = deskPayments
+    .filter((p) => p.method === 'CASH' || p.paymentMethod === 'CASH_AT_DESK')
+    .reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
+
+  const cardPOS = deskPayments
+    .filter(
+      (p) =>
+        p.method === 'CARD_POS' ||
+        p.method === 'CARD' ||
+        p.paymentMethod === 'CARD_POS' ||
+        p.paymentMethod === 'CARD_AT_DESK'
+    )
+    .reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
+
+  const expectedCashTotal = openingFloat + cashCollected
+
+  const addDeskPayment = (paymentData) => {
+    const record = {
+      id: paymentData.id || `PAY-${Date.now().toString().slice(-4)}`,
+      time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      ...paymentData,
+      amount: Number(paymentData.amount) || 0,
+    }
+    setDeskPayments((prev) => [record, ...prev])
+    return record
+  }
+
   const { toast } = useToast()
 
   // Live MongoDB Atlas Sync on Mount + Smart Live Heartbeat (Every 3.5s for zero-refresh updates)
@@ -385,30 +450,29 @@ export function HotelDataProvider({ children }) {
       }
 
       try {
-        const hkRes = await fetchHousekeepingDashboard()
-        if (isMounted && hkRes.success && hkRes.data) {
-          if (hkRes.data.inventory && hkRes.data.inventory.length > 0) {
-            setInventory(hkRes.data.inventory)
-          }
-          if (hkRes.data.tickets && hkRes.data.tickets.length > 0) {
-            setMaintenanceTickets(
-              hkRes.data.tickets.map((t) => ({
-                id: t._id,
-                roomNumber: t.roomNumber,
-                category: t.issueCategory,
-                issue: t.issueDescription,
-                urgency: t.priority,
-                reportedAt: new Date(t.createdAt).toLocaleDateString(),
-                assignedTo: t.assignedTechnician,
-                status: t.status,
-              }))
-            )
+        const shiftRes = await fetchShiftSummary()
+        if (isMounted && shiftRes.success && shiftRes.data) {
+          if (Array.isArray(shiftRes.data.payments) && shiftRes.data.payments.length > 0) {
+            setDeskPayments((prev) => {
+              const existingIds = new Set(prev.map((p) => p.id || p._id))
+              const newRemote = shiftRes.data.payments
+                .filter((p) => !existingIds.has(p._id) && !existingIds.has(p.id))
+                .map((p) => ({
+                  id: p._id || p.id,
+                  time: new Date(p.paidAt || Date.now()).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+                  type: p.transactionType || 'DESK_PAYMENT',
+                  method: p.paymentMethod === 'CARD_POS' || p.paymentMethod === 'CARD_AT_DESK' ? 'CARD_POS' : 'CASH',
+                  amount: p.amount,
+                  roomNumber: p.bookingId?.roomNumber || 'Front Desk',
+                  guest: p.bookingId?.guestDetails?.name || 'Guest',
+                  notes: p.notes,
+                }))
+              return newRemote.length > 0 ? [...newRemote, ...prev] : prev
+            })
           }
         }
       } catch (err) {
-        if (isInitial) {
-          console.warn('[HotelDataContext] Housekeeping sync fallback:', err.message)
-        }
+        // Fallback silently if running client-only
       }
     }
 

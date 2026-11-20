@@ -129,7 +129,7 @@ async function getDashboard(req, res) {
 async function checkInGuest(req, res) {
   try {
     const { bookingRef } = req.params
-    const { roomNumber } = req.body
+    const { roomNumber, paymentMethod, settleBalanceNow, actorName = 'Front Desk' } = req.body
 
     let booking = await Booking.findOne({ bookingReference: bookingRef }).populate('room')
     if (!booking) {
@@ -137,6 +137,14 @@ async function checkInGuest(req, res) {
       const targetRoom = await resolveRoom(roomNumber)
       if (!targetRoom) {
         return res.status(404).json({ success: false, message: 'Reservation or Suite not found' })
+      }
+
+      // Guard: Cannot check in to a dirty or maintenance room
+      if (['DIRTY', 'CLEANING', 'MAINTENANCE'].includes(targetRoom.status)) {
+        return res.status(400).json({
+          success: false,
+          message: `Cannot check in: ${targetRoom.roomNumber} is currently ${targetRoom.status}. Please select an available clean suite.`,
+        })
       }
 
       booking = await Booking.create({
@@ -168,16 +176,70 @@ async function checkInGuest(req, res) {
         incidentals: [],
       })
     } else {
+      // Room Reassignment check & Dirty room guard
+      let targetRoom = null
+      if (roomNumber && roomNumber !== booking.roomNumber) {
+        targetRoom = await resolveRoom(roomNumber)
+        if (!targetRoom) {
+          return res.status(404).json({ success: false, message: `Suite ${roomNumber} not found` })
+        }
+      } else {
+        targetRoom = await Room.findById(booking.room)
+      }
+
+      if (!targetRoom) {
+        return res.status(404).json({ success: false, message: 'Assigned suite not found' })
+      }
+
+      // Guard: Cannot check in to a dirty or maintenance room
+      if (['DIRTY', 'CLEANING', 'MAINTENANCE'].includes(targetRoom.status)) {
+        return res.status(400).json({
+          success: false,
+          message: `Cannot check in: ${targetRoom.roomNumber} is currently ${targetRoom.status}. Please assign an available clean suite.`,
+        })
+      }
+
+      // Reassign room if different from booked
+      if (String(targetRoom._id) !== String(booking.room?._id || booking.room)) {
+        const oldRoom = await Room.findById(booking.room)
+        if (oldRoom && oldRoom.status === 'OCCUPIED') {
+          oldRoom.status = 'AVAILABLE'
+          await oldRoom.save()
+        }
+        booking.room = targetRoom._id
+        booking.roomNumber = targetRoom.roomNumber
+      }
+
+      // Process 70% balance settlement if collected at check-in
+      if (settleBalanceNow && paymentMethod && booking.pricingSnapshot?.balanceDue > 0) {
+        const balanceAmt = booking.pricingSnapshot.balanceDue
+        const normalizedMethod = paymentMethod === 'CARD' || paymentMethod === 'CARD_POS' ? 'CARD_POS' : 'CASH_AT_DESK'
+        const receiptNumber = `RCP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
+
+        await Payment.create({
+          bookingId: booking._id,
+          guestId: booking.guest || null,
+          transactionType: 'BALANCE_70',
+          paymentMethod: normalizedMethod,
+          amount: balanceAmt,
+          currency: 'PKR',
+          status: 'SUCCEEDED',
+          idempotencyKey: `desk-checkin-${booking.bookingReference}-${Date.now()}`,
+          receiptNumber,
+          notes: `Check-in balance settlement (${normalizedMethod})`,
+          paidAt: new Date(),
+        })
+
+        booking.pricingSnapshot.balanceDue = 0
+      }
+
       booking.status = 'CHECKED_IN'
       booking.checkedInAt = new Date()
       await booking.save()
-    }
 
-    // Set Room to OCCUPIED
-    const room = await Room.findById(booking.room)
-    if (room) {
-      room.status = 'OCCUPIED'
-      await room.save()
+      // Set target room to OCCUPIED
+      targetRoom.status = 'OCCUPIED'
+      await targetRoom.save()
     }
 
     // Append to Activity Audit Trail
@@ -197,7 +259,7 @@ async function checkInGuest(req, res) {
         guest: booking.guestDetails?.name,
         bookingRef: booking.bookingReference,
         updatedAt: new Date(),
-        actor: req.body.actorName || 'Front Desk',
+        actor: actorName,
       })
       io.emit('booking:checked_in', {
         bookingRef: booking.bookingReference,
@@ -301,6 +363,10 @@ async function checkOutGuest(req, res) {
     }
 
     const balanceRemaining = booking.pricingSnapshot?.balanceDue || 0
+    const normalizedMethod =
+      paymentMethod === 'CARD' || paymentMethod === 'CARD_POS'
+        ? 'CARD_POS'
+        : 'CASH_AT_DESK'
 
     // Record balance settlement payment in immutable ledger
     if (balanceRemaining > 0) {
@@ -309,13 +375,13 @@ async function checkOutGuest(req, res) {
         bookingId: booking._id,
         guestId: booking.guest || null,
         transactionType: 'BALANCE_70',
-        paymentMethod,
+        paymentMethod: normalizedMethod,
         amount: balanceRemaining,
         currency: 'PKR',
         status: 'SUCCEEDED',
         idempotencyKey: `desk-${booking.bookingReference}-${Date.now()}`,
         receiptNumber,
-        notes: notes || 'Front desk final check-out settlement',
+        notes: notes || `Front desk check-out settlement (${normalizedMethod})`,
         paidAt: new Date(),
       })
     }
@@ -371,6 +437,67 @@ async function checkOutGuest(req, res) {
   }
 }
 
+// @desc    Mark reservation as NO_SHOW, release room to AVAILABLE, retain 30% advance deposit
+// @route   POST /api/staff/no-show/:bookingRef
+// @access  Public (or Staff Authorized)
+async function markNoShow(req, res) {
+  try {
+    const { bookingRef } = req.params
+    const { actorName = 'Front Desk' } = req.body
+
+    const booking = await Booking.findOne({ bookingReference: bookingRef }).populate('room')
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'Reservation not found' })
+    }
+
+    booking.status = 'NO_SHOW'
+    await booking.save()
+
+    // Release assigned room back to AVAILABLE if not occupied
+    if (booking.room) {
+      const room = await Room.findById(booking.room)
+      if (room && room.status !== 'OCCUPIED') {
+        room.status = 'AVAILABLE'
+        await room.save()
+      }
+    }
+
+    // Append to Activity Audit Trail
+    await ActivityLog.create({
+      action: 'NO_SHOW_RECORDED',
+      details: `Guest ${booking.guestDetails?.name || 'Guest'} marked NO-SHOW for ${booking.bookingReference}. Suite ${booking.roomNumber} released to AVAILABLE. 30% deposit retained.`,
+      targetModel: 'Booking',
+      targetId: booking._id,
+    })
+
+    // Broadcast WebSocket events
+    const io = req.app.get('io')
+    if (io) {
+      io.emit('booking:no_show', {
+        bookingRef: booking.bookingReference,
+        roomNumber: booking.roomNumber,
+        guest: booking.guestDetails?.name,
+      })
+      if (booking.roomNumber) {
+        io.emit('room:status_changed', {
+          roomNumber: booking.roomNumber,
+          status: 'AVAILABLE',
+          actor: actorName,
+        })
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Reservation ${booking.bookingReference} marked NO-SHOW. Suite ${booking.roomNumber} released to AVAILABLE.`,
+      data: booking,
+    })
+  } catch (error) {
+    console.error('[StaffOperations.markNoShow] Error:', error.message)
+    res.status(500).json({ success: false, message: error.message })
+  }
+}
+
 // @desc    Get Cashier Shift Reconciliation (Z-Report)
 // @route   GET /api/staff/shifts/current
 // @access  Public (or Staff Authorized)
@@ -417,5 +544,6 @@ module.exports = {
   checkInGuest,
   addFolioCharge,
   checkOutGuest,
+  markNoShow,
   getShiftSummary,
 }

@@ -145,6 +145,17 @@ export async function postFolioCharge(bookingRef, payload) {
   })
 }
 
+export async function markNoShowStaffGuest(bookingRef, payload = {}) {
+  return request(`/staff/no-show/${encodeURIComponent(bookingRef)}`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function fetchShiftSummary() {
+  return request('/staff/shifts/current')
+}
+
 // 5. Housekeeping, Maintenance & Hotel Supplies
 export async function fetchHousekeepingDashboard() {
   return request('/housekeeping/dashboard')

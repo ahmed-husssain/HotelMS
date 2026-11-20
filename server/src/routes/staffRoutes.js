@@ -5,6 +5,7 @@ const {
   checkInGuest,
   addFolioCharge,
   checkOutGuest,
+  markNoShow,
   getShiftSummary,
 } = require('../controllers/staffOperationsController')
 const { protect } = require('../middleware/auth')
@@ -25,6 +26,9 @@ router.get('/dashboard', getDashboard)
 
 // Guest Check-In & Arrival Processing
 router.post('/check-in/:bookingRef', checkInGuest)
+
+// Mark Guest No-Show & Release Suite
+router.post('/no-show/:bookingRef', markNoShow)
 
 // Post Folio Extra Service
 router.post('/folio/:bookingRef/add', addFolioCharge)
