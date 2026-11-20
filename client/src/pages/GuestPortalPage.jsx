@@ -222,7 +222,7 @@ export default function GuestPortalPage() {
   const [searchParams] = useSearchParams()
   const initialRef = searchParams.get('ref') || ''
   const { currentUser, logout } = useAuth()
-  const { requestGuestService } = useHotelData()
+  const { requestGuestService, arrivals } = useHotelData()
   const { toast } = useToast()
 
   // Navigation & View State
@@ -293,15 +293,79 @@ export default function GuestPortalPage() {
           setIsUnlocked(true)
           setSearchError('')
         } else {
+          // Check local confirmed arrivals registry
+          const localArrival = (arrivals || []).find((a) => a.bookingRef?.toUpperCase() === activeRef.toUpperCase())
+          if (localArrival) {
+            const roomNum = localArrival.roomNumber?.replace(/\D/g, '') || '301'
+            const matchedRes = RESIDENCES.find((r) => r.roomNumber === roomNum) || RESIDENCES[0]
+            setCurrentBooking({
+              bookingRef: localArrival.bookingRef,
+              roomNumber: localArrival.roomNumber || `Suite ${roomNum}`,
+              residence: {
+                ...matchedRes,
+                roomNumber: roomNum,
+                credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
+                valetBay: `Bay #${roomNum} (Underground Parking)`,
+                assignedButler: 'Tariq J.',
+              },
+              guestName: localArrival.guest || 'In-House Guest',
+              guestEmail: localArrival.guestEmail || '',
+              guestPhone: localArrival.phone || '',
+              nights: localArrival.nights || 4,
+              checkIn: 'Today',
+              checkOut: 'In 4 Days',
+              checkInTime: '14:00 PKT',
+              checkOutTime: '12:00 PKT',
+              guestCount: 2,
+              safepayRef: localArrival.safepayRef || 'SPF-892104',
+              initialServices: [],
+            })
+            setIsUnlocked(true)
+            setSearchError('')
+            return
+          }
+
           if (isMounted) {
             setIsUnlocked(false)
-            setSearchError(`No reservation found matching reference "${activeRef}". Please check your code or load the verified demo stay.`)
+            setSearchError('Reservation code not found.')
           }
         }
       } catch (err) {
+        // Fallback: Check local confirmed arrivals registry
+        const localArrival = (arrivals || []).find((a) => a.bookingRef?.toUpperCase() === activeRef.toUpperCase())
+        if (localArrival) {
+          const roomNum = localArrival.roomNumber?.replace(/\D/g, '') || '301'
+          const matchedRes = RESIDENCES.find((r) => r.roomNumber === roomNum) || RESIDENCES[0]
+          setCurrentBooking({
+            bookingRef: localArrival.bookingRef,
+            roomNumber: localArrival.roomNumber || `Suite ${roomNum}`,
+            residence: {
+              ...matchedRes,
+              roomNumber: roomNum,
+              credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
+              valetBay: `Bay #${roomNum} (Underground Parking)`,
+              assignedButler: 'Tariq J.',
+            },
+            guestName: localArrival.guest || 'In-House Guest',
+            guestEmail: localArrival.guestEmail || '',
+            guestPhone: localArrival.phone || '',
+            nights: localArrival.nights || 4,
+            checkIn: 'Today',
+            checkOut: 'In 4 Days',
+            checkInTime: '14:00 PKT',
+            checkOutTime: '12:00 PKT',
+            guestCount: 2,
+            safepayRef: localArrival.safepayRef || 'SPF-892104',
+            initialServices: [],
+          })
+          setIsUnlocked(true)
+          setSearchError('')
+          return
+        }
+
         if (isMounted) {
           setIsUnlocked(false)
-          setSearchError(`Reservation reference "${activeRef}" was not found in hotel records. Please check your reference code or load the verified demo stay.`)
+          setSearchError('Reservation code not found.')
         }
       } finally {
         if (isMounted) setIsLoadingStay(false)
@@ -373,6 +437,11 @@ export default function GuestPortalPage() {
     const cleanCode = bookingCode.trim().toUpperCase()
     const cleanEmail = guestEmailInput.trim().toLowerCase()
 
+    if (!cleanCode && !cleanEmail) {
+      setSearchError('Reservation code not found.')
+      return
+    }
+
     try {
       const res = await lookupStay(cleanCode ? { ref: cleanCode } : { email: cleanEmail })
       if (res.success && res.data) {
@@ -410,14 +479,56 @@ export default function GuestPortalPage() {
         return
       }
     } catch {
-      // Graceful fallback to demo
+      // Fallback: Check local confirmed arrivals registry
     }
 
-    if (cleanCode === 'ST-301-9041' || cleanCode === 'TH-301-9041' || cleanCode.startsWith('ST-') || cleanCode.startsWith('TH-') || cleanCode.startsWith('LX-') || cleanEmail.includes('@')) {
+    // Check confirmed local arrivals registry (HotelDataContext)
+    const localArrival = (arrivals || []).find((a) => {
+      const matchRef = cleanCode && a.bookingRef?.toUpperCase() === cleanCode
+      const matchEmail = cleanEmail && (a.guestEmail?.toLowerCase() === cleanEmail || a.email?.toLowerCase() === cleanEmail)
+      return matchRef || matchEmail
+    })
+
+    if (localArrival) {
+      const roomNum = localArrival.roomNumber?.replace(/\D/g, '') || '301'
+      const matchedRes = RESIDENCES.find((r) => r.roomNumber === roomNum) || RESIDENCES[0]
+      setCurrentBooking({
+        bookingRef: localArrival.bookingRef,
+        roomNumber: localArrival.roomNumber || `Suite ${roomNum}`,
+        residence: {
+          ...matchedRes,
+          roomNumber: roomNum,
+          credentials: { wifiNetwork: 'Stayza_Guest', wifiPassword: 'pacific2026' },
+          valetBay: `Bay #${roomNum} (Underground Parking)`,
+          assignedButler: 'Tariq J.',
+        },
+        guestName: localArrival.guest || 'In-House Guest',
+        guestEmail: localArrival.guestEmail || cleanEmail || '',
+        guestPhone: localArrival.phone || '',
+        nights: localArrival.nights || 4,
+        checkIn: 'Today',
+        checkOut: 'In 4 Days',
+        checkInTime: '14:00 PKT',
+        checkOutTime: '12:00 PKT',
+        guestCount: 2,
+        safepayRef: localArrival.safepayRef || 'SPF-892104',
+        initialServices: [],
+      })
       setIsUnlocked(true)
-    } else {
-      setSearchError('Reservation reference not found. Try demo reference ST-301-9041.')
+      toast.success(`Welcome to ${localArrival.roomNumber}`, 'SUITE CONNECTED')
+      return
     }
+
+    // Designated official demo stay
+    if (cleanCode === 'ST-301-9041' || cleanCode === 'TH-301-9041' || cleanEmail === 'tariq.khan@luxury.pk') {
+      setCurrentBooking(DEMO_BOOKING)
+      setIsUnlocked(true)
+      return
+    }
+
+    // Strictly reject any unverified code
+    setIsUnlocked(false)
+    setSearchError('Reservation code not found.')
   }
 
   const handleLoadDemo = async () => {
