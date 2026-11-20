@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import {
   loginUser,
   registerUser,
+  fetchCurrentUser,
   fetchAdminStaff,
   createAdminStaff,
   toggleAdminStaffStatus,
@@ -136,6 +137,84 @@ export function AuthProvider({ children }) {
     }
     return () => { isMounted = false }
   }, [currentUser?.role])
+
+  // Cryptographically validate session against Express JWT backend on boot
+  useEffect(() => {
+    let isMounted = true
+    const token =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem('stayza_auth_token') || localStorage.getItem('habitas_auth_token')
+        : null
+
+    if (token) {
+      fetchCurrentUser()
+        .then((res) => {
+          if (!isMounted) return
+          if (res?.success && res.data) {
+            // Server verified cryptographic JWT signature; enforce true database role & profile
+            const verified = res.data
+            const roleLabels = {
+              guest: 'Verified Guest',
+              receptionist: 'Front Desk Receptionist',
+              housekeeping: 'Housekeeping Lead',
+              admin: 'General Manager',
+            }
+
+            setCurrentUser((prev) => {
+              if (!prev) return prev
+              return {
+                ...prev,
+                id: verified.id || verified._id,
+                name: verified.name,
+                email: verified.email,
+                role: verified.role,
+                roleLabel: roleLabels[verified.role] || verified.role,
+                phone: verified.phone || prev.phone || '',
+                activeReservationCode: verified.activeReservationCode || prev.activeReservationCode || '',
+                token,
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          if (!isMounted) return
+          // If server explicitly rejected the token (401 Unauthorized or 403 Forbidden), purge session
+          if (err.status === 401 || err.status === 403) {
+            console.warn('[AuthContext] Session expired or invalid JWT token. Clearing credentials.')
+            localStorage.removeItem('stayza_auth_token')
+            localStorage.removeItem('stayza_auth_user')
+            localStorage.removeItem('habitas_auth_token')
+            localStorage.removeItem('habitas_auth_user')
+            setCurrentUser(null)
+          }
+        })
+    } else if (currentUser) {
+      // In offline/client demo mode with no JWT token, prevent local role tampering:
+      const matched = staffAccounts.find(
+        (acc) => acc.email?.toLowerCase() === currentUser.email?.toLowerCase()
+      )
+      if (matched && matched.role !== currentUser.role) {
+        console.warn('[AuthContext] Detected unauthorized role tampering. Resetting to registered role.')
+        setCurrentUser((prev) => ({
+          ...prev,
+          role: matched.role,
+          roleLabel: matched.roleLabel,
+        }))
+      } else if (!matched && currentUser.role !== 'guest') {
+        // Unknown account claiming staff privileges without a server JWT token
+        console.warn('[AuthContext] Unregistered account claiming staff privileges. Resetting to guest.')
+        setCurrentUser((prev) => ({
+          ...prev,
+          role: 'guest',
+          roleLabel: 'Guest Profile',
+        }))
+      }
+    }
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   /**
    * Login function with Server-Side JWT Authentication & Automatic Role Detection.

@@ -58,6 +58,10 @@ export async function registerUser(payload) {
   })
 }
 
+export async function fetchCurrentUser() {
+  return request('/auth/me')
+}
+
 // 1. Reservation & Pricing
 export async function createCheckoutHold(payload) {
   return request('/bookings/hold', {
