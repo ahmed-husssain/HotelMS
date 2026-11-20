@@ -12,6 +12,7 @@ const {
   submitFeedback,
   downloadInvoice,
 } = require('../controllers/bookingController')
+const { protect, verifyBookingOwnerOrStaff } = require('../middleware/auth')
 
 /**
  * Booking Routes — Guest Reservation Lifecycle & /my-stay Hub
@@ -24,13 +25,13 @@ router.post('/:reference/release-hold', releaseHold)
 
 // 2. Confirmation & Official PDF Tax Document
 router.post('/:reference/confirm', confirmBooking)
-router.get('/:reference/invoice', downloadInvoice)
+router.get('/:reference/invoice', protect, verifyBookingOwnerOrStaff, downloadInvoice)
 
-// 3. /my-stay In-Residence Hub Controls
+// 3. /my-stay In-Residence Hub Controls (Cryptographically Secured: Owner or Staff only)
 router.get('/lookup', lookupBooking)
-router.post('/:reference/unlock', toggleDigitalKey)
-router.patch('/:reference/settings', updateInStaySettings)
-router.post('/:reference/incidentals', addIncidental)
-router.post('/:reference/feedback', submitFeedback)
+router.post('/:reference/unlock', protect, verifyBookingOwnerOrStaff, toggleDigitalKey)
+router.patch('/:reference/settings', protect, verifyBookingOwnerOrStaff, updateInStaySettings)
+router.post('/:reference/incidentals', protect, verifyBookingOwnerOrStaff, addIncidental)
+router.post('/:reference/feedback', protect, verifyBookingOwnerOrStaff, submitFeedback)
 
 module.exports = router

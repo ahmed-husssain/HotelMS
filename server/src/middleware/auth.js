@@ -65,4 +65,52 @@ async function protect(req, res, next) {
   }
 }
 
-module.exports = { protect }
+/**
+ * Verify Booking Ownership Middleware
+ * 
+ * Verifies that the authenticated user (req.user) is either:
+ * 1. The guest who owns the booking (by user ID or email)
+ * 2. An authorized staff member ('receptionist', 'housekeeping', 'admin')
+ * 
+ * Rejects unauthorized callers with HTTP 403 Forbidden.
+ */
+async function verifyBookingOwnerOrStaff(req, res, next) {
+  try {
+    const reference = req.params.reference || req.body.bookingRef || req.query.ref
+    if (!reference) {
+      return res.status(400).json({ success: false, message: 'Reservation reference is required.' })
+    }
+
+    const Booking = require('../models/Booking')
+    const booking = await Booking.findOne({ bookingReference: reference })
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'Reservation not found.' })
+    }
+
+    // Staff tiers always have authorized access
+    if (req.user && ['admin', 'receptionist', 'housekeeping'].includes(req.user.role)) {
+      req.booking = booking
+      return next()
+    }
+
+    // Guest tier: must match guest user ID or email
+    const isOwnerId = booking.guest && req.user._id && booking.guest.toString() === req.user._id.toString()
+    const isOwnerEmail = booking.guestDetails?.email && req.user.email &&
+      booking.guestDetails.email.toLowerCase() === req.user.email.toLowerCase()
+
+    if (!isOwnerId && !isOwnerEmail) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. You do not have authorization to control this reservation.',
+      })
+    }
+
+    req.booking = booking
+    next()
+  } catch (error) {
+    console.error('[verifyBookingOwnerOrStaff] Error:', error.message)
+    res.status(500).json({ success: false, message: 'Authorization check failed.' })
+  }
+}
+
+module.exports = { protect, verifyBookingOwnerOrStaff }
