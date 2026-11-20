@@ -155,8 +155,9 @@ export default function BookingLookup({
               </div>
 
               {searchError && (
-                <div className="p-2.5 bg-red-50 border border-red-200 text-red-900 text-xs font-mono rounded-[2px]">
-                  {searchError}
+                <div className="py-2 px-3 bg-red-50/90 border border-red-200/90 text-red-800 text-xs font-mono rounded-[2px] flex items-center gap-2 animate-fade-in">
+                  <span className="text-red-500 font-bold text-[11px]">✕</span>
+                  <span>{searchError}</span>
                 </div>
               )}
 
