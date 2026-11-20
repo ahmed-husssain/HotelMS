@@ -200,6 +200,10 @@ export function AuthProvider({ children }) {
     }
 
     // 2. Offline / Hosted static fallback
+    if (!password || !password.trim()) {
+      throw new Error('Please enter your password.')
+    }
+
     const matchedAccount = staffAccounts.find(
       (acc) =>
         acc.email.toLowerCase() === cleanEmail ||
@@ -207,44 +211,29 @@ export function AuthProvider({ children }) {
         acc.email.toLowerCase() === cleanEmail.replace('@stayza.com', '@habitas.com')
     )
 
-    if (matchedAccount) {
-      if (matchedAccount.status === 'inactive') {
-        throw new Error('This account has been deactivated by the General Manager.')
-      }
-
-      // Check password: match registered password if present, or standard test passwords
-      const normalizedPass = (password || '').trim().toLowerCase()
-      const isPasswordValid = matchedAccount.password
-        ? matchedAccount.password === password || normalizedPass === matchedAccount.password.toLowerCase()
-        : !normalizedPass || ['password123!', 'password123', '123', 'admin', '123456', 'pass'].includes(normalizedPass)
-
-      if (!isPasswordValid) {
-        throw new Error('Invalid credentials. Password is Password123!')
-      }
-
-      const userSession = {
-        ...matchedAccount,
-        lastLogin: new Date().toISOString(),
-      }
-      setCurrentUser(userSession)
-      return userSession
+    if (!matchedAccount) {
+      throw new Error('Invalid email or password. Please check your credentials or create an account.')
     }
 
-    // If email is not in staff registry, treat as newly recognized guest
-    const guestSession = {
-      id: `usr-guest-${Date.now().toString().slice(-4)}`,
-      name: cleanEmail.split('@')[0].replace('.', ' '),
-      email: cleanEmail,
-      role: 'guest',
-      roleLabel: 'Guest Profile',
-      activeReservationCode: 'ST-301-9041',
-      suiteNumber: 'Suite 301',
-      status: 'active',
+    if (matchedAccount.status === 'inactive') {
+      throw new Error('This account has been deactivated by the General Manager.')
+    }
+
+    // Check password: match registered password if present, or canonical demo password
+    const isPasswordValid = matchedAccount.password
+      ? matchedAccount.password === password
+      : password === 'Password123!'
+
+    if (!isPasswordValid) {
+      throw new Error('Invalid email or password.')
+    }
+
+    const userSession = {
+      ...matchedAccount,
       lastLogin: new Date().toISOString(),
     }
-
-    setCurrentUser(guestSession)
-    return guestSession
+    setCurrentUser(userSession)
+    return userSession
   }
 
   /**
