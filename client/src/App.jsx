@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import ErrorBoundary from './components/ErrorBoundary'
+import CardHoverPill from './components/CardHoverPill'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { HotelDataProvider } from './context/HotelDataContext'
@@ -68,6 +69,9 @@ function AppRoutes() {
 
   return (
     <>
+      {/* Signature Monolithic Floating Pill for Suite/Project Cards (Desktop-Only) */}
+      <CardHoverPill />
+
       <ScrollToTop />
       <Suspense fallback={<PageFallback />}>
         <Routes>

@@ -58,49 +58,9 @@ export async function registerUser(payload) {
   })
 }
 
-export async function fetchCurrentUser() {
-  return request('/auth/me')
-}
-
-// 1. Suite Inventory
-export async function fetchSuites(params = {}) {
-  const query = new URLSearchParams()
-  if (params.checkIn) query.append('checkIn', params.checkIn)
-  if (params.checkOut) query.append('checkOut', params.checkOut)
-  if (params.guests) query.append('guests', params.guests)
-  if (params.category && params.category !== 'all') query.append('category', params.category)
-
-  const qs = query.toString() ? `?${query.toString()}` : ''
-  return request(`/rooms${qs}`)
-}
-
-export async function fetchSuiteById(id) {
-  return request(`/rooms/${id}`)
-}
-
-// 2. Reservation & Pricing
-export async function getPricingQuote(payload) {
-  return request('/bookings/quote', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  })
-}
-
+// 1. Reservation & Pricing
 export async function createCheckoutHold(payload) {
   return request('/bookings/hold', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  })
-}
-
-export async function releaseHold(reference) {
-  return request(`/bookings/${reference}/release-hold`, {
-    method: 'POST',
-  })
-}
-
-export async function confirmReservation(reference, payload = {}) {
-  return request(`/bookings/${reference}/confirm`, {
     method: 'POST',
     body: JSON.stringify(payload),
   })
@@ -181,10 +141,6 @@ export async function postFolioCharge(bookingRef, payload) {
   })
 }
 
-export async function fetchCashierShift() {
-  return request('/staff/shifts/current')
-}
-
 // 5. Housekeeping, Maintenance & Hotel Supplies
 export async function fetchHousekeepingDashboard() {
   return request('/housekeeping/dashboard')
@@ -207,13 +163,6 @@ export async function createMaintenanceTicketApi(payload) {
   return request('/housekeeping/maintenance', {
     method: 'POST',
     body: JSON.stringify(payload),
-  })
-}
-
-export async function resolveMaintenanceTicketApi(ticketId, resolutionNotes = '') {
-  return request(`/housekeeping/maintenance/${encodeURIComponent(ticketId)}/resolve`, {
-    method: 'PATCH',
-    body: JSON.stringify({ resolutionNotes }),
   })
 }
 
