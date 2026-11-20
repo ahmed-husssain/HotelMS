@@ -6,6 +6,7 @@ export default function ArrivalsList({
   onCheckInArrival,
   onOpenFolio,
   onOpenInvoice,
+  onMarkNoShow,
   searchQuery = '',
 }) {
   const q = searchQuery.toLowerCase().trim()
@@ -77,7 +78,21 @@ export default function ArrivalsList({
                         <span className="font-bold text-slate-900 text-sm block">
                           {arr.roomNumber}
                         </span>
-                        <span className="text-[11px] text-slate-500">{arr.tier || 'Luxury Residence'}</span>
+                        <span className="text-[11px] text-slate-500 block">{arr.tier || 'Luxury Residence'}</span>
+                        {(() => {
+                          const r = rooms.find((rm) => rm.roomNumber === arr.roomNumber)
+                          if (!r) return null
+                          if (r.status === 'AVAILABLE') {
+                            return <span className="inline-block mt-1 text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-950 rounded-[2px] font-bold">Clean &amp; Ready</span>
+                          }
+                          if (r.status === 'DIRTY' || r.status === 'CLEANING') {
+                            return <span className="inline-block mt-1 text-[9px] px-1.5 py-0.5 bg-amber-100 text-amber-950 rounded-[2px] font-bold">Needs Cleaning</span>
+                          }
+                          if (r.status === 'MAINTENANCE') {
+                            return <span className="inline-block mt-1 text-[9px] px-1.5 py-0.5 bg-red-100 text-red-950 rounded-[2px] font-bold">Maintenance Hold</span>
+                          }
+                          return null
+                        })()}
                       </td>
                       <td className="py-4 px-4">
                         <strong className="font-serif-grand text-sm text-slate-900 block font-bold">
@@ -104,13 +119,23 @@ export default function ArrivalsList({
                         <span className="text-[10px] text-slate-400 block">Due at Desk</span>
                       </td>
                       <td className="py-4 px-5 text-right">
-                        <button
-                          type="button"
-                          onClick={() => onCheckInArrival(arr)}
-                          className="px-4 py-2 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs"
-                        >
-                          Check-In &rarr;
-                        </button>
+                        <div className="inline-flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => onMarkNoShow && onMarkNoShow(arr)}
+                            className="px-2.5 py-1.5 bg-white hover:bg-red-50 hover:text-red-700 text-slate-600 text-xs font-mono uppercase font-semibold rounded-[2px] border border-slate-200 transition-colors cursor-pointer"
+                            title="Mark guest as no-show and release suite"
+                          >
+                            No-Show
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onCheckInArrival(arr)}
+                            className="px-4 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs"
+                          >
+                            Check-In &rarr;
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   )

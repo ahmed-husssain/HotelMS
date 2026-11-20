@@ -450,6 +450,33 @@ export function HotelDataProvider({ children }) {
       }
 
       try {
+        const hkRes = await fetchHousekeepingDashboard()
+        if (isMounted && hkRes.success && hkRes.data) {
+          if (hkRes.data.inventory && hkRes.data.inventory.length > 0) {
+            setInventory(hkRes.data.inventory)
+          }
+          if (hkRes.data.tickets && hkRes.data.tickets.length > 0) {
+            setMaintenanceTickets(
+              hkRes.data.tickets.map((t) => ({
+                id: t._id,
+                roomNumber: t.roomNumber,
+                category: t.issueCategory,
+                issue: t.issueDescription,
+                urgency: t.priority,
+                reportedAt: new Date(t.createdAt).toLocaleDateString(),
+                assignedTo: t.assignedTechnician,
+                status: t.status,
+              }))
+            )
+          }
+        }
+      } catch (err) {
+        if (isInitial) {
+          console.warn('[HotelDataContext] Housekeeping sync fallback:', err.message)
+        }
+      }
+
+      try {
         const shiftRes = await fetchShiftSummary()
         if (isMounted && shiftRes.success && shiftRes.data) {
           if (Array.isArray(shiftRes.data.payments) && shiftRes.data.payments.length > 0) {
@@ -634,6 +661,21 @@ export function HotelDataProvider({ children }) {
           )
         }
         toast?.info?.(`Guest checked out of ${data.roomNumber || 'suite'}`, 'PMS CHECK-OUT')
+      } else if (type === 'NO_SHOW') {
+        setArrivals((prev) =>
+          prev.filter((a) => a.bookingRef !== data.bookingRef && a.id !== data.bookingRef)
+        )
+        if (data.roomNumber) {
+          setRooms((prev) =>
+            prev.map((r) => {
+              if (r.roomNumber === data.roomNumber && r.status !== 'OCCUPIED') {
+                return { ...r, status: 'AVAILABLE', guest: null }
+              }
+              return r
+            })
+          )
+        }
+        toast?.info?.(`Reservation ${data.bookingRef || ''} marked NO-SHOW`, 'NO-SHOW')
       }
     })
 
@@ -713,15 +755,46 @@ export function HotelDataProvider({ children }) {
 
   /**
    * Action B: Check-in Guest (Invoked on /pms)
-   * Transitions room to OCCUPIED, removes from arrivals queue, syncs with MongoDB Atlas
+   * Enforces clean room guard, supports suite reassignment/upgrade, and optional 70% balance settlement
    */
-  const checkInGuest = async (arrivalId, roomNumber, actorName = 'Sara Ahmed (Front Desk)') => {
+  const checkInGuest = async (arrivalId, roomNumber, options = {}) => {
+    const {
+      paymentMethod = null,
+      settleBalanceNow = false,
+      actorName = 'Sara Ahmed (Front Desk)',
+    } = typeof options === 'string' ? { actorName: options } : options
+
     const arrival = arrivals.find((a) => a.id === arrivalId || a.bookingRef === arrivalId)
     const bookingRef = arrival?.bookingRef || arrivalId
+    const oldRoomNumber = arrival?.roomNumber
+    const targetRoomNumber = roomNumber || oldRoomNumber
 
+    // Defensive check: Verify target room is not DIRTY or MAINTENANCE
+    const targetRoomObj = rooms.find((r) => r.roomNumber === targetRoomNumber)
+    if (targetRoomObj && ['DIRTY', 'CLEANING', 'MAINTENANCE'].includes(targetRoomObj.status)) {
+      toast?.error?.(
+        `Cannot check in: ${targetRoomNumber} is currently ${targetRoomObj.status}. Please assign an available clean suite.`,
+        'CHECK-IN BLOCKED'
+      )
+      return false
+    }
+
+    const totalVal = arrival?.totalValuation || 0
+    const advPaid = arrival?.advancePaid || 0
+    const balanceDue = Math.max(0, totalVal - advPaid)
+
+    // Room state update
     setRooms((prev) =>
       prev.map((r) => {
-        if (r.roomNumber === roomNumber) {
+        // If room was reassigned, release previous room if occupied
+        if (oldRoomNumber && oldRoomNumber !== targetRoomNumber && r.roomNumber === oldRoomNumber) {
+          return {
+            ...r,
+            status: r.status === 'OCCUPIED' ? 'AVAILABLE' : r.status,
+            guest: null,
+          }
+        }
+        if (r.roomNumber === targetRoomNumber) {
           return {
             ...r,
             status: 'OCCUPIED',
@@ -730,9 +803,9 @@ export function HotelDataProvider({ children }) {
             checkIn: new Date().toLocaleDateString('en-GB'),
             checkOut: 'In-House',
             nights: arrival?.nights || 1,
-            advancePaid: arrival?.advancePaid || 0,
-            balanceDue: (arrival?.totalValuation || 0) - (arrival?.advancePaid || 0),
-            folioNumber: `FOL-${roomNumber.replace(/\D/g, '')}-${Math.floor(10 + Math.random() * 90)}`,
+            advancePaid: advPaid,
+            balanceDue: settleBalanceNow ? 0 : balanceDue,
+            folioNumber: `FOL-${targetRoomNumber.replace(/\D/g, '')}-${Math.floor(10 + Math.random() * 90)}`,
             bookingRef,
           }
         }
@@ -740,28 +813,71 @@ export function HotelDataProvider({ children }) {
       })
     )
 
+    // If 70% balance was collected at front desk, record in cashier drawer
+    if (settleBalanceNow && paymentMethod && balanceDue > 0) {
+      addDeskPayment({
+        type: 'CHECKIN_BALANCE',
+        method: paymentMethod,
+        amount: balanceDue,
+        roomNumber: targetRoomNumber,
+        guest: arrival?.guest || 'Guest',
+        bookingRef,
+        notes: `Check-in 70% balance settlement via ${paymentMethod}`,
+      })
+    }
+
     setArrivals((prev) => prev.filter((a) => a.id !== arrivalId && a.bookingRef !== arrivalId))
-    addAuditLog('CHECKIN_COMPLETED', 'PMS', `Checked in ${arrival?.guest || 'Guest'} into ${roomNumber}.`, actorName)
+    addAuditLog(
+      'CHECKIN_COMPLETED',
+      'PMS',
+      `Checked in ${arrival?.guest || 'Guest'} into ${targetRoomNumber}.${settleBalanceNow ? ` Settled balance PKR ${balanceDue.toLocaleString()} via ${paymentMethod}.` : ''}`,
+      actorName
+    )
 
     try {
       await checkInStaffGuest(bookingRef, {
-        roomNumber,
+        roomNumber: targetRoomNumber,
         guestName: arrival?.guest,
         guestPhone: arrival?.phone,
+        paymentMethod,
+        settleBalanceNow,
+        actorName,
       })
     } catch (err) {
       console.warn('[PMS CheckIn] Remote Atlas sync warning:', err.message)
     }
+
+    return true
   }
 
   /**
    * Action C: Check-out Guest & Release Folio (Invoked on /pms)
-   * Transitions room to DIRTY, marks balance settled, triggers Housekeeping Turnover, syncs with MongoDB Atlas
+   * Collects remaining balance (Cash or Card POS), transitions room to DIRTY, records in cashier ledger
    */
-  const checkOutGuest = async (roomNumber, actorName = 'Sara Ahmed (Front Desk)') => {
+  const checkOutGuest = async (roomNumber, options = {}) => {
+    const {
+      paymentMethod = 'CASH',
+      amountPaid = null,
+      actorName = 'Sara Ahmed (Front Desk)',
+    } = typeof options === 'string' ? { actorName: options } : options
+
     const currentRoom = rooms.find((r) => r.roomNumber === roomNumber)
     const guestName = currentRoom?.guest || 'Guest'
     const bookingRef = currentRoom?.bookingRef || `TH-${roomNumber.replace(/\D/g, '')}-9041`
+    const finalBalance = amountPaid !== null ? amountPaid : (currentRoom?.balanceDue || 0)
+
+    // Record collected checkout settlement in cashier drawer
+    if (finalBalance > 0) {
+      addDeskPayment({
+        type: 'CHECKOUT_SETTLEMENT',
+        method: paymentMethod,
+        amount: finalBalance,
+        roomNumber,
+        guest: guestName,
+        bookingRef,
+        notes: `Check-out folio settlement via ${paymentMethod}`,
+      })
+    }
 
     setRooms((prev) =>
       prev.map((r) => {
@@ -790,15 +906,86 @@ export function HotelDataProvider({ children }) {
     addAuditLog(
       'CHECKOUT_AND_SETTLEMENT',
       'PMS',
-      `Checked out ${guestName} from ${roomNumber}. Folio balance settled. Room flagged DIRTY for housekeeping turnover.`,
+      `Checked out ${guestName} from ${roomNumber}. Balance settled: PKR ${finalBalance.toLocaleString()} via ${paymentMethod}. Room flagged DIRTY for housekeeping turnover.`,
       actorName
     )
 
     try {
-      await checkOutStaffGuest(bookingRef, { paymentMethod: 'CASH_AT_DESK' })
+      await checkOutStaffGuest(bookingRef, {
+        paymentMethod: paymentMethod === 'CARD' || paymentMethod === 'CARD_POS' ? 'CARD_POS' : 'CASH_AT_DESK',
+      })
     } catch (err) {
       console.warn('[PMS CheckOut] Remote Atlas sync warning:', err.message)
     }
+
+    return true
+  }
+
+  /**
+   * Action C2: Mark No-Show (Invoked on /pms)
+   * Releases assigned room to AVAILABLE and retains 30% advance deposit per cancellation policy
+   */
+  const markNoShow = async (arrivalId, roomNumber, actorName = 'Sara Ahmed (Front Desk)') => {
+    const arrival = arrivals.find((a) => a.id === arrivalId || a.bookingRef === arrivalId)
+    const bookingRef = arrival?.bookingRef || arrivalId
+    const targetRoomNumber = roomNumber || arrival?.roomNumber
+
+    // Remove from arrivals queue
+    setArrivals((prev) => prev.filter((a) => a.id !== arrivalId && a.bookingRef !== arrivalId))
+
+    // Release assigned room back to AVAILABLE if not occupied
+    if (targetRoomNumber) {
+      setRooms((prev) =>
+        prev.map((r) => {
+          if (r.roomNumber === targetRoomNumber && r.status !== 'OCCUPIED') {
+            return {
+              ...r,
+              status: 'AVAILABLE',
+              guest: null,
+            }
+          }
+          return r
+        })
+      )
+    }
+
+    addAuditLog(
+      'NO_SHOW_RECORDED',
+      'PMS',
+      `Guest ${arrival?.guest || 'Guest'} marked NO-SHOW for reservation ${bookingRef}. Suite ${targetRoomNumber || 'N/A'} released to AVAILABLE. 30% advance deposit retained.`,
+      actorName
+    )
+
+    toast?.info?.(
+      `${arrival?.guest || 'Guest'} marked No-Show. Suite ${targetRoomNumber || ''} released.`,
+      'NO-SHOW RECORDED'
+    )
+
+    try {
+      await markNoShowStaffGuest(bookingRef, { actorName })
+    } catch (err) {
+      console.warn('[PMS NoShow] Remote Atlas sync warning:', err.message)
+    }
+
+    return true
+  }
+
+  /**
+   * Action C3: Close Cashier Shift (Z-Report Certification)
+   */
+  const closeCashierShift = ({ countedCash, shiftNotes, actorName = 'Sara Ahmed (Front Desk)' }) => {
+    const expected = openingFloat + cashCollected
+    const variance = Number(countedCash || 0) - expected
+
+    addAuditLog(
+      'SHIFT_CLOSED',
+      'PMS',
+      `Cashier shift certified & closed by ${actorName}. Expected: PKR ${expected.toLocaleString()}, Physically Counted: PKR ${Number(countedCash || 0).toLocaleString()}, Variance: PKR ${variance.toLocaleString()}. Notes: ${shiftNotes}`,
+      actorName
+    )
+
+    toast?.success?.('Cashier shift certified and closed successfully', 'SHIFT RECONCILIATION')
+    return { expected, countedCash: Number(countedCash || 0), variance }
   }
 
   /**
@@ -1156,9 +1343,17 @@ export function HotelDataProvider({ children }) {
     inventory,
     systemSettings,
     auditLogs,
+    deskPayments,
+    cashCollected,
+    cardPOS,
+    openingFloat,
+    expectedCashTotal,
+    addDeskPayment,
     createReservation,
     checkInGuest,
     checkOutGuest,
+    markNoShow,
+    closeCashierShift,
     addIncidental,
     updateCleaningTask,
     certifyRoomReady,

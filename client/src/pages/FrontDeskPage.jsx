@@ -16,6 +16,7 @@ export default function FrontDeskPage() {
     arrivals,
     checkInGuest,
     checkOutGuest,
+    markNoShow,
     addIncidental,
     systemSettings,
   } = useHotelData()
@@ -58,6 +59,15 @@ export default function FrontDeskPage() {
   const handleCheckInArrival = (arrival) => {
     setSelectedArrival(arrival)
     setIsCheckInOpen(true)
+  }
+
+  const handleMarkNoShow = (arrival) => {
+    const isConfirmed = window.confirm(
+      `Mark ${arrival.guest} as No-Show for ${arrival.roomNumber}?\n\nThis will release the suite back to AVAILABLE immediately. The 30% Safepay deposit (PKR ${arrival.advancePaid?.toLocaleString()}) will be forfeited per hotel cancellation policy.`
+    )
+    if (isConfirmed) {
+      markNoShow(arrival.id, arrival.roomNumber, currentUser?.name || 'Sara Ahmed (Front Desk)')
+    }
   }
 
   const handleOpenFolio = (room) => {
@@ -190,6 +200,7 @@ export default function FrontDeskPage() {
             onCheckInArrival={handleCheckInArrival}
             onOpenFolio={handleOpenFolio}
             onOpenInvoice={handleOpenInvoice}
+            onMarkNoShow={handleMarkNoShow}
             searchQuery={searchQuery}
           />
         ) : (
@@ -210,7 +221,13 @@ export default function FrontDeskPage() {
         isOpen={isCheckInOpen}
         onClose={() => setIsCheckInOpen(false)}
         selectedArrival={selectedArrival}
-        onConfirmCheckIn={checkInGuest}
+        rooms={rooms}
+        onConfirmCheckIn={(arrivalId, targetRoom, options) =>
+          checkInGuest(arrivalId, targetRoom, {
+            ...options,
+            actorName: currentUser?.name || 'Sara Ahmed (Front Desk)',
+          })
+        }
       />
 
       <AddChargeModal
@@ -225,7 +242,12 @@ export default function FrontDeskPage() {
         onClose={() => setIsInvoiceOpen(false)}
         selectedRoom={selectedRoom}
         taxRate={systemSettings.taxRate}
-        onConfirmCheckout={checkOutGuest}
+        onConfirmCheckout={(roomNumber, options) =>
+          checkOutGuest(roomNumber, {
+            ...options,
+            actorName: currentUser?.name || 'Sara Ahmed (Front Desk)',
+          })
+        }
       />
 
       <ShiftClosingModal

@@ -462,7 +462,7 @@ export default function EstatePage() {
       {/* ========================================================= */}
       {/* CHAPTER 03: COASTAL DINING (CASA MOMO SCALE-GROW BREAK)   */}
       {/* ========================================================= */}
-      <section className="py-24 sm:py-36 px-5 sm:px-12 lg:px-20 border-t border-slate-200/80">
+      <section id="dining" className="py-24 sm:py-36 px-5 sm:px-12 lg:px-20 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto space-y-16">
           
           <div className="max-w-3xl space-y-4">
@@ -489,17 +489,17 @@ export default function EstatePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 font-mono text-xs">
-            <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2">
+            <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <span className="text-slate-400 uppercase text-[10px] block">BREAKFAST</span>
               <strong className="text-slate-900 text-sm block">07:00 &ndash; 11:00</strong>
               <p className="text-slate-600 font-sans text-xs">Fresh pastries, local fruit, and hand-brewed pour-overs beside the tide.</p>
             </div>
-            <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2">
+            <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <span className="text-slate-400 uppercase text-[10px] block">COASTAL DINNER</span>
               <strong className="text-slate-900 text-sm block">18:00 &ndash; 23:00</strong>
               <p className="text-slate-600 font-sans text-xs">Wood-fired red snapper, wild sea bass, and herbs picked that morning.</p>
             </div>
-            <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2">
+            <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <span className="text-slate-400 uppercase text-[10px] block">PRIVATE CHEF</span>
               <strong className="text-slate-900 text-sm block">In-Suite Service</strong>
               <p className="text-slate-600 font-sans text-xs">Custom multi-course dinners prepared directly on your private terrace.</p>
@@ -513,7 +513,7 @@ export default function EstatePage() {
       {/* ========================================================= */}
       {/* CHAPTER 04: GEOTHERMAL MINERAL SPRINGS (INSET PARALLAX)   */}
       {/* ========================================================= */}
-      <section className="py-24 sm:py-36 px-5 sm:px-12 lg:px-20 bg-white border-t border-slate-200/80">
+      <section id="wellness" className="py-24 sm:py-36 px-5 sm:px-12 lg:px-20 bg-white border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto space-y-16">
           
           <div className="max-w-3xl space-y-4">
@@ -540,19 +540,19 @@ export default function EstatePage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-4">
-            <div className="p-6 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-2">
+            <div className="p-6 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <strong className="text-slate-900 block font-mono text-xs uppercase">38°C Thermal Plunge Baths</strong>
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Geothermal mineral water pools rich in sea magnesium, positioned on cliff terraces directly above the waves.
               </p>
             </div>
-            <div className="p-6 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-2">
+            <div className="p-6 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <strong className="text-slate-900 block font-mono text-xs uppercase">Panoramic Cedar Saunas</strong>
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Weathered timber dry saunas infused with wild coastal thyme, overlooking the vast ocean horizon.
               </p>
             </div>
-            <div className="p-6 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-2">
+            <div className="p-6 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <strong className="text-slate-900 block font-mono text-xs uppercase">Holistic Marine Treatments</strong>
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Rejuvenating sea salt scrubs and organic body treatments curated by resident holistic therapists.
@@ -567,7 +567,7 @@ export default function EstatePage() {
       {/* ========================================================= */}
       {/* CHAPTER 05: ARRIVAL SANCTUARY & PRIVACY                   */}
       {/* ========================================================= */}
-      <section className="py-24 sm:py-36 px-5 sm:px-12 lg:px-20 border-t border-slate-200/80">
+      <section id="arrival" className="py-24 sm:py-36 px-5 sm:px-12 lg:px-20 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           <div className="lg:col-span-6 space-y-6">
@@ -582,15 +582,15 @@ export default function EstatePage() {
             </p>
             
             <div className="space-y-3 pt-2 text-xs font-mono">
-              <div className="p-4 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3">
+              <div className="p-4 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3 hover:border-emerald-700/50 hover:bg-slate-50 transition-all duration-300">
                 <span className="w-2 h-2 rounded-full bg-emerald-700 shrink-0" />
                 <span>Private Chauffeur Transfers from Karachi (75 Minutes)</span>
               </div>
-              <div className="p-4 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3">
+              <div className="p-4 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3 hover:border-emerald-700/50 hover:bg-slate-50 transition-all duration-300">
                 <span className="w-2 h-2 rounded-full bg-emerald-700 shrink-0" />
                 <span>Underground Parking &amp; Direct Suite Elevators</span>
               </div>
-              <div className="p-4 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3">
+              <div className="p-4 bg-white border border-slate-200 rounded-[2px] flex items-center gap-3 hover:border-emerald-700/50 hover:bg-slate-50 transition-all duration-300">
                 <span className="w-2 h-2 rounded-full bg-emerald-700 shrink-0" />
                 <span>100% In-Suite Check-In (No Crowds, No Waiting)</span>
               </div>
