@@ -7,6 +7,17 @@ const cors = require('cors')
 const morgan = require('morgan')
 const connectDB = require('./src/config/db')
 
+// Security verification: enforce non-default JWT_SECRET in production
+const isProduction = process.env.NODE_ENV === 'production'
+const devSecret = 'luxurystay_dev_jwt_secret_2026'
+
+if (isProduction && (!process.env.JWT_SECRET || process.env.JWT_SECRET === devSecret)) {
+  console.error('[FATAL SECURITY ERROR] Insecure or missing JWT_SECRET in production environment.')
+  process.exit(1)
+} else if (!process.env.JWT_SECRET) {
+  console.warn('[SECURITY WARNING] JWT_SECRET is not set in environment. Using fallback for local dev only.')
+}
+
 const app = express()
 const server = http.createServer(app)
 const PORT = process.env.PORT || 5000

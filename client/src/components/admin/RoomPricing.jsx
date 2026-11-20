@@ -112,14 +112,14 @@ export default function RoomPricing({
                           type="button"
                           onClick={() => handleSaveRate(room.roomNumber)}
                           disabled={isSaving}
-                          className="px-2.5 py-1 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-[9px] uppercase font-bold rounded-[2px] cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-semibold rounded-[2px] cursor-pointer disabled:opacity-50"
                         >
                           {isSaving ? '...' : 'Save'}
                         </button>
                         <button
                           type="button"
                           onClick={() => setEditingRoom(null)}
-                          className="px-1.5 py-1 text-slate-400 hover:text-slate-700 text-xs cursor-pointer"
+                          className="px-2 py-1 text-slate-400 hover:text-slate-700 text-sm cursor-pointer"
                         >
                           &times;
                         </button>
@@ -130,7 +130,7 @@ export default function RoomPricing({
                   </td>
                   <td className="py-3.5 px-4">
                     <span
-                      className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                         room.status === 'MAINTENANCE'
                           ? 'bg-red-100 text-red-900'
                           : 'bg-emerald-100 text-emerald-950'

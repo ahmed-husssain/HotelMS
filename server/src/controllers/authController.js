@@ -2,13 +2,18 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const ActivityLog = require('../models/ActivityLog')
 
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' ? null : 'luxurystay_dev_jwt_secret_2026')
+
 /**
  * Helper: Generate signed 7-day JSON Web Token
  */
 function generateToken(user) {
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET must be defined in production environment.')
+  }
   return jwt.sign(
     { id: user._id, role: user.role },
-    process.env.JWT_SECRET || 'luxurystay_dev_jwt_secret_2026',
+    JWT_SECRET,
     { expiresIn: '7d' }
   )
 }

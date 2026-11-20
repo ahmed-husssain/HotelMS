@@ -47,7 +47,7 @@ export default function EstatePage() {
             <span>STAYZA RESORT &bull; SINDH COAST</span>
           </div>
           <span className="hidden sm:inline-block text-white/80 font-normal">
-            PRIVATE OCEAN SANCTUARY
+            PRIVATE BEACH RESORT
           </span>
         </div>
 
@@ -57,7 +57,7 @@ export default function EstatePage() {
             42 OCEANFRONT ACRES &bull; 7 PRIVATE SUITES
           </span>
           <h1 className="font-serif-grand text-4xl sm:text-7xl lg:text-8xl font-light text-[#FAF8F5] tracking-tight leading-[1.04]">
-            An Oceanfront Sanctuary Built into the Coast.
+            Luxury Beachfront Resort.
           </h1>
           <p className="text-sm sm:text-lg text-slate-200 max-w-2xl mx-auto leading-relaxed font-light">
             Secluded cliffside residences, farm-to-table coastal dining, and natural mineral hot springs overlooking the Arabian Sea.

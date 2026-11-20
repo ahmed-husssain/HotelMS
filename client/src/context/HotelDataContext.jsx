@@ -107,7 +107,7 @@ const INITIAL_ROOMS = [
   },
   {
     roomNumber: 'Suite 201',
-    name: 'The Dune Sanctuary',
+    name: 'The Beach Suite',
     tier: 'GARDEN & LAGOON RESIDENCE',
     category: 'sanctuary',
     nightlyRate: 65000,

@@ -191,7 +191,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
             </div>
 
             <div className="text-left sm:text-right font-mono text-xs space-y-0.5 shrink-0">
-              <span className="text-[9px] text-slate-400 block tracking-widest uppercase font-bold">
+              <span className="text-[11px] text-slate-500 block tracking-widest uppercase font-bold">
                 {isFinalInvoice ? 'TAX INVOICE' : 'ADVANCE DEPOSIT RECEIPT'}
               </span>
               <span className="text-sm sm:text-base font-bold text-slate-900 block font-mono">
@@ -200,7 +200,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
               <span className="text-[10px] text-slate-500 block">
                 Issued: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </span>
-              <span className="text-[9px] text-slate-400 block">
+              <span className="text-[10px] text-slate-500 block">
                 SNTN: 4829104-7 &bull; STRN: 3277876123456
               </span>
             </div>
@@ -210,7 +210,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#FAF8F5] p-3 rounded-[2px] border border-slate-200/80">
             {/* Guest Profile */}
             <div className="space-y-0.5 border-b sm:border-b-0 sm:border-r border-slate-200 pb-2 sm:pb-0 sm:pr-3">
-              <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest block font-bold">
+              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-widest block font-bold">
                 GUEST DETAILS
               </span>
               <h2 className="font-serif-grand text-sm sm:text-base text-slate-900 font-bold">
@@ -227,7 +227,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
 
             {/* Suite & Stay Profile */}
             <div className="space-y-0.5 sm:pl-2">
-              <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest block font-bold">
+              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-widest block font-bold">
                 SUITE DETAILS
               </span>
               <h2 className="font-serif-grand text-sm sm:text-base text-slate-900 font-bold">
@@ -245,7 +245,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
 
           {/* C. Itemized Line Charges Table */}
           <div className="space-y-1.5">
-            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest block font-bold">
+            <span className="text-[11px] font-mono text-slate-500 uppercase tracking-widest block font-bold">
               ITEMIZED SERVICES &amp; CHARGES
             </span>
 
@@ -263,7 +263,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
                 <tr>
                   <td className="py-1.5 pr-2">
                     <span className="font-bold text-slate-900 block text-[11px]">{residence.name} (Suite {residence.roomNumber})</span>
-                    <span className="text-[9px] text-slate-400 block font-sans-clean">
+                    <span className="text-[10px] text-slate-500 block font-sans-clean">
                       Luxury oceanfront accommodation &bull; Private Ocean View
                     </span>
                   </td>
@@ -277,7 +277,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
                   <tr key={`addon-${idx}`}>
                     <td className="py-1.5 pr-2">
                       <span className="font-medium text-slate-900 block text-[11px]">{addon.title}</span>
-                      <span className="text-[9px] text-slate-400 block font-sans-clean">Concierge Experience</span>
+                      <span className="text-[10px] text-slate-500 block font-sans-clean">Concierge Experience</span>
                     </td>
                     <td className="py-1.5 text-center text-slate-600 text-[11px]">1</td>
                     <td className="py-1.5 text-right text-slate-600 text-[11px]">{addon.price?.toLocaleString()}</td>
@@ -290,7 +290,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
                   <tr key={`order-${idx}`}>
                     <td className="py-1.5 pr-2">
                       <span className="font-medium text-slate-900 block text-[11px]">{order.title}</span>
-                      <span className="text-[9px] text-slate-400 block font-sans-clean">In-Suite Service Charge</span>
+                      <span className="text-[10px] text-slate-500 block font-sans-clean">In-Suite Service Charge</span>
                     </td>
                     <td className="py-1.5 text-center text-slate-600 text-[11px]">1</td>
                     <td className="py-1.5 text-right text-slate-600 text-[11px]">{order.price?.toLocaleString()}</td>
@@ -318,7 +318,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
                 <p className="leading-tight">
                   Ref: <strong className="text-slate-900">{booking.bookingRef || 'ST-301-9041'}</strong>
                 </p>
-                <span className="text-[9px] text-slate-400 block">
+                <span className="text-[10px] text-slate-500 block">
                   Verified by Front Desk
                 </span>
               </div>
@@ -354,7 +354,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
           </div>
 
           {/* E. Legal Audit Declarations & Signatures */}
-          <div className="border-t border-slate-200 pt-2 pb-4 sm:pb-6 grid grid-cols-2 gap-3 text-[9px] font-mono text-slate-500">
+          <div className="border-t border-slate-200 pt-2 pb-4 sm:pb-6 grid grid-cols-2 gap-3 text-[10px] font-mono text-slate-600">
             <div className="space-y-2">
               <p className="leading-relaxed">
                 Computer-generated tax voucher under Sindh Revenue Board rules.
@@ -365,7 +365,7 @@ Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
             </div>
 
             <div className="space-y-2 text-right">
-              <div className="inline-block px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-900 text-[8px] sm:text-[9px] font-bold uppercase rounded-[2px]">
+              <div className="inline-block px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-900 text-[10px] sm:text-[11px] font-bold uppercase rounded-[2px]">
                 {isFinalInvoice ? 'PAID IN FULL' : '30% SAFEPAY DEPOSIT VERIFIED'}
               </div>
               <div className="border-t border-slate-300 pt-0.5">

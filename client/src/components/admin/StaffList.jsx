@@ -152,14 +152,14 @@ export default function StaffList({
                 <td className="py-3.5 px-5 font-bold text-slate-900">{staff.name}</td>
                 <td className="py-3.5 px-4 text-slate-600">{staff.email}</td>
                 <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 bg-slate-100 text-slate-800 text-[9px] uppercase font-bold rounded">
+                  <span className="px-2 py-0.5 bg-slate-100 text-slate-800 text-[10px] uppercase font-bold rounded">
                     {staff.role}
                   </span>
                 </td>
                 <td className="py-3.5 px-4 text-slate-500">{staff.phone}</td>
                 <td className="py-3.5 px-4">
                   <span
-                    className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                       staff.status === 'active'
                         ? 'bg-emerald-100 text-emerald-950'
                         : 'bg-red-100 text-red-900'

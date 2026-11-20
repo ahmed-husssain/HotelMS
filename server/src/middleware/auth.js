@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' ? null : 'luxurystay_dev_jwt_secret_2026')
+
 /**
  * Protect Middleware — Cryptographic JWT Authentication Gate
  * 
@@ -26,8 +28,12 @@ async function protect(req, res, next) {
   }
 
   try {
+    if (!JWT_SECRET) {
+      throw new Error('JWT_SECRET must be defined in production environment.')
+    }
+
     // 3. Cryptographically verify signature and expiration
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'luxurystay_dev_jwt_secret_2026')
+    const decoded = jwt.verify(token, JWT_SECRET)
 
     // 4. Retrieve fresh user from database (excluding password hash)
     const user = await User.findById(decoded.id).select('-password')

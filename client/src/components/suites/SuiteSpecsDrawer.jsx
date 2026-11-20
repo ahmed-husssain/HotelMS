@@ -167,7 +167,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
         {/* Drawer Header */}
         <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5] shrink-0">
           <div>
-            <span className="text-[9px] font-mono tracking-[0.25em] font-bold text-emerald-900 uppercase">
+            <span className="text-[11px] font-mono tracking-[0.2em] font-bold text-emerald-900 uppercase">
               ROOM DETAILS &bull; SUITE {residence.roomNumber}
             </span>
             <h2 id="suite-specs-title" className="font-serif-grand text-xl sm:text-2xl text-slate-900 mt-0.5">
@@ -220,37 +220,37 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
               <span className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold text-slate-900">
                 ROOM FEATURES
               </span>
-              <span className="text-[9px] font-mono text-slate-400">UNITS: METRIC / IMPERIAL</span>
+              <span className="text-[10px] font-mono text-slate-500">UNITS: METRIC / IMPERIAL</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="p-3 bg-white border border-[#E5DFD5] rounded-[2px]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Interior Living Space</span>
+                <span className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block">Interior Living Space</span>
                 <span className="font-semibold text-slate-900 mt-0.5 block">{specs.interiorArea}</span>
               </div>
 
               <div className="p-3 bg-white border border-[#E5DFD5] rounded-[2px]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Oceanfront Terrace Deck</span>
+                <span className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block">Oceanfront Terrace Deck</span>
                 <span className="font-semibold text-slate-900 mt-0.5 block">{specs.terraceArea}</span>
               </div>
 
               <div className="p-3 bg-white border border-[#E5DFD5] rounded-[2px]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Ceiling Height</span>
+                <span className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block">Ceiling Height</span>
                 <span className="font-semibold text-slate-900 mt-0.5 block">{specs.ceilingHeight}</span>
               </div>
 
               <div className="p-3 bg-white border border-[#E5DFD5] rounded-[2px]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Private Pool System</span>
+                <span className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block">Private Pool System</span>
                 <span className="font-semibold text-emerald-950 mt-0.5 block">{specs.plungePool}</span>
               </div>
 
               <div className="p-3 bg-white border border-[#E5DFD5] rounded-[2px]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Acoustic Isolation</span>
+                <span className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block">Acoustic Isolation</span>
                 <span className="font-semibold text-slate-900 mt-0.5 block">{specs.acoustics}</span>
               </div>
 
               <div className="p-3 bg-white border border-[#E5DFD5] rounded-[2px]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Valet &amp; Parking</span>
+                <span className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block">Valet &amp; Parking</span>
                 <span className="font-semibold text-slate-900 mt-0.5 block">{specs.valetBay}</span>
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
         {/* Drawer Sticky Footer Action Bar */}
         <div className="p-4 sm:p-6 border-t border-[#E5DFD5] bg-[#FAF8F5] flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
           <div>
-            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">
+            <span className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block">
               30% Safepay Online Deposit
             </span>
             <div className="flex items-baseline gap-2">

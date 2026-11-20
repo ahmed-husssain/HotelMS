@@ -126,7 +126,7 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
                 <td className="py-3.5 px-4 text-slate-500">{log.timestamp}</td>
                 <td className="py-3.5 px-4 font-bold text-slate-900">{log.actor}</td>
                 <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 bg-slate-100 text-slate-800 text-[9px] font-bold rounded">
+                  <span className="px-2 py-0.5 bg-slate-100 text-slate-800 text-[10px] font-bold rounded">
                     {log.action}
                   </span>
                 </td>

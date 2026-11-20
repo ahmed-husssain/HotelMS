@@ -99,6 +99,7 @@ const bookingSchema = new mongoose.Schema(
           'CHECKED_OUT',
           'CANCELLED',
           'EXPIRED',
+          'NO_SHOW',
         ],
         message: '{VALUE} is not a valid booking status',
       },

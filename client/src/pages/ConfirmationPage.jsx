@@ -44,7 +44,7 @@ export default function ConfirmationPage() {
           <div className="flex justify-center scale-90 sm:scale-100">
             <BrandLogo variant="full" theme="dark" size="sm" />
           </div>
-          <span className="block text-[8px] sm:text-[9px] tracking-[0.25em] text-emerald-800 font-semibold uppercase font-mono">
+          <span className="block text-[10px] sm:text-[11px] tracking-[0.2em] text-emerald-800 font-semibold uppercase font-mono">
             RESERVATION CONFIRMED &bull; SAFEPAY VERIFIED
           </span>
         </div>
@@ -53,7 +53,7 @@ export default function ConfirmationPage() {
         <div className="bg-white border border-slate-200/90 shadow-lg p-3.5 sm:p-5 rounded-[2px] space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-2">
             <div>
-              <span className="text-[9px] font-mono tracking-[0.2em] text-slate-400 font-bold uppercase block">
+              <span className="text-[11px] font-mono tracking-[0.15em] text-slate-500 font-bold uppercase block">
                 CONFIRMATION CODE
               </span>
               <div className="flex items-center gap-2 mt-0.5">
@@ -70,7 +70,7 @@ export default function ConfirmationPage() {
                 </button>
               </div>
             </div>
-            <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-950 text-[9px] font-mono tracking-wider font-bold uppercase rounded-full">
+            <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-950 text-[11px] font-mono tracking-wider font-bold uppercase rounded-full">
               CONFIRMED
             </span>
           </div>
@@ -90,7 +90,7 @@ export default function ConfirmationPage() {
 
           {/* Residence Details */}
           <div className="space-y-0.5">
-            <span className="text-[9px] font-mono tracking-wider font-bold text-emerald-900 uppercase block">
+            <span className="text-[11px] font-mono tracking-wider font-bold text-emerald-900 uppercase block">
               ROOM {booking.residence.roomNumber} &bull; {booking.residence.tier}
             </span>
             <h3 className="font-serif-grand text-base sm:text-lg text-slate-900 font-bold leading-tight">
@@ -164,7 +164,7 @@ export default function ConfirmationPage() {
         />
       </div>
 
-      <footer className="text-center text-[9px] font-mono text-slate-400 tracking-[0.2em] uppercase shrink-0 py-1">
+      <footer className="text-center text-[11px] font-mono text-slate-500 tracking-[0.15em] uppercase shrink-0 py-1">
         Stayza Hotel &bull; Luxury Residences &bull; Sindh Coast, Pakistan
       </footer>
     </div>

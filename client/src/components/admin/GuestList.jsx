@@ -139,7 +139,7 @@ export default function GuestList() {
                   <div className="text-[10px] text-slate-400">{g.phone}</div>
                 </td>
                 <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 bg-amber-100 text-amber-900 text-[9px] font-bold rounded">
+                  <span className="px-2 py-0.5 bg-amber-100 text-amber-900 text-[10px] font-bold rounded">
                     {g.tier}
                   </span>
                 </td>
