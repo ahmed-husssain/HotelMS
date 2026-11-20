@@ -60,7 +60,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
     '301': {
       interiorArea: '210 m² (2,260 sq ft)',
       terraceArea: '65 m² cantilevered rooftop deck',
-      ceilingHeight: '4.2m monolithic limestone',
+      ceilingHeight: 'High Ceilings',
       plungePool: '14 m² heated mineral infinity pool (28°C)',
       orientation: '180° Arabian Sunset & Ocean Panorama',
       acoustics: 'STC 64 triple-glazed ocean acoustic isolation',
@@ -103,7 +103,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
       ceilingHeight: '4.5m charred timber & travertine',
       plungePool: '25 m² private Olympic-grade lap pool',
       orientation: '360° Uninterrupted Coastline & Horizon',
-      acoustics: 'STC 66 ultra-quiet acoustic sanctuary',
+      acoustics: 'Soundproof Room',
       valetBay: 'Dual Bays #501A & #501B (Dual EV Fast-Charge)',
       maxOccupancy: '4 Guests • Maximum Privacy',
     },

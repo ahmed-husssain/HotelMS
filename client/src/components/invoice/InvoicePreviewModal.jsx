@@ -72,14 +72,28 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
     window.print()
   }
 
+  const handleDownloadPDF = async () => {
+    const ref = booking.bookingRef || 'ST-301-9041'
+    try {
+      const res = await fetch(`/api/bookings/${ref}/invoice`, { method: 'HEAD' })
+      if (res.ok && res.headers.get('content-type')?.includes('application/pdf')) {
+        window.open(`/api/bookings/${ref}/invoice`, '_blank')
+        return
+      }
+    } catch {
+      // Fallback to browser print/save
+    }
+    window.print()
+  }
+
   const handleCopySummary = () => {
-    const summary = `STAYZA LUXURY STAY VOUCHER
+    const summary = `STAYZA HOTEL INVOICE
 Ref: ${booking.bookingRef || 'ST-301-9041'}
 Guest: ${booking.guestName || 'Guest'}
-Suite: Room ${residence.roomNumber} - ${residence.name}
-Total: PKR ${totalValuation.toLocaleString()}
-Advance (30%): PKR ${advancePaid.toLocaleString()}
-Balance Due: PKR ${balanceDue.toLocaleString()}`
+Room: Suite ${residence.roomNumber} - ${residence.name}
+Total Amount: PKR ${totalValuation.toLocaleString()}
+30% Advance Deposit Paid: PKR ${advancePaid.toLocaleString()}
+Balance Due at Check-In: PKR ${balanceDue.toLocaleString()}`
     
     if (navigator?.clipboard) {
       navigator.clipboard.writeText(summary)
@@ -117,7 +131,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
           <div className="flex items-center gap-2 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="uppercase font-bold tracking-wider text-[11px] sm:text-xs">
-              {isFinalInvoice ? 'Official Tax Invoice Preview' : 'Official Advance Stay Voucher'}
+              {isFinalInvoice ? 'Official Tax Invoice Preview' : 'Hotel Invoice & Deposit Receipt Preview'}
             </span>
           </div>
 
@@ -125,18 +139,26 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
             <button
               type="button"
               onClick={handleCopySummary}
-              className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-[#FFF0CA] font-mono text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
+              className="px-2.5 py-1.5 bg-white/10 hover:bg-white/20 text-[#FFF0CA] font-mono text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer hidden sm:inline-block"
             >
               {copied ? '✓ Copied' : 'Copy Summary'}
             </button>
 
             <button
               type="button"
-              onClick={handlePrint}
-              className="px-3.5 py-1 bg-emerald-950 hover:bg-emerald-900 border border-emerald-700/80 text-white font-mono text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+              onClick={handleDownloadPDF}
+              className="px-3.5 py-1.5 bg-white text-slate-900 hover:bg-slate-100 font-mono text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
             >
-              <span>Print / Save PDF</span>
-              <span>&darr;</span>
+              <span>Download PDF</span>
+              <span className="text-xs">&darr;</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-mono text-[10px] uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer hidden sm:flex items-center gap-1"
+            >
+              <span>Print</span>
             </button>
 
             <button

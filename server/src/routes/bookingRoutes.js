@@ -10,6 +10,7 @@ const {
   updateInStaySettings,
   addIncidental,
   submitFeedback,
+  downloadInvoice,
 } = require('../controllers/bookingController')
 
 /**
@@ -21,8 +22,9 @@ router.post('/quote', getQuote)
 router.post('/hold', createHold)
 router.post('/:reference/release-hold', releaseHold)
 
-// 2. Confirmation
+// 2. Confirmation & Official PDF Tax Document
 router.post('/:reference/confirm', confirmBooking)
+router.get('/:reference/invoice', downloadInvoice)
 
 // 3. /my-stay In-Residence Hub Controls
 router.get('/lookup', lookupBooking)

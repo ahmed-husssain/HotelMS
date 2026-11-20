@@ -74,7 +74,7 @@ export default class ErrorBoundary extends React.Component {
                 Session Interruption
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-                A temporary interface issue occurred while loading this view. You can reload the application or return to the Sanctuary overview.
+                A temporary interface issue occurred while loading this view. You can reload the application or return to the home page.
               </p>
             </div>
 
@@ -92,7 +92,7 @@ export default class ErrorBoundary extends React.Component {
                 onClick={this.handleReload}
                 className="w-full sm:w-auto flex-1 text-center py-3.5 px-4 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] font-bold uppercase tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-md"
               >
-                Reload Sanctuary &rarr;
+                Reload Page &rarr;
               </button>
               <button
                 type="button"
@@ -106,7 +106,7 @@ export default class ErrorBoundary extends React.Component {
 
           {/* Luxury Footer */}
           <footer className="max-w-4xl w-full mx-auto text-center font-mono text-[10px] text-slate-500">
-            STAYZA HOTEL &bull; COASTAL SANCTUARY &bull; SINDH, PAKISTAN
+            STAYZA RESORTS &bull; LUXURY HOTELS &bull; SINDH, PAKISTAN
           </footer>
         </div>
       )

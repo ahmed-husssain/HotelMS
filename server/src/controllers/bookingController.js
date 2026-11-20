@@ -5,6 +5,7 @@ const Payment = require('../models/Payment')
 const User = require('../models/User')
 const { calculatePricing } = require('../services/pricingService')
 const { checkRoomAvailability } = require('../services/availabilityService')
+const { generateInvoicePDF } = require('../services/invoiceService')
 
 /**
  * LuxuryStay Hospitality — Guest Booking & In-Stay Controller
@@ -454,6 +455,41 @@ async function submitFeedback(req, res) {
   }
 }
 
+/**
+ * @desc    Generate and stream official PDF tax invoice / advance receipt
+ * @route   GET /api/bookings/:reference/invoice
+ * @access  Public (Guest with reference) / Staff
+ */
+async function downloadInvoice(req, res) {
+  try {
+    const { reference } = req.params
+
+    if (!reference) {
+      return res.status(400).json({ success: false, message: 'Please provide a booking reference' })
+    }
+
+    // Locate booking in MongoDB (case-insensitive)
+    const booking = await Booking.findOne({
+      bookingReference: new RegExp('^' + reference + '$', 'i'),
+    }).populate('room')
+
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'Reservation not found' })
+    }
+
+    // Fetch any associated payments (e.g. 30% online advance deposit)
+    const payments = await Payment.find({ bookingId: booking._id }).sort({ createdAt: 1 })
+
+    // Stream PDF directly to client response
+    generateInvoicePDF(booking, payments, res)
+  } catch (error) {
+    console.error('[BookingController.downloadInvoice] Error:', error.message)
+    if (!res.headersSent) {
+      res.status(500).json({ success: false, message: 'Failed to generate PDF invoice: ' + error.message })
+    }
+  }
+}
+
 module.exports = {
   getQuote,
   createHold,
@@ -464,4 +500,5 @@ module.exports = {
   updateInStaySettings,
   addIncidental,
   submitFeedback,
+  downloadInvoice,
 }

@@ -180,7 +180,7 @@ export default function PaymentVerifyPage() {
                 Verifying Advance Deposit...
               </h1>
               <p className="text-xs text-slate-600 max-w-xs mx-auto leading-relaxed">
-                Confirming order settlement with Safepay and appending transaction to immutable ledger.
+                Verifying your payment and booking...
               </p>
             </div>
 
@@ -247,7 +247,7 @@ export default function PaymentVerifyPage() {
 
       {/* Footer */}
       <footer className="text-center font-mono text-[9px] text-slate-500 max-w-xl mx-auto">
-        Stayza Hotel &bull; Zero-Trust 2-Stage Payment Gateway &bull; Safepay Sandbox
+        Stayza Resorts &bull; Secure Online Payment &bull; Safepay
       </footer>
     </div>
   )

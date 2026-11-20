@@ -175,7 +175,7 @@ export default function NavMenu({
                 </div>
               ) : (
                 <div className="flex items-center justify-between w-full">
-                  <span className="text-slate-500">Sanctuary Account:</span>
+                  <span className="text-slate-500">Guest Account:</span>
                   <div className="flex items-center gap-3">
                     <Link
                       to="/login"
@@ -206,7 +206,7 @@ export default function NavMenu({
             <div className="flex justify-between items-center">
               <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
               <span className="text-slate-400 text-[9px] uppercase tracking-wider">
-                Stayza Sanctuary &middot; Sindh Coast
+                Stayza Resorts &middot; Sindh Coast
               </span>
             </div>
           </div>

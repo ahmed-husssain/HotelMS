@@ -146,9 +146,9 @@ export default function ConfirmationPage() {
               <button
                 type="button"
                 onClick={() => setIsInvoiceOpen(true)}
-                className="tactile flex-1 py-2.5 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] cursor-pointer flex items-center justify-center gap-1 min-h-[44px]"
+                className="tactile flex-1 py-2.5 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] cursor-pointer flex items-center justify-center gap-1.5 min-h-[44px]"
               >
-                <span>View Stay Voucher</span>
+                <span>Preview &amp; Download Invoice</span>
                 <span>&rarr;</span>
               </button>
             )}

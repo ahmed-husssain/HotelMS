@@ -146,7 +146,7 @@ export default function SafepayCheckoutModal({
 
         {/* Modal Footer Note */}
         <div className="bg-slate-50 px-6 py-2.5 border-t border-slate-200 text-center font-mono text-[9px] text-slate-500">
-          Encrypted SSL &bull; HMAC-SHA256 Signed &bull; Idempotent Ledger Protected
+          100% Safe &amp; Secure Payment &bull; Protected by Safepay
         </div>
       </div>
     </div>
