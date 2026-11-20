@@ -65,7 +65,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
       orientation: '180° Arabian Sunset & Ocean Panorama',
       acoustics: 'STC 64 triple-glazed ocean acoustic isolation',
       valetBay: 'Dedicated Bay #301 (EV Ultra-Fast 150kW)',
-      maxOccupancy: '4 Guests • Presidential Seclusion',
+      maxOccupancy: '4 Guests • Presidential Suite',
     },
     '302': {
       interiorArea: '240 m² (2,583 sq ft) duplex',
@@ -75,7 +75,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
       orientation: 'Arabian Sea Panorama & Palm Garden',
       acoustics: 'STC 62 luxury sound-damped glazing',
       valetBay: 'Dedicated Bay #302 (EV Ready)',
-      maxOccupancy: '2 Guests • Royal Privacy',
+      maxOccupancy: '2 Guests • Duplex Suite',
     },
     '204': {
       interiorArea: '140 m² (1,506 sq ft)',
@@ -89,13 +89,13 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
     },
     '401': {
       interiorArea: '175 m² (1,883 sq ft)',
-      terraceArea: '58 m² biophilic jungle canopy deck',
+      terraceArea: '58 m² garden deck',
       ceilingHeight: '4.0m warm teak & volcanic stone',
       plungePool: '12 m² natural freshwater stone plunge',
       orientation: 'Coastal Flora Canopy & Garden Views',
       acoustics: 'STC 62 organic sound isolation',
       valetBay: 'Dedicated Bay #401 (EV Ready)',
-      maxOccupancy: '4 Guests • Biophilic Seclusion',
+      maxOccupancy: '4 Guests • Garden Privacy',
     },
     '501': {
       interiorArea: '290 m² (3,121 sq ft) estate',
@@ -105,7 +105,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
       orientation: '360° Uninterrupted Coastline & Horizon',
       acoustics: 'STC 66 ultra-quiet acoustic sanctuary',
       valetBay: 'Dual Bays #501A & #501B (Dual EV Fast-Charge)',
-      maxOccupancy: '4 Guests • Estate Autonomy',
+      maxOccupancy: '4 Guests • Maximum Privacy',
     },
     '102': {
       interiorArea: '160 m² (1,722 sq ft)',
@@ -125,7 +125,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
       orientation: 'Dramatic Clifftop Ocean Panorama',
       acoustics: 'STC 64 high-wind acoustic isolation',
       valetBay: 'Dedicated Bay #201 (EV Ready)',
-      maxOccupancy: '4 Guests • Clifftop Sanctuary',
+      maxOccupancy: '4 Guests • Clifftop Residence',
     },
   }[residence.roomNumber] || {
     interiorArea: '160 m² (1,722 sq ft)',
@@ -168,7 +168,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
         <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5] shrink-0">
           <div>
             <span className="text-[9px] font-mono tracking-[0.25em] font-bold text-emerald-900 uppercase">
-              SUITE SPECIFICATIONS &bull; SUITE {residence.roomNumber}
+              ROOM DETAILS &bull; SUITE {residence.roomNumber}
             </span>
             <h2 id="suite-specs-title" className="font-serif-grand text-xl sm:text-2xl text-slate-900 mt-0.5">
               {residence.name}
@@ -218,7 +218,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-[#E5DFD5] pb-2">
               <span className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold text-slate-900">
-                DIMENSIONS &amp; FEATURES
+                ROOM FEATURES
               </span>
               <span className="text-[9px] font-mono text-slate-400">UNITS: METRIC / IMPERIAL</span>
             </div>

@@ -35,7 +35,7 @@ export default function HotelSettings({
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs p-6 sm:p-8 space-y-6">
       <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
         <div>
-          <h3 className="font-serif-grand text-xl text-slate-900">Hotel Global Parameters (Aptech Module 9)</h3>
+          <h3 className="font-serif-grand text-xl text-slate-900">Hotel Settings &amp; Policies</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
             Provincial tax percentages, advance split rules, check-in/out hours, and legal policies
           </p>

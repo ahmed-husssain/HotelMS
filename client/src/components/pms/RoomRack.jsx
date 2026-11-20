@@ -155,8 +155,8 @@ export default function RoomRack({
                   <th className="py-3 px-4">Residence Title &amp; Tier</th>
                   <th className="py-3 px-4">Level / Floor</th>
                   <th className="py-3 px-4">Nightly Rate</th>
-                  <th className="py-3 px-4">Current Operational State</th>
-                  <th className="py-3 px-4">Resident or Assignment</th>
+                  <th className="py-3 px-4">Room Status</th>
+                  <th className="py-3 px-4">Assigned Guest</th>
                   <th className="py-3 px-5 text-right">Quick Action</th>
                 </tr>
               </thead>

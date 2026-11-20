@@ -310,7 +310,7 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
           <span className="text-slate-300">&bull;</span>
           <span className="truncate max-w-[125px] font-semibold">{residence.specs?.find(s => s.label === 'VIEW')?.value || '360° Ocean'}</span>
           <span className="text-slate-300">&bull;</span>
-          <span className="font-semibold">{residence.specs?.find(s => s.label === 'BED')?.value || 'Super King'}</span>
+          <span className="font-semibold">{residence.specs?.find(s => s.label === 'BED')?.value || 'King Bed'}</span>
         </div>
 
         {/* Desktop 3-Metric Editorial Grid (>= sm) */}
@@ -320,10 +320,10 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
               key={idx}
               className="p-3 bg-white border border-slate-200/80 rounded-[2px] flex flex-col justify-between hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-200 shadow-2xs"
             >
-              <span className="text-[8px] tracking-[0.25em] font-bold text-slate-500 uppercase">
+              <span className="text-[10px] tracking-[0.25em] font-bold text-slate-500 uppercase">
                 {item.label}
               </span>
-              <span className="text-xs font-bold text-slate-900 tracking-tight mt-1">
+              <span className="text-xs sm:text-sm font-bold text-slate-900 tracking-tight mt-1">
                 {item.value}
               </span>
             </div>
@@ -364,7 +364,7 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
                   onClick={() => onOpenSpecs(residence)}
                   className="px-2 py-2 text-[10px] font-mono text-slate-600 underline min-h-[44px] flex items-center"
                 >
-                  Specs
+                  Room Details
                 </button>
               )}
               <button

@@ -98,7 +98,7 @@ export default function FrontDeskPage() {
             onClick={() => setIsZReportOpen(true)}
             className="px-3.5 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs"
           >
-            Shift Z-Report &rarr;
+            Shift Closing &rarr;
           </button>
           <button
             type="button"
@@ -136,7 +136,7 @@ export default function FrontDeskPage() {
                 <strong className="text-base text-emerald-950 font-bold">{availableCount} Suites</strong>
               </div>
               <div className="border-l border-slate-200 pl-6">
-                <span className="text-slate-400 block text-[10px] uppercase">In Turnover</span>
+                <span className="text-slate-400 block text-[10px] uppercase">Needs Cleaning</span>
                 <strong className="text-base text-amber-900 font-bold">{dirtyCount} Suites</strong>
               </div>
             </div>

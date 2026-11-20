@@ -141,14 +141,14 @@ export default function AnalyticsReport({ rooms = [] }) {
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold">
-              MONGODB ATLAS LIVE TELEMETRY &bull; EXECUTIVE DASHBOARD
+              Hotel Analytics
             </span>
           </div>
           <h3 className="font-serif-grand text-xl text-white">
-            Property Performance &bull; Stayza Sanctuary
+            Property Performance &bull; Overview
           </h3>
           <p className="text-xs text-slate-300 font-mono">
-            Zero-Trust financial ledger, atomic 5-minute hold concurrency, and live room turnover sync.
+            Live revenue, occupancy, and room status.
           </p>
         </div>
 
@@ -165,13 +165,13 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Gross Realized Revenue (M1)
+              Total Gross Revenue
             </span>
             <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               PKR {revenue.grossRevenue.toLocaleString()}
             </span>
             <span className="text-[10px] font-mono text-emerald-800 font-semibold block mt-1">
-              ✓ Verified Double-Entry Ledger
+              ✓ Verified Financial Records
             </span>
           </div>
 
@@ -186,7 +186,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             </div>
             {revenue.extrasTotal > 0 && (
               <div className="flex justify-between text-slate-600">
-                <span>Folio Extras:</span>
+                <span>Extra Services:</span>
                 <strong className="text-amber-900">PKR {revenue.extrasTotal.toLocaleString()}</strong>
               </div>
             )}
@@ -197,13 +197,13 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Live Occupancy Rate (M2)
+              Live Occupancy Rate
             </span>
             <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               {occupancy.occupancyRate}%
             </span>
             <span className="text-[10px] font-mono text-slate-500 block mt-1">
-              Capacity: {occupancy.totalRooms} Ultra-Luxury Suites
+              Capacity: {occupancy.totalRooms} Luxury Suites
             </span>
           </div>
 
@@ -229,7 +229,7 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Pricing Yield: ADR &amp; RevPAR (M3)
+              Average Room Rate
             </span>
             <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               PKR {pricingYield.adr.toLocaleString()}
@@ -255,13 +255,13 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Checkout Hold Conversion (M4)
+              Booking Conversion Rate
             </span>
             <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               {bookingFunnel.conversionRate}%
             </span>
             <span className="text-[10px] font-mono text-slate-500 block mt-1">
-              5-Min Pessimistic Lock Funnel
+              Checkout Conversion Funnel
             </span>
           </div>
 

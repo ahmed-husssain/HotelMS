@@ -81,7 +81,7 @@ export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
               Cashier Shift Closing
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
-              Shift Z-Report Handover
+              Shift Closing
             </h3>
           </div>
           <button

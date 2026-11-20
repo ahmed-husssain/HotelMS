@@ -242,10 +242,10 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
                   <td className="py-1.5 pr-2">
                     <span className="font-bold text-slate-900 block text-[11px]">{residence.name} (Suite {residence.roomNumber})</span>
                     <span className="text-[9px] text-slate-400 block font-sans-clean">
-                      Luxury oceanfront accommodation &bull; 100% Private Bluffs
+                      Luxury oceanfront accommodation &bull; Private Ocean View
                     </span>
                   </td>
-                  <td className="py-1.5 text-center text-slate-600 text-[11px]">{nights}N</td>
+                  <td className="py-1.5 text-center text-slate-600 text-[11px]">{nights} Nights</td>
                   <td className="py-1.5 text-right text-slate-600 text-[11px]">{residence.nightlyRate?.toLocaleString()}</td>
                   <td className="py-1.5 text-right font-bold text-slate-900 text-[11px]">{suiteSubtotal.toLocaleString()}</td>
                 </tr>
@@ -297,7 +297,7 @@ Balance Due: PKR ${balanceDue.toLocaleString()}`
                   Ref: <strong className="text-slate-900">{booking.bookingRef || 'ST-301-9041'}</strong>
                 </p>
                 <span className="text-[9px] text-slate-400 block">
-                  Audited on Stayza PMS Network
+                  Verified by Front Desk
                 </span>
               </div>
             </div>

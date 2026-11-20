@@ -102,7 +102,7 @@ export default function HousekeepingPage() {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between border-b border-slate-200/90 pb-6 gap-6">
           <div>
             <div className="inline-block text-[11px] font-mono uppercase tracking-[0.2em] font-bold text-emerald-950 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 mb-2">
-              Turnaround Manifest &middot; Ready Queue
+              Daily Room Cleaning
             </div>
             <h1 className="font-serif-grand text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
               Housekeeping Floor Plan
@@ -127,7 +127,7 @@ export default function HousekeepingPage() {
             <div className="px-3 sm:px-4 py-1.5 border-r border-slate-200">
               <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-700 font-semibold">Clean &amp; Ready</div>
               <div className="font-mono text-xl sm:text-2xl font-bold text-emerald-950">{readyCount}</div>
-              <div className="text-[10px] font-mono text-slate-500">Live on PMS</div>
+              <div className="text-[10px] font-mono text-slate-500">Ready for Guests</div>
             </div>
             <div className="px-3 sm:px-4 py-1.5">
               <div className="text-[10px] font-mono uppercase tracking-widest text-slate-600 font-semibold">Guest Requests</div>
