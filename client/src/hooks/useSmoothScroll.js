@@ -38,7 +38,7 @@ export function useSmoothScroll() {
 
     // 3. Route Guard: Smooth virtual scroll runs ONLY on marketing showcase pages ('/', '/rooms', '/suites', '/residences').
     // All operational terminals, portals, forms, and modals run at 100% native browser speed.
-    const isMarketingPage = ['/', '/suites', '/residences', '/rooms'].includes(location.pathname)
+    const isMarketingPage = ['/', '/suites', '/residences', '/rooms', '/estate'].includes(location.pathname)
     if (!isMarketingPage) return
 
     // 4. Initialize Lenis with snappy, non-sluggish luxury physics (0.85s duration)

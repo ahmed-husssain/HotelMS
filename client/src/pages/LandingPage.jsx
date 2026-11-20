@@ -142,6 +142,16 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
+
+        <div className="mt-12 text-center">
+          <Link
+            to="/estate"
+            className="group inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] font-semibold text-slate-900 hover:text-emerald-900 transition-colors"
+          >
+            <span>Discover The Estate &amp; Grounds</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+          </Link>
+        </div>
       </section>
 
       {/* Architectural Luxury Footer */}

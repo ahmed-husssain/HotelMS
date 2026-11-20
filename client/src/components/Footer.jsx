@@ -185,24 +185,24 @@ export default function Footer() {
             </span>
             <ul className="space-y-1 text-xs">
               <li>
-                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
+                <Link to="/estate#spa" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   Cedar Spa &amp; Saltwater Baths
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
+                <Link to="/estate#dining" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   The Harvest Coastal Pavilion
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
+                <Link to="/estate" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   Underground Valet &amp; Helipad
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#experience" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
+                <Link to="/estate" className="inline-flex items-center min-h-[28px] py-1 text-[#44403C] hover:text-amber-800 transition-colors">
                   Private Arabian Boat Charters
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

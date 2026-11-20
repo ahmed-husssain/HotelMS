@@ -61,13 +61,14 @@ export default function Navbar({ onOpenDrawer }) {
     },
     {
       num: '02',
-      label: 'Dining & Spa',
-      href: '#experience',
-      desc: 'Mineral Hot Springs & Dining',
+      label: 'The Estate',
+      href: '/estate',
+      isRouter: true,
+      desc: 'Architecture, Dining, Beach & Spa',
       preview: {
-        tag: 'SPA & DINING',
-        title: 'Thermal Springs & Dining',
-        subtitle: 'Natural mineral hot tubs and fresh organic coastal dining.',
+        tag: 'THE ESTATE',
+        title: 'Sindh Coast Sanctuary',
+        subtitle: '42 secluded oceanfront acres featuring cliffside architecture, farm-to-table dining, and mineral thermal springs.',
         image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=85',
       },
     },
@@ -142,12 +143,12 @@ export default function Navbar({ onOpenDrawer }) {
             >
               <StaggeredWaveText text="Rooms & Suites" />
             </Link>
-            <a
-              href="#experience"
+            <Link
+              to="/estate"
               className="group relative h-10 flex items-center text-slate-700 hover:text-slate-950 transition-colors select-none"
             >
-              <StaggeredWaveText text="Dining & Spa" />
-            </a>
+              <StaggeredWaveText text="The Estate" />
+            </Link>
           </nav>
 
           {/* Mobile Left Brand Logo (< sm: Eliminates center collision with Reserve button) */}

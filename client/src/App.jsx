@@ -10,6 +10,7 @@ import LandingPage from './pages/LandingPage'
 
 // Lazy-loaded auxiliary routes for ultra-low initial bundle weight
 const RoomsPage = lazy(() => import('./pages/RoomsPage'))
+const EstatePage = lazy(() => import('./pages/EstatePage'))
 const BookingPage = lazy(() => import('./pages/BookingPage'))
 const GuestPortalPage = lazy(() => import('./pages/GuestPortalPage'))
 const ConfirmationPage = lazy(() => import('./pages/ConfirmationPage'))
@@ -44,6 +45,11 @@ function AppRoutes() {
           <Route path="/suites" element={<RoomsPage />} />
           <Route path="/residences" element={<RoomsPage />} />
           <Route path="/rooms" element={<RoomsPage />} />
+
+          {/* Dedicated Estate & Property Experience */}
+          <Route path="/estate" element={<EstatePage />} />
+          <Route path="/experience" element={<EstatePage />} />
+          <Route path="/dining" element={<EstatePage />} />
 
           {/* Dedicated 2-Column Luxury Reservation Flow */}
           <Route path="/reserve" element={<BookingPage />} />

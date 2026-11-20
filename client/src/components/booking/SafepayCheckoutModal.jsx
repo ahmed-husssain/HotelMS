@@ -10,13 +10,13 @@ import { useNavigate } from 'react-router-dom'
  */
 export default function SafepayCheckoutModal({
   session,
-  residenceName,
+  residence,
   onCancel,
 }) {
   const navigate = useNavigate()
   const [secondsRemaining, setSecondsRemaining] = useState(300)
 
-  // Isolated countdown timer: Only re-renders this tiny modal header, not the parent BookingPage
+  // Isolated countdown timer: Only re-renders this modal header, preventing parent page re-renders
   useEffect(() => {
     const interval = setInterval(() => {
       setSecondsRemaining((prev) => {
@@ -34,6 +34,15 @@ export default function SafepayCheckoutModal({
 
   const minutes = String(Math.floor(secondsRemaining / 60)).padStart(2, '0')
   const seconds = String(secondsRemaining % 60).padStart(2, '0')
+  const residenceName = residence?.name || session.residence?.name || 'Luxury Residence'
+  const roomNumber = session.roomNumber || residence?.roomNumber || '301'
+
+  const handleSimulatedSettle = () => {
+    navigate(
+      `/payment/verify?ref=${session.bookingRef}&tracker=${session.trackerToken}`,
+      { state: { bookingSession: session } }
+    )
+  }
 
   return (
     <div
@@ -66,7 +75,7 @@ export default function SafepayCheckoutModal({
               Suite Hold Active &bull; Reference {session.bookingRef}
             </span>
             <h3 className="font-serif-grand text-xl text-slate-900">
-              Suite {session.roomNumber} &bull; {residenceName}
+              Suite {roomNumber} &bull; {residenceName}
             </h3>
           </div>
 
@@ -117,9 +126,7 @@ export default function SafepayCheckoutModal({
             {/* 2. Instant Simulator for Viva Examination / Presentation */}
             <button
               type="button"
-              onClick={() => {
-                navigate(`/payment/verify?ref=${session.bookingRef}&tracker=${session.trackerToken}`)
-              }}
+              onClick={handleSimulatedSettle}
               className="w-full py-3 bg-emerald-950 hover:bg-emerald-900 text-emerald-200 font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.98]"
             >
               <span>Authorize &amp; Settle (Viva Defense Simulator)</span>
@@ -130,7 +137,7 @@ export default function SafepayCheckoutModal({
             <button
               type="button"
               onClick={onCancel}
-              className="w-full py-2.5 text-slate-500 hover:text-red-700 text-xs font-mono tracking-wider uppercase transition-colors cursor-pointer"
+              className="w-full py-2.5 text-slate-500 hover:text-red-700 text-xs font-mono tracking-wider uppercase transition-colors cursor-pointer text-center"
             >
               Cancel &amp; Release Suite Hold
             </button>

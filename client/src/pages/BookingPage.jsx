@@ -8,6 +8,7 @@ import StayDatesForm from '../components/booking/StayDatesForm'
 import GuestInfoForm from '../components/booking/GuestInfoForm'
 import ExtraServices, { CONCIERGE_ADDONS } from '../components/booking/ExtraServices'
 import BookingSummary from '../components/booking/BookingSummary'
+import SafepayCheckoutModal from '../components/booking/SafepayCheckoutModal'
 import { createCheckoutHold, createPaymentSession, cancelPaymentSession } from '../services/api'
 
 export default function BookingPage() {
@@ -85,22 +86,6 @@ export default function BookingPage() {
   // 4. Processing & Safepay Gateway State
   const [isProcessing, setIsProcessing] = useState(false)
   const [activeCheckoutSession, setActiveCheckoutSession] = useState(null)
-  const [holdSecondsRemaining, setHoldSecondsRemaining] = useState(300)
-
-  // Live 5-Minute Pessimistic Hold Countdown Timer
-  useEffect(() => {
-    if (!activeCheckoutSession) return
-    const interval = setInterval(() => {
-      setHoldSecondsRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval)
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [activeCheckoutSession])
 
   // Explicit Hold Release (When user clicks Cancel on checkout)
   const handleCancelHold = async () => {
@@ -208,7 +193,6 @@ export default function BookingPage() {
       }
 
       setActiveCheckoutSession(sessionData)
-      setHoldSecondsRemaining(300)
     } catch (apiErr) {
       console.warn('[Booking] API sync issue; opening verification fallback:', apiErr.message)
       const fallbackRef = `ST-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
@@ -233,7 +217,6 @@ export default function BookingPage() {
       }
 
       setActiveCheckoutSession(fallbackSession)
-      setHoldSecondsRemaining(300)
     } finally {
       setIsProcessing(false)
     }
@@ -400,148 +383,13 @@ export default function BookingPage() {
         </form>
       </main>
 
-      {/* Safepay Checkout Gateway Modal */}
+      {/* High-Performance Isolated Safepay Checkout Modal */}
       {activeCheckoutSession && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Secure Reservation Checkout"
-          className="fixed inset-0 z-50 bg-[#0E1201]/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in"
-        >
-          <div className="max-w-md w-full bg-[#FAF8F5] text-slate-900 border border-slate-200/80 shadow-2xl rounded-[3px] overflow-hidden flex flex-col animate-scale-in">
-            {/* Modal Header */}
-            <div className="bg-[#0E1201] text-[#FAF8F5] px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="font-mono text-[11px] uppercase tracking-[0.2em] font-bold text-[#FAF8F5]">
-                  Secure Checkout
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                {/* 5-Minute Countdown Badge */}
-                <span className="px-2.5 py-0.5 bg-white/10 border border-white/15 rounded-full font-mono text-[11px] text-emerald-300 font-semibold tracking-wide">
-                  Hold: {String(Math.floor(holdSecondsRemaining / 60)).padStart(2, '0')}:
-                  {String(holdSecondsRemaining % 60).padStart(2, '0')}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={handleCancelHold}
-                  className="text-slate-400 hover:text-white transition-colors text-lg leading-none p-1 cursor-pointer"
-                  aria-label="Close checkout modal"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 sm:p-7 space-y-5">
-              {/* Suite Title */}
-              <div className="space-y-1 border-b border-slate-200/80 pb-4">
-                <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 font-bold block">
-                  Reference: {activeCheckoutSession.bookingRef}
-                </span>
-                <h3 className="font-serif-grand text-2xl text-slate-900 leading-tight">
-                  {selectedResidence.name}
-                </h3>
-                <p className="text-xs text-slate-600 font-mono">
-                  Suite {selectedResidence.roomNumber} &bull; {nights} {nights === 1 ? 'Night' : 'Nights'} &bull; {guestDossier.fullName || 'Guest'}
-                </p>
-              </div>
-
-              {/* Clean Financial Breakdown */}
-              <div className="space-y-2.5 font-mono text-xs">
-                <div className="flex items-center justify-between text-slate-600">
-                  <span>Total Stay ({nights}N + 13% Tax):</span>
-                  <span className="font-semibold text-slate-900">
-                    PKR {activeCheckoutSession.totalAmount?.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between py-2.5 px-3 bg-emerald-50/70 border border-emerald-200/60 rounded-[2px]">
-                  <div>
-                    <span className="font-bold text-emerald-950 block text-[11px] uppercase tracking-wider">
-                      30% Advance Deposit Due:
-                    </span>
-                    <span className="text-[10px] text-emerald-700">Secures room &amp; confirms booking</span>
-                  </div>
-                  <span className="font-mono text-lg font-bold text-emerald-950">
-                    PKR {activeCheckoutSession.advanceAmount?.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between text-slate-500 text-[11px]">
-                  <span>Remaining 70% at Hotel Check-In:</span>
-                  <span>
-                    PKR {(activeCheckoutSession.totalAmount - activeCheckoutSession.advanceAmount)?.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="space-y-2 pt-2">
-                {/* 1. Official Safepay Sandbox Gateway */}
-                {activeCheckoutSession.checkoutUrl && activeCheckoutSession.checkoutUrl !== '#' ? (
-                  <>
-                    <a
-                      href={activeCheckoutSession.checkoutUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-xs font-bold uppercase tracking-widest rounded-[2px] transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow active:scale-[0.99]"
-                    >
-                      <span>Pay PKR {activeCheckoutSession.advanceAmount?.toLocaleString()} via Safepay</span>
-                      <span className="text-sm">&rarr;</span>
-                    </a>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigate(
-                          `/payment/verify?ref=${activeCheckoutSession.bookingRef}&tracker=${activeCheckoutSession.trackerToken}`,
-                          { state: { bookingSession: activeCheckoutSession } }
-                        )
-                      }}
-                      className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-xs font-semibold rounded-[2px] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      <span>Instant Confirmation (Demo / Viva Mode)</span>
-                      <span>✓</span>
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      navigate(
-                        `/payment/verify?ref=${activeCheckoutSession.bookingRef}&tracker=${activeCheckoutSession.trackerToken}`,
-                        { state: { bookingSession: activeCheckoutSession } }
-                      )
-                    }}
-                    className="w-full py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-xs font-bold uppercase tracking-widest rounded-[2px] transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow active:scale-[0.99] cursor-pointer"
-                  >
-                    <span>Confirm &amp; Authorize 30% Deposit</span>
-                    <span className="text-sm">&rarr;</span>
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  onClick={handleCancelHold}
-                  className="w-full py-1.5 text-slate-400 hover:text-red-700 text-xs font-mono tracking-wider transition-colors cursor-pointer text-center"
-                >
-                  Cancel and release suite
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Footer Note */}
-            <div className="bg-slate-100/60 px-6 py-2.5 border-t border-slate-200/80 text-center font-mono text-[10px] text-slate-500 flex items-center justify-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>Safepay 256-Bit SSL &bull; Sindh Hospitality Tax Compliant</span>
-            </div>
-          </div>
-        </div>
+        <SafepayCheckoutModal
+          session={activeCheckoutSession}
+          residence={selectedResidence}
+          onCancel={handleCancelHold}
+        />
       )}
     </div>
   )
