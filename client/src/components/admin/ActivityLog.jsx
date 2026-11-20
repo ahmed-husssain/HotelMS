@@ -102,7 +102,7 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
             onClick={handleExportCSV}
             className="px-4 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1.5"
           >
-            <span>📥 Export CSV</span>
+            <span>Export CSV ↓</span>
           </button>
         </div>
       </div>

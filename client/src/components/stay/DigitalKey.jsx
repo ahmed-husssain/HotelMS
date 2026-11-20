@@ -7,7 +7,7 @@ export default function DigitalKey({ currentBooking }) {
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
           <span className="text-[9px] font-mono tracking-[0.25em] text-[#A8A29E] uppercase block">
-            CONTACTLESS DIGITAL PASS
+            Digital Room Pass &amp; Key
           </span>
           <h3 className="font-serif-grand text-xl font-bold tracking-widest text-[#FAF8F5] mt-0.5">
             {currentBooking.roomNumber || `SUITE ${currentBooking.residence?.roomNumber}`}
@@ -52,11 +52,11 @@ export default function DigitalKey({ currentBooking }) {
         </div>
         <div className="flex justify-between">
           <span className="text-slate-400">Access Tier:</span>
-          <span className="text-[#FAF8F5] font-semibold">UNRESTRICTED RESIDENTIAL</span>
+          <span className="text-[#FAF8F5] font-semibold">Full Access</span>
         </div>
         <div className="flex justify-between">
           <span className="text-slate-400">Valet Bay:</span>
-          <span>Bay #301 (Subterranean)</span>
+          <span>Bay #301 (Underground Parking)</span>
         </div>
       </div>
     </div>

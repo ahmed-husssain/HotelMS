@@ -39,7 +39,7 @@ export default function BookingLookup({
             GUEST SELF-SERVICE PORTAL
           </span>
           <h1 className="font-serif-grand text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
-            {currentUser && !showManualLookup ? 'Your Sanctuary Account' : 'Access Your Stay.'}
+            {currentUser && !showManualLookup ? 'Your Guest Account' : 'Access Your Stay.'}
           </h1>
           <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
             {currentUser && !showManualLookup
@@ -51,8 +51,10 @@ export default function BookingLookup({
         {/* 1. Logged-In User with No Active Stays -> Clear Welcome Hub */}
         {currentUser && !showManualLookup ? (
           <div className="bg-white border border-slate-200/90 shadow-xl p-6 sm:p-7 rounded-[2px] text-center space-y-5">
-            <div className="w-12 h-12 mx-auto rounded-full bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-xl shadow-xs">
-              🌊
+            <div className="w-12 h-12 mx-auto rounded-full bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-900 shadow-xs">
+              <svg className="w-5 h-5 text-emerald-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 2l-2 2m-1.5 1.5L16 7l-2-2m-3.5 3.5a5 5 0 1 0-7.07 7.07 5 5 0 0 0 7.07-7.07z" />
+              </svg>
             </div>
 
             <div className="space-y-1">
@@ -63,7 +65,7 @@ export default function BookingLookup({
                 No Active Reservation
               </h2>
               <p className="text-xs text-slate-600 max-w-xs mx-auto leading-relaxed font-sans pt-1">
-                You do not have a booked suite yet. Reserve an oceanfront residence to unlock your digital room key and in-stay concierge.
+                You do not have a booked suite yet. Reserve a suite to unlock your digital room key and room services.
               </p>
             </div>
 

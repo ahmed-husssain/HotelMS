@@ -16,25 +16,25 @@ const ARCHITECTURAL_COLLECTIONS = [
   {
     id: 'penthouses',
     label: 'Penthouses',
-    keys: '2 Keys',
+    keys: '2 Suites',
     matcher: (r) => r.roomNumber === '301' || r.roomNumber === '302',
   },
   {
     id: 'villas',
     label: 'Private Villas',
-    keys: '3 Keys',
+    keys: '3 Suites',
     matcher: (r) => r.roomNumber === '204' || r.roomNumber === '401' || r.roomNumber === '501',
   },
   {
     id: 'overwater',
     label: 'Overwater & Cliff',
-    keys: '2 Keys',
+    keys: '2 Suites',
     matcher: (r) => r.roomNumber === '102' || r.roomNumber === '201',
   },
   {
     id: 'all',
     label: 'All Suites',
-    keys: '7 Keys',
+    keys: '7 Suites',
     matcher: () => true,
   },
 ]
@@ -115,7 +115,7 @@ export default function RoomsPage() {
           {/* Subtle Monograph Eyebrow */}
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-mono tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
-              THE RESIDENCES &bull; 7 PRIVATE KEYS
+              ROOMS &amp; SUITES &bull; 7 PRIVATE SUITES
             </span>
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:inline-block">
               100% Oceanfront
@@ -139,7 +139,7 @@ export default function RoomsPage() {
 
           {/* Grand Architectural Serif Title */}
           <h1 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light tracking-tight leading-tight">
-            Architectural Suites &amp; Villas.
+            Luxury Ocean Suites &amp; Villas.
           </h1>
 
           {/* Quiet Luxury Editorial Navigation Tabs */}

@@ -14,7 +14,7 @@ export default function StayBill({
             STATEMENT OF CHARGES
           </span>
           <h3 className="font-serif-grand text-xl text-slate-900">
-            Live Guest Folio
+            Live Room Bill
           </h3>
         </div>
         <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-900 font-mono text-[9px] font-bold rounded">

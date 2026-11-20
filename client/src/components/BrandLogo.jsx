@@ -97,7 +97,7 @@ export default function BrandLogo({
             <span
               className={`font-sans-clean font-semibold uppercase ${dimensions.subtitle} ${subtitleColor} leading-none pt-1`}
             >
-              SANCTUARY &bull; RESIDENCES
+              RESORTS &bull; SUITES
             </span>
           )}
         </div>

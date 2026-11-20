@@ -125,10 +125,6 @@ export default function SplashScreen({ onComplete }) {
           transform: translateY(12px);
           animation: fadeInUp 750ms cubic-bezier(0.16, 1, 0.3, 1) 1250ms forwards;
         }
-        .anim-skip {
-          opacity: 0;
-          animation: fadeInUp 800ms ease-out 1800ms forwards;
-        }
       `}</style>
 
       {/* Center Architectural Composition */}
@@ -219,14 +215,9 @@ export default function SplashScreen({ onComplete }) {
             STAYZA
           </div>
           <div className="font-sans-clean text-[9px] sm:text-[10px] tracking-[0.38em] text-[#A8A29E] uppercase mt-2 font-medium">
-            SANCTUARY &bull; RESIDENCES
+            RESORTS, HOTELS &bull; SUITES
           </div>
         </div>
-      </div>
-
-      {/* Discreet Tap/Click to Enter Indicator */}
-      <div className="anim-skip absolute bottom-8 sm:bottom-12 text-[9px] font-mono tracking-[0.3em] uppercase text-[#78716C] hover:text-[#FAF8F5] transition-colors">
-        Click anywhere to enter &rarr;
       </div>
     </div>
   )

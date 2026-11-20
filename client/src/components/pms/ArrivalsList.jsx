@@ -61,7 +61,7 @@ export default function ArrivalsList({
                   <th className="py-3 px-5">Suite Assignment</th>
                   <th className="py-3 px-4">Guest Information</th>
                   <th className="py-3 px-4">Estimated Arrival</th>
-                  <th className="py-3 px-4">Online Escrow Paid</th>
+                  <th className="py-3 px-4">Online Deposit Paid (30%)</th>
                   <th className="py-3 px-4">Balance at Desk</th>
                   <th className="py-3 px-5 text-right">Action</th>
                 </tr>
@@ -146,10 +146,10 @@ export default function ArrivalsList({
             <table className="w-full text-left text-xs font-mono">
               <thead className="bg-[#FAF8F5] border-b border-slate-200/80 text-[10px] text-slate-500 uppercase tracking-wider">
                 <tr>
-                  <th className="py-3 px-5">Suite &amp; Folio</th>
-                  <th className="py-3 px-4">Resident Information</th>
+                  <th className="py-3 px-5">Suite &amp; Bill #</th>
+                  <th className="py-3 px-4">Guest Information</th>
                   <th className="py-3 px-4">Nights Stayed</th>
-                  <th className="py-3 px-4">Incidentals Posted</th>
+                  <th className="py-3 px-4">Extra Services Posted</th>
                   <th className="py-3 px-4">Total Balance Due</th>
                   <th className="py-3 px-5 text-right">Actions</th>
                 </tr>

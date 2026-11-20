@@ -151,7 +151,7 @@ export default function HeroSection({ onQuickReserve, onExplore }) {
               <line x1="16" y1="78" x2="84" y2="78" strokeWidth="8" />
               <circle cx="50" cy="50" r="7" fill="currentColor" stroke="none" />
             </svg>
-            <span className="font-semibold text-slate-900 tracking-wider">Explore Residences</span>
+            <span className="font-semibold text-slate-900 tracking-wider">Explore Rooms &amp; Suites</span>
           </div>
 
           <span className="w-[1px] h-4 bg-[#E5DFD5] mx-1" aria-hidden="true" />
@@ -164,7 +164,7 @@ export default function HeroSection({ onQuickReserve, onExplore }) {
         </button>
 
         <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mt-2.5 block select-none">
-          Private Ocean Suites &bull; 3 Flagship Keys
+          Private Ocean Suites &bull; Luxury Villas
         </span>
       </div>
     </section>
