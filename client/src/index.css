@@ -190,30 +190,7 @@ html.lenis, html.lenis body {
   opacity: 1;
 }
 
-/* Site-wide luxury custom cursor suppression for mouse/trackpad (Only active when custom cursor has initialized) */
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor body,
-  html.has-custom-cursor a,
-  html.has-custom-cursor button,
-  html.has-custom-cursor [role="button"],
-  html.has-custom-cursor [data-cursor] {
-    cursor: none !important;
-  }
-  /* Always allow natural I-beam cursor for typing in text fields */
-  html.has-custom-cursor input,
-  html.has-custom-cursor textarea {
-    cursor: text !important;
-  }
-}
 
-/* Suppress custom cursor container completely on touch devices (smartphones and tablets) */
-@media (pointer: coarse), (hover: none) {
-  .custom-cursor-container,
-  .custom-cursor-root {
-    display: none !important;
-  }
-}
 
 /* Accessibility: Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
@@ -252,7 +229,7 @@ html.lenis, html.lenis body {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
-  header, footer, nav, aside, .custom-cursor-root, .print\:hidden {
+  header, footer, nav, aside, .print\:hidden {
     display: none !important;
   }
 }
