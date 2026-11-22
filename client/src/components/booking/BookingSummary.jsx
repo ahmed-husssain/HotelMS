@@ -32,24 +32,25 @@ export default function BookingSummary({
 
   return (
     <div className="bg-white border border-slate-200/90 rounded-xl overflow-hidden shadow-md">
-      {/* 1. Visual Suite Hero Image */}
-      <div className="relative h-44 sm:h-48 bg-slate-900 overflow-hidden">
+      {/* 1. Visual Suite Hero Image — Cinematic Editorial Showcase */}
+      <div className="relative h-64 sm:h-72 bg-slate-900 overflow-hidden group">
         <img
           src={heroImage}
           alt={selectedResidence.name}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        {/* Editorial vignette gradient: keeps architecture bright while text stays crisp */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
-        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-mono font-bold text-white">
+        <div className="absolute top-3.5 right-3.5 bg-black/60 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[11px] font-mono font-bold text-white shadow-sm">
           Suite {selectedResidence.roomNumber}
         </div>
 
-        <div className="absolute bottom-3 left-4 right-4 text-white">
-          <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-emerald-300 block">
+        <div className="absolute bottom-4 left-4 right-4 text-white">
+          <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-emerald-300 block mb-1">
             {selectedResidence.tier}
           </span>
-          <h3 className="font-syne font-bold text-base sm:text-lg text-white leading-tight">
+          <h3 className="font-syne font-bold text-lg sm:text-xl text-white leading-tight">
             {selectedResidence.name}
           </h3>
         </div>

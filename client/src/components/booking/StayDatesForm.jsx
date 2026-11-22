@@ -40,19 +40,26 @@ export default function StayDatesForm({
         {/* Live Availability Badge */}
         <div>
           {isCheckingAvailability ? (
-            <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-              Checking availability...
+            <span className="text-[11px] font-mono text-slate-500 bg-slate-100 border border-slate-200/80 px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5">
+              <svg className="w-3 h-3 animate-spin text-slate-400" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Verifying dates...
             </span>
           ) : isAvailable ? (
-            <span className="text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full font-semibold flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-              Suite {roomNumber} is Available
+            <span className="text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5">
+              <svg className="w-3 h-3 text-emerald-600" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              Suite {roomNumber} Available
             </span>
           ) : (
-            <span className="text-[11px] font-mono text-rose-800 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-full font-semibold flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
-              Unavailable for these dates
+            <span className="text-[11px] font-mono text-rose-800 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5">
+              <svg className="w-3 h-3 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+              Dates Unavailable
             </span>
           )}
         </div>
@@ -126,23 +133,30 @@ export default function StayDatesForm({
           <span className="text-[11px] text-slate-400">Accommodates up to 4 guests</span>
         </div>
 
-        <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-1">
+        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1">
           <button
             type="button"
+            aria-label="Decrease guest count"
             onClick={() => setGuestCount(Math.max(1, guestCount - 1))}
-            className="w-8 h-8 rounded bg-white border border-slate-200 text-slate-600 font-bold hover:bg-slate-100 flex items-center justify-center cursor-pointer transition-colors"
+            className="w-8 h-8 rounded bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 active:scale-95 flex items-center justify-center cursor-pointer transition-all shadow-2xs touch-target"
           >
-            &minus;
+            <svg className="w-3.5 h-3.5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
           </button>
-          <span className="font-mono font-bold text-xs w-6 text-center text-slate-900">
+          <span className="font-mono font-bold text-sm w-7 text-center text-slate-900 select-none">
             {guestCount}
           </span>
           <button
             type="button"
+            aria-label="Increase guest count"
             onClick={() => setGuestCount(Math.min(4, guestCount + 1))}
-            className="w-8 h-8 rounded bg-white border border-slate-200 text-slate-600 font-bold hover:bg-slate-100 flex items-center justify-center cursor-pointer transition-colors"
+            className="w-8 h-8 rounded bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 active:scale-95 flex items-center justify-center cursor-pointer transition-all shadow-2xs touch-target"
           >
-            &plus;
+            <svg className="w-3.5 h-3.5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
           </button>
         </div>
       </div>

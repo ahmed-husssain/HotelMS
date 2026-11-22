@@ -22,6 +22,51 @@ const KeyIcon = ({ className = "w-4 h-4" }) => (
   </svg>
 )
 
+const NfcWaveIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M6 8.5a7 7 0 0 1 12 0" />
+    <path d="M8.5 11.5a3.5 3.5 0 0 1 7 0" />
+    <path d="M11 14.5a.5.5 0 0 1 2 0" />
+    <path d="M3.5 5.5a11 11 0 0 1 17 0" />
+  </svg>
+)
+
+const LockClosedIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+)
+
+const LockOpenIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+  </svg>
+)
+
+const ThermometerIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+  </svg>
+)
+
+const WifiIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+    <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+    <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+    <line x1="12" y1="20" x2="12.01" y2="20" strokeWidth="2.5" />
+  </svg>
+)
+
+const CarIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="1" y="5" width="22" height="13" rx="2" />
+    <path d="M7 15h.01M17 15h.01" strokeWidth="2.5" />
+  </svg>
+)
+
 const DiningIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M3 19h18M4 15h16a8 8 0 0 0-16 0zM12 4v3" />
@@ -102,6 +147,7 @@ const DINING_MENU = [
     description: 'Toasted brioche, smoked chicken breast, aged white cheddar, butter lettuce, and hand-cut sea salt fries.',
     price: 2400,
     timeEst: '25 mins',
+    tag: 'Artisanal Brioche',
     image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=700&q=80',
   },
   {
@@ -111,6 +157,7 @@ const DINING_MENU = [
     description: 'Pan-seared fresh red snapper filet served with charred asparagus, citrus vinaigrette, and wild herb butter.',
     price: 4800,
     timeEst: '35 mins',
+    tag: 'Wild Catch',
     image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
   },
   {
@@ -120,6 +167,7 @@ const DINING_MENU = [
     description: 'Artisanal butter croissants, seasonal berry preserves, organic Greek yoghurt, and freshly squeezed orange juice.',
     price: 3200,
     timeEst: '20 mins',
+    tag: 'Morning Bakery',
     image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=700&q=80',
   },
   {
@@ -129,6 +177,7 @@ const DINING_MENU = [
     description: 'Fresh sliced rockmelon, dragon fruit, sweet figs, and strawberries served with coastal Sindh forest honey.',
     price: 1600,
     timeEst: '15 mins',
+    tag: 'Seasonal Organic',
     image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=700&q=80',
   },
   {
@@ -138,6 +187,7 @@ const DINING_MENU = [
     description: 'Double espresso poured over chilled artisanal mineral tonic with crushed fresh garden mint.',
     price: 1200,
     timeEst: '10 mins',
+    tag: 'Single Origin',
     image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=700&q=80',
   },
 ]
@@ -179,6 +229,15 @@ const SPA_HOUSEKEEPING_SERVICES = [
     price: 4500,
     timeEst: '30 mins',
     badge: 'Signature',
+  },
+  {
+    id: 'spa-5',
+    category: 'Housekeeping',
+    title: 'In-Suite Ice Bucket & Mineral Water Carafe',
+    description: 'Fresh artisan mineral ice bucket, chilled sparkling or still carafes, and fresh cut citrus slices.',
+    price: 0,
+    timeEst: '10 mins',
+    badge: 'Complimentary',
   },
 ]
 
@@ -383,9 +442,24 @@ export default function GuestPortalPage() {
   const [isDND, setIsDND] = useState(false)
   const [isKeyUnlocking, setIsKeyUnlocking] = useState(false)
   const [keyUnlockedToast, setKeyUnlockedToast] = useState(false)
-  const [climateMode, setClimateMode] = useState('ocean') // 'ocean' (21°C) or 'cedar' (24°C)
+  const [keyRelockRemaining, setKeyRelockRemaining] = useState(0)
+  const [climateMode, setClimateMode] = useState('ocean') // 'ocean' (20°C), 'cedar' (24°C), 'eco' (22°C)
+  const [climateTemp, setClimateTemp] = useState(21)
   const [wifiCopied, setWifiCopied] = useState(false)
+  const [valetRequested, setValetRequested] = useState(false)
   const [expressCheckoutNotice, setExpressCheckoutNotice] = useState(false)
+
+  // Auto-relock countdown timer for digital keycard
+  useEffect(() => {
+    if (keyRelockRemaining <= 0) {
+      setKeyUnlockedToast(false)
+      return
+    }
+    const timer = setInterval(() => {
+      setKeyRelockRemaining((prev) => (prev > 1 ? prev - 1 : 0))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [keyRelockRemaining])
 
   // Feedback State
   const [reviewRating, setReviewRating] = useState(5)
@@ -618,14 +692,14 @@ export default function GuestPortalPage() {
     setTimeout(() => setServiceFeedbackNotice(''), 4500)
   }
 
-  // Digital Key Trigger
+  // Digital Key Trigger with Apple Contactless Ripple & Haptic feedback
   const handleTriggerDigitalKey = async () => {
     if (isKeyUnlocking) return
     setIsKeyUnlocking(true)
 
-    // Optional haptic feedback on supported mobile devices
+    // Tactile haptic pulse on supported devices
     if (navigator?.vibrate) {
-      navigator.vibrate([40, 60, 40])
+      navigator.vibrate([35, 45, 35])
     }
 
     try {
@@ -637,12 +711,70 @@ export default function GuestPortalPage() {
     setTimeout(() => {
       setIsKeyUnlocking(false)
       setKeyUnlockedToast(true)
-      toast.success(`${currentBooking.roomNumber || 'Suite 301'} lock disengaged`, 'Door Unlocked')
-      setTimeout(() => setKeyUnlockedToast(false), 8000)
+      setKeyRelockRemaining(12)
+      if (navigator?.vibrate) {
+        navigator.vibrate([60, 40, 60])
+      }
+      toast.success(`${currentBooking.roomNumber || 'Suite 301'} deadbolt disengaged`, 'Suite Door Unlocked')
     }, 1200)
   }
 
-  // Copy Wi-Fi Credentials
+  // Fluid iOS-style Do Not Disturb toggle
+  const handleToggleDND = async () => {
+    const nextDND = !isDND
+    setIsDND(nextDND)
+
+    if (navigator?.vibrate) {
+      navigator.vibrate(25)
+    }
+
+    try {
+      await updateStaySettings(currentBooking.bookingRef, { isDND: nextDND })
+    } catch (err) {
+      console.warn('[GuestPortal] DND fallback:', err.message)
+    }
+
+    if (nextDND) {
+      toast.info('Do Not Disturb enabled. Housekeeping and calls paused.', 'Privacy Active')
+    } else {
+      toast.info('Do Not Disturb disabled. Standard service resumed.', 'Privacy Inactive')
+    }
+  }
+
+  // Interactive Climate Presets & Steppers (Apple HomeKit inspired)
+  const handleSetClimatePreset = async (mode, temp) => {
+    setClimateMode(mode)
+    setClimateTemp(temp)
+
+    if (navigator?.vibrate) {
+      navigator.vibrate(20)
+    }
+
+    try {
+      await updateStaySettings(currentBooking.bookingRef, { climateMode: mode, climateTemp: temp })
+    } catch (err) {
+      console.warn('[GuestPortal] Climate preset fallback:', err.message)
+    }
+
+    toast.success(`Thermostat set to ${temp}°C (${mode === 'ocean' ? 'Ocean Breeze' : mode === 'cedar' ? 'Cedar Warmth' : 'Quiet Eco'})`, 'Climate Updated')
+  }
+
+  const handleStepClimate = async (delta) => {
+    const newTemp = Math.min(28, Math.max(18, climateTemp + delta))
+    setClimateTemp(newTemp)
+
+    if (navigator?.vibrate) {
+      navigator.vibrate(15)
+    }
+
+    try {
+      await updateStaySettings(currentBooking.bookingRef, { climateTemp: newTemp })
+    } catch (err) {
+      console.warn('[GuestPortal] Climate step fallback:', err.message)
+    }
+  }
+
+  // Copy Wi-Fi Credentials with instant visual confirmation
   const handleCopyWifi = () => {
     if (navigator?.clipboard) {
       navigator.clipboard.writeText('pacific2026')
@@ -650,6 +782,21 @@ export default function GuestPortalPage() {
     setWifiCopied(true)
     toast.success('Wi-Fi password copied to clipboard', 'Password Copied')
     setTimeout(() => setWifiCopied(false), 2500)
+  }
+
+  // Valet Vehicle Retrieval
+  const handleRequestValet = () => {
+    if (valetRequested) return
+    setValetRequested(true)
+    requestGuestService(
+      currentBooking.roomNumber || 'Suite 301',
+      currentBooking.guestName,
+      'Valet Vehicle Retrieval Request (Bay #301)',
+      0,
+      'Valet'
+    )
+    toast.success('Valet team dispatched to bring your car from Bay #301.', 'Vehicle Requested')
+    setTimeout(() => setValetRequested(false), 8000)
   }
 
   // Express Checkout Request
@@ -711,20 +858,28 @@ export default function GuestPortalPage() {
           <div className="flex items-center gap-2 sm:gap-3">
             {isUnlocked && (
               <>
-                {/* DND Toggle */}
-                <button
-                  type="button"
-                  onClick={() => setIsDND((prev) => !prev)}
-                  className={`touch-target px-3 py-1.5 text-xs font-mono font-bold rounded-[2px] transition-all cursor-pointer border ${
-                    isDND
-                      ? 'bg-rose-900 text-rose-100 border-rose-950 shadow-xs'
-                      : 'bg-white text-slate-700 border-slate-200 hover:border-slate-900'
-                  }`}
-                  title="Toggle Do Not Disturb"
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full mr-1.5 inline-block ${isDND ? 'bg-rose-400' : 'bg-slate-300'}`} />
-                  <span>{isDND ? 'DND: On' : 'DND: Off'}</span>
-                </button>
+                {/* Apple-Style Fluid DND Spring Switch */}
+                <div className="flex items-center gap-2">
+                  <span className="hidden md:inline font-mono text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
+                    {isDND ? 'Privacy On' : 'Privacy Off'}
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={isDND}
+                    aria-label="Toggle Do Not Disturb privacy"
+                    onClick={handleToggleDND}
+                    className={`touch-target relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none ${
+                      isDND ? 'bg-rose-600' : 'bg-slate-300'
+                    }`}
+                  >
+                    <span
+                      className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) ${
+                        isDND ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
 
                 {/* Quick Folio Link */}
                 <button
@@ -777,8 +932,11 @@ export default function GuestPortalPage() {
                   <button
                     key={tab.id}
                     type="button"
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`touch-target px-4 sm:px-5 py-2.5 rounded-full font-mono text-xs sm:text-[13px] font-semibold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+                    onClick={() => {
+                      setActiveTab(tab.id)
+                      if (navigator?.vibrate) navigator.vibrate(15)
+                    }}
+                    className={`touch-target px-4 sm:px-5 py-2.5 rounded-full font-mono text-xs sm:text-[13px] font-semibold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 active:scale-95 ${
                       isActive
                         ? 'bg-slate-900 text-[#FFF0CA] shadow-sm'
                         : 'bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80'
@@ -840,165 +998,282 @@ export default function GuestPortalPage() {
           {/* TAB 1: MY SUITE & DIGITAL KEY                                */}
           {/* ============================================================ */}
           {activeTab === 'suite' && (
-            <div className="space-y-4 animate-fade-in">
+            <div className="space-y-6 animate-fade-in">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
-                {/* Left: Cinematic Suite Card with Live NFC Key Access */}
-                <div className="lg:col-span-7 space-y-3">
-                  <div className="relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/9.5] max-h-[360px] sm:max-h-[380px] rounded-[2px] overflow-hidden bg-slate-900 border border-slate-200/80 shadow-md group">
+                {/* Left: Apple Wallet-Grade Digital Keycard & Suite Showcase */}
+                <div className="lg:col-span-7 space-y-4">
+                  {/* 1. APPLE WALLET-STYLE DIGITAL ROOM PASS */}
+                  <div className="bg-gradient-to-br from-[#12161F] via-[#0E1117] to-[#1C160F] text-white border border-amber-500/30 rounded-2xl p-6 sm:p-7 shadow-2xl relative overflow-hidden group">
+                    {/* Ambient Gold Radial Shine */}
+                    <div className="absolute -top-16 -right-16 w-56 h-56 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                    {/* Pass Header */}
+                    <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono tracking-[0.25em] text-amber-300 uppercase font-bold">
+                          STAYZA &bull; DIGITAL ROOM PASS
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 font-mono text-[10px] text-amber-300 tracking-widest uppercase">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                        <span>NFC ACTIVE</span>
+                        <NfcWaveIcon className="w-4 h-4 text-amber-300 ml-0.5" />
+                      </div>
+                    </div>
+
+                    {/* Pass Core Information */}
+                    <div className="py-5 sm:py-6 space-y-1">
+                      <span className="text-[11px] font-mono tracking-[0.25em] text-slate-400 uppercase block font-semibold">
+                        GUEST RESIDENCE
+                      </span>
+                      <h2 className="font-serif-grand text-3xl sm:text-4xl text-white block tracking-tight">
+                        {currentBooking.roomNumber || 'Suite 301'}
+                      </h2>
+                      <p className="font-mono text-xs sm:text-sm text-amber-200/90 font-medium tracking-wide">
+                        {currentBooking.residence?.name || 'The Horizon Penthouse'}
+                      </p>
+                    </div>
+
+                    {/* Metadata Chips Grid */}
+                    <div className="grid grid-cols-3 gap-2 py-3 px-3.5 bg-white/5 border border-white/10 rounded-xl font-mono text-[11px] text-slate-300 mb-5">
+                      <div>
+                        <span className="text-[9px] text-slate-400 block uppercase">PRIMARY GUEST</span>
+                        <span className="text-white font-bold truncate block">{currentBooking.guestName}</span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-slate-400 block uppercase">VALID DATES</span>
+                        <span className="text-slate-200 block truncate">{currentBooking.checkIn} – {currentBooking.checkOut}</span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-slate-400 block uppercase">ACCESS CHIP</span>
+                        <span className="text-emerald-400 font-bold block truncate">RFID #8921-A3</span>
+                      </div>
+                    </div>
+
+                    {/* Contactless Unlock Zone */}
+                    {keyUnlockedToast ? (
+                      <div className="w-full bg-emerald-950/90 border border-emerald-500/70 rounded-xl p-4 flex flex-col gap-2 shadow-lg animate-fade-in">
+                        <div className="flex items-center justify-between font-mono text-xs sm:text-sm text-emerald-200">
+                          <div className="flex items-center gap-2">
+                            <LockOpenIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                            <span className="font-bold tracking-wider">DOOR UNLATCHED &bull; TURN HANDLE</span>
+                          </div>
+                          <span className="text-[11px] text-emerald-300 font-mono">
+                            Relocks in {keyRelockRemaining}s
+                          </span>
+                        </div>
+                        {/* Auto-relock countdown bar */}
+                        <div className="w-full bg-emerald-900/60 h-1.5 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-emerald-400 transition-all duration-1000 ease-linear rounded-full"
+                            style={{ width: `${(keyRelockRemaining / 12) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        {isKeyUnlocking && (
+                          <span className="absolute inset-0 rounded-xl bg-amber-400/30 animate-ping pointer-events-none" />
+                        )}
+                        <button
+                          type="button"
+                          onClick={handleTriggerDigitalKey}
+                          disabled={isKeyUnlocking}
+                          className={`touch-target w-full py-4 px-6 font-mono text-xs sm:text-sm font-bold uppercase tracking-widest rounded-xl shadow-xl flex items-center justify-center gap-3 transition-all cursor-pointer active:scale-[0.98] ${
+                            isKeyUnlocking
+                              ? 'bg-amber-400 text-slate-950 ring-4 ring-amber-300/40 scale-[1.01]'
+                              : 'bg-gradient-to-r from-[#E5C158] via-[#F3E5AB] to-[#D4AF37] text-slate-950 hover:brightness-105'
+                          }`}
+                        >
+                          {isKeyUnlocking ? (
+                            <>
+                              <SpinnerIcon className="w-5 h-5 text-slate-950" />
+                              <span>Disengaging Deadbolt...</span>
+                            </>
+                          ) : (
+                            <>
+                              <NfcWaveIcon className="w-5 h-5 text-slate-950" />
+                              <span>Hold Near Door to Unlock</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+
+                    <p className="text-[10px] font-mono text-slate-400 text-center mt-3 tracking-wide">
+                      BLE Contactless Access &bull; Hold device within 5cm of door lock escutcheon
+                    </p>
+                  </div>
+
+                  {/* 2. CINEMATIC SUITE PREVIEW CARD */}
+                  <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xs group">
                     <img
                       src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85"
                       alt="Suite 301 Horizon Penthouse"
                       className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/35" />
-
-                    {/* Top Overlay Badges */}
-                    <div className="absolute top-3 inset-x-3 sm:top-4 sm:inset-x-4 flex items-center justify-between font-mono text-xs text-white">
-                      <span className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-[2px] border border-white/15 tracking-widest uppercase text-[#FFF0CA] font-bold">
-                        {currentBooking.roomNumber || 'Suite 301'} &bull; 210 m²
-                      </span>
-                      <span className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-[2px] border border-white/15 text-slate-300 tracking-wider">
-                        {currentBooking.checkIn} – {currentBooking.checkOut}
-                      </span>
-                    </div>
-
-                    {/* Bottom Digital Key Trigger */}
-                    <div className="absolute bottom-4 inset-x-4 sm:bottom-5 sm:inset-x-5 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-                      <div>
-                        <span className="text-[11px] font-mono tracking-[0.25em] text-amber-400 uppercase block font-bold">
-                          ROOM KEY &bull; DIGITAL ACCESS
-                        </span>
-                        <h2 className="font-serif-grand text-2xl sm:text-3xl text-white block mt-1">
-                          {currentBooking.residence?.name || 'The Horizon Penthouse'}
-                        </h2>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={handleTriggerDigitalKey}
-                        disabled={isKeyUnlocking}
-                        className={`touch-target px-6 py-3.5 font-mono text-xs sm:text-[13px] font-bold uppercase tracking-widest rounded-full shadow-2xl flex items-center justify-center gap-2.5 transition-all cursor-pointer shrink-0 active:scale-95 ${
-                          isKeyUnlocking
-                            ? 'bg-amber-400 text-slate-950 scale-102 ring-4 ring-amber-300/40'
-                            : 'bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-slate-950 hover:brightness-105'
-                        }`}
-                      >
-                        {isKeyUnlocking ? (
-                          <SpinnerIcon className="w-4 h-4 text-slate-950 animate-spin" />
-                        ) : (
-                          <KeyIcon className="w-4 h-4 text-slate-950" />
-                        )}
-                        <span>{isKeyUnlocking ? 'Unlocking Door...' : 'Unlock Suite Door'}</span>
-                      </button>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30" />
+                    <div className="absolute bottom-3 inset-x-4 flex items-center justify-between text-white font-mono text-xs">
+                      <span className="font-semibold">{currentBooking.roomNumber || 'Suite 301'} &bull; 210 m² Living Space</span>
+                      <span className="text-amber-300 font-bold">Private Plunge Pool</span>
                     </div>
                   </div>
-
-                  {/* Key Unlock Feedback Toast */}
-                  {keyUnlockedToast && (
-                    <div className="p-3.5 bg-emerald-950 text-emerald-200 border border-emerald-800 rounded-[2px] font-mono text-xs sm:text-sm flex items-center justify-between shadow-md animate-fade-in">
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                        <span>Suite 301 lock disengaged. Welcome inside, {currentBooking.guestName}.</span>
-                      </div>
-                      <span className="text-[11px] text-emerald-400 uppercase font-bold">
-                        UNLOCKED (15S)
-                      </span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Right: In-Room Amenities & Tactile Controls */}
                 <div className="lg:col-span-5 space-y-4">
                   <div>
                     <span className="text-[11px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
-                      Suite Essentials
+                      Suite Controls
                     </span>
                     <h3 className="type-h2 text-2xl sm:text-3xl text-slate-900 mt-0.5">
-                      Room Info
+                      Room Atmosphere
                     </h3>
                   </div>
 
-                  {/* 3 Metric Control Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {/* Wi-Fi Card */}
-                    <div className="p-3.5 sm:p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-mono text-slate-400 uppercase font-bold">WI-FI</span>
-                        <button
-                          type="button"
-                          onClick={handleCopyWifi}
-                          className="text-[11px] font-mono text-emerald-900 uppercase font-bold hover:underline cursor-pointer"
-                        >
-                          {wifiCopied ? 'Copied!' : 'Copy'}
-                        </button>
+                  {/* 1. APPLE HOMEKIT-STYLE CLIMATE CARD */}
+                  <div className="bg-white border border-slate-200/90 rounded-xl p-5 shadow-xs space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <ThermometerIcon className="w-5 h-5 text-amber-800" />
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
+                          In-Suite Thermostat
+                        </span>
                       </div>
-                      <span className="font-mono text-sm font-bold text-slate-900 block truncate">
-                        Stayza_Guest
+                      <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                        climateTemp <= 21
+                          ? 'bg-sky-50 text-sky-800'
+                          : climateTemp <= 23
+                          ? 'bg-emerald-50 text-emerald-800'
+                          : 'bg-amber-50 text-amber-800'
+                      }`}>
+                        {climateTemp <= 21 ? 'Cooling Active' : climateTemp <= 23 ? 'Optimal Balance' : 'Gentle Heating'}
                       </span>
-                      <span className="text-xs text-slate-500 font-mono block">Pass: pacific2026</span>
                     </div>
 
-                    {/* Climate Card */}
-                    <div className="p-3.5 sm:p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-mono text-slate-400 uppercase font-bold">CLIMATE</span>
-                        <button
-                          type="button"
-                          onClick={() => setClimateMode((prev) => (prev === 'ocean' ? 'cedar' : 'ocean'))}
-                          className="text-[11px] font-mono text-slate-900 font-bold hover:underline cursor-pointer"
-                        >
-                          Toggle
-                        </button>
-                      </div>
-                      <span className="font-mono text-sm font-bold text-slate-900 block">
-                        {climateMode === 'ocean' ? '21°C • Ocean' : '24°C • Cedar'}
-                      </span>
-                      <span className="text-xs text-emerald-800 font-mono block">Automated</span>
-                    </div>
-
-                    {/* Valet Bay Card */}
-                    <div className="p-3.5 sm:p-4 bg-white border border-slate-200/90 rounded-[2px] space-y-1 shadow-xs">
-                      <span className="text-[11px] font-mono text-slate-400 uppercase block font-bold">VALET</span>
-                      <span className="font-mono text-sm font-bold text-slate-900 block">
-                        Bay #301
-                      </span>
-                      <span className="text-xs text-slate-500 font-mono block">Underground Parking</span>
-                    </div>
-                  </div>
-
-                  {/* Private Butler & Residence Features */}
-                  <div className="p-4 sm:p-5 bg-white border border-slate-200/90 rounded-[2px] space-y-3 shadow-xs text-sm text-slate-600">
-                    <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
-                      <div>
-                        <span className="font-bold text-slate-900 block text-sm">Private Butler on Duty</span>
-                        <span className="text-xs text-slate-500 font-mono">Tariq J. &bull; In-House</span>
-                      </div>
+                    {/* Large Stepper Display */}
+                    <div className="flex items-center justify-between py-2 px-4 bg-slate-50 rounded-xl border border-slate-100">
                       <button
                         type="button"
-                        onClick={() => handleRequestService({
-                          id: 'butler-call',
-                          title: 'Direct Butler Room Consultation',
-                          price: 0,
-                          category: 'Front Desk',
-                        })}
-                        className="touch-target px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-900 font-mono text-xs uppercase font-bold rounded-[2px] transition-colors cursor-pointer"
+                        onClick={() => handleStepClimate(-1)}
+                        className="touch-target w-11 h-11 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-800 hover:bg-slate-100 active:scale-90 font-mono text-xl font-bold cursor-pointer transition-all shadow-2xs"
+                        aria-label="Decrease temperature by 1 degree"
                       >
-                        Request Butler &rarr;
+                        −
+                      </button>
+
+                      <div className="text-center">
+                        <span className="font-serif-grand text-4xl font-bold text-slate-900 tracking-tight">
+                          {climateTemp}°C
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-500 block uppercase tracking-wider">
+                          Suite Ambient
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleStepClimate(+1)}
+                        className="touch-target w-11 h-11 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-800 hover:bg-slate-100 active:scale-90 font-mono text-xl font-bold cursor-pointer transition-all shadow-2xs"
+                        aria-label="Increase temperature by 1 degree"
+                      >
+                        +
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
-                      <span className="font-medium text-slate-800">Private Oceanfront Pool</span>
-                      <span className="font-mono text-emerald-900 font-semibold text-xs">Heated &bull; 28°C</span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium text-slate-800">Reservation Reference</span>
-                      <span className="font-mono text-slate-900 font-bold text-xs">{currentBooking.bookingRef}</span>
+                    {/* 3 Atmosphere Mode Presets */}
+                    <div className="grid grid-cols-3 gap-2 pt-1">
+                      {[
+                        { id: 'ocean', label: 'Ocean Breeze', temp: 20 },
+                        { id: 'eco', label: 'Quiet Eco', temp: 22 },
+                        { id: 'cedar', label: 'Cedar Warmth', temp: 24 },
+                      ].map((preset) => {
+                        const isSelected = climateMode === preset.id && climateTemp === preset.temp
+                        return (
+                          <button
+                            key={preset.id}
+                            type="button"
+                            onClick={() => handleSetClimatePreset(preset.id, preset.temp)}
+                            className={`touch-target py-2 px-1 text-center font-mono text-[11px] rounded-lg border transition-all cursor-pointer active:scale-95 ${
+                              isSelected
+                                ? 'bg-slate-900 text-[#FFF0CA] border-slate-900 font-bold shadow-xs'
+                                : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
+                            }`}
+                          >
+                            <span className="block font-semibold">{preset.label}</span>
+                            <span className="text-[10px] text-slate-400">{preset.temp}°C</span>
+                          </button>
+                        )
+                      })}
                     </div>
                   </div>
 
-                  {/* Quick Housekeeping Triggers */}
+                  {/* 2. WI-FI & VALET 2-COLUMN GRID */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Wi-Fi Card */}
+                    <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <WifiIcon className="w-4 h-4 text-amber-800" />
+                          <span className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">WI-FI</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleCopyWifi}
+                          className="text-[11px] font-mono text-emerald-900 uppercase font-bold hover:underline cursor-pointer active:scale-95 transition-transform"
+                        >
+                          {wifiCopied ? 'Copied ✓' : 'Copy'}
+                        </button>
+                      </div>
+                      <div>
+                        <span className="font-mono text-xs font-bold text-slate-900 block truncate">Stayza_Guest</span>
+                        <span className="text-[11px] font-mono text-slate-500">Pass: pacific2026</span>
+                      </div>
+                    </div>
+
+                    {/* Valet Parking Card */}
+                    <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <CarIcon className="w-4 h-4 text-amber-800" />
+                          <span className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">VALET BAY</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleRequestValet}
+                          className="text-[11px] font-mono text-slate-900 uppercase font-bold hover:underline cursor-pointer active:scale-95 transition-transform"
+                        >
+                          {valetRequested ? 'Dispatched ✓' : 'Call Car'}
+                        </button>
+                      </div>
+                      <div>
+                        <span className="font-mono text-xs font-bold text-slate-900 block">Bay #301</span>
+                        <span className="text-[11px] font-mono text-slate-500">Underground Floor P1</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3. HEAD BUTLER SERVICE TILE */}
+                  <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs flex items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block">Head Butler On Duty</span>
+                      <span className="text-xs text-slate-500 font-mono">Tariq J. &bull; In-Residence Concierge</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRequestService({
+                        id: 'butler-call',
+                        title: 'Direct Butler Room Consultation',
+                        price: 0,
+                        category: 'Front Desk',
+                      })}
+                      className="touch-target px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer active:scale-95 shrink-0"
+                    >
+                      Request Butler &rarr;
+                    </button>
+                  </div>
+
+                  {/* 4. ONE-TOUCH HOUSEKEEPING AMENITIES (2X2 GRID) */}
                   <div className="space-y-2">
                     <span className="text-[11px] font-mono tracking-wider font-bold text-slate-400 uppercase block">
                       QUICK ROOM SERVICES &bull; 1-TOUCH REQUEST
@@ -1008,15 +1283,15 @@ export default function GuestPortalPage() {
                         type="button"
                         onClick={() => handleRequestService({
                           id: 'linen-quick',
-                          title: 'Fresh Egyptian Linens & Pillow Refresh',
+                          title: 'Fresh Egyptian Linens & Extra Pillows',
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs sm:text-sm transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
                       >
                         <BedIcon className="w-5 h-5 text-amber-800 shrink-0" />
                         <div>
-                          <span className="font-bold text-slate-900 block text-xs sm:text-sm">Fresh Linens</span>
+                          <span className="font-bold text-slate-900 block text-xs">Fresh Linens</span>
                           <span className="text-[11px] text-slate-500">Complimentary</span>
                         </div>
                       </button>
@@ -1029,12 +1304,46 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-[2px] text-left font-mono text-xs sm:text-sm transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
                       >
                         <CandleIcon className="w-5 h-5 text-amber-800 shrink-0" />
                         <div>
-                          <span className="font-bold text-slate-900 block text-xs sm:text-sm">Turn-Down Setup</span>
+                          <span className="font-bold text-slate-900 block text-xs">Turn-Down Setup</span>
                           <span className="text-[11px] text-slate-500">Cedar Mist &bull; Free</span>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleRequestService({
+                          id: 'water-ice-quick',
+                          title: 'In-Suite Ice Bucket & Mineral Water Carafe',
+                          price: 0,
+                          category: 'Housekeeping',
+                        })}
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                      >
+                        <DiningIcon className="w-5 h-5 text-amber-800 shrink-0" />
+                        <div>
+                          <span className="font-bold text-slate-900 block text-xs">Ice &amp; Mineral Water</span>
+                          <span className="text-[11px] text-slate-500">Complimentary</span>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleRequestService({
+                          id: 'spa-towels-quick',
+                          title: 'Plush Bath Towels & Cedar Robes',
+                          price: 0,
+                          category: 'Housekeeping',
+                        })}
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                      >
+                        <SpaIcon className="w-5 h-5 text-amber-800 shrink-0" />
+                        <div>
+                          <span className="font-bold text-slate-900 block text-xs">Extra Towels &amp; Robes</span>
+                          <span className="text-[11px] text-slate-500">Complimentary</span>
                         </div>
                       </button>
                     </div>
