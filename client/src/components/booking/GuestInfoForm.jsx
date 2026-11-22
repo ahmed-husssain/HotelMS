@@ -172,6 +172,30 @@ export default function GuestInfoForm({
             </p>
           )}
         </div>
+
+        {/* 5. Optional Account Password for Auto-Registration */}
+        {!currentUser && (
+          <div className="sm:col-span-2 p-3 bg-slate-50 border border-slate-200/80 rounded-lg space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-mono text-slate-700 uppercase tracking-wider font-semibold block">
+                Create Account Password (Optional)
+              </label>
+              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-medium">
+                Instant Auto-Login
+              </span>
+            </div>
+            <input
+              type="password"
+              value={guestDossier.password || ''}
+              onChange={(e) => setGuestDossier((prev) => ({ ...prev, password: e.target.value }))}
+              placeholder="Min. 6 characters (for digital key & in-suite controls)"
+              className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-md text-xs sm:text-sm font-medium text-slate-900 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none transition-all placeholder:text-slate-400"
+            />
+            <p className="text-[10px] text-slate-500 font-mono">
+              Save your profile to access your digital room key, view invoices, and control suite climate anytime.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Special Requests */}

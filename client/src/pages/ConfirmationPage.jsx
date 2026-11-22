@@ -9,7 +9,7 @@ export default function ConfirmationPage() {
   const { currentUser } = useAuth()
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
   const [copied, setCopied] = useState(false)
-  const booking = location.state?.booking || {
+  const rawBooking = location.state?.booking || {
     bookingRef: 'ST-301-9041',
     residence: {
       name: 'The Horizon Penthouse',
@@ -24,8 +24,15 @@ export default function ConfirmationPage() {
     safepayRef: 'SPF-829104',
   }
 
+  // Sanitize booking reference to prevent query string artifacts from payment gateways
+  const displayBookingRef = (rawBooking.bookingRef || 'ST-301-9041').split('?')[0].split('&')[0].trim()
+  const booking = {
+    ...rawBooking,
+    bookingRef: displayBookingRef,
+  }
+
   const handleCopyCode = async () => {
-    const code = booking.bookingRef || 'ST-301-9041'
+    const code = displayBookingRef
     try {
       await navigator.clipboard.writeText(code)
       setCopied(true)
@@ -75,16 +82,13 @@ export default function ConfirmationPage() {
             </span>
           </div>
 
-          {/* Important Notice Box for the Booking Code */}
-          <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-[2px] text-xs font-mono text-amber-950 space-y-1">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 text-[11px]">
-              <svg className="w-3.5 h-3.5 text-amber-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M21 2l-2 2m-1.5 1.5L16 7l-2-2m-3.5 3.5a5 5 0 1 0-7.07 7.07 5 5 0 0 0 7.07-7.07z" />
-              </svg>
-              <span>Important: Save This Confirmation Code</span>
-            </div>
-            <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
-              Please save or copy this reference code. You will present it at the Front Desk upon arrival to collect your physical RFID keycard, and use it anytime to access your digital room key.
+          {/* Clean Front Desk Arrival Note */}
+          <div className="py-2.5 px-3 bg-amber-50/70 border border-amber-200/80 rounded-[2px] flex items-center gap-2.5 text-xs text-amber-950">
+            <svg className="w-4 h-4 text-amber-800 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 2l-2 2m-1.5 1.5L16 7l-2-2m-3.5 3.5a5 5 0 1 0-7.07 7.07 5 5 0 0 0 7.07-7.07z" />
+            </svg>
+            <p className="text-[11px] sm:text-xs text-slate-700 leading-snug">
+              Show this code at the Front Desk upon arrival to collect your physical RFID keycard.
             </p>
           </div>
 

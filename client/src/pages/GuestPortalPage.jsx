@@ -287,6 +287,7 @@ export default function GuestPortalPage() {
   // Navigation & View State
   const [activeTab, setActiveTab] = useState('suite') // 'suite' | 'dining' | 'spa' | 'concierge' | 'folio'
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
 
   // Portal Authentication State
   const [bookingCode, setBookingCode] = useState(() => initialRef || currentUser?.activeReservationCode || '')
@@ -821,8 +822,97 @@ export default function GuestPortalPage() {
       {/* 1. TOP ESSENTIAL APP DOCK (ZERO CLUTTER, 44PX TARGETS)        */}
       {/* ============================================================== */}
       <header className="shrink-0 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80 z-40">
-        {/* Main Essential Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-3">
+        {/* Mobile Header (<640px) */}
+        <div className="sm:hidden">
+          {/* Mobile Tier 1: Brand & Guest Identity */}
+          <div className="px-4 py-2.5 flex items-center justify-between border-b border-slate-200/50">
+            <div className="flex items-center gap-2.5">
+              <Link
+                to="/"
+                className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-950 transition-colors"
+                title="Return to Overview"
+              >
+                &larr;
+              </Link>
+              <BrandLogo variant="wordmark" theme="dark" size="sm" />
+            </div>
+
+            {/* Guest Profile Trigger */}
+            {currentUser ? (
+              <button
+                type="button"
+                onClick={() => setIsProfileModalOpen(true)}
+                className="flex items-center gap-1.5 py-1 px-2.5 bg-white border border-slate-200 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95"
+                title="View Guest Profile & Settings"
+              >
+                <span className="w-5 h-5 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+                  {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
+                </span>
+                <span className="font-mono text-xs text-slate-800 font-semibold max-w-[80px] truncate">
+                  {currentUser.name ? currentUser.name.split(' ')[0] : 'Guest'}
+                </span>
+              </button>
+            ) : (
+              <Link
+                to="/login?redirect=/my-stay"
+                className="font-mono text-xs font-bold text-emerald-900 underline uppercase tracking-wider py-1 px-2"
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile Tier 2: Suite Status, DND Switch, Bill */}
+          {isUnlocked && (
+            <div className="px-4 py-1.5 bg-slate-50/90 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 font-mono text-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
+                <span className="font-bold text-slate-900 uppercase tracking-wide">
+                  {currentBooking.roomNumber || 'Suite 301'}
+                </span>
+              </div>
+
+              {/* Apple-Style Fluid DND Spring Switch */}
+              <div className="flex items-center gap-1">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
+                  {isDND ? 'Privacy On' : 'Privacy Off'}
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={isDND}
+                  aria-label="Toggle Do Not Disturb privacy"
+                  onClick={handleToggleDND}
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus:outline-none"
+                >
+                  <div
+                    className={`relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ease-in-out p-0.5 ${
+                      isDND ? 'bg-rose-600' : 'bg-slate-300'
+                    }`}
+                  >
+                    <span
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out ${
+                        isDND ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </div>
+                </button>
+              </div>
+
+              {/* Quick Bill Button */}
+              <button
+                type="button"
+                onClick={() => setActiveTab('folio')}
+                className="py-1 px-2.5 bg-slate-900 text-[#FFF0CA] font-mono text-[11px] font-bold uppercase tracking-wider rounded-[2px] active:scale-95 transition-all shadow-2xs cursor-pointer"
+              >
+                PKR {Math.round(financials.totalStayAmount / 1000)}k &rarr;
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Header (>=640px) */}
+        <div className="hidden sm:flex max-w-7xl mx-auto px-4 sm:px-8 py-2 sm:py-2.5 items-center justify-between gap-3">
           {/* Left: Return & Brand */}
           <div className="flex items-center gap-3 sm:gap-4">
             <Link
@@ -854,7 +944,7 @@ export default function GuestPortalPage() {
             </div>
           )}
 
-          {/* Right: Quick DND, Folio Pill & Sign In/Out */}
+          {/* Right: Quick DND, Folio Pill & Guest Profile */}
           <div className="flex items-center gap-2 sm:gap-3">
             {isUnlocked && (
               <>
@@ -869,15 +959,19 @@ export default function GuestPortalPage() {
                     aria-checked={isDND}
                     aria-label="Toggle Do Not Disturb privacy"
                     onClick={handleToggleDND}
-                    className={`touch-target relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none ${
-                      isDND ? 'bg-rose-600' : 'bg-slate-300'
-                    }`}
+                    className="min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus:outline-none"
                   >
-                    <span
-                      className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) ${
-                        isDND ? 'translate-x-5' : 'translate-x-0'
+                    <div
+                      className={`relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ease-in-out p-0.5 ${
+                        isDND ? 'bg-rose-600' : 'bg-slate-300'
                       }`}
-                    />
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out ${
+                          isDND ? 'translate-x-5' : 'translate-x-0'
+                        }`}
+                      />
+                    </div>
                   </button>
                 </div>
 
@@ -896,15 +990,21 @@ export default function GuestPortalPage() {
             {currentUser ? (
               <button
                 type="button"
-                onClick={logout}
-                className="touch-target px-2 text-xs font-mono text-slate-500 hover:text-slate-900 uppercase transition-colors"
+                onClick={() => setIsProfileModalOpen(true)}
+                className="flex items-center gap-2 py-1.5 px-3 bg-white border border-slate-200 hover:border-slate-400 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95"
+                title="Guest Profile & Account Settings"
               >
-                Sign Out
+                <span className="w-5 h-5 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+                  {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
+                </span>
+                <span className="font-mono text-xs font-semibold text-slate-800 max-w-[120px] truncate">
+                  {currentUser.name || 'Guest Profile'}
+                </span>
               </button>
             ) : (
               <Link
                 to="/login?redirect=/my-stay"
-                className="touch-target text-xs font-mono text-emerald-900 font-bold uppercase tracking-widest underline"
+                className="touch-target text-xs font-mono text-emerald-900 font-bold uppercase tracking-widest underline px-2"
               >
                 Sign In
               </Link>
@@ -1108,14 +1208,14 @@ export default function GuestPortalPage() {
                   {/* 2. CINEMATIC SUITE PREVIEW CARD */}
                   <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xs group">
                     <img
-                      src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85"
-                      alt="Suite 301 Horizon Penthouse"
+                      src={currentBooking.residence?.detailImage || 'https://res.cloudinary.com/v1rl3ras/image/upload/v1795019369/hotel-suites/suite-301/suite-301-bedroom.webp'}
+                      alt={`${currentBooking.roomNumber || 'Suite 301'} Master Bedroom`}
                       className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30" />
-                    <div className="absolute bottom-3 inset-x-4 flex items-center justify-between text-white font-mono text-xs">
-                      <span className="font-semibold">{currentBooking.roomNumber || 'Suite 301'} &bull; 210 m² Living Space</span>
-                      <span className="text-amber-300 font-bold">Private Plunge Pool</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-3 inset-x-3 sm:inset-x-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-white font-mono text-xs">
+                      <span className="font-semibold text-white/95">{currentBooking.roomNumber || 'Suite 301'} &bull; 210 m² Living Space</span>
+                      <span className="text-amber-300 font-bold text-[11px] sm:text-xs">Private Plunge Pool</span>
                     </div>
                   </div>
                 </div>
@@ -1194,14 +1294,18 @@ export default function GuestPortalPage() {
                             key={preset.id}
                             type="button"
                             onClick={() => handleSetClimatePreset(preset.id, preset.temp)}
-                            className={`touch-target py-2 px-1 text-center font-mono text-[11px] rounded-lg border transition-all cursor-pointer active:scale-95 ${
+                            className={`min-h-[52px] py-2 px-1 flex flex-col items-center justify-center text-center font-mono rounded-lg border transition-all cursor-pointer active:scale-95 ${
                               isSelected
-                                ? 'bg-slate-900 text-[#FFF0CA] border-slate-900 font-bold shadow-xs'
+                                ? 'bg-slate-900 text-[#FFF0CA] border-slate-900 shadow-xs'
                                 : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
                             }`}
                           >
-                            <span className="block font-semibold">{preset.label}</span>
-                            <span className="text-[10px] text-slate-400">{preset.temp}°C</span>
+                            <span className="text-[11px] font-semibold leading-tight block truncate w-full text-center">
+                              {preset.label}
+                            </span>
+                            <span className={`text-[10px] mt-0.5 block ${isSelected ? 'text-amber-300' : 'text-slate-400'}`}>
+                              {preset.temp}°C
+                            </span>
                           </button>
                         )
                       })}
@@ -1848,6 +1952,119 @@ export default function GuestPortalPage() {
         booking={invoiceBookingData}
         type="FINAL_TAX_INVOICE"
       />
+
+      {/* Guest Profile & Settings Modal */}
+      {isProfileModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="guest-profile-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in"
+          onClick={() => setIsProfileModalOpen(false)}
+        >
+          <div
+            className="w-full max-w-md bg-white border border-slate-200/90 rounded-2xl shadow-2xl p-5 sm:p-6 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-emerald-900 text-white font-mono text-sm font-bold flex items-center justify-center shadow-xs">
+                  {(currentUser?.name || currentBooking.guestName || 'G').charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h3 id="guest-profile-modal-title" className="font-syne font-bold text-base text-slate-900">
+                    Guest Profile &amp; Settings
+                  </h3>
+                  <span className="text-[10px] font-mono text-emerald-800 uppercase tracking-widest font-semibold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                    Verified Stayza Guest
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsProfileModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-sm font-mono cursor-pointer transition-colors"
+                aria-label="Close profile modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Profile Information List */}
+            <div className="space-y-3 font-mono text-xs">
+              <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-2">
+                <div className="flex items-center justify-between border-b border-slate-200/50 pb-1.5">
+                  <span className="text-slate-400 text-[10px] uppercase">FULL NAME</span>
+                  <span className="font-bold text-slate-900 text-right">{currentUser?.name || currentBooking.guestName}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-slate-200/50 pb-1.5">
+                  <span className="text-slate-400 text-[10px] uppercase">EMAIL ADDRESS</span>
+                  <span className="font-bold text-slate-900 text-right truncate max-w-[200px]">{currentUser?.email || currentBooking.guestEmail || 'guest@stayza.com'}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-slate-200/50 pb-1.5">
+                  <span className="text-slate-400 text-[10px] uppercase">MOBILE NUMBER</span>
+                  <span className="font-bold text-slate-900 text-right">{currentUser?.phone || currentBooking.guestPhone || '+92 300 1234567'}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400 text-[10px] uppercase">ACTIVE RESERVATION</span>
+                  <span className="font-bold text-emerald-800 text-right">{currentBooking.bookingRef || 'TH-301-4575'}</span>
+                </div>
+              </div>
+
+              {/* In-Residence Information */}
+              <div className="p-3 bg-amber-50/60 border border-amber-200/80 rounded-xl space-y-1.5">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-slate-500 font-semibold">ASSIGNED SUITE</span>
+                  <span className="font-bold text-slate-900">{currentBooking.roomNumber || 'Suite 301'} &bull; {currentBooking.residence?.name || 'The Horizon Penthouse'}</span>
+                </div>
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-slate-500 font-semibold">STAY DURATION</span>
+                  <span className="text-slate-700">{currentBooking.checkIn} – {currentBooking.checkOut} ({currentBooking.nights} Nights)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsProfileModalOpen(false)
+                  setIsInvoiceOpen(true)
+                }}
+                className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98]"
+              >
+                <FolioIcon className="w-4 h-4" />
+                <span>Preview &amp; Download PDF Invoice</span>
+              </button>
+
+              {currentUser ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsProfileModalOpen(false)
+                    logout()
+                  }}
+                  className="w-full py-2 px-4 bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-600 font-mono text-xs uppercase font-semibold tracking-wider rounded-xl transition-colors cursor-pointer"
+                >
+                  Sign Out of Account
+                </button>
+              ) : (
+                <Link
+                  to="/login?redirect=/my-stay"
+                  onClick={() => setIsProfileModalOpen(false)}
+                  className="w-full py-2 px-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-colors text-center block"
+                >
+                  Sign In with Existing Account
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

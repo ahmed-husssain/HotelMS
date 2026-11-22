@@ -478,6 +478,37 @@ export function AuthProvider({ children }) {
   }
 
   /**
+   * Set authenticated user session directly (e.g. following payment confirmation auto-login)
+   */
+  const setAuthenticatedSession = (user, token) => {
+    if (!user) return null
+    if (token) {
+      localStorage.setItem('stayza_auth_token', token)
+    }
+    const roleLabels = {
+      guest: 'Verified Guest',
+      receptionist: 'Front Desk Receptionist',
+      housekeeping: 'Housekeeping Lead',
+      admin: 'General Manager',
+    }
+    const session = {
+      id: user.id || user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role || 'guest',
+      roleLabel: roleLabels[user.role] || 'Verified Guest',
+      phone: user.phone || '',
+      activeReservationCode: user.activeReservationCode || '',
+      suiteNumber: user.role === 'guest' ? (user.suiteNumber || 'Suite 301') : null,
+      token: token || null,
+      lastLogin: new Date().toISOString(),
+    }
+    setCurrentUser(session)
+    localStorage.setItem('stayza_auth_user', JSON.stringify(session))
+    return session
+  }
+
+  /**
    * Log out active session & purge JWT tokens
    */
   const logout = () => {
@@ -497,6 +528,7 @@ export function AuthProvider({ children }) {
         logout,
         registerGuest,
         linkReservationCode,
+        setAuthenticatedSession,
         createStaffAccount,
         toggleStaffStatus,
         isAuthenticated: !!currentUser,

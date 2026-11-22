@@ -129,6 +129,23 @@ async function createHold(req, res) {
 
     // Check if guest user already exists in DB
     const existingUser = await User.findOne({ email: normalizedEmail })
+    let guestUserId = existingUser ? existingUser._id : null
+
+    // Optional Auto-Registration: If a password (min 6 chars) was provided during checkout
+    if (!guestUserId && guestDetails.password && guestDetails.password.length >= 6) {
+      try {
+        const newUser = await User.create({
+          name: guestDetails.name.trim(),
+          email: normalizedEmail,
+          password: guestDetails.password, // Automatically hashed by User.js pre-save hook (bcrypt 10 rounds)
+          role: 'guest',
+          phone: guestDetails.phone || '',
+        })
+        guestUserId = newUser._id
+      } catch (userErr) {
+        console.warn('[BookingController.createHold] Optional user creation notice:', userErr.message)
+      }
+    }
 
     if (existingHold) {
       // Seamlessly renew existing hold for the same guest
@@ -178,7 +195,7 @@ async function createHold(req, res) {
 
     const booking = await Booking.create({
       bookingReference,
-      guest: existingUser ? existingUser._id : null,
+      guest: guestUserId,
       room: room._id,
       roomNumber: room.roomNumber,
       checkInDate: new Date(checkInDate),

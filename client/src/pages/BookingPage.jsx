@@ -111,6 +111,7 @@ export default function BookingPage() {
     phone: currentUser?.phone || '',
     identificationNumber: '',
     specialRequests: '',
+    password: '',
   }))
 
   const [formErrors, setFormErrors] = useState({})
@@ -227,6 +228,7 @@ export default function BookingPage() {
           phone: guestDossier.phone,
           identificationNumber: guestDossier.identificationNumber,
           specialRequests: guestDossier.specialRequests,
+          password: guestDossier.password || undefined,
         },
       })
 
@@ -235,7 +237,8 @@ export default function BookingPage() {
         `TH-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
 
       // 2. Initiate Safepay 30% Advance Checkout Session
-      const successUrl = `${window.location.origin}/payment/verify?ref=${finalBookingRef}`
+      // Safepay auto-appends ?order_id=...&tracker=... to redirect_url, so keep base clean
+      const successUrl = `${window.location.origin}/payment/verify`
       const cancelUrl = `${window.location.origin}/reserve?room=${selectedResidence.roomNumber}&cancelled=true&ref=${finalBookingRef}`
 
       const sessionRes = await createPaymentSession(finalBookingRef, successUrl, cancelUrl)

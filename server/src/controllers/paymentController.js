@@ -1,7 +1,49 @@
 const crypto = require('crypto')
+const jwt = require('jsonwebtoken')
 const Booking = require('../models/Booking')
 const Payment = require('../models/Payment')
+const User = require('../models/User')
 const { sendBookingConfirmationEmail } = require('../services/emailService')
+
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' ? null : 'luxurystay_dev_jwt_secret_2026')
+
+/**
+ * Helper: Generate auto-login session for guest upon successful payment
+ */
+async function resolveGuestAuthSession(booking) {
+  try {
+    let guestUser = null
+    if (booking.guest) {
+      guestUser = await User.findById(booking.guest)
+    } else if (booking.guestDetails?.email) {
+      guestUser = await User.findOne({ email: booking.guestDetails.email.toLowerCase().trim() })
+    }
+
+    if (!guestUser) return { user: null, token: null }
+
+    guestUser.activeReservationCode = booking.bookingReference
+    await guestUser.save()
+
+    const token = JWT_SECRET
+      ? jwt.sign({ id: guestUser._id, role: guestUser.role }, JWT_SECRET, { expiresIn: '7d' })
+      : null
+
+    return {
+      user: {
+        id: guestUser._id,
+        name: guestUser.name,
+        email: guestUser.email,
+        role: guestUser.role,
+        phone: guestUser.phone,
+        activeReservationCode: guestUser.activeReservationCode,
+      },
+      token,
+    }
+  } catch (err) {
+    console.warn('[PaymentController.resolveGuestAuthSession] Warning:', err.message)
+    return { user: null, token: null }
+  }
+}
 
 /**
  * Payment Controller — Enterprise Safepay Gateway & Audit Ledger
@@ -70,7 +112,9 @@ async function createCheckoutSession(req, res) {
     // 5. Initiate Order Token with Safepay Sandbox API (or generate deterministic simulator token)
     let trackerToken = `track_${booking.bookingReference.toLowerCase()}_${Date.now()}`
     const clientBase = process.env.CLIENT_URL || 'https://stayza.web.app'
-    const finalSuccessUrl = successUrl || `${clientBase}/payment/verify?ref=${booking.bookingReference}`
+    // Ensure clean redirect URL: Safepay automatically appends ?order_id=...&tracker=...
+    const rawSuccessUrl = successUrl || `${clientBase}/payment/verify`
+    const finalSuccessUrl = rawSuccessUrl.split('?')[0]
     const finalCancelUrl = cancelUrl || `${clientBase}/reserve?room=${booking.roomNumber}&cancelled=true&ref=${booking.bookingReference}`
 
     let checkoutUrl = `${SAFEPAY_BASE_URL}/checkout?env=sandbox&beacon=${trackerToken}&order_id=${encodeURIComponent(booking.bookingReference)}&source=magento2&webhooks=true&redirect_url=${encodeURIComponent(finalSuccessUrl)}&cancel_url=${encodeURIComponent(finalCancelUrl)}`
@@ -138,7 +182,10 @@ async function verifyCheckoutSession(req, res) {
       return res.status(400).json({ success: false, message: 'Missing booking reference' })
     }
 
-    const booking = await Booking.findOne({ bookingReference }).populate('room')
+    // Sanitize booking reference to remove any extraneous query strings
+    const cleanBookingRef = String(bookingReference).split('?')[0].split('&')[0].trim()
+
+    const booking = await Booking.findOne({ bookingReference: cleanBookingRef }).populate('room')
     if (!booking) {
       return res.status(404).json({ success: false, message: 'Reservation not found' })
     }
@@ -146,12 +193,15 @@ async function verifyCheckoutSession(req, res) {
     // If webhook already settled and confirmed this booking:
     if (booking.status === 'CONFIRMED' || booking.status === 'CHECKED_IN') {
       const existingPayment = await Payment.findOne({ bookingId: booking._id })
+      const authSession = await resolveGuestAuthSession(booking)
       return res.status(200).json({
         success: true,
         message: 'Reservation verified and confirmed',
         data: {
           booking,
           payment: existingPayment,
+          token: authSession.token,
+          user: authSession.user,
         },
       })
     }
@@ -163,6 +213,9 @@ async function verifyCheckoutSession(req, res) {
     booking.pricingSnapshot.advancePaid = advancePaid
     booking.pricingSnapshot.balanceDue = booking.pricingSnapshot.totalAmount - advancePaid
     await booking.save()
+
+    // Generate authenticated session for guest if registered
+    const authSession = await resolveGuestAuthSession(booking)
 
     // Append immutable transaction to payments audit ledger (Doc TRD 2.4)
     const receiptNumber = `RCP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
@@ -214,6 +267,8 @@ async function verifyCheckoutSession(req, res) {
       data: {
         booking,
         payment: paymentRecord,
+        token: authSession.token,
+        user: authSession.user,
       },
     })
   } catch (error) {

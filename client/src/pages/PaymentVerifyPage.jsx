@@ -17,17 +17,21 @@ export default function PaymentVerifyPage() {
   const [searchParams] = useSearchParams()
   const location = useLocation()
   const navigate = useNavigate()
-  const { linkReservationCode } = useAuth()
+  const { linkReservationCode, setAuthenticatedSession } = useAuth()
   const { createReservation } = useHotelData()
 
   const [status, setStatus] = useState('verifying') // 'verifying' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState('')
 
-  const bookingRef =
+  // Sanitize booking reference to remove any double query strings from gateway redirects
+  const rawBookingRef =
     searchParams.get('ref') ||
+    searchParams.get('order_id') ||
     searchParams.get('bookingReference') ||
     searchParams.get('reference') ||
-    searchParams.get('order_id')
+    ''
+  const bookingRef = rawBookingRef ? rawBookingRef.split('?')[0].split('&')[0].trim() : ''
+
   const trackerToken =
     searchParams.get('tracker') ||
     searchParams.get('beacon') ||
@@ -47,16 +51,19 @@ export default function PaymentVerifyPage() {
         const response = await verifyPaymentSession(bookingRef, trackerToken)
 
         if (response.success && response.data) {
-          const { booking, payment } = response.data
+          const { booking, payment, token, user } = response.data
 
-          // Link reservation to user session if available
-          if (linkReservationCode) {
+          // If guest account exists or was auto-created, log in automatically
+          if (user && setAuthenticatedSession) {
+            setAuthenticatedSession(user, token)
+          } else if (linkReservationCode) {
             linkReservationCode(booking.bookingReference, booking.roomNumber)
           }
 
           // Format booking data for confirmation page
+          const cleanRef = (booking.bookingReference || bookingRef).split('?')[0].split('&')[0].trim()
           const formattedBooking = {
-            bookingRef: booking.bookingReference,
+            bookingRef: cleanRef,
             roomNumber: booking.roomNumber,
             residence: {
               roomNumber: booking.roomNumber,
