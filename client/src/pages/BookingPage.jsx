@@ -46,6 +46,17 @@ export default function BookingPage() {
   const [guestCount, setGuestCount] = useState(2)
   const [selectedAddons, setSelectedAddons] = useState([])
 
+  // Cancellation return handling
+  const isCancelled = searchParams.get('cancelled') === 'true'
+  const cancelledRef = searchParams.get('ref')
+  const [showCancelledBanner, setShowCancelledBanner] = useState(isCancelled)
+
+  useEffect(() => {
+    if (isCancelled && cancelledRef) {
+      cancelPaymentSession(cancelledRef).catch(() => {})
+    }
+  }, [isCancelled, cancelledRef])
+
   const nights = useMemo(() => {
     const d1 = new Date(checkInDate)
     const d2 = new Date(checkOutDate)
@@ -234,7 +245,9 @@ export default function BookingPage() {
       const checkoutUrl =
         sessionRes?.data?.checkoutUrl && sessionRes.data.checkoutUrl !== '#'
           ? sessionRes.data.checkoutUrl
-          : `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(
+          : `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${trackerToken}&order_id=${encodeURIComponent(
+              finalBookingRef
+            )}&source=magento2&webhooks=true&redirect_url=${encodeURIComponent(
               successUrl
             )}&cancel_url=${encodeURIComponent(cancelUrl)}`
 
@@ -263,9 +276,11 @@ export default function BookingPage() {
       console.warn('[Booking] API issue:', apiErr.message)
       const fallbackRef = `TH-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
       const trackerToken = `track_${fallbackRef.toLowerCase()}_${Date.now()}`
-      const checkoutUrl = `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(
+      const checkoutUrl = `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${trackerToken}&order_id=${encodeURIComponent(
+        fallbackRef
+      )}&source=magento2&webhooks=true&redirect_url=${encodeURIComponent(
         window.location.origin + '/payment/verify?ref=' + fallbackRef
-      )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve')}`
+      )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve?cancelled=true&ref=' + fallbackRef)}`
 
       const fallbackSession = {
         bookingRef: fallbackRef,
@@ -310,6 +325,26 @@ export default function BookingPage() {
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10">
+        {/* Cancelled Notice Banner */}
+        {showCancelledBanner && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200/90 rounded-xl flex items-center justify-between text-xs text-amber-950 shadow-xs animate-in fade-in duration-300">
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+              <span>
+                <strong>Reservation Hold Released:</strong> Checkout was cancelled on Safepay. No charges were made, and your temporary hold on Suite {selectedResidence.roomNumber} has been released.
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowCancelledBanner(false)}
+              className="text-amber-800 hover:text-amber-950 font-bold px-2 py-1 cursor-pointer text-sm"
+              aria-label="Dismiss notice"
+            >
+              &times;
+            </button>
+          </div>
+        )}
+
         {/* Page Header & Suite Switcher */}
         <div className="mb-8 border-b border-slate-200/80 pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>

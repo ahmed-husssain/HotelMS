@@ -73,7 +73,7 @@ async function createCheckoutSession(req, res) {
     const finalSuccessUrl = successUrl || `${clientBase}/payment/verify?ref=${booking.bookingReference}`
     const finalCancelUrl = cancelUrl || `${clientBase}/reserve?room=${booking.roomNumber}&cancelled=true&ref=${booking.bookingReference}`
 
-    let checkoutUrl = `${SAFEPAY_BASE_URL}/checkout?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(finalSuccessUrl)}&cancel_url=${encodeURIComponent(finalCancelUrl)}`
+    let checkoutUrl = `${SAFEPAY_BASE_URL}/checkout?env=sandbox&beacon=${trackerToken}&order_id=${encodeURIComponent(booking.bookingReference)}&source=magento2&webhooks=true&redirect_url=${encodeURIComponent(finalSuccessUrl)}&cancel_url=${encodeURIComponent(finalCancelUrl)}`
 
     try {
       const response = await fetch(`${SAFEPAY_BASE_URL}/order/v1/init`, {
@@ -94,7 +94,7 @@ async function createCheckoutSession(req, res) {
         const safepayData = await response.json()
         if (safepayData?.data?.token) {
           trackerToken = safepayData.data.token
-          checkoutUrl = `${SAFEPAY_BASE_URL}/checkout?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(finalSuccessUrl)}&cancel_url=${encodeURIComponent(finalCancelUrl)}`
+          checkoutUrl = `${SAFEPAY_BASE_URL}/checkout?env=sandbox&beacon=${trackerToken}&order_id=${encodeURIComponent(booking.bookingReference)}&source=magento2&webhooks=true&redirect_url=${encodeURIComponent(finalSuccessUrl)}&cancel_url=${encodeURIComponent(finalCancelUrl)}`
         }
       }
     } catch (apiErr) {

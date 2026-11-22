@@ -98,8 +98,23 @@ async function createHold(req, res) {
       return res.status(404).json({ success: false, message: 'Suite not found' })
     }
 
-    // 1. Verify availability on resolved room ID
-    const isAvailable = await checkRoomAvailability(room._id, checkInDate, checkOutDate)
+    const normalizedEmail = guestDetails.email.toLowerCase().trim()
+
+    // 1. Check for an active unconfirmed hold by the SAME guest (Hold Renewal)
+    const existingHold = await Booking.findOne({
+      room: room._id,
+      'guestDetails.email': normalizedEmail,
+      status: 'AWAITING_PAYMENT',
+      holdExpiresAt: { $gt: new Date() },
+    })
+
+    // 2. Verify availability (excluding this guest's own active hold if renewing)
+    const isAvailable = await checkRoomAvailability(
+      room._id,
+      checkInDate,
+      checkOutDate,
+      existingHold ? existingHold._id : null
+    )
     if (!isAvailable) {
       return res.status(409).json({
         success: false,
@@ -107,20 +122,59 @@ async function createHold(req, res) {
       })
     }
 
-    // 2. Zero-Trust pricing calculation
+    // 3. Zero-Trust pricing calculation
     const pricing = calculatePricing(room.baseNightlyRate, checkInDate, checkOutDate)
-
-    // 3. Generate unique booking reference: TH-{roomNumber}-{random4}
-    const cleanNum = room.roomNumber.replace(/\D/g, '') || '301'
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000)
-    const bookingReference = `TH-${cleanNum}-${randomSuffix}`
-
-    // 4. Set 5-Minute Pessimistic Hold Lock (Doc TRD 3.2)
     const holdDurationMs = 5 * 60 * 1000
     const holdExpiresAt = new Date(Date.now() + holdDurationMs)
 
     // Check if guest user already exists in DB
-    const existingUser = await User.findOne({ email: guestDetails.email.toLowerCase() })
+    const existingUser = await User.findOne({ email: normalizedEmail })
+
+    if (existingHold) {
+      // Seamlessly renew existing hold for the same guest
+      existingHold.checkInDate = new Date(checkInDate)
+      existingHold.checkOutDate = new Date(checkOutDate)
+      existingHold.numberOfNights = pricing.numberOfNights
+      existingHold.holdExpiresAt = holdExpiresAt
+      existingHold.pricingSnapshot = {
+        nightlyRate: pricing.nightlyRate,
+        subtotal: pricing.subtotal,
+        taxPercent: pricing.taxPercent,
+        taxAmount: pricing.taxAmount,
+        totalAmount: pricing.totalAmount,
+        advancePercent: pricing.advancePercent,
+        advanceAmount: pricing.advanceAmount,
+        advancePaid: 0,
+        balanceDue: pricing.balanceDue,
+        currency: 'PKR',
+      }
+      existingHold.guestDetails.name = guestDetails.name.trim()
+      existingHold.guestDetails.phone = guestDetails.phone || existingHold.guestDetails.phone || '+92 300 0000000'
+      existingHold.guestDetails.identificationNumber = (guestDetails.identificationNumber || existingHold.guestDetails.identificationNumber || '').trim()
+      existingHold.guestDetails.specialRequests = guestDetails.specialRequests || existingHold.guestDetails.specialRequests || ''
+      await existingHold.save()
+
+      return res.status(200).json({
+        success: true,
+        message: 'Suite hold renewed successfully',
+        data: {
+          bookingId: existingHold._id,
+          bookingReference: existingHold.bookingReference,
+          holdExpiresAt: existingHold.holdExpiresAt,
+          pricingSnapshot: existingHold.pricingSnapshot,
+          suite: {
+            name: room.name,
+            roomNumber: room.roomNumber,
+            tier: room.tier,
+          },
+        },
+      })
+    }
+
+    // 4. Generate unique booking reference: TH-{roomNumber}-{random4}
+    const cleanNum = room.roomNumber.replace(/\D/g, '') || '301'
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000)
+    const bookingReference = `TH-${cleanNum}-${randomSuffix}`
 
     const booking = await Booking.create({
       bookingReference,
