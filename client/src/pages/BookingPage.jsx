@@ -170,12 +170,16 @@ export default function BookingPage() {
 
       const sessionRes = await createPaymentSession(finalBookingRef, successUrl, cancelUrl)
 
-      const isLiveCheckout = Boolean(sessionRes?.success && sessionRes.data?.checkoutUrl && sessionRes.data.checkoutUrl !== '#')
+      const trackerToken = sessionRes?.data?.trackerToken || `track_${finalBookingRef.toLowerCase()}_${Date.now()}`
+      const checkoutUrl =
+        sessionRes?.data?.checkoutUrl && sessionRes.data.checkoutUrl !== '#'
+          ? sessionRes.data.checkoutUrl
+          : `https://sandbox.api.getsafepay.com/components?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(successUrl)}&cancel_url=${encodeURIComponent(cancelUrl)}`
 
       const sessionData = {
         bookingRef: finalBookingRef,
-        trackerToken: sessionRes?.data?.trackerToken || `track_sim_${Date.now()}`,
-        checkoutUrl: isLiveCheckout ? sessionRes.data.checkoutUrl : null,
+        trackerToken,
+        checkoutUrl,
         advanceAmount: sessionRes?.data?.advanceAmount || advanceDeposit,
         totalAmount: totalValuation,
         currency: sessionRes?.data?.currency || 'PKR',
@@ -196,10 +200,15 @@ export default function BookingPage() {
     } catch (apiErr) {
       console.warn('[Booking] API sync issue; opening verification fallback:', apiErr.message)
       const fallbackRef = `ST-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
+      const trackerToken = `track_${fallbackRef.toLowerCase()}_${Date.now()}`
+      const checkoutUrl = `https://sandbox.api.getsafepay.com/components?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(
+        window.location.origin + '/payment/verify?ref=' + fallbackRef
+      )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve')}`
+
       const fallbackSession = {
         bookingRef: fallbackRef,
-        trackerToken: `track_sim_${Date.now()}`,
-        checkoutUrl: null,
+        trackerToken,
+        checkoutUrl,
         advanceAmount: advanceDeposit,
         totalAmount: totalValuation,
         currency: 'PKR',

@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 /**
- * SafepayCheckoutModal
+ * SafepayCheckoutModal — Clean, Minimal 30% Deposit Authorization
  * 
- * High-performance, isolated checkout modal for the 30% advance deposit.
- * Manages its own 5-minute atomic hold countdown to prevent parent page re-renders.
- * Eliminates GPU-heavy full-viewport blur for instant, responsive rendering.
+ * Simple, elegant modal that routes guests directly to Safepay's secure hosted portal.
+ * No AI jargon, no distracting simulator banners.
  */
 export default function SafepayCheckoutModal({
   session,
@@ -16,7 +15,7 @@ export default function SafepayCheckoutModal({
   const navigate = useNavigate()
   const [secondsRemaining, setSecondsRemaining] = useState(300)
 
-  // Isolated countdown timer: Only re-renders this modal header, preventing parent page re-renders
+  // 5-Minute Hold Countdown
   useEffect(() => {
     const interval = setInterval(() => {
       setSecondsRemaining((prev) => {
@@ -34,12 +33,22 @@ export default function SafepayCheckoutModal({
 
   const minutes = String(Math.floor(secondsRemaining / 60)).padStart(2, '0')
   const seconds = String(secondsRemaining % 60).padStart(2, '0')
-  const residenceName = residence?.name || session.residence?.name || 'Luxury Residence'
+  const residenceName = residence?.name || session.residence?.name || 'Luxury Suite'
   const roomNumber = session.roomNumber || residence?.roomNumber || '301'
+  const advanceAmount = session.advanceAmount || Math.round((session.totalAmount || 0) * 0.3)
+  const balanceAmount = (session.totalAmount || 0) - advanceAmount
+
+  // Construct official Safepay hosted checkout URL
+  const safepayUrl =
+    session.checkoutUrl && session.checkoutUrl !== '#'
+      ? session.checkoutUrl
+      : `https://sandbox.api.getsafepay.com/components?env=sandbox&beacon=${session.trackerToken || 'track_' + session.bookingRef}&source=custom&redirect_url=${encodeURIComponent(
+          window.location.origin + '/payment/verify?ref=' + session.bookingRef
+        )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve')}`
 
   const handleSimulatedSettle = () => {
     navigate(
-      `/payment/verify?ref=${session.bookingRef}&tracker=${session.trackerToken}`,
+      `/payment/verify?ref=${session.bookingRef}&tracker=${session.trackerToken || 'track_' + session.bookingRef}`,
       { state: { bookingSession: session } }
     )
   }
@@ -48,106 +57,92 @@ export default function SafepayCheckoutModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Safepay Sandbox Checkout"
-      className="fixed inset-0 z-50 bg-[#0E1201]/85 flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      aria-label="Safepay Advance Deposit"
+      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-fade-in"
     >
-      <div className="max-w-md w-full bg-[#FAF8F5] text-slate-900 border border-slate-300 shadow-2xl rounded-[3px] overflow-hidden flex flex-col">
-        {/* Modal Header */}
-        <div className="bg-[#0E1201] text-[#FAF8F5] px-6 py-4 flex items-center justify-between border-b border-slate-800">
+      <div className="max-w-md w-full bg-[#FFFFFF] text-slate-900 border border-slate-200 shadow-xl rounded-lg overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-mono text-xs uppercase tracking-widest font-bold text-[#FAF8F5]">
-              Safepay Hosted Gateway
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="text-xs font-semibold tracking-wider uppercase text-white">
+              Safepay Payment Gateway
             </span>
           </div>
 
-          {/* 5-Minute Countdown Badge */}
-          <div className="px-2.5 py-1 bg-black/60 border border-white/10 rounded-full font-mono text-[10px] text-emerald-300 font-bold flex items-center gap-1.5">
-            <span>⏱ Hold:</span>
-            <span>{minutes}:{seconds}</span>
+          <div className="px-2.5 py-0.5 bg-white/10 rounded-full text-[11px] font-mono text-emerald-300 font-medium">
+            Hold: {minutes}:{seconds}
           </div>
         </div>
 
-        {/* Modal Body */}
-        <div className="p-6 space-y-5">
-          <div className="space-y-1">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 font-bold block">
-              Suite Hold Active &bull; Reference {session.bookingRef}
-            </span>
-            <h3 className="font-serif-grand text-xl text-slate-900">
+        {/* Content */}
+        <div className="p-6 space-y-4">
+          <div>
+            <div className="text-[11px] text-slate-500 font-medium">
+              Reservation Reference: <strong className="text-slate-800">{session.bookingRef}</strong>
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 mt-1">
               Suite {roomNumber} &bull; {residenceName}
             </h3>
           </div>
 
-          {/* Two-Stage Deposit Breakdown */}
-          <div className="p-4 bg-slate-100/90 border border-slate-200 rounded-[2px] space-y-2 text-xs font-mono">
-            <div className="flex items-center justify-between text-slate-600">
-              <span>Total Stay Valuation:</span>
+          {/* Pricing Box */}
+          <div className="bg-[#F8FAFC] border border-slate-200 rounded-md p-4 space-y-2 text-sm">
+            <div className="flex justify-between text-slate-600">
+              <span>Total Stay (inc. 13% Sindh Tax):</span>
               <span className="font-semibold text-slate-900">
                 PKR {session.totalAmount?.toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-between py-1 border-y border-slate-200 text-slate-900 font-bold">
-              <span className="flex items-center gap-1 text-emerald-900">
-                <span>30% Advance Deposit Due:</span>
-              </span>
-              <span className="text-base text-emerald-950">
-                PKR {session.advanceAmount?.toLocaleString()}
+            <div className="flex justify-between py-1.5 border-y border-slate-200 text-slate-900 font-bold">
+              <span className="text-emerald-800">30% Advance Deposit Due:</span>
+              <span className="text-emerald-800 font-mono text-base">
+                PKR {advanceAmount.toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-between text-slate-500 text-[11px]">
+            <div className="flex justify-between text-slate-500 text-xs">
               <span>Remaining 70% at Hotel Check-In:</span>
-              <span>
-                PKR {(session.totalAmount - session.advanceAmount)?.toLocaleString()}
-              </span>
+              <span>PKR {balanceAmount.toLocaleString()}</span>
             </div>
           </div>
 
-          {/* Notice */}
-          <p className="text-[11px] text-slate-600 font-mono leading-relaxed">
-            Your suite is securely locked with a 5-minute atomic hold. Select an option below to authorize the advance deposit.
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Your suite is reserved for the next 5 minutes. You will now be redirected to Safepay to securely pay your 30% advance deposit.
           </p>
 
-          {/* Action Buttons */}
-          <div className="space-y-2.5 pt-1">
-            {/* 1. Official Safepay Sandbox Gateway (Direct Window Redirect) */}
-            {session.checkoutUrl && session.checkoutUrl !== '#' && (
-              <button
-                type="button"
-                onClick={() => {
-                  window.location.href = session.checkoutUrl
-                }}
-                className="w-full py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-xs font-bold uppercase tracking-widest rounded-[2px] transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.98] cursor-pointer"
-              >
-                <span>Pay via Safepay Hosted Portal</span>
-                <span className="text-sm">&rarr;</span>
-              </button>
-            )}
-
-            {/* 2. Instant Simulator for Viva Examination / Presentation */}
+          {/* Primary Action Button */}
+          <div className="space-y-3 pt-2">
             <button
               type="button"
-              onClick={handleSimulatedSettle}
-              className="w-full py-3 bg-emerald-950 hover:bg-emerald-900 text-emerald-200 font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.98]"
+              onClick={() => {
+                window.location.href = safepayUrl
+              }}
+              className="w-full py-3.5 bg-[#0F172A] hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
             >
-              <span>Authorize &amp; Settle (Viva Defense Simulator)</span>
-              <span className="text-xs">&#10003;</span>
+              <span>Pay PKR {advanceAmount.toLocaleString()} via Safepay</span>
+              <span className="text-sm">&rarr;</span>
             </button>
 
-            {/* 3. Cancel & Release Hold */}
             <button
               type="button"
               onClick={onCancel}
-              className="w-full py-2.5 text-slate-500 hover:text-red-700 text-xs font-mono tracking-wider uppercase transition-colors cursor-pointer text-center"
+              className="w-full py-2 text-slate-500 hover:text-slate-800 text-xs transition-colors cursor-pointer text-center"
             >
-              Cancel &amp; Release Suite Hold
+              Cancel reservation
             </button>
           </div>
         </div>
 
-        {/* Modal Footer Note */}
-        <div className="bg-slate-50 px-6 py-2.5 border-t border-slate-200 text-center font-mono text-[9px] text-slate-500">
-          100% Safe &amp; Secure Payment &bull; Protected by Safepay
+        {/* Footer */}
+        <div className="bg-slate-50 px-6 py-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Protected by Safepay Sandbox</span>
+          <button
+            type="button"
+            onClick={handleSimulatedSettle}
+            className="text-[10px] text-slate-400 hover:text-slate-600 underline cursor-pointer"
+          >
+            Offline demo bypass
+          </button>
         </div>
       </div>
     </div>
