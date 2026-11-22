@@ -6,7 +6,7 @@ const PDFDocument = require('pdfkit')
  * Generates official, publication-grade hotel tax invoices and advance deposit receipts
  * using simple, clean terminology (No jargon: No "Dossier", "Valuation", or "Folio").
  * 
- * Viva Defense Concepts:
+ * Automated PDF Invoicing Service Architecture:
  * - Single Source of Truth: Data fetched directly from MongoDB, tamper-proof.
  * - In-Memory Streaming: Pipes binary PDF directly to HTTP response or returns a Buffer.
  * - Tax Compliance: Itemizes 13% Sindh Sales Tax (SRB) and 30% advance deposit.

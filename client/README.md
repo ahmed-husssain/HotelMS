@@ -29,7 +29,7 @@ The client application automatically routes users based on their role and authen
 * **`/login` & `/register`:** Unified authentication portal with automatic role detection and clean password visibility controls.
 * **`/front-desk` (PMS Desk):** Receptionist console featuring the Today's Arrivals queue, check-in modal, extra service charge poster, 7-suite Room Rack with live status updates, and shift closing summary.
 * **`/housekeeping` (Housekeeping Hub):** Daily cleaning queue with 4-step room certification, live guest requests feed, maintenance issue logger with room lock, and linen/supplies stock tracker.
-* **`/admin` (General Manager Suite):** Executive telemetry dashboard showing live occupancy %, Average Daily Rate (ADR), RevPAR, gross revenue, staff RBAC manager, room rate editor, and activity audit logs with CSV export.
+* **`/admin` (General Manager Suite):** Executive analytics dashboard showing live occupancy %, Average Daily Rate (ADR), RevPAR, gross revenue, staff RBAC manager, room rate editor, and activity audit logs with CSV export.
 
 ---
 

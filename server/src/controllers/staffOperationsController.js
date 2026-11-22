@@ -6,10 +6,10 @@ const ActivityLog = require('../models/ActivityLog')
 const { sendCheckoutInvoiceEmail } = require('../services/emailService')
 
 /**
- * LuxuryStay Hospitality — Staff & Front Desk Operations Controller
+ * Stayza Hospitality — Staff & Front Desk Operations Controller
  * 
- * Implements Aptech Module 3 (PMS Operations), Module 4 (Folio Settlement),
- * and Module 5 (Cashier Shift Reconciliation) strictly against MongoDB Atlas.
+ * Property Management System (PMS) Operations, Folio Settlement
+ * and Cashier Shift Reconciliation strictly against MongoDB Atlas.
  */
 
 // Helper to resolve room by ObjectId or string room number
@@ -94,7 +94,7 @@ async function getDashboard(req, res) {
       checkOutDate: b.checkOutDate,
     }))
 
-    // 6. Calculate PMS Telemetry Metrics
+    // 6. Calculate PMS Operational Metrics
     const totalRooms = rooms.length
     const occupiedCount = rooms.filter((r) => r.status === 'OCCUPIED').length
     const availableCount = rooms.filter((r) => r.status === 'AVAILABLE').length

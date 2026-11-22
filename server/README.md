@@ -84,7 +84,7 @@
 * `PATCH /api/housekeeping/inventory/:itemId/restock` — Restock linen or amenity supplies.
 
 ### 7. Executive Administration (`/api/admin`)
-* `GET   /api/admin/analytics` — Live hotel telemetry (Occupancy %, ADR, RevPAR, Gross Revenue).
+* `GET   /api/admin/analytics` — Live hotel KPI analytics (Occupancy %, ADR, RevPAR, Gross Revenue).
 * `GET   /api/admin/staff` — List staff accounts and roles.
 * `POST  /api/admin/staff` — Provision new receptionist or housekeeping staff member.
 * `PATCH /api/admin/staff/:id/status` — Activate or deactivate staff member account.

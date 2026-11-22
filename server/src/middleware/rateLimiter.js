@@ -1,7 +1,7 @@
 /**
  * Rate Limiter Middleware Factory — In-Memory Sliding Window
  * 
- * Fulfills Aptech Module 7 (Security & Access Control):
+ * Security & Abuse Prevention Gate:
  * - Throttles brute-force password guessing and bot account spam
  * - Pure Node.js & Express (Zero bloated third-party dependencies - KISS compliant)
  * - Returns standard HTTP 429 Too Many Requests with Retry-After header

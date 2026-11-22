@@ -538,7 +538,7 @@ const seedDatabase = async () => {
     console.log('\n======================================================')
     console.log('✅ DATABASE SEED COMPLETE!')
     console.log('------------------------------------------------------')
-    console.log('Demo Credentials for Viva / Examiner Testing:')
+    console.log('Demo Credentials for Evaluation & Testing:')
     console.log('1. Guest:        guest@stayza.com      / Password123!')
     console.log('2. Front Desk:   reception@stayza.com  / Password123!')
     console.log('3. Housekeeping: cleaning@stayza.com   / Password123!')

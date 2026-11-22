@@ -6,10 +6,10 @@ const Payment = require('../models/Payment')
 const ActivityLog = require('../models/ActivityLog')
 
 /**
- * LuxuryStay / Stayza HMS — Admin & Executive Analytics Controller
+ * Stayza HMS — Admin & Executive Analytics Controller
  * 
- * Fulfills Aptech Module 6 (Executive Analytics), Module 7 (Staff Governance & RBAC),
- * and Module 9 (Audit & System Settings) in strict compliance with AGENTS.md, PRD, and TRD.
+ * Executive Operations, Revenue Analytics, Staff Governance & RBAC Management
+ * in strict compliance with AGENTS.md architectural principles.
  */
 
 // @desc    Get 5 Core Executive Hotel Analytics (Real Database Aggregation)

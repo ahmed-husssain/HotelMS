@@ -7,7 +7,7 @@ const { generateInvoicePDFBuffer } = require('./invoiceService')
  * Delivers official SRB-compliant PDF tax invoices and booking confirmations directly
  * to guest inboxes upon 30% Safepay online payment and 100% front desk check-out.
  * 
- * Viva Defense Concepts:
+ * Transactional Email Service Architecture:
  * - Clean plain-English copy matching Stayza's luxury aesthetic (No AI jargon).
  * - Zero Disk Footprint: In-memory binary PDF buffer attached directly to outgoing mail.
  * - Non-blocking Resilience: Dispatch failures are caught gracefully and never break or
@@ -39,7 +39,7 @@ async function getTransporter() {
     return cachedTransporter
   }
 
-  // Graceful fallback for local development or demo viva testing (Ethereal virtual inbox)
+  // Graceful fallback for local development or staging tests (Ethereal virtual inbox)
   try {
     const testAccount = await nodemailer.createTestAccount()
     cachedTransporter = nodemailer.createTransport({

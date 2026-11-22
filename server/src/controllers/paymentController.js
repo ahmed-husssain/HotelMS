@@ -10,7 +10,7 @@ const { sendBookingConfirmationEmail } = require('../services/emailService')
  * 1. 30% Advance Deposit paid online via Safepay Sandbox (Card / Mobile Wallet).
  * 2. 70% Remaining Balance collected at hotel check-in/checkout by Front Desk.
  * 
- * Viva Defense Concepts Explained in Code:
+ * Architectural & Security Concepts Explained in Code:
  * - Hold Window Extension: Prevents double-booking if guest spends minutes entering OTP.
  * - S2S Webhook: Server-to-Server authoritative settlement (handles closed tabs).
  * - Cryptographic HMAC: Timing-safe verification of Safepay x-sfpy-signature.
