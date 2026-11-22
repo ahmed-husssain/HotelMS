@@ -109,7 +109,7 @@ export default function LoginPage() {
       
       const roleDestinations = {
         guest: { path: '/my-stay', label: 'Guest Portal & Key' },
-        receptionist: { path: '/reception', label: 'Reception Terminal' },
+        receptionist: { path: '/reception', label: 'Reception Desk' },
         housekeeping: { path: '/housekeeping', label: 'Housekeeping & Maintenance' },
         admin: { path: '/admin', label: 'General Manager Console' },
       }

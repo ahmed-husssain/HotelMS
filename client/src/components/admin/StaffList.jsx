@@ -219,7 +219,8 @@ export default function StaffList({
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-900 text-lg cursor-pointer"
+                aria-label="Close modal"
+                className="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer transition-colors"
               >
                 &times;
               </button>
@@ -247,7 +248,7 @@ export default function StaffList({
 
               <div>
                 <label className="text-[10px] uppercase text-slate-500 font-semibold block mb-1">
-                  Work Email (Used for Auto-Role Sign In)
+                  Work Email Address
                 </label>
                 <input
                   type="email"

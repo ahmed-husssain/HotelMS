@@ -29,6 +29,15 @@ export default function SafepayCheckoutModal({
     return () => clearInterval(interval)
   }, [])
 
+  // Keyboard accessibility: Escape to dismiss
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onCancel()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onCancel])
+
   if (!session) return null
 
   const minutes = String(Math.floor(secondsRemaining / 60)).padStart(2, '0')
@@ -58,20 +67,36 @@ export default function SafepayCheckoutModal({
       role="dialog"
       aria-modal="true"
       aria-label="Safepay Advance Deposit"
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-fade-in"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onCancel()
+      }}
+      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-fade-in cursor-pointer"
     >
-      <div className="max-w-md w-full bg-[#FFFFFF] text-slate-900 border border-slate-200 shadow-xl rounded-lg overflow-hidden flex flex-col">
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="max-w-md w-full bg-[#FFFFFF] text-slate-900 border border-slate-200 shadow-xl rounded-lg overflow-hidden flex flex-col cursor-default"
+      >
         {/* Header */}
         <div className="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
             <span className="text-xs font-semibold tracking-wider uppercase text-white">
-              Safepay Payment Gateway
+              Secure Deposit Guarantee
             </span>
           </div>
 
-          <div className="px-2.5 py-0.5 bg-white/10 rounded-full text-[11px] font-mono text-emerald-300 font-medium">
-            Hold: {minutes}:{seconds}
+          <div className="flex items-center gap-3">
+            <div className="px-2.5 py-0.5 bg-white/10 rounded-full text-[11px] font-mono text-emerald-300 font-medium">
+              Hold: {minutes}:{seconds}
+            </div>
+            <button
+              type="button"
+              onClick={onCancel}
+              aria-label="Close checkout modal"
+              className="w-8 h-8 rounded-full text-slate-300 hover:text-white hover:bg-white/10 flex items-center justify-center text-lg cursor-pointer transition-colors"
+            >
+              &times;
+            </button>
           </div>
         </div>
 
@@ -141,7 +166,7 @@ export default function SafepayCheckoutModal({
             onClick={handleSimulatedSettle}
             className="text-[10px] text-slate-400 hover:text-slate-600 underline cursor-pointer"
           >
-            Offline demo bypass
+            Demo Instant Confirmation
           </button>
         </div>
       </div>

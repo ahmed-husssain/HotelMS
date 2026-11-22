@@ -1196,7 +1196,7 @@ export default function GuestPortalPage() {
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200/80 pb-4">
                 <div>
                   <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
-                    ESTATE BUTLER &bull; BESPOKE EXPERIENCES
+                    ESTATE CONCIERGE &bull; IN-SUITE DINING
                   </span>
                   <h2 className="font-serif-grand text-2xl sm:text-3xl text-slate-900 mt-0.5">
                     Concierge &amp; Transfers

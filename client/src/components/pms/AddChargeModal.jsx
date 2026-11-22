@@ -85,7 +85,7 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>
             <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
-              Add Extra Room Charge
+              FRONT DESK &bull; EXTRA ROOM CHARGE
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
               Post to Bill &bull; {selectedRoom.roomNumber}
@@ -94,7 +94,8 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold"
+            aria-label="Close charge modal"
+            className="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold transition-colors"
           >
             &times;
           </button>

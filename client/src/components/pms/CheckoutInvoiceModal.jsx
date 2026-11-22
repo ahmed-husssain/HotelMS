@@ -102,7 +102,8 @@ export default function CheckoutInvoiceModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold"
+            aria-label="Close checkout invoice modal"
+            className="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold transition-colors"
           >
             &times;
           </button>
@@ -187,11 +188,11 @@ export default function CheckoutInvoiceModal({
                 }`}
               >
                 <span className="block text-sm font-bold">Card POS Slip</span>
-                <span className="text-[10px] text-slate-500 font-normal">Bank EDC terminal authorization</span>
+                <span className="text-[10px] text-slate-500 font-normal">Bank Card Machine (POS Authorization)</span>
               </button>
             </div>
             <p className="text-[11px] font-mono text-slate-500">
-              * Payment is recorded into today's cashier shift ledger before room is released to housekeeping.
+              * Payment is recorded into today's front desk shift summary before room is released to housekeeping.
             </p>
           </div>
         ) : (

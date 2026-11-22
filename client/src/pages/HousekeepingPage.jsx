@@ -108,7 +108,7 @@ export default function HousekeepingPage() {
               Housekeeping Floor Plan
             </h1>
             <p className="text-sm text-slate-600 mt-1 max-w-xl font-sans-clean">
-              Floor-by-floor room matrix for daily cleaning, stayover service, and supervisor quality approval.
+              Floor-by-floor room status for daily cleaning, stayover service, and supervisor quality approval.
             </p>
           </div>
 

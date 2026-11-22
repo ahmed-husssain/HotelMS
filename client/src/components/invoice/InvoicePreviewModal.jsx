@@ -157,8 +157,8 @@ Balance: PKR ${balanceDue.toLocaleString()}`
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close"
-              className="w-7 h-7 ml-1 rounded-full text-slate-400 hover:text-white hover:bg-white/10 flex items-center justify-center text-lg cursor-pointer transition-colors"
+              aria-label="Close invoice preview"
+              className="w-8 h-8 ml-1 rounded-full text-slate-400 hover:text-white hover:bg-white/10 flex items-center justify-center text-lg cursor-pointer transition-colors"
             >
               &times;
             </button>

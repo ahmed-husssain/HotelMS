@@ -179,7 +179,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Close specifications drawer"
-            className="w-8 h-8 rounded-full border border-slate-300 hover:border-slate-900 flex items-center justify-center text-slate-600 hover:text-slate-950 text-base cursor-pointer transition-colors"
+            className="w-9 h-9 rounded-full border border-slate-300 hover:border-slate-900 flex items-center justify-center text-slate-600 hover:text-slate-950 text-lg cursor-pointer transition-colors"
           >
             &times;
           </button>

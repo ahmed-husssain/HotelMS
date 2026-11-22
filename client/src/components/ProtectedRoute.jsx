@@ -23,7 +23,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
     const roleWorkspaces = {
       guest: { path: '/my-stay', label: 'Guest Portal & Key' },
-      receptionist: { path: '/reception', label: 'Reception Terminal' },
+      receptionist: { path: '/reception', label: 'Reception Desk' },
       housekeeping: { path: '/housekeeping', label: 'Housekeeping & Maintenance' },
       admin: { path: '/admin', label: 'General Manager Console' },
     }
@@ -53,7 +53,7 @@ export default function ProtectedRoute({ allowedRoles, children }) {
               Access Restricted
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-              Your current active session as <strong>{currentUser.name}</strong> (<code>{currentUser.roleLabel || currentUser.role}</code>) does not possess authorization to view this terminal.
+              Your current active session as <strong>{currentUser.name}</strong> (<code>{currentUser.roleLabel || currentUser.role}</code>) does not possess authorization to view this workspace.
             </p>
           </div>
 

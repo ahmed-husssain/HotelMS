@@ -112,7 +112,7 @@ export default function CheckInModal({
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>
             <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
-              // FRONT DESK PMS CHECK-IN
+              FRONT DESK &bull; GUEST CHECK-IN
             </span>
             <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
               Check-In {selectedArrival.guest}
@@ -121,7 +121,8 @@ export default function CheckInModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold"
+            aria-label="Close check-in modal"
+            className="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold transition-colors"
           >
             &times;
           </button>
@@ -282,10 +283,10 @@ export default function CheckInModal({
             </div>
           )}
 
-          {/* 3. RFID KEYCARD CALIBRATION */}
+          {/* 3. ROOM KEYCARD ISSUANCE */}
           <div>
             <label className="text-[10px] font-mono uppercase tracking-wider font-semibold text-slate-500 block mb-1">
-              Calibrate RFID Physical Keycard
+              Issue Room Keycard (RFID Key)
             </label>
             <input
               type="text"
@@ -319,7 +320,7 @@ export default function CheckInModal({
               }`}
             >
               {isCalibrating
-                ? 'Calibrating Keycard...'
+                ? 'Encoding Keycard...'
                 : isBlocked
                 ? 'Suite Not Ready (Blocked)'
                 : 'Complete Check-In →'}

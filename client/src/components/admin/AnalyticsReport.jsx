@@ -104,7 +104,7 @@ export default function AnalyticsReport({ rooms = [] }) {
       <div className="p-12 text-center bg-white border border-slate-200/90 rounded-[2px] shadow-xs">
         <div className="w-6 h-6 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin mx-auto mb-3" />
         <span className="text-xs font-mono uppercase tracking-widest text-slate-500">
-          Aggregating Live Financial &amp; Inventory Telemetry...
+          Loading Financial &amp; Occupancy Metrics...
         </span>
       </div>
     )
@@ -126,7 +126,7 @@ export default function AnalyticsReport({ rooms = [] }) {
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-amber-500" />
             <span>
-              <strong>Local Inventory Baseline:</strong> Displaying telemetry calculated from active suites while backend connects.
+              <strong>Local Inventory Baseline:</strong> Displaying performance metrics calculated from room inventory.
             </span>
           </div>
           <span className="text-[10px] uppercase tracking-wider text-amber-700 font-semibold">
@@ -365,8 +365,8 @@ export default function AnalyticsReport({ rooms = [] }) {
 
             <div className="p-3 bg-slate-50 border border-slate-100 rounded-[2px] flex items-center justify-between">
               <div>
-                <span className="text-slate-900 font-bold block">Card Terminal POS at Desk</span>
-                <span className="text-[10px] text-slate-500">Credit / Debit Merchant Terminal</span>
+                <span className="text-slate-900 font-bold block">Front Desk Card Machine</span>
+                <span className="text-[10px] text-slate-500">Credit / Debit Card Payments</span>
               </div>
               <strong className="text-slate-900 font-bold">
                 PKR {(channels.deskCard || 0).toLocaleString()}
