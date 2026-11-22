@@ -203,17 +203,21 @@ export default function StaffList({
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsModalOpen(false)
           }}
-          className={`fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4 transition-opacity duration-200 ease-out cursor-pointer ${
+          className={`fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity duration-300 ease-out cursor-pointer ${
             isModalVisible ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <div 
             data-lenis-prevent="true"
             onClick={(e) => e.stopPropagation()}
-            className={`bg-[#FAF8F5] border border-slate-300 rounded-[2px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-5 will-change-transform transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-default ${
-              isModalVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-2'
+            className={`bg-[#FAF8F5] border-t sm:border border-slate-300 rounded-t-2xl sm:rounded-[3px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto overscroll-contain p-5 sm:p-8 space-y-5 will-change-transform transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-default ${
+              isModalVisible ? 'translate-y-0 opacity-100 sm:scale-100' : 'translate-y-8 opacity-0 sm:translate-y-0 sm:scale-95'
             }`}
           >
+            {/* Mobile Sheet Grab Handle */}
+            <div className="sm:hidden flex justify-center -mt-1 mb-2">
+              <div className="w-10 h-1 bg-slate-300 rounded-full" />
+            </div>
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="font-serif-grand text-xl text-slate-900">Provision New Staff Account</h3>
               <button

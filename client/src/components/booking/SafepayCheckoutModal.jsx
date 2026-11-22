@@ -14,6 +14,19 @@ export default function SafepayCheckoutModal({
 }) {
   const navigate = useNavigate()
   const [secondsRemaining, setSecondsRemaining] = useState(300)
+  const [isRendered, setIsRendered] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Fluid Hardware-Accelerated Mount/Unmount lifecycle (Apple Critically Damped Spring)
+  useEffect(() => {
+    setIsRendered(true)
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsVisible(true)
+      })
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [])
 
   // 5-Minute Hold Countdown
   useEffect(() => {
@@ -38,7 +51,7 @@ export default function SafepayCheckoutModal({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [onCancel])
 
-  if (!session) return null
+  if (!session || !isRendered) return null
 
   const minutes = String(Math.floor(secondsRemaining / 60)).padStart(2, '0')
   const seconds = String(secondsRemaining % 60).padStart(2, '0')
@@ -67,15 +80,26 @@ export default function SafepayCheckoutModal({
       role="dialog"
       aria-modal="true"
       aria-label="Safepay Advance Deposit"
+      data-lenis-prevent="true"
       onClick={(e) => {
         if (e.target === e.currentTarget) onCancel()
       }}
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-fade-in cursor-pointer"
+      className={`fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity duration-300 ease-out cursor-pointer ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
     >
       <div 
+        data-lenis-prevent="true"
         onClick={(e) => e.stopPropagation()}
-        className="max-w-md w-full bg-[#FFFFFF] text-slate-900 border border-slate-200 shadow-xl rounded-lg overflow-hidden flex flex-col cursor-default"
+        className={`max-w-md w-full bg-[#FFFFFF] text-slate-900 border-t sm:border border-slate-200 shadow-2xl rounded-t-2xl sm:rounded-lg overflow-hidden flex flex-col cursor-default max-h-[92vh] sm:max-h-none overflow-y-auto overscroll-contain will-change-transform transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isVisible ? 'translate-y-0 opacity-100 sm:scale-100' : 'translate-y-8 opacity-0 sm:translate-y-0 sm:scale-95'
+        }`}
       >
+        {/* Mobile Sheet Grab Handle */}
+        <div className="pt-2 pb-1 bg-[#0F172A] sm:hidden flex justify-center">
+          <div className="w-10 h-1 bg-white/30 rounded-full" />
+        </div>
+
         {/* Header */}
         <div className="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -142,7 +166,7 @@ export default function SafepayCheckoutModal({
               onClick={() => {
                 window.location.href = safepayUrl
               }}
-              className="w-full py-3.5 bg-[#0F172A] hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              className="w-full py-3.5 bg-[#0F172A] hover:bg-slate-800 active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
             >
               <span>Pay PKR {advanceAmount.toLocaleString()} via Safepay</span>
               <span className="text-sm">&rarr;</span>

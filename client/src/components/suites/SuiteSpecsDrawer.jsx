@@ -163,6 +163,10 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
             : 'translate-y-full md:translate-y-0 md:translate-x-full'
         }`}
       >
+        {/* Mobile iOS Sheet Grab Handle */}
+        <div className="pt-2.5 pb-1 md:hidden flex justify-center bg-[#FAF8F5]">
+          <div className="w-10 h-1 bg-slate-300 rounded-full" />
+        </div>
         
         {/* Drawer Header */}
         <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5] shrink-0">
