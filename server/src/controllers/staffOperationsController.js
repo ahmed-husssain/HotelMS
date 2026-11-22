@@ -3,6 +3,7 @@ const Room = require('../models/Room')
 const Booking = require('../models/Booking')
 const Payment = require('../models/Payment')
 const ActivityLog = require('../models/ActivityLog')
+const { sendCheckoutInvoiceEmail } = require('../services/emailService')
 
 /**
  * LuxuryStay Hospitality — Staff & Front Desk Operations Controller
@@ -425,6 +426,11 @@ async function checkOutGuest(req, res) {
         guest: booking.guestDetails?.name,
       })
     }
+
+    // Asynchronous Transactional Email Dispatch: Send Final PDF Tax Invoice to guest
+    Payment.find({ bookingId: booking._id })
+      .then((payments) => sendCheckoutInvoiceEmail(booking, payments))
+      .catch((mailErr) => console.warn('[StaffOperations.checkOutGuest] Non-blocking email dispatch warning:', mailErr.message))
 
     res.status(200).json({
       success: true,

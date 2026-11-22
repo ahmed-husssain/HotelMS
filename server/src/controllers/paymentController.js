@@ -1,6 +1,7 @@
 const crypto = require('crypto')
 const Booking = require('../models/Booking')
 const Payment = require('../models/Payment')
+const { sendBookingConfirmationEmail } = require('../services/emailService')
 
 /**
  * Payment Controller — Enterprise Safepay Gateway & Audit Ledger
@@ -202,6 +203,11 @@ async function verifyCheckoutSession(req, res) {
       console.warn('[Socket.io Dispatch] Front-desk broadcast failed:', wsErr.message)
     }
 
+    // Asynchronous Transactional Email Dispatch: Send PDF confirmation to guest
+    sendBookingConfirmationEmail(booking, paymentRecord).catch((mailErr) => {
+      console.warn('[PaymentController] Non-blocking email dispatch warning:', mailErr.message)
+    })
+
     res.status(200).json({
       success: true,
       message: 'Payment successfully captured and reservation confirmed',
@@ -311,6 +317,11 @@ async function handleWebhook(req, res) {
     } catch (wsErr) {
       console.warn('[Socket.io Webhook Dispatch] Alert failed:', wsErr.message)
     }
+
+    // Asynchronous Transactional Email Dispatch: Send PDF confirmation to guest
+    sendBookingConfirmationEmail(booking, payment).catch((mailErr) => {
+      console.warn('[PaymentController Webhook] Non-blocking email dispatch warning:', mailErr.message)
+    })
 
     return res.status(200).json({
       success: true,

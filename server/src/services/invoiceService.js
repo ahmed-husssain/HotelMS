@@ -8,11 +8,11 @@ const PDFDocument = require('pdfkit')
  * 
  * Viva Defense Concepts:
  * - Single Source of Truth: Data fetched directly from MongoDB, tamper-proof.
- * - In-Memory Streaming: Pipes binary PDF directly to HTTP response with zero disk I/O.
+ * - In-Memory Streaming: Pipes binary PDF directly to HTTP response or returns a Buffer.
  * - Tax Compliance: Itemizes 13% Sindh Sales Tax (SRB) and 30% advance deposit.
  */
 
-function generateInvoicePDF(booking, payments = [], res) {
+function buildPDFDocument(booking, payments = []) {
   const doc = new PDFDocument({
     size: 'A4',
     margin: 40,
@@ -22,15 +22,6 @@ function generateInvoicePDF(booking, payments = [], res) {
       Subject: 'Official Hotel Tax Invoice & Reservation Receipt',
     },
   })
-
-  // Set HTTP headers for binary PDF streaming
-  res.setHeader('Content-Type', 'application/pdf')
-  res.setHeader(
-    'Content-Disposition',
-    `inline; filename="Stayza-Invoice-${booking.bookingReference}.pdf"`
-  )
-
-  doc.pipe(res)
 
   const primaryColor = '#0F172A'
   const mutedColor = '#64748B'
@@ -177,20 +168,65 @@ function generateInvoicePDF(booking, payments = [], res) {
   const noticeY = Math.max(currentY + 45, 490)
   doc.rect(40, noticeY, 515, 62).fillAndStroke(lightBg, '#E2E8F0')
 
-  doc.fontSize(9).font('Helvetica-Bold').fillColor(accentGreen)
-    .text('[ VERIFIED RESERVATION ]  30% Online Advance Deposit Confirmed', 55, noticeY + 12)
-  doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
-    .text('This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.', 55, noticeY + 26)
-    .text(`Please present this document or booking code ${booking.bookingReference} upon arrival at the Front Desk.`, 55, noticeY + 38)
-    .text('Thank you for choosing Stayza Hotel & Resort. For assistance, email concierge@stayza.pk', 55, noticeY + 50)
+  if (isFullySettled) {
+    doc.fontSize(9).font('Helvetica-Bold').fillColor(accentGreen)
+      .text('[ OFFICIAL TAX INVOICE ]  All Charges Settled & Account Closed', 55, noticeY + 12)
+    doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
+      .text('This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.', 55, noticeY + 26)
+      .text(`Booking Reference: ${booking.bookingReference} • Departure Date: ${new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}`, 55, noticeY + 38)
+      .text('Thank you for choosing Stayza Hotel & Resort. For accounting inquiries, email concierge@stayza.pk', 55, noticeY + 50)
+  } else {
+    doc.fontSize(9).font('Helvetica-Bold').fillColor(accentGreen)
+      .text('[ VERIFIED RESERVATION ]  30% Online Advance Deposit Confirmed', 55, noticeY + 12)
+    doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
+      .text('This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.', 55, noticeY + 26)
+      .text(`Please present this document or booking code ${booking.bookingReference} upon arrival at the Front Desk.`, 55, noticeY + 38)
+      .text('Thank you for choosing Stayza Hotel & Resort. For assistance, email concierge@stayza.pk', 55, noticeY + 50)
+  }
 
   // 6. Footer
   doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
     .text('Stayza Hotel & Resort • Coastal Road, Sindh, Pakistan • www.stayza.pk', 40, 785, { align: 'center', width: 515 })
 
+  return doc
+}
+
+/**
+ * Stream binary PDF directly to an HTTP Express response object
+ */
+function generateInvoicePDF(booking, payments = [], res) {
+  res.setHeader('Content-Type', 'application/pdf')
+  res.setHeader(
+    'Content-Disposition',
+    `inline; filename="Stayza-Invoice-${booking.bookingReference}.pdf"`
+  )
+
+  const doc = buildPDFDocument(booking, payments)
+  doc.pipe(res)
   doc.end()
+}
+
+/**
+ * Generate PDF and return as an in-memory binary Buffer (for email attachments)
+ */
+function generateInvoicePDFBuffer(booking, payments = []) {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = buildPDFDocument(booking, payments)
+      const chunks = []
+
+      doc.on('data', (chunk) => chunks.push(chunk))
+      doc.on('end', () => resolve(Buffer.concat(chunks)))
+      doc.on('error', (err) => reject(err))
+
+      doc.end()
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 module.exports = {
   generateInvoicePDF,
+  generateInvoicePDFBuffer,
 }
