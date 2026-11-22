@@ -1,83 +1,150 @@
 import React from 'react'
 
+/**
+ * BookingSummary — Sticky Visual Order Ledger with Suite Anchoring
+ * 
+ * Features:
+ * - High-res Cloudinary photography of the chosen suite
+ * - Micro-specs (Area, View, Bed)
+ * - Clear 30% advance deposit breakdown vs 70% check-in balance
+ * - Live submit button connected to Safepay
+ */
 export default function BookingSummary({
   selectedResidence,
   nights,
   suiteSubtotal,
-  addonTotal,
+  addonTotal = 0,
   sindhTax,
   totalValuation,
   advanceDeposit,
   remainingBalance,
-  isProcessing,
+  isProcessing = false,
+  isAvailable = true,
+  checkInDate,
+  checkOutDate,
   taxRate = 13,
   depositRate = 30,
 }) {
+  const heroImage =
+    selectedResidence.detailImage ||
+    selectedResidence.gallery?.[0]?.url ||
+    'https://res.cloudinary.com/v1rl3ras/image/upload/v1795019369/hotel-suites/suite-301/suite-301-bedroom.webp'
+
   return (
-    <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-lg p-6 sm:p-7 space-y-6">
-      {/* Residence Title */}
-      <div className="border-b border-slate-100 pb-4">
-        <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
-          {selectedResidence.tier}
-        </span>
-        <h3 className="font-serif-grand text-xl sm:text-2xl text-slate-900 mt-0.5">
-          {selectedResidence.name}
-        </h3>
-        <span className="font-mono text-xs text-slate-500">
-          Suite {selectedResidence.roomNumber} &bull; {nights} {nights === 1 ? 'Night' : 'Nights'}
-        </span>
+    <div className="bg-white border border-slate-200/90 rounded-xl overflow-hidden shadow-md">
+      {/* 1. Visual Suite Hero Image */}
+      <div className="relative h-44 sm:h-48 bg-slate-900 overflow-hidden">
+        <img
+          src={heroImage}
+          alt={selectedResidence.name}
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+
+        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-mono font-bold text-white">
+          Suite {selectedResidence.roomNumber}
+        </div>
+
+        <div className="absolute bottom-3 left-4 right-4 text-white">
+          <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-emerald-300 block">
+            {selectedResidence.tier}
+          </span>
+          <h3 className="font-syne font-bold text-base sm:text-lg text-white leading-tight">
+            {selectedResidence.name}
+          </h3>
+        </div>
       </div>
 
-      {/* Price Summary */}
-      <div className="space-y-3 text-xs sm:text-sm text-slate-600">
-        <div className="flex justify-between">
-          <span>Suite Rate ({nights} &times; PKR {selectedResidence.nightlyRate.toLocaleString()})</span>
-          <span className="font-mono text-slate-900 font-medium">PKR {suiteSubtotal.toLocaleString()}</span>
+      {/* 2. Micro-Specs Strip */}
+      <div className="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100 text-center py-2 bg-slate-50 text-[11px] font-mono text-slate-600">
+        <div>
+          <strong className="text-slate-900 block">{selectedResidence.specs?.[0]?.value || '210 M²'}</strong> Area
+        </div>
+        <div>
+          <strong className="text-slate-900 block">{selectedResidence.specs?.[1]?.value || 'OCEAN'}</strong> View
+        </div>
+        <div>
+          <strong className="text-slate-900 block">{selectedResidence.specs?.[2]?.value || 'KING'}</strong> Bed
+        </div>
+      </div>
+
+      {/* 3. Financial Summary */}
+      <div className="p-5 space-y-3.5 text-xs">
+        <div className="flex justify-between text-slate-600">
+          <span>Accommodation ({nights}N &times; PKR {selectedResidence.nightlyRate?.toLocaleString()})</span>
+          <span className="font-mono text-slate-900 font-semibold">PKR {suiteSubtotal.toLocaleString()}</span>
         </div>
 
         {addonTotal > 0 && (
-          <div className="flex justify-between">
-            <span>Selected Services</span>
-            <span className="font-mono text-slate-900 font-medium">+ PKR {addonTotal.toLocaleString()}</span>
+          <div className="flex justify-between text-slate-600">
+            <span>Selected Concierge Services</span>
+            <span className="font-mono text-slate-900 font-semibold">+ PKR {addonTotal.toLocaleString()}</span>
           </div>
         )}
 
-        <div className="flex justify-between">
-          <span>Sindh Sales Tax ({taxRate}%)</span>
-          <span className="font-mono text-slate-900 font-medium">PKR {sindhTax.toLocaleString()}</span>
+        <div className="flex justify-between text-slate-600">
+          <span>Sindh Sales Tax ({taxRate}% SRB)</span>
+          <span className="font-mono text-slate-900 font-semibold">PKR {sindhTax.toLocaleString()}</span>
         </div>
 
-        <div className="flex justify-between text-base font-bold text-slate-900 pt-3 border-t border-slate-200">
-          <span>Total Amount</span>
+        <div className="flex justify-between text-sm font-bold text-slate-900 pt-2.5 border-t border-slate-200">
+          <span>Total Stay Charges</span>
           <span className="font-mono">PKR {totalValuation.toLocaleString()}</span>
         </div>
 
-        {/* 30% Deposit & 70% Balance */}
-        <div className="pt-3 border-t border-slate-100 space-y-2">
-          <div className="flex justify-between text-emerald-900 font-bold">
-            <span>{depositRate}% Online Deposit (Safepay):</span>
-            <span className="font-mono">PKR {advanceDeposit.toLocaleString()}</span>
+        {/* 4. Highlighted 30% Advance Deposit Due Today */}
+        <div className="bg-emerald-50 border border-emerald-200/90 rounded-lg p-3 space-y-1.5 mt-2">
+          <div className="flex justify-between items-center text-xs">
+            <span className="font-bold text-emerald-950 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+              {depositRate}% Advance Deposit Due Today:
+            </span>
+            <span className="font-mono font-extrabold text-sm text-emerald-950">
+              PKR {advanceDeposit.toLocaleString()}
+            </span>
           </div>
-          <div className="flex justify-between text-slate-500 text-xs">
-            <span>Remaining 70% (Pay at Front Desk):</span>
-            <span className="font-mono font-semibold text-slate-800">PKR {remainingBalance.toLocaleString()}</span>
-          </div>
+          <p className="text-[11px] text-emerald-800 leading-tight">
+            Locks Suite {selectedResidence.roomNumber} securely via Safepay.
+          </p>
         </div>
-      </div>
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={isProcessing}
-        className="w-full py-4 bg-[#0E1201] hover:bg-slate-900 disabled:bg-slate-300 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-[0.2em] rounded-[2px] transition-all cursor-pointer shadow-md active:scale-[0.98]"
-      >
-        {isProcessing
-          ? 'Verifying Safepay Deposit...'
-          : `Confirm & Pay 30% Deposit (PKR ${advanceDeposit.toLocaleString()}) →`}
-      </button>
+        {/* 5. 70% Remaining Balance */}
+        <div className="flex justify-between text-[11px] text-slate-500 pt-1">
+          <span>Remaining 70% at Hotel Check-In:</span>
+          <span className="font-mono font-bold text-slate-800">
+            PKR {remainingBalance.toLocaleString()}
+          </span>
+        </div>
 
-      <div className="text-[11px] text-slate-400 font-mono text-center tracking-wider uppercase">
-        256-Bit SSL Encrypted &bull; Safepay Verified
+        {/* 6. Primary Action Button */}
+        <button
+          type="submit"
+          disabled={isProcessing || !isAvailable}
+          className={`w-full mt-3 py-4 text-xs font-mono font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 shadow-md touch-target ${
+            !isAvailable
+              ? 'bg-rose-100 text-rose-800 border border-rose-300 cursor-not-allowed'
+              : isProcessing
+              ? 'bg-slate-300 text-slate-600 cursor-wait'
+              : 'bg-[#0F172A] hover:bg-slate-800 text-white hover:shadow-lg active:scale-[0.98] cursor-pointer'
+          }`}
+        >
+          {isProcessing ? (
+            <span>Securing 5-Minute Hold...</span>
+          ) : !isAvailable ? (
+            <span>Unavailable for Selected Dates</span>
+          ) : (
+            <>
+              <span>Confirm &amp; Pay 30% Deposit (PKR {advanceDeposit.toLocaleString()})</span>
+              <span className="text-sm">&rarr;</span>
+            </>
+          )}
+        </button>
+
+        {/* 7. Reassurance Badges */}
+        <div className="pt-2 text-center text-[10px] font-mono text-slate-400 space-y-1">
+          <div>&bull; Free cancellation up to 48 hours prior to arrival</div>
+          <div>&bull; 256-Bit SSL Encrypted &bull; Official Tax Invoice Attached</div>
+        </div>
       </div>
     </div>
   )

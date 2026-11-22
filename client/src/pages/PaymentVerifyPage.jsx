@@ -8,7 +8,7 @@ import { useHotelData } from '../context/HotelDataContext'
 /**
  * PaymentVerifyPage — Authoritative Safepay Verification & Settlement Landing
  * 
- * Viva Defense Concept:
+ * Payment Verification Architecture:
  * - Anti-Tamper Verification: Attempts authoritative S2S handshake against MongoDB & Safepay.
  * - Resilient Fallback: If running on static hosting or offline demo, gracefully confirms
  *   in client mode without ever breaking the user experience.

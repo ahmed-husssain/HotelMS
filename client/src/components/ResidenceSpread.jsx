@@ -218,7 +218,7 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
             </div>
           </div>
 
-          {/* Top Floating Telemetry & Perspective Indicator */}
+          {/* Top Floating Room & Perspective Indicator */}
           <div className="absolute top-3 sm:top-4 inset-x-3 sm:inset-x-4 flex items-center justify-between pointer-events-none z-20">
             {/* Room Number Emblem */}
             <span className="px-2.5 sm:px-3 py-1 bg-[#0E1201]/55 backdrop-blur-md text-[9px] font-mono tracking-[0.2em] font-bold text-[#FAF8F5] uppercase border border-white/10 rounded-[2px] shadow-xs">
@@ -290,7 +290,7 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
         </div>
       </div>
 
-      {/* Telemetry Monograph Column (5 cols) */}
+      {/* Suite Details Column (5 cols) */}
       <div className={`${isReversed ? 'lg:col-start-1 lg:col-span-5' : 'lg:col-span-5'} space-y-3.5 sm:space-y-6`}>
         {/* Tier & Number Header */}
         <div className="space-y-1">

@@ -10,7 +10,7 @@ import BrandLogo from './BrandLogo'
  * - Sleek hairline guest ledger strip (no eCommerce boxes)
  * - Clean typographic directory with subtle hover micro-interactions
  * - Core integrated baseline: Live PKT Time, Safepay 30% Deposit & Top button
- * - Zero separate bottom telemetry strips or fake entity strings
+ * - Zero separate bottom data strips or fake entity strings
  */
 export default function Footer() {
   const [estateTime, setEstateTime] = useState('')

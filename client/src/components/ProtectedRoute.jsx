@@ -6,8 +6,8 @@ import BrandLogo from './BrandLogo'
 /**
  * CLIENT-SIDE ROLE-BASED ACCESS CONTROL (RBAC) GUARD
  * 
- * Fulfills Aptech Module 7 (Security & Access Control):
- * - Blocks unauthenticated visitors from accessing internal staff terminals
+ * Role-Based Access Control (RBAC) & Route Security:
+ * - Blocks unauthenticated visitors from accessing internal staff workspaces
  * - Blocks role elevation (e.g., Receptionists cannot view /admin)
  * - Presents an editorial, luxury access-restricted interface with 1-click workspace returns
  */

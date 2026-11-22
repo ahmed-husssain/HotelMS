@@ -7,9 +7,9 @@ import { useLocation } from 'react-router-dom'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * useSmoothScroll — Enterprise High-Performance Scroll Authority
+ * useSmoothScroll — High-Performance Scroll Architecture
  * 
- * VIVA & ARCHITECTURAL DEFENSE:
+ * ARCHITECTURAL DESIGN & PERFORMANCE ISOLATION:
  * 1. Hardware Segregation (Native on Mobile, Smooth on Desktop):
  *    - Mobile Phones & Tablets: Emulating touch via JS creates lag and battery drain.
  *      Touchscreens are bypassed to run on 100% native 120Hz GPU ProMotion scroll.
@@ -17,7 +17,7 @@ gsap.registerPlugin(ScrollTrigger)
  * 
  * 2. Zero-Lag Form Isolation & Route Filtering:
  *    - Nested form sheets use 'data-lenis-prevent' to eliminate input latency.
- *    - Front-Desk Staff PMS (/pms) runs at 100% raw native speed for cashier efficiency.
+ *    - Operational workspaces run at 100% raw native speed for staff efficiency.
  * 
  * 3. Accessibility & Frame Locking:
  *    - Bypasses virtual scroll if user has 'prefers-reduced-motion: reduce'.

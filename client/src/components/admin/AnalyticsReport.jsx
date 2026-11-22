@@ -8,7 +8,7 @@ import { fetchAdminAnalytics } from '../../services/api'
  * 1. Gross Realized Revenue & Payment Split (Payment Ledger)
  * 2. Live Occupancy Rate & Operational Distribution (Room Inventory)
  * 3. Average Daily Rate (ADR) & RevPAR (Pricing Yield)
- * 4. Checkout Hold Conversion vs Abandonment Rate (5-Min Concurrency Telemetry)
+ * 4. Checkout Hold Conversion vs Abandonment Rate
  * 5. Incidental Folio Upsell & Top Concierge Services (In-Stay Folios)
  */
 export default function AnalyticsReport({ rooms = [] }) {
@@ -35,7 +35,7 @@ export default function AnalyticsReport({ rooms = [] }) {
     return () => { isMounted = false }
   }, [])
 
-  // Dynamic baseline telemetry calculated directly from active room inventory
+  // Dynamic baseline metrics calculated directly from active room inventory
   const fallbackAnalytics = React.useMemo(() => {
     const roomList = Array.isArray(rooms) && rooms.length > 0 ? rooms : [
       { status: 'OCCUPIED', nightlyRate: 110000, advancePaid: 111870, balanceDue: 261030 },
@@ -159,7 +159,7 @@ export default function AnalyticsReport({ rooms = [] }) {
         </div>
       </div>
 
-      {/* 2. THE 4 PRIMARY TELEMETRY CARDS */}
+      {/* 2. PRIMARY KPI METRIC CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* METRIC 1: Gross Realized Revenue */}
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">

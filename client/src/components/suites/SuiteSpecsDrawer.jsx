@@ -7,7 +7,7 @@ import { getOptimizedImageUrl } from '../../utils/cloudinary'
  * 
  * Architectural Specification Dossier for Stayza Residences:
  * - Mobile-First: Bottom-sheet on mobile (< 768px), elegant slide-over drawer on desktop
- * - Full architectural telemetry: square meters, ceiling heights, heated plunge pool specs, acoustics
+ * - Full architectural room specifications: square meters, ceiling heights, heated plunge pool specs, acoustics
  * - Direct luxury booking CTA with 30% deposit calculation
  */
 export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
@@ -218,7 +218,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
             </p>
           </div>
 
-          {/* Architectural Telemetry Matrix */}
+          {/* Architectural Specifications Matrix */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-[#E5DFD5] pb-2">
               <span className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold text-slate-900">

@@ -123,7 +123,7 @@ export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
           </button>
         </div>
 
-        {/* Real Cashier Telemetry Summary */}
+        {/* Cashier Shift Summary */}
         <div className="p-4 bg-white border border-slate-200/80 rounded-[2px] text-xs font-mono space-y-2">
           <div className="flex justify-between">
             <span className="text-slate-500">Cashier on Duty:</span>

@@ -2,7 +2,7 @@
  * Stayza Hospitality — Client API Service
  * 
  * Centralized, minimal native fetch client for communicating with Express backend.
- * Zero external libraries (KISS & Viva Defense compliant).
+ * Zero external libraries (KISS & minimal dependency standard).
  */
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
@@ -63,6 +63,17 @@ export async function fetchCurrentUser() {
 }
 
 // 1. Reservation & Pricing
+export async function fetchRoomQuote(roomId, checkInDate, checkOutDate) {
+  return request('/bookings/quote', {
+    method: 'POST',
+    body: JSON.stringify({ roomId, checkInDate, checkOutDate }),
+  })
+}
+
+export async function fetchRoomDetails(roomId) {
+  return request(`/rooms/${encodeURIComponent(roomId)}`)
+}
+
 export async function createCheckoutHold(payload) {
   return request('/bookings/hold', {
     method: 'POST',

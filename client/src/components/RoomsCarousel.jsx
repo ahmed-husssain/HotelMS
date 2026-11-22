@@ -252,7 +252,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
           </div>
         </div>
 
-        {/* Top Floating Telemetry & Room Emblem */}
+        {/* Top Floating Room Emblem */}
         <div className="absolute top-3.5 sm:top-5 inset-x-3.5 sm:inset-x-6 flex items-center justify-between pointer-events-none z-20">
           {/* Room Number Badge */}
           <span

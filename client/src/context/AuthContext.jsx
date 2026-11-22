@@ -9,9 +9,9 @@ import {
 } from '../services/api'
 
 /**
- * HABITAS SANCTUARY & LUXURYSTAY — AUTHENTICATION & RBAC CONTEXT
+ * STAYZA HOSPITALITY — AUTHENTICATION & RBAC CONTEXT
  * 
- * Implements Aptech Module 1 (User Management) & Module 7 (Security & RBAC):
+ * User Management, Authentication & Role-Based Access Control (RBAC):
  * - Role-Based Access Control: 'guest', 'receptionist', 'housekeeping', 'admin'
  * - Single source of truth for user session (persisted to localStorage)
  * - Automatic role detection on login (no toggles needed)

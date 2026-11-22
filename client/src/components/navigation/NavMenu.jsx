@@ -197,7 +197,7 @@ export default function NavMenu({
             </div>
           </nav>
 
-          {/* Bottom Telemetry & Metadata Strip */}
+          {/* Bottom Information & Metadata Strip */}
           <div className="border-t border-slate-200/80 pt-3 text-[10px] font-mono text-slate-500 space-y-1.5 shrink-0">
             <div className="flex justify-between items-center text-slate-800">
               <span className="uppercase tracking-widest">Active Vacation Dates</span>

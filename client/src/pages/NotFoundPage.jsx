@@ -6,7 +6,7 @@ import BrandLogo from '../components/BrandLogo'
  * NotFoundPage (404)
  * 
  * Clean, human-designed luxury 404:
- * - Simple, honest, human-readable copy (no AI sci-fi jargon or fake telemetry)
+ * - Simple, honest, human-readable copy (no jargon or fluff)
  * - Natural typography and standard, clean casing
  * - Clear, friendly navigation back to home or suites
  */

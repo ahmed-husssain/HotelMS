@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext'
  * 
  * - Desktop: Architectural split-card with local hero imagery
  * - Mobile: Clean responsive layout with zero cut-off elements
- * - Provisions strict role: 'guest' in compliance with Aptech Module 1 & 7
+ * - Provisions strict role: 'guest' in compliance with zero-trust RBAC
  * - Pure theme monochrome (zero yellowish accents)
  * - Custom React validation with inline error messaging (zero generic HTML popups)
  */

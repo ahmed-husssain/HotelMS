@@ -101,7 +101,7 @@ export default function ConfirmationPage() {
             </p>
           </div>
 
-          {/* Payment Telemetry */}
+          {/* Payment Summary */}
           <div className="p-2.5 sm:p-3 bg-slate-50 border border-slate-200/80 rounded-[2px] space-y-1.5 font-mono text-[11px]">
             <div className="flex justify-between text-slate-600">
               <span>Safepay Reference:</span>

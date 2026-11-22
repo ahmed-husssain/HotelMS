@@ -22,16 +22,16 @@ import {
 import { useToast } from './ToastContext'
 
 /**
- * HABITAS SANCTUARY & LUXURYSTAY — HOTEL DATA & WORKFLOW CONTEXT
+ * STAYZA HOSPITALITY — HOTEL DATA & WORKFLOW CONTEXT
  * 
- * Fulfills Aptech Modules 1 through 9:
- * - Module 2: Room Inventory & Real-Time Status Synchronization
- * - Module 3: Reservation, Arrivals Queue & Check-In/Check-Out
- * - Module 4: Billing, Folios, Incidental Posting & 13% Sindh Tax
- * - Module 5: Housekeeping Turnovers & Maintenance Ticket Locking
- * - Module 6: Executive Analytics Data Feed
- * - Module 8: In-Stay Guest Services & Feedback Tracking
- * - Module 9: System Settings & Central Audit Trail
+ * Hotel PMS Operations, Real-Time Inventory & Reservation Workflow Engine:
+ * - Room Inventory & Real-Time Status Synchronization
+ * - Reservation, Arrivals Queue & Check-In/Check-Out
+ * - Billing, Folios, Incidental Posting & 13% Sindh Tax
+ * - Housekeeping Turnovers & Maintenance Ticket Locking
+ * - Executive Analytics Data Feed
+ * - In-Stay Guest Services & Feedback Tracking
+ * - System Settings & Central Audit Trail
  * 
  * Single source of truth across Front Desk PMS, Housekeeping, GM Admin, and Guest Portal.
  */
