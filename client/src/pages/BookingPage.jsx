@@ -233,7 +233,7 @@ export default function BookingPage() {
       const checkoutUrl =
         sessionRes?.data?.checkoutUrl && sessionRes.data.checkoutUrl !== '#'
           ? sessionRes.data.checkoutUrl
-          : `https://sandbox.api.getsafepay.com/components?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(
+          : `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(
               successUrl
             )}&cancel_url=${encodeURIComponent(cancelUrl)}`
 
@@ -262,7 +262,7 @@ export default function BookingPage() {
       console.warn('[Booking] API issue:', apiErr.message)
       const fallbackRef = `TH-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
       const trackerToken = `track_${fallbackRef.toLowerCase()}_${Date.now()}`
-      const checkoutUrl = `https://sandbox.api.getsafepay.com/components?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(
+      const checkoutUrl = `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(
         window.location.origin + '/payment/verify?ref=' + fallbackRef
       )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve')}`
 

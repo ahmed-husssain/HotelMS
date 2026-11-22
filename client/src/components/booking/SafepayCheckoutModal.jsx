@@ -64,7 +64,7 @@ export default function SafepayCheckoutModal({
   const safepayUrl =
     session.checkoutUrl && session.checkoutUrl !== '#'
       ? session.checkoutUrl
-      : `https://sandbox.api.getsafepay.com/components?env=sandbox&beacon=${session.trackerToken || 'track_' + session.bookingRef}&source=custom&redirect_url=${encodeURIComponent(
+      : `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${session.trackerToken || 'track_' + session.bookingRef}&source=custom&redirect_url=${encodeURIComponent(
           window.location.origin + '/payment/verify?ref=' + session.bookingRef
         )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve')}`
 
