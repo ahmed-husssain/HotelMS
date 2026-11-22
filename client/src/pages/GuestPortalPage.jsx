@@ -1372,13 +1372,48 @@ export default function GuestPortalPage() {
                 </span>
               </div>
 
+              {/* In-Stay Active Dining Tracker Bar */}
+              {orderedServices.filter((s) => s.category === 'Dining').length > 0 && (
+                <div className="p-4 bg-white border border-slate-200/90 rounded-xl shadow-xs space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                      <span className="font-mono text-xs font-bold uppercase tracking-wider text-slate-900">
+                        Kitchen Order Tracker &bull; {orderedServices.filter((s) => s.category === 'Dining').length} Items
+                      </span>
+                    </div>
+                    <span className="font-mono text-[11px] text-slate-500">
+                      Dispatched to Executive Chef
+                    </span>
+                  </div>
+                  <div className="divide-y divide-slate-100">
+                    {orderedServices.filter((s) => s.category === 'Dining').slice(-3).map((item, idx) => (
+                      <div key={idx} className="py-2.5 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-slate-900">{item.title}</span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                            {item.time || 'In-Kitchen'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="font-mono font-semibold text-slate-900">PKR {item.price?.toLocaleString()}</span>
+                          <span className="font-mono text-[10px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-bold uppercase">
+                            Preparing
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {DINING_MENU.map((item) => {
                   const isOrdered = orderedServices.some((s) => s.id === item.id)
                   return (
                     <div
                       key={item.id}
-                      className="bg-white border border-slate-200/90 rounded-[2px] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
+                      className="bg-white border border-slate-200/90 rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
                     >
                       <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
                         <img
@@ -1387,9 +1422,16 @@ export default function GuestPortalPage() {
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                           loading="lazy"
                         />
-                        <span className="absolute top-3 right-3 px-2 py-1 bg-black/70 backdrop-blur-md text-[#FFF0CA] font-mono text-[10px] font-bold rounded-[2px]">
-                          {item.timeEst}
-                        </span>
+                        <div className="absolute top-3 inset-x-3 flex items-center justify-between">
+                          {item.tag && (
+                            <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md text-[#FFF0CA] font-mono text-[10px] font-bold rounded-lg border border-white/10 uppercase tracking-wider">
+                              {item.tag}
+                            </span>
+                          )}
+                          <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-slate-200 font-mono text-[10px] font-semibold rounded-lg ml-auto">
+                            {item.timeEst}
+                          </span>
+                        </div>
                       </div>
 
                       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
@@ -1411,10 +1453,10 @@ export default function GuestPortalPage() {
                           type="button"
                           onClick={() => handleRequestService(item)}
                           disabled={isOrdered}
-                          className={`touch-target w-full py-2.5 font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] transition-all cursor-pointer ${
+                          className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
                             isOrdered
-                              ? 'bg-emerald-50 text-emerald-900 border border-emerald-300'
-                              : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] active:scale-[0.98]'
+                              ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
+                              : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
                           }`}
                         >
                           {isOrdered ? 'Added to Room Bill ✓' : `Order to ${currentBooking.roomNumber || 'Suite 301'} →`}
@@ -1452,11 +1494,11 @@ export default function GuestPortalPage() {
                   return (
                     <div
                       key={item.id}
-                      className="bg-white border border-slate-200/90 rounded-[2px] p-6 shadow-xs flex flex-col justify-between space-y-5"
+                      className="bg-white border border-slate-200/90 rounded-xl p-6 shadow-xs flex flex-col justify-between space-y-5"
                     >
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-950 font-mono text-[9px] font-bold uppercase tracking-wider rounded">
+                          <span className="px-2.5 py-1 bg-emerald-50 text-emerald-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-md border border-emerald-200">
                             {item.badge}
                           </span>
                           <span className="font-mono text-xs text-slate-500">
@@ -1482,10 +1524,10 @@ export default function GuestPortalPage() {
                         type="button"
                         onClick={() => handleRequestService(item)}
                         disabled={isOrdered}
-                        className={`touch-target w-full py-2.5 font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] transition-all cursor-pointer ${
+                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
                           isOrdered
-                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] active:scale-[0.98]'
+                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
+                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
                         }`}
                       >
                         {isOrdered ? 'Service Requested ✓' : 'Request Service →'}
@@ -1505,7 +1547,7 @@ export default function GuestPortalPage() {
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200/80 pb-4">
                 <div>
                   <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-slate-400 uppercase block">
-                    ESTATE CONCIERGE &bull; IN-SUITE DINING
+                    ESTATE CONCIERGE &bull; BESPOKE EXPERIENCES
                   </span>
                   <h2 className="font-serif-grand text-2xl sm:text-3xl text-slate-900 mt-0.5">
                     Concierge &amp; Transfers
@@ -1522,11 +1564,11 @@ export default function GuestPortalPage() {
                   return (
                     <div
                       key={item.id}
-                      className="bg-white border border-slate-200/90 rounded-[2px] p-6 shadow-xs flex flex-col justify-between space-y-5"
+                      className="bg-white border border-slate-200/90 rounded-xl p-6 shadow-xs flex flex-col justify-between space-y-5"
                     >
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="px-2 py-0.5 bg-amber-50 text-amber-950 font-mono text-[9px] font-bold uppercase tracking-wider rounded">
+                          <span className="px-2.5 py-1 bg-amber-50 text-amber-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-md border border-amber-200">
                             {item.category}
                           </span>
                           <span className="font-mono text-xs text-slate-500">
@@ -1552,10 +1594,10 @@ export default function GuestPortalPage() {
                         type="button"
                         onClick={() => handleRequestService(item)}
                         disabled={isOrdered}
-                        className={`touch-target w-full py-2.5 font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] transition-all cursor-pointer ${
+                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
                           isOrdered
-                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] active:scale-[0.98]'
+                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
+                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
                         }`}
                       >
                         {isOrdered ? 'Reserved & Posted ✓' : 'Reserve Experience →'}
@@ -1566,9 +1608,9 @@ export default function GuestPortalPage() {
               </div>
 
               {/* Direct Concierge Contact Card */}
-              <div className="p-6 bg-slate-900 text-[#FAF8F5] rounded-[2px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
+              <div className="p-6 bg-slate-900 text-[#FAF8F5] rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
                 <div className="space-y-1">
-                  <span className="text-[9px] font-mono text-amber-400 uppercase tracking-widest block font-bold">
+                  <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block font-bold">
                     DIRECT PRIVATE LINE
                   </span>
                   <h3 className="font-serif-grand text-xl text-white">
@@ -1580,7 +1622,7 @@ export default function GuestPortalPage() {
                 </div>
                 <a
                   href="tel:+923008921455"
-                  className="touch-target px-5 py-2.5 bg-[#D4AF37] text-slate-950 font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-amber-300 transition-colors shrink-0 flex items-center gap-1.5"
+                  className="touch-target px-5 py-3 bg-[#D4AF37] text-slate-950 font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-amber-300 transition-colors shrink-0 flex items-center gap-1.5 active:scale-95"
                 >
                   <span>Call Concierge Desk</span>
                   <span>→</span>
@@ -1607,7 +1649,7 @@ export default function GuestPortalPage() {
                   <button
                     type="button"
                     onClick={() => setIsInvoiceOpen(true)}
-                    className="touch-target px-3.5 py-2 bg-white border border-slate-300 hover:border-slate-900 text-slate-900 font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1"
+                    className="touch-target px-4 py-2.5 bg-white border border-slate-300 hover:border-slate-900 text-slate-900 font-mono text-xs uppercase font-bold tracking-wider rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 active:scale-95"
                   >
                     <span>Preview &amp; Print Invoice</span>
                     <span>→</span>
@@ -1615,7 +1657,7 @@ export default function GuestPortalPage() {
                   <button
                     type="button"
                     onClick={handleRequestCheckout}
-                    className="touch-target px-4 py-2 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-sm active:scale-95 flex items-center gap-1"
+                    className="touch-target px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-lg transition-colors cursor-pointer shadow-sm active:scale-95 flex items-center gap-1.5"
                   >
                     <span>Request Express Checkout</span>
                     <span>→</span>
@@ -1689,7 +1731,7 @@ export default function GuestPortalPage() {
                       <span>Advance Deposit Paid (30% via Safepay)</span>
                       <span className="font-mono">- PKR {financials.advancePaid.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between text-slate-900 font-bold text-sm bg-slate-50 p-3 rounded-[2px]">
+                    <div className="flex justify-between text-slate-900 font-bold text-sm bg-slate-50 p-3.5 rounded-lg border border-slate-100">
                       <span>Balance Due at Front Desk / Checkout</span>
                       <span className="font-mono text-emerald-950">PKR {financials.balanceDue.toLocaleString()}</span>
                     </div>
@@ -1698,7 +1740,7 @@ export default function GuestPortalPage() {
               </div>
 
               {/* Guest Experience Rating Card */}
-              <div className="bg-white border border-slate-200/90 rounded-[2px] p-6 sm:p-8 shadow-xs space-y-4">
+              <div className="bg-white border border-slate-200/90 rounded-xl p-6 sm:p-8 shadow-xs space-y-4">
                 <div className="border-b border-slate-100 pb-3">
                   <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-slate-400 uppercase">
                     Guest Feedback
@@ -1709,7 +1751,7 @@ export default function GuestPortalPage() {
                 </div>
 
                 {reviewSubmitted ? (
-                  <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-[2px] text-center space-y-1">
+                  <div className="p-5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-center space-y-1">
                     <span className="font-serif-grand text-lg block">Thank You, {currentBooking.guestName}</span>
                     <p className="text-xs">Your rating and feedback have been shared directly with the General Manager.</p>
                   </div>
@@ -1737,8 +1779,12 @@ export default function GuestPortalPage() {
                           <button
                             key={star}
                             type="button"
-                            onClick={() => setReviewRating(star)}
-                            className="text-2xl cursor-pointer hover:scale-110 transition-transform"
+                            onClick={() => {
+                              setReviewRating(star)
+                              if (navigator?.vibrate) navigator.vibrate(15)
+                            }}
+                            className="text-2xl cursor-pointer hover:scale-110 active:scale-90 transition-transform"
+                            aria-label={`Rate ${star} star`}
                           >
                             {star <= reviewRating ? '★' : '☆'}
                           </button>
@@ -1756,13 +1802,13 @@ export default function GuestPortalPage() {
                         value={reviewComment}
                         onChange={(e) => setReviewComment(e.target.value)}
                         placeholder="Share any special memories or recommendations regarding your stay..."
-                        className="w-full p-3 bg-slate-50 border border-slate-300 focus:border-slate-900 rounded-[2px] text-xs text-slate-900 focus:outline-none"
+                        className="w-full p-3.5 bg-slate-50 border border-slate-300 focus:border-slate-900 rounded-lg text-xs text-slate-900 focus:outline-none"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="touch-target px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer flex items-center gap-1.5"
+                      className="touch-target px-6 py-3 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-sm"
                     >
                       <span>Submit Stay Feedback</span>
                       <span>→</span>
