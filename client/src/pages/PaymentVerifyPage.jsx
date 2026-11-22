@@ -23,8 +23,15 @@ export default function PaymentVerifyPage() {
   const [status, setStatus] = useState('verifying') // 'verifying' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState('')
 
-  const bookingRef = searchParams.get('ref') || searchParams.get('bookingReference')
-  const trackerToken = searchParams.get('tracker') || searchParams.get('token')
+  const bookingRef =
+    searchParams.get('ref') ||
+    searchParams.get('bookingReference') ||
+    searchParams.get('reference') ||
+    searchParams.get('order_id')
+  const trackerToken =
+    searchParams.get('tracker') ||
+    searchParams.get('beacon') ||
+    searchParams.get('token')
 
   useEffect(() => {
     let isMounted = true

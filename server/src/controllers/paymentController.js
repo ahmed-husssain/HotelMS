@@ -68,7 +68,11 @@ async function createCheckoutSession(req, res) {
 
     // 5. Initiate Order Token with Safepay Sandbox API (or generate deterministic simulator token)
     let trackerToken = `track_${booking.bookingReference.toLowerCase()}_${Date.now()}`
-    let checkoutUrl = `${SAFEPAY_BASE_URL}/components?env=sandbox&beacon=${trackerToken}&source=custom`
+    const clientBase = process.env.CLIENT_URL || 'https://stayza.web.app'
+    const finalSuccessUrl = successUrl || `${clientBase}/payment/verify?ref=${booking.bookingReference}`
+    const finalCancelUrl = cancelUrl || `${clientBase}/reserve?room=${booking.roomNumber}&cancelled=true&ref=${booking.bookingReference}`
+
+    let checkoutUrl = `${SAFEPAY_BASE_URL}/components?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(finalSuccessUrl)}&cancel_url=${encodeURIComponent(finalCancelUrl)}`
 
     try {
       const response = await fetch(`${SAFEPAY_BASE_URL}/order/v1/init`, {
@@ -89,7 +93,7 @@ async function createCheckoutSession(req, res) {
         const safepayData = await response.json()
         if (safepayData?.data?.token) {
           trackerToken = safepayData.data.token
-          checkoutUrl = `${SAFEPAY_BASE_URL}/components?env=sandbox&beacon=${trackerToken}&source=custom`
+          checkoutUrl = `${SAFEPAY_BASE_URL}/components?env=sandbox&beacon=${trackerToken}&source=custom&redirect_url=${encodeURIComponent(finalSuccessUrl)}&cancel_url=${encodeURIComponent(finalCancelUrl)}`
         }
       }
     } catch (apiErr) {
@@ -110,8 +114,8 @@ async function createCheckoutSession(req, res) {
         trackerToken,
         checkoutUrl,
         holdExpiresAt: booking.holdExpiresAt,
-        redirectUrl: successUrl || `/payment/verify?ref=${booking.bookingReference}&tracker=${trackerToken}`,
-        cancelUrl: cancelUrl || `/reserve?room=${booking.roomNumber}&cancelled=true&ref=${booking.bookingReference}`,
+        redirectUrl: finalSuccessUrl,
+        cancelUrl: finalCancelUrl,
       },
     })
   } catch (error) {

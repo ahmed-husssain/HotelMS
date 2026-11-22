@@ -110,17 +110,18 @@ export default function SafepayCheckoutModal({
 
           {/* Action Buttons */}
           <div className="space-y-2.5 pt-1">
-            {/* 1. Official Safepay Sandbox Gateway */}
+            {/* 1. Official Safepay Sandbox Gateway (Direct Window Redirect) */}
             {session.checkoutUrl && session.checkoutUrl !== '#' && (
-              <a
-                href={session.checkoutUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => {
+                  window.location.href = session.checkoutUrl
+                }}
                 className="w-full py-3.5 bg-slate-900 hover:bg-[#0E1201] text-[#FAF8F5] font-mono text-xs font-bold uppercase tracking-widest rounded-[2px] transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.98] cursor-pointer"
               >
-                <span>Open Safepay Sandbox Portal</span>
+                <span>Pay via Safepay Hosted Portal</span>
                 <span className="text-sm">&rarr;</span>
-              </a>
+              </button>
             )}
 
             {/* 2. Instant Simulator for Viva Examination / Presentation */}
