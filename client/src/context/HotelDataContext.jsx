@@ -20,6 +20,7 @@ import {
   subscribeToBookingEvents,
 } from '../services/socket'
 import { useToast } from './ToastContext'
+import { useAuth } from './AuthContext'
 
 /**
  * STAYZA HOSPITALITY — HOTEL DATA & WORKFLOW CONTEXT
@@ -405,14 +406,19 @@ export function HotelDataProvider({ children }) {
   }
 
   const { toast } = useToast()
+  const { currentUser } = useAuth()
 
-  // Live MongoDB Atlas Sync on Mount + Smart Live Heartbeat (Every 3.5s for zero-refresh updates)
+  // Live MongoDB Atlas Sync on Mount + Smart Staff Heartbeat (only for authenticated staff)
   useEffect(() => {
     let isMounted = true
 
     async function syncLiveDashboard(isInitial = false) {
-      // Only poll when page/tab is active/visible
+      // 1. Only poll when page/tab is active and visible
       if (typeof document !== 'undefined' && document.hidden) return
+
+      // 2. Performance guard: Only poll staff operational queues if user is authenticated staff
+      const isStaff = currentUser && ['receptionist', 'housekeeping', 'admin'].includes(currentUser.role)
+      if (!isStaff) return
 
       try {
         const res = await fetchStaffDashboard()
@@ -506,16 +512,16 @@ export function HotelDataProvider({ children }) {
     // 1. Initial mount load
     syncLiveDashboard(true)
 
-    // 2. Smart Background Heartbeat (every 3.5s): auto-syncs so changes reflect across devices without manual refresh
+    // 2. Smart Background Heartbeat (every 8s for staff terminals): syncs changes across devices without excessive load
     const heartbeatInterval = setInterval(() => {
       syncLiveDashboard(false)
-    }, 3500)
+    }, 8000)
 
     return () => {
       isMounted = false
       clearInterval(heartbeatInterval)
     }
-  }, [toast])
+  }, [toast, currentUser])
 
   // Real-Time Socket.io Synchronization (<40ms duplex event bus)
   useEffect(() => {

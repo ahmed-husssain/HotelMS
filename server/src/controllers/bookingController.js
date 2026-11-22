@@ -134,6 +134,7 @@ async function createHold(req, res) {
         name: guestDetails.name.trim(),
         email: guestDetails.email.toLowerCase().trim(),
         phone: guestDetails.phone || '+92 300 0000000',
+        identificationNumber: (guestDetails.identificationNumber || '').trim(),
         specialRequests: guestDetails.specialRequests || '',
       },
       pricingSnapshot: {

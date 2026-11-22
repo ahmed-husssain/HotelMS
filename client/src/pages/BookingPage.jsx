@@ -214,6 +214,7 @@ export default function BookingPage() {
           name: guestDossier.fullName,
           email: guestDossier.email,
           phone: guestDossier.phone,
+          identificationNumber: guestDossier.identificationNumber,
           specialRequests: guestDossier.specialRequests,
         },
       })

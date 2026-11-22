@@ -225,12 +225,12 @@ export default function Navbar({ onOpenDrawer }) {
             type="button"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open Navigation Menu"
-            className="group relative w-9 h-9 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-xs shrink-0"
+            className="touch-target group relative rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] p-2 flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-xs shrink-0"
           >
-            <div className="relative w-3.5 h-2.5 flex flex-col justify-between items-center pointer-events-none">
-              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
-              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
-              <span className="w-3.5 h-[1.5px] bg-slate-900 rounded-full" />
+            <div className="relative w-4 h-2.5 flex flex-col justify-between items-center pointer-events-none">
+              <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
+              <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
             </div>
           </button>
         </div>
@@ -260,9 +260,9 @@ export default function Navbar({ onOpenDrawer }) {
             type="button"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open Navigation Menu"
-            className="group relative w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-2xs shrink-0"
+            className="touch-target group relative rounded-full border border-slate-300 hover:border-slate-900 bg-[#FAF8F5] p-2 flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-2xs shrink-0"
           >
-            <div className="relative w-3 h-2 sm:w-3.5 sm:h-2.5 flex flex-col justify-between items-center pointer-events-none">
+            <div className="relative w-3.5 h-2.5 flex flex-col justify-between items-center pointer-events-none">
               <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
               <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />
               <span className="w-full h-[1.5px] bg-slate-900 rounded-full" />

@@ -98,7 +98,7 @@ export default function Footer() {
                 <button
                   type="submit"
                   aria-label="Submit email"
-                  className="w-7 h-7 inline-flex items-center justify-center text-xs font-mono text-[#121619] hover:text-amber-800 transition-colors cursor-pointer"
+                  className="touch-target w-9 h-9 inline-flex items-center justify-center text-xs font-mono text-[#121619] hover:text-amber-800 transition-colors cursor-pointer"
                 >
                   &rarr;
                 </button>
@@ -275,7 +275,7 @@ export default function Footer() {
           <button
             type="button"
             onClick={scrollToTop}
-            className="inline-flex items-center min-h-[28px] py-1 px-1 text-[#121619] hover:text-amber-800 font-bold uppercase tracking-wider cursor-pointer gap-1 transition-colors active:scale-95"
+            className="touch-target inline-flex items-center text-[#121619] hover:text-amber-800 font-bold uppercase tracking-wider cursor-pointer gap-1 transition-colors active:scale-95 text-xs"
             aria-label="Back to top of page"
           >
             <span>Top</span>

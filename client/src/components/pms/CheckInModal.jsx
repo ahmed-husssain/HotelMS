@@ -140,6 +140,12 @@ export default function CheckInModal({
             <span className="text-slate-900 font-bold">{selectedArrival.phone}</span>
           </div>
           <div className="flex justify-between">
+            <span className="text-slate-500">National ID / CNIC:</span>
+            <span className="text-slate-900 font-bold">
+              {selectedArrival.identificationNumber || selectedArrival.guestDetails?.identificationNumber || 'Verified Online'}
+            </span>
+          </div>
+          <div className="flex justify-between">
             <span className="text-slate-500">Duration:</span>
             <span className="text-slate-700">{selectedArrival.nights || 1} {selectedArrival.nights === 1 ? 'Night' : 'Nights'}</span>
           </div>
