@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 /**
- * InvoicePreviewModal — Minimal, Elegant Luxury Hotel Tax Invoice
+ * InvoicePreviewModal — Mobile-First, Minimal Luxury Hotel Tax Document
  * 
- * Simple, clean design without AI jargon or clunky overlapping toolbars.
- * Clean modal container with independent header and naturally scrolling document body.
+ * Fully responsive:
+ * - On Mobile: Full-width clean sheet, stacked accommodation card (zero horizontal overflow),
+ *   compact top action bar, and easy-tap buttons.
+ * - On Desktop: Publication-grade A4 layout with clean 4-column ledger and printable styling.
  */
 export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalInvoice = false }) {
   const invoiceRef = useRef(null)
@@ -63,9 +65,9 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
   const advancePaid = booking.advance || Math.round(totalAmount * 0.3)
   const balanceDue = isFinalInvoice ? 0 : Math.max(0, totalAmount - advancePaid)
 
-  const bookingRef = booking.bookingRef || 'TH-301-9335'
+  const bookingRef = booking.bookingRef || 'ST-301-6077'
   const invoiceNum = isFinalInvoice ? `INV-2026-${bookingRef.slice(-4)}` : `RCP-2026-${bookingRef.slice(-4)}`
-  const docTitle = isFinalInvoice ? 'OFFICIAL TAX INVOICE' : 'ADVANCE DEPOSIT RECEIPT'
+  const docTitle = isFinalInvoice ? 'Official Tax Invoice' : 'Advance Deposit Receipt'
 
   const handlePrint = () => {
     window.print()
@@ -79,7 +81,7 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
         return
       }
     } catch {
-      // Fallback to print dialog
+      // Fallback to print
     }
     window.print()
   }
@@ -93,7 +95,7 @@ Suite: Suite ${residence.roomNumber} - ${residence.name}
 Total: PKR ${totalAmount.toLocaleString()}
 Advance Paid (30%): PKR ${advancePaid.toLocaleString()}
 Balance: PKR ${balanceDue.toLocaleString()}`
-    
+
     if (navigator?.clipboard) {
       navigator.clipboard.writeText(summary)
       setCopied(true)
@@ -102,8 +104,8 @@ Balance: PKR ${balanceDue.toLocaleString()}`
   }
 
   return (
-    <div 
-      className={`fixed inset-0 z-50 overflow-y-auto bg-black/60 p-4 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static transition-opacity duration-200 ${
+    <div
+      className={`fixed inset-0 z-50 overflow-y-auto bg-black/60 p-0 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static transition-opacity duration-200 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
       role="dialog"
@@ -112,23 +114,23 @@ Balance: PKR ${balanceDue.toLocaleString()}`
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      {/* Modal Container */}
-      <div 
-        className={`relative w-full max-w-2xl bg-white border border-slate-200 rounded-lg shadow-2xl my-4 sm:my-8 flex flex-col overflow-hidden transition-all duration-200 print:border-none print:shadow-none print:w-full print:m-0 ${
+      {/* Modal Container: Full-width on mobile (no cramped side margins), centered card on desktop */}
+      <div
+        className={`relative w-full max-w-2xl bg-white border-0 sm:border sm:border-slate-200 rounded-none sm:rounded-lg shadow-2xl my-0 sm:my-8 flex flex-col min-h-screen sm:min-h-0 overflow-hidden transition-all duration-200 print:border-none print:shadow-none print:w-full print:m-0 ${
           isVisible ? 'scale-100' : 'scale-95'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Clean Modal Header (Fixed at top of modal, NOT overlapping document) */}
-        <div className="bg-[#0F172A] text-white px-6 py-3.5 flex items-center justify-between border-b border-slate-800 print:hidden shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-xs font-semibold tracking-wider uppercase text-slate-200">
+        {/* Top Header Bar: Clean, compact on mobile with touch-friendly 44px close button */}
+        <div className="bg-[#0F172A] text-white px-4 sm:px-6 py-3 flex items-center justify-between border-b border-slate-800 print:hidden shrink-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+            <span className="text-xs font-semibold tracking-wider uppercase text-slate-200 truncate">
               {docTitle}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={handleCopySummary}
@@ -140,7 +142,7 @@ Balance: PKR ${balanceDue.toLocaleString()}`
             <button
               type="button"
               onClick={handleDownloadPDF}
-              className="px-3 py-1 bg-white text-slate-900 hover:bg-slate-100 text-xs font-semibold rounded transition-colors cursor-pointer flex items-center gap-1 shadow-xs"
+              className="px-3 py-1.5 bg-white text-slate-900 hover:bg-slate-100 text-xs font-semibold rounded transition-colors cursor-pointer flex items-center gap-1 shadow-xs touch-target"
             >
               <span>Download PDF</span>
               <span>&darr;</span>
@@ -158,19 +160,19 @@ Balance: PKR ${balanceDue.toLocaleString()}`
               type="button"
               onClick={onClose}
               aria-label="Close invoice preview"
-              className="w-8 h-8 ml-1 rounded-full text-slate-400 hover:text-white hover:bg-white/10 flex items-center justify-center text-lg cursor-pointer transition-colors"
+              className="w-9 h-9 rounded-full text-slate-300 hover:text-white hover:bg-white/10 flex items-center justify-center text-xl cursor-pointer transition-colors touch-target"
             >
               &times;
             </button>
           </div>
         </div>
 
-        {/* Invoice Document Body (Scrolls cleanly below header) */}
-        <div ref={invoiceRef} className="p-6 sm:p-8 bg-white text-slate-900 space-y-5 print:p-6">
-          {/* Header */}
-          <div className="border-b border-slate-200 pb-5 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3">
+        {/* Invoice Document Body */}
+        <div ref={invoiceRef} className="p-4 sm:p-8 bg-white text-slate-900 space-y-4 sm:space-y-5 print:p-6">
+          {/* Letterhead */}
+          <div className="border-b border-slate-200 pb-4 sm:pb-5 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3">
             <div>
-              <h1 className="text-xl font-bold tracking-wider text-slate-900 uppercase">
+              <h1 className="text-lg sm:text-xl font-bold tracking-wider text-slate-900 uppercase">
                 STAYZA HOTEL &amp; RESORT
               </h1>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
@@ -181,7 +183,7 @@ Balance: PKR ${balanceDue.toLocaleString()}`
 
             <div className="text-left sm:text-right text-xs text-slate-600 space-y-0.5">
               <span className="font-bold text-sm text-slate-900 block">{docTitle}</span>
-              <span className="font-mono text-slate-700 block">Invoice #: {invoiceNum}</span>
+              <span className="font-mono text-slate-700 block font-medium">Invoice #: {invoiceNum}</span>
               <span className="text-slate-500 block">
                 Issued: {new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
               </span>
@@ -189,10 +191,10 @@ Balance: PKR ${balanceDue.toLocaleString()}`
             </div>
           </div>
 
-          {/* Guest & Reservation Details */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#FAF8F5] p-4 rounded-md border border-slate-200 text-xs">
+          {/* Guest & Reservation Details (Responsive Stack) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 bg-[#FAF8F5] p-3.5 sm:p-4 rounded-md border border-slate-200 text-xs">
             <div>
-              <span className="font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+              <span className="font-semibold text-slate-500 uppercase tracking-wider text-[11px] block mb-1">
                 Guest Details
               </span>
               <p className="font-bold text-sm text-slate-900">{booking.guestName || 'Ahmed Hussain'}</p>
@@ -200,73 +202,100 @@ Balance: PKR ${balanceDue.toLocaleString()}`
               <p className="text-slate-600">{booking.guestEmail || 'ahmedhusssain117@gmail.com'}</p>
             </div>
 
-            <div className="sm:text-right">
-              <span className="font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+            <div className="sm:text-right border-t sm:border-t-0 pt-2.5 sm:pt-0 border-slate-200/80">
+              <span className="font-semibold text-slate-500 uppercase tracking-wider text-[11px] block mb-1">
                 Booking Details
               </span>
               <p className="font-bold text-sm text-slate-900 font-mono">Ref: {bookingRef}</p>
               <p className="text-slate-700 mt-0.5 font-medium">Suite {residence.roomNumber} &bull; {residence.name}</p>
               <p className="text-slate-500">
-                Duration: {nights} {nights === 1 ? 'Night' : 'Nights'} ({booking.checkIn || 'Check-in'} to {booking.checkOut || 'Check-out'})
+                Duration: {nights} {nights === 1 ? 'Night' : 'Nights'}
               </p>
             </div>
           </div>
 
-          {/* Itemized Table */}
+          {/* Charges Section: Mobile-optimized card view + Desktop Table View */}
           <div className="space-y-2">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
               Charges Summary
             </span>
 
-            <table className="w-full text-xs border-collapse">
-              <thead>
-                <tr className="bg-slate-100 text-slate-600 uppercase text-[11px] border-y border-slate-200">
-                  <th className="py-2 px-3 text-left font-semibold">Description</th>
-                  <th className="py-2 px-3 text-center font-semibold">Duration</th>
-                  <th className="py-2 px-3 text-right font-semibold">Rate (PKR)</th>
-                  <th className="py-2 px-3 text-right font-semibold">Amount (PKR)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                <tr>
-                  <td className="py-2.5 px-3">
-                    <span className="font-semibold text-slate-900 block">Suite {residence.roomNumber} Accommodation</span>
-                    <span className="text-[11px] text-slate-500">{residence.name}</span>
-                  </td>
-                  <td className="py-2.5 px-3 text-center text-slate-600">{nights} Nights</td>
-                  <td className="py-2.5 px-3 text-right text-slate-600 font-mono">{nightlyRate.toLocaleString()}</td>
-                  <td className="py-2.5 px-3 text-right font-semibold text-slate-900 font-mono">{suiteSubtotal.toLocaleString()}</td>
-                </tr>
+            {/* Mobile View: Stacked Card (Eliminates table overflow on small phones) */}
+            <div className="sm:hidden bg-[#F8FAFC] border border-slate-200 rounded-md p-3.5 space-y-2 text-xs">
+              <div className="flex justify-between items-start gap-2">
+                <div>
+                  <strong className="text-slate-900 text-sm block">Suite {residence.roomNumber} Accommodation</strong>
+                  <span className="text-slate-500 text-xs">{residence.name}</span>
+                </div>
+                <span className="font-mono font-bold text-slate-900 text-sm whitespace-nowrap">
+                  PKR {suiteSubtotal.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between text-slate-600 text-xs pt-1.5 border-t border-slate-200/70">
+                <span>Duration: {nights} Nights</span>
+                <span>Rate: PKR {nightlyRate.toLocaleString()}/night</span>
+              </div>
 
-                {/* Additional Orders if present */}
-                {(booking.diningOrders || []).map((item, idx) => (
-                  <tr key={`item-${idx}`}>
-                    <td className="py-2 px-3 text-slate-800">{item.title}</td>
-                    <td className="py-2 px-3 text-center text-slate-600">1</td>
-                    <td className="py-2 px-3 text-right text-slate-600 font-mono">{item.price?.toLocaleString()}</td>
-                    <td className="py-2 px-3 text-right font-medium text-slate-900 font-mono">{item.price?.toLocaleString()}</td>
+              {/* Any additional service line items */}
+              {(booking.diningOrders || []).map((item, idx) => (
+                <div key={`m-item-${idx}`} className="flex justify-between pt-1 text-slate-700 border-t border-slate-200/50">
+                  <span>{item.title}</span>
+                  <span className="font-mono font-medium">PKR {item.price?.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop View: Full 4-Column Table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-slate-100 text-slate-600 uppercase text-[11px] border-y border-slate-200">
+                    <th className="py-2 px-3 text-left font-semibold">Description</th>
+                    <th className="py-2 px-3 text-center font-semibold">Duration</th>
+                    <th className="py-2 px-3 text-right font-semibold">Rate (PKR)</th>
+                    <th className="py-2 px-3 text-right font-semibold">Amount (PKR)</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  <tr>
+                    <td className="py-2.5 px-3">
+                      <span className="font-semibold text-slate-900 block">Suite {residence.roomNumber} Accommodation</span>
+                      <span className="text-[11px] text-slate-500">{residence.name}</span>
+                    </td>
+                    <td className="py-2.5 px-3 text-center text-slate-600">{nights} Nights</td>
+                    <td className="py-2.5 px-3 text-right text-slate-600 font-mono">{nightlyRate.toLocaleString()}</td>
+                    <td className="py-2.5 px-3 text-right font-semibold text-slate-900 font-mono">{suiteSubtotal.toLocaleString()}</td>
+                  </tr>
+
+                  {(booking.diningOrders || []).map((item, idx) => (
+                    <tr key={`item-${idx}`}>
+                      <td className="py-2 px-3 text-slate-800">{item.title}</td>
+                      <td className="py-2 px-3 text-center text-slate-600">1</td>
+                      <td className="py-2 px-3 text-right text-slate-600 font-mono">{item.price?.toLocaleString()}</td>
+                      <td className="py-2 px-3 text-right font-medium text-slate-900 font-mono">{item.price?.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Financial Breakdown */}
-          <div className="bg-[#FAF8F5] p-4 rounded-md border border-slate-200 flex justify-end">
-            <div className="w-full sm:w-72 space-y-2 text-xs">
+          <div className="bg-[#FAF8F5] p-3.5 sm:p-4 rounded-md border border-slate-200 flex justify-end">
+            <div className="w-full sm:w-80 space-y-2 text-xs">
               <div className="flex justify-between text-slate-600">
-                <span>Subtotal:</span>
-                <span className="font-mono text-slate-900">PKR {netSubtotal.toLocaleString()}</span>
+                <span>Services Subtotal:</span>
+                <span className="font-mono text-slate-900 font-medium">PKR {netSubtotal.toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-slate-600">
                 <span>Sindh Sales Tax (13%):</span>
-                <span className="font-mono text-slate-900">PKR {sindhTax.toLocaleString()}</span>
+                <span className="font-mono text-slate-900 font-medium">PKR {sindhTax.toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-slate-900 font-bold border-t border-slate-200 pt-2 text-sm">
                 <span>Total Amount:</span>
                 <span className="font-mono">PKR {totalAmount.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+              <div className="flex justify-between text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-1.5 rounded border border-emerald-200">
                 <span>30% Advance Deposit Paid:</span>
                 <span className="font-mono">- PKR {advancePaid.toLocaleString()}</span>
               </div>
@@ -274,7 +303,7 @@ Balance: PKR ${balanceDue.toLocaleString()}`
                 <span className={balanceDue === 0 ? 'text-emerald-800' : 'text-amber-900'}>
                   {balanceDue === 0 ? 'Balance (Settled):' : 'Balance Due at Check-in:'}
                 </span>
-                <span className={`font-mono ${balanceDue === 0 ? 'text-emerald-800' : 'text-amber-900'}`}>
+                <span className={`font-mono text-sm ${balanceDue === 0 ? 'text-emerald-800' : 'text-amber-900'}`}>
                   PKR {balanceDue.toLocaleString()}
                 </span>
               </div>
@@ -286,8 +315,20 @@ Balance: PKR ${balanceDue.toLocaleString()}`
             <strong className="text-emerald-800 block mb-0.5">
               [ Verified Reservation ] &bull; 30% Online Advance Deposit Confirmed
             </strong>
-            This official tax invoice is generated in accordance with Sindh Revenue Board (SRB) regulations.
+            This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.
             Please present this booking reference or valid CNIC/Passport upon arrival at the Front Desk.
+          </div>
+
+          {/* Mobile Bottom Action: Full-width download button */}
+          <div className="sm:hidden pt-2">
+            <button
+              type="button"
+              onClick={handleDownloadPDF}
+              className="w-full py-3 bg-[#0F172A] hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-md flex items-center justify-center gap-2 shadow-sm cursor-pointer touch-target"
+            >
+              <span>Download Official PDF Receipt</span>
+              <span>&darr;</span>
+            </button>
           </div>
 
           {/* Footer */}
