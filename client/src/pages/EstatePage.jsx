@@ -206,16 +206,25 @@ export default function EstatePage() {
   const heroFrameRef = useRef(null)
   const heroImgRef = useRef(null)
 
-  // Real, authentic resort photography
-  const HERO_IMG = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2400&q=85'
-  const BEACH_IMG = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85'
+  // Real, authentic resort photography (100% self-hosted & cohesive)
+  const HERO_IMG = '/Images/estate/clifftop-sanctuary.webp'
+  const BEACH_IMG = '/Images/estate/private-beach.webp'
   const DINING_IMG = '/Images/estate/coastal-dining.webp'
   const SPA_IMG = '/Images/estate/wellness-spa.webp'
   const VALET_IMG = '/Images/estate/complete-privacy.webp'
 
-  // Eager background preloading for estate sanctuary photography
+  const [heroLoaded, setHeroLoaded] = useState(false)
+
+  // Fast-track hero if already cached
   useEffect(() => {
-    [DINING_IMG, SPA_IMG, VALET_IMG].forEach((src) => {
+    if (heroImgRef.current?.complete && heroImgRef.current?.naturalWidth > 0) {
+      setHeroLoaded(true)
+    }
+  }, [HERO_IMG])
+
+  // Eager background preloading for all 5 estate sanctuary photographs
+  useEffect(() => {
+    [HERO_IMG, BEACH_IMG, DINING_IMG, SPA_IMG, VALET_IMG].forEach((src) => {
       const img = new Image()
       img.src = src
     })
@@ -301,13 +310,31 @@ export default function EstatePage() {
         <div className="w-full max-w-7xl mx-auto mt-6">
           <div
             ref={heroFrameRef}
-            className="relative h-[55vh] sm:h-[75vh] w-full overflow-hidden shadow-2xl bg-slate-950 will-change-transform"
+            className="relative h-[55vh] sm:h-[75vh] w-full overflow-hidden shadow-2xl bg-[#11140E] will-change-transform"
           >
+            {/* Luxury Editorial Loading Indicator */}
+            {!heroLoaded && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#11140E] text-[#D8D2C2] select-none pointer-events-none transition-opacity duration-500">
+                <div className="w-8 h-8 rounded-full border border-white/10 border-t-[#D8D2C2] animate-spin mb-3" />
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#D8D2C2]/85">
+                    Loading Sanctuary Visual...
+                  </span>
+                </div>
+              </div>
+            )}
+
             <img
               ref={heroImgRef}
               src={HERO_IMG}
               alt="Stayza ocean cliffside architectural sanctuary"
-              className="absolute left-0 right-0 w-full object-cover will-change-transform select-none"
+              loading="eager"
+              decoding="async"
+              onLoad={() => setHeroLoaded(true)}
+              className={`absolute left-0 right-0 w-full object-cover will-change-transform select-none transition-opacity duration-700 ease-out ${
+                heroLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
               style={{ top: '-15%', height: '130%' }}
             />
             {/* Subtle Gradient Shadow */}
