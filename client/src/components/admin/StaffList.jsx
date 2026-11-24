@@ -244,6 +244,7 @@ export default function StaffList({
                 <input
                   type="text"
                   required
+                  maxLength={100}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"
@@ -257,6 +258,7 @@ export default function StaffList({
                 <input
                   type="email"
                   required
+                  maxLength={120}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"
@@ -268,10 +270,13 @@ export default function StaffList({
                   Initial Password
                 </label>
                 <input
-                  type="text"
+                  type="password"
                   required
+                  minLength={6}
+                  maxLength={100}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Min 6 characters"
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900 font-mono"
                 />
               </div>
@@ -296,7 +301,8 @@ export default function StaffList({
                   Phone / Extension
                 </label>
                 <input
-                  type="text"
+                  type="tel"
+                  maxLength={20}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+92 300 0000000"

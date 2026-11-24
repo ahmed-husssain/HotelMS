@@ -89,6 +89,7 @@ export default function Footer() {
                 <input
                   type="email"
                   required
+                  maxLength={120}
                   value={inquiryEmail}
                   onChange={(e) => setInquiryEmail(e.target.value)}
                   placeholder="Enter email for private openings"

@@ -23,6 +23,7 @@ export default function StayDatesForm({
   roomNumber = '301',
 }) {
   const todayStr = new Date().toISOString().split('T')[0]
+  const maxDateStr = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
   return (
     <section className="bg-white border border-slate-200/90 rounded-xl p-5 sm:p-7 shadow-xs space-y-6">
@@ -73,7 +74,9 @@ export default function StayDatesForm({
           </label>
           <input
             type="date"
+            required
             min={todayStr}
+            max={maxDateStr}
             value={checkInDate}
             onChange={(e) => setCheckInDate(e.target.value)}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono font-medium text-slate-900 focus:bg-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none transition-all touch-target cursor-pointer"
@@ -86,7 +89,9 @@ export default function StayDatesForm({
           </label>
           <input
             type="date"
+            required
             min={checkInDate || todayStr}
+            max={maxDateStr}
             value={checkOutDate}
             onChange={(e) => setCheckOutDate(e.target.value)}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono font-medium text-slate-900 focus:bg-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none transition-all touch-target cursor-pointer"

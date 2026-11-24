@@ -190,6 +190,8 @@ export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
             <input
               type="number"
               required
+              min="0"
+              step="1"
               value={countedCash}
               onChange={(e) => setCountedCash(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none focus:border-slate-900"
@@ -231,6 +233,7 @@ export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
             <textarea
               rows="2"
               required={hasDiscrepancy}
+              maxLength={1000}
               value={shiftNotes}
               onChange={(e) => setShiftNotes(e.target.value)}
               placeholder={

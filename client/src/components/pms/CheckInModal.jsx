@@ -302,6 +302,7 @@ export default function CheckInModal({
             <input
               type="text"
               required
+              maxLength={50}
               value={rfidKey}
               onChange={(e) => setRfidKey(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none focus:border-slate-900"

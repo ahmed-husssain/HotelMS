@@ -246,6 +246,7 @@ export default function RegisterPage() {
               <input
                 id="reg-name"
                 type="text"
+                maxLength={100}
                 placeholder="e.g. Tariq Khan"
                 value={name}
                 onChange={(e) => handleChange('name', e.target.value)}
@@ -275,6 +276,7 @@ export default function RegisterPage() {
                 <input
                   id="reg-email"
                   type="email"
+                  maxLength={120}
                   placeholder="guest@stayza.com"
                   value={email}
                   onChange={(e) => handleChange('email', e.target.value)}
@@ -302,6 +304,7 @@ export default function RegisterPage() {
                 <input
                   id="reg-phone"
                   type="tel"
+                  maxLength={20}
                   placeholder="+92 300 1234567"
                   value={phone}
                   onChange={(e) => handleChange('phone', e.target.value)}
@@ -332,6 +335,8 @@ export default function RegisterPage() {
                 <input
                   id="reg-pass"
                   type="password"
+                  minLength={6}
+                  maxLength={100}
                   autoComplete="new-password"
                   placeholder="Min 6 characters"
                   value={password}
@@ -360,6 +365,8 @@ export default function RegisterPage() {
                 <input
                   id="reg-confirm"
                   type="password"
+                  minLength={6}
+                  maxLength={100}
                   autoComplete="new-password"
                   placeholder="Re-type password"
                   value={confirmPassword}

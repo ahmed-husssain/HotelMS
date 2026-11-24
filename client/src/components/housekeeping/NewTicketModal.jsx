@@ -181,6 +181,7 @@ export default function NewTicketModal({ isOpen, onClose, rooms = [], onSubmitTi
             <textarea
               required
               rows="3"
+              maxLength={1000}
               value={issue}
               onChange={(e) => setIssue(e.target.value)}
               placeholder="Describe malfunction, leaking fixture, or calibration error..."
@@ -194,8 +195,10 @@ export default function NewTicketModal({ isOpen, onClose, rooms = [], onSubmitTi
             </label>
             <input
               type="text"
+              maxLength={100}
               value={assignedTo}
               onChange={(e) => setAssignedTo(e.target.value)}
+              placeholder="e.g. Chief Engineer Bilal"
               className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"
             />
           </div>

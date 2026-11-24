@@ -1903,6 +1903,7 @@ export default function GuestPortalPage() {
                       <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1">Private Comments for General Manager</label>
                       <textarea
                         rows={3}
+                        maxLength={1000}
                         value={reviewComment}
                         onChange={(e) => setReviewComment(e.target.value)}
                         placeholder="Share any special memories or recommendations regarding your stay..."

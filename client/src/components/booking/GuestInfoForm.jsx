@@ -76,6 +76,7 @@ export default function GuestInfoForm({
           <input
             type="text"
             required
+            maxLength={100}
             value={guestDossier.fullName}
             onChange={handleNameChange}
             onBlur={() => handleBlur('fullName')}
@@ -106,6 +107,7 @@ export default function GuestInfoForm({
           <input
             type="text"
             required
+            maxLength={15}
             value={guestDossier.identificationNumber}
             onChange={handleCNICChange}
             onBlur={() => handleBlur('identificationNumber')}
@@ -131,6 +133,7 @@ export default function GuestInfoForm({
           <input
             type="email"
             required
+            maxLength={120}
             value={guestDossier.email}
             onChange={(e) => setGuestDossier((prev) => ({ ...prev, email: e.target.value }))}
             onBlur={() => handleBlur('email')}
@@ -156,6 +159,7 @@ export default function GuestInfoForm({
           <input
             type="tel"
             required
+            maxLength={20}
             value={guestDossier.phone}
             onChange={handlePhoneChange}
             onBlur={() => handleBlur('phone')}
@@ -186,6 +190,8 @@ export default function GuestInfoForm({
             </div>
             <input
               type="password"
+              minLength={6}
+              maxLength={100}
               value={guestDossier.password || ''}
               onChange={(e) => setGuestDossier((prev) => ({ ...prev, password: e.target.value }))}
               placeholder="Min. 6 characters (for digital key & in-suite controls)"
@@ -205,6 +211,7 @@ export default function GuestInfoForm({
         </label>
         <textarea
           rows={2}
+          maxLength={500}
           value={guestDossier.specialRequests}
           onChange={(e) => setGuestDossier((prev) => ({ ...prev, specialRequests: e.target.value }))}
           placeholder="e.g. Quiet upper floor, feather pillows, estimated arrival time 15:00"

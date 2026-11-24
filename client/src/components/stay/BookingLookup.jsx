@@ -122,6 +122,7 @@ export default function BookingLookup({
                 </label>
                 <input
                   type="text"
+                  maxLength={30}
                   value={bookingCode}
                   onChange={(e) => {
                     setBookingCode(e.target.value)
@@ -147,6 +148,7 @@ export default function BookingLookup({
                 </label>
                 <input
                   type="email"
+                  maxLength={120}
                   value={guestEmailInput}
                   onChange={(e) => setGuestEmailInput(e.target.value)}
                   placeholder="e.g. guest@stayza.com"

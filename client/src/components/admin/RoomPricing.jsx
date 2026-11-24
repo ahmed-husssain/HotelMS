@@ -103,6 +103,9 @@ export default function RoomPricing({
                       <div className="flex items-center gap-2">
                         <input
                           type="number"
+                          required
+                          min="1"
+                          max="10000000"
                           value={newRate}
                           onChange={(e) => setNewRate(e.target.value)}
                           className="w-28 px-2 py-1 bg-white border border-slate-300 rounded-[2px] text-xs font-mono"

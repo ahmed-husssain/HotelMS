@@ -56,6 +56,9 @@ export default function HotelSettings({
             <input
               type="number"
               required
+              min="0"
+              max="100"
+              step="0.1"
               value={taxRate}
               onChange={(e) => setTaxRate(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"
@@ -70,6 +73,9 @@ export default function HotelSettings({
             <input
               type="number"
               required
+              min="0"
+              max="100"
+              step="1"
               value={depositRate}
               onChange={(e) => setDepositRate(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"
@@ -82,7 +88,7 @@ export default function HotelSettings({
               Standard Check-In Hour
             </label>
             <input
-              type="text"
+              type="time"
               required
               value={checkInTime}
               onChange={(e) => setCheckInTime(e.target.value)}
@@ -95,7 +101,7 @@ export default function HotelSettings({
               Standard Check-Out Hour
             </label>
             <input
-              type="text"
+              type="time"
               required
               value={checkOutTime}
               onChange={(e) => setCheckOutTime(e.target.value)}
@@ -110,6 +116,7 @@ export default function HotelSettings({
           </label>
           <textarea
             rows="3"
+            maxLength={2000}
             value={policyNotes}
             onChange={(e) => setPolicyNotes(e.target.value)}
             className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-slate-900 focus:outline-none focus:border-slate-900"

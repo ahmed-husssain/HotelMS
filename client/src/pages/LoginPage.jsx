@@ -238,6 +238,7 @@ export default function LoginPage() {
               <input
                 id="login-email"
                 type="email"
+                maxLength={120}
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => handleEmailChange(e.target.value)}
@@ -267,6 +268,7 @@ export default function LoginPage() {
                 <input
                   id="login-pass"
                   type={showPassword ? 'text' : 'password'}
+                  maxLength={100}
                   autoComplete="current-password"
                   placeholder="••••••••••••"
                   value={password}

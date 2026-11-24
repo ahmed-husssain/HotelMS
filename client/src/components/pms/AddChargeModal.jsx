@@ -58,8 +58,9 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
 
   const handlePostCustom = (e) => {
     e.preventDefault()
-    if (!customItem || !customAmount) return
-    onAddIncidental(selectedRoom.roomNumber, customItem.trim(), Number(customAmount))
+    const amt = Number(customAmount)
+    if (!customItem?.trim() || isNaN(amt) || amt <= 0) return
+    onAddIncidental(selectedRoom.roomNumber, customItem.trim(), amt)
     setCustomItem('')
     setCustomAmount('')
     onClose()
@@ -138,6 +139,8 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
           <div className="grid grid-cols-3 gap-2">
             <input
               type="text"
+              required
+              maxLength={100}
               placeholder="Item description"
               value={customItem}
               onChange={(e) => setCustomItem(e.target.value)}
@@ -145,6 +148,9 @@ export default function AddChargeModal({ isOpen, onClose, selectedRoom, onAddInc
             />
             <input
               type="number"
+              required
+              min="1"
+              max="1000000"
               placeholder="PKR Amount"
               value={customAmount}
               onChange={(e) => setCustomAmount(e.target.value)}
