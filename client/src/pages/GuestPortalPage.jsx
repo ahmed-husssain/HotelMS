@@ -822,8 +822,8 @@ export default function GuestPortalPage() {
       {/* 1. TOP ESSENTIAL APP DOCK (ZERO CLUTTER, 44PX TARGETS)        */}
       {/* ============================================================== */}
       <header className="shrink-0 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80 z-40">
-        {/* Mobile Header (<640px) */}
-        <div className="sm:hidden">
+        {/* Mobile Header (<768px) */}
+        <div className="md:hidden">
           {/* Mobile Tier 1: Brand & Guest Identity */}
           <div className="px-4 py-2.5 flex items-center justify-between border-b border-slate-200/50">
             <div className="flex items-center gap-2.5">
@@ -864,7 +864,7 @@ export default function GuestPortalPage() {
 
           {/* Mobile Tier 2: Suite Status, DND Switch, Bill */}
           {isUnlocked && (
-            <div className="px-4 py-1.5 bg-slate-50/90 flex items-center justify-between gap-2">
+            <div className="px-4 py-2 bg-slate-50/90 flex items-center justify-between gap-2 border-b border-slate-200/40">
               <div className="flex items-center gap-1.5 font-mono text-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
                 <span className="font-bold text-slate-900 uppercase tracking-wide">
@@ -873,7 +873,7 @@ export default function GuestPortalPage() {
               </div>
 
               {/* Apple-Style Fluid DND Spring Switch */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
                   {isDND ? 'Privacy On' : 'Privacy Off'}
                 </span>
@@ -903,7 +903,7 @@ export default function GuestPortalPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab('folio')}
-                className="py-1 px-2.5 bg-slate-900 text-[#FFF0CA] font-mono text-[11px] font-bold uppercase tracking-wider rounded-[2px] active:scale-95 transition-all shadow-2xs cursor-pointer"
+                className="py-1.5 px-3 bg-slate-900 text-[#FFF0CA] font-mono text-[11px] font-bold uppercase tracking-wider rounded-[2px] active:scale-95 transition-all shadow-2xs cursor-pointer"
               >
                 PKR {Math.round(financials.totalStayAmount / 1000)}k &rarr;
               </button>
@@ -911,8 +911,8 @@ export default function GuestPortalPage() {
           )}
         </div>
 
-        {/* Desktop Header (>=640px) */}
-        <div className="hidden sm:flex max-w-7xl mx-auto px-4 sm:px-8 py-2 sm:py-2.5 items-center justify-between gap-3">
+        {/* Desktop Header (>=768px) */}
+        <div className="hidden md:flex max-w-7xl mx-auto px-4 sm:px-8 py-2 sm:py-2.5 items-center justify-between gap-3">
           {/* Left: Return & Brand */}
           <div className="flex items-center gap-3 sm:gap-4">
             <Link
@@ -1294,16 +1294,16 @@ export default function GuestPortalPage() {
                             key={preset.id}
                             type="button"
                             onClick={() => handleSetClimatePreset(preset.id, preset.temp)}
-                            className={`min-h-[52px] py-2 px-1 flex flex-col items-center justify-center text-center font-mono rounded-lg border transition-all cursor-pointer active:scale-95 ${
+                            className={`min-h-[58px] py-2 px-1.5 flex flex-col items-center justify-center text-center font-mono rounded-lg border transition-all cursor-pointer active:scale-95 ${
                               isSelected
                                 ? 'bg-slate-900 text-[#FFF0CA] border-slate-900 shadow-xs'
-                                : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
+                                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
                             }`}
                           >
-                            <span className="text-[11px] font-semibold leading-tight block truncate w-full text-center">
+                            <span className="text-[11px] font-bold leading-tight block text-center">
                               {preset.label}
                             </span>
-                            <span className={`text-[10px] mt-0.5 block ${isSelected ? 'text-amber-300' : 'text-slate-400'}`}>
+                            <span className={`text-[10px] font-bold mt-1 block ${isSelected ? 'text-amber-300' : 'text-emerald-800'}`}>
                               {preset.temp}°C
                             </span>
                           </button>

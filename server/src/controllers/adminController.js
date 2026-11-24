@@ -426,13 +426,6 @@ async function deleteStaffAccount(req, res) {
     res.status(500).json({ success: false, message: error.message })
   }
 }
-      data: staff,
-    })
-  } catch (error) {
-    console.error('[AdminController.toggleStaffStatus] Error:', error.message)
-    res.status(500).json({ success: false, message: error.message })
-  }
-}
 
 // @desc    Get Guest Directory with aggregated lifetime spend & stays
 // @route   GET /api/admin/guests
@@ -604,12 +597,6 @@ module.exports = {
   toggleStaffStatus,
   updateStaffAccount,
   deleteStaffAccount,
-  getGuestDirectory,
-  updateRoomRate,
-  getAuditLogs,
-}
-  createStaffAccount,
-  toggleStaffStatus,
   getGuestDirectory,
   updateRoomRate,
   getAuditLogs,
