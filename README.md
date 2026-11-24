@@ -210,10 +210,10 @@ The seed script (`npm run seed`) provisions pre-configured accounts for testing:
 
 | Role | Email | Password | Access Route |
 | :--- | :--- | :--- | :--- |
-| **General Manager (Admin)** | `admin@stayza.pk` | `Admin123!` | `/admin` |
-| **Front Desk Receptionist** | `receptionist@stayza.pk` | `Staff123!` | `/front-desk` |
-| **Housekeeping Lead** | `housekeeping@stayza.pk` | `Staff123!` | `/housekeeping` |
-| **Registered Guest** | `guest@luxury.pk` | `Guest123!` | `/my-stay` |
+| **General Manager (Admin)** | `admin@stayza.com` | `Password123!` | `/admin` |
+| **Front Desk Receptionist** | `reception@stayza.com` | `Password123!` | `/front-desk` |
+| **Housekeeping Lead** | `cleaning@stayza.com` | `Password123!` | `/housekeeping` |
+| **Registered Guest** | `guest@stayza.com` | `Password123!` | `/my-stay` |
 
 *(You can also register a new guest account directly at `/register`)*
 

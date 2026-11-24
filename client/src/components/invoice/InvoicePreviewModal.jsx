@@ -178,8 +178,8 @@ Balance: PKR ${balanceDue.toLocaleString()}`
                 STAYZA HOTEL &amp; RESORT
               </h1>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                Karachi &ndash; Thatta Coastal Road, Sindh, Pakistan<br />
-                Phone: +92 21 3890 0000 &bull; Email: concierge@stayza.pk
+                Beachfront Avenue, Coastal Highway, Thatta, Sindh, Pakistan<br />
+                Phone: +92 21 3890 0000 &bull; Email: hello@stayza.com
               </p>
             </div>
 
@@ -335,7 +335,7 @@ Balance: PKR ${balanceDue.toLocaleString()}`
 
           {/* Footer */}
           <div className="pt-2 text-center text-[10px] text-slate-400">
-            Stayza Hotel &amp; Resort &bull; Coastal Road, Sindh, Pakistan &bull; www.stayza.pk
+            Stayza Hotel &amp; Resort &bull; Beachfront Avenue, Thatta, Sindh &bull; www.stayza.com
           </div>
         </div>
       </div>

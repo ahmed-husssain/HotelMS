@@ -40,8 +40,8 @@ function buildPDFDocument(booking, payments = []) {
   // 1. Header (Brand & Document Details)
   doc.fillColor(primaryColor).fontSize(18).font('Helvetica-Bold').text('STAYZA HOTEL & RESORT', 40, 40)
   doc.fontSize(9).font('Helvetica').fillColor(mutedColor)
-    .text('Karachi - Thatta Coastal Road, Sindh, Pakistan', 40, 64)
-    .text('Phone: +92 21 3890 0000 | Email: concierge@stayza.pk', 40, 77)
+    .text('Beachfront Avenue, Coastal Highway, Thatta, Sindh, Pakistan', 40, 64)
+    .text('Phone: +92 21 3890 0000 | Email: hello@stayza.com', 40, 77)
 
   // Top Right Info Block
   doc.fontSize(12).font('Helvetica-Bold').fillColor(primaryColor)
@@ -62,7 +62,7 @@ function buildPDFDocument(booking, payments = []) {
   doc.fontSize(9).font('Helvetica').fillColor(primaryColor)
     .text(`Name: ${booking.guestDetails?.name || 'In-House Guest'}`, 55, 137)
     .text(`Phone: ${booking.guestDetails?.phone || '+92 300 0000000'}`, 55, 151)
-    .text(`Email: ${booking.guestDetails?.email || 'guest@stayza.pk'}`, 55, 165)
+    .text(`Email: ${booking.guestDetails?.email || 'guest@stayza.com'}`, 55, 165)
 
   // Right Column: Booking Details
   const checkInStr = booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Flexible'
@@ -174,19 +174,19 @@ function buildPDFDocument(booking, payments = []) {
     doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
       .text('This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.', 55, noticeY + 26)
       .text(`Booking Reference: ${booking.bookingReference} • Departure Date: ${new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}`, 55, noticeY + 38)
-      .text('Thank you for choosing Stayza Hotel & Resort. For accounting inquiries, email concierge@stayza.pk', 55, noticeY + 50)
+      .text('Thank you for choosing Stayza Hotel & Resort. For accounting inquiries, email hello@stayza.com', 55, noticeY + 50)
   } else {
     doc.fontSize(9).font('Helvetica-Bold').fillColor(accentGreen)
       .text('[ VERIFIED RESERVATION ]  30% Online Advance Deposit Confirmed', 55, noticeY + 12)
     doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
       .text('This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.', 55, noticeY + 26)
       .text(`Please present this document or booking code ${booking.bookingReference} upon arrival at the Front Desk.`, 55, noticeY + 38)
-      .text('Thank you for choosing Stayza Hotel & Resort. For assistance, email concierge@stayza.pk', 55, noticeY + 50)
+      .text('Thank you for choosing Stayza Hotel & Resort. For assistance, email hello@stayza.com', 55, noticeY + 50)
   }
 
   // 6. Footer
   doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
-    .text('Stayza Hotel & Resort • Coastal Road, Sindh, Pakistan • www.stayza.pk', 40, 785, { align: 'center', width: 515 })
+    .text('Stayza Hotel & Resort • Beachfront Avenue, Thatta, Sindh • www.stayza.com', 40, 785, { align: 'center', width: 515 })
 
   return doc
 }

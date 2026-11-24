@@ -86,7 +86,7 @@ function wrapEmailLayout({ preheader, contentHtml }) {
           STAYZA HOTEL &amp; RESORT
         </div>
         <div style="color: #94A3B8; font-size: 11px; margin-top: 4px; letter-spacing: 0.04em;">
-          Karachi &ndash; Thatta Coastal Road, Sindh, Pakistan
+          Beachfront Avenue, Coastal Highway, Thatta, Sindh, Pakistan
         </div>
       </td>
     </tr>
@@ -99,8 +99,8 @@ function wrapEmailLayout({ preheader, contentHtml }) {
     <!-- Footer -->
     <tr>
       <td style="background-color: #F8FAFC; border-top: 1px solid #E2E8F0; padding: 20px 32px; text-align: center; font-size: 11px; color: #94A3B8; line-height: 1.5;">
-        Stayza Hotel &amp; Resort &bull; Coastal Road, Sindh, Pakistan<br>
-        Direct: +92 21 3890 0000 &bull; Email: reservations@stayza.pk &bull; Web: www.stayza.pk<br>
+        Stayza Hotel &amp; Resort &bull; Beachfront Avenue, Thatta, Sindh<br>
+        Direct: +92 21 3890 0000 &bull; Email: hello@stayza.com &bull; Web: www.stayza.com<br>
         NTN: 9821481-2 | STRN: 17-00-9821-001
       </td>
     </tr>
@@ -115,7 +115,7 @@ function wrapEmailLayout({ preheader, contentHtml }) {
 async function sendBookingConfirmationEmail(booking, payment) {
   try {
     const recipientEmail = booking.guestDetails?.email
-    if (!recipientEmail || recipientEmail === 'guest@stayza.pk') {
+    if (!recipientEmail || recipientEmail === 'guest@stayza.com' || recipientEmail === 'guest@stayza.pk') {
       console.log(`[EmailService] Skipping booking confirmation: No real guest email on record (${recipientEmail})`)
       return { success: false, reason: 'NO_RECIPIENT_EMAIL' }
     }
@@ -227,7 +227,7 @@ async function sendBookingConfirmationEmail(booking, payment) {
       contentHtml,
     })
 
-    const sender = process.env.SMTP_FROM || `"Stayza Hotel & Resort" <${process.env.SMTP_USER || 'reservations@stayza.pk'}>`
+    const sender = process.env.SMTP_FROM || `"Stayza Hotel & Resort" <${process.env.SMTP_USER || 'hello@stayza.com'}>`
 
     const info = await transporter.sendMail({
       from: sender,
@@ -262,7 +262,7 @@ async function sendBookingConfirmationEmail(booking, payment) {
 async function sendCheckoutInvoiceEmail(booking, payments = []) {
   try {
     const recipientEmail = booking.guestDetails?.email
-    if (!recipientEmail || recipientEmail === 'guest@stayza.pk') {
+    if (!recipientEmail || recipientEmail === 'guest@stayza.com' || recipientEmail === 'guest@stayza.pk') {
       console.log(`[EmailService] Skipping checkout invoice: No real guest email on record (${recipientEmail})`)
       return { success: false, reason: 'NO_RECIPIENT_EMAIL' }
     }
@@ -372,7 +372,7 @@ async function sendCheckoutInvoiceEmail(booking, payments = []) {
       contentHtml,
     })
 
-    const sender = process.env.SMTP_FROM || `"Stayza Hotel & Resort" <${process.env.SMTP_USER || 'concierge@stayza.pk'}>`
+    const sender = process.env.SMTP_FROM || `"Stayza Hotel & Resort" <${process.env.SMTP_USER || 'hello@stayza.com'}>`
 
     const info = await transporter.sendMail({
       from: sender,

@@ -128,9 +128,12 @@ export default function Footer() {
               <a href="tel:+922138900000" className="inline-flex items-center min-h-[28px] py-1 font-semibold text-[#121619] hover:text-amber-800 transition-colors">
                 +92 21 3890 0000
               </a>
-              <a href="mailto:concierge@stayza.pk" className="inline-flex items-center min-h-[28px] py-1 text-[11px] text-[#44403C] hover:text-[#121619] transition-colors">
-                concierge@stayza.pk
+              <a href="mailto:hello@stayza.com" className="inline-flex items-center min-h-[28px] py-1 text-[11px] text-[#44403C] hover:text-[#121619] transition-colors">
+                hello@stayza.com
               </a>
+              <span className="text-[11px] text-[#78716C] leading-normal pt-1 font-sans">
+                Beachfront Avenue, Coastal Highway, Thatta, Sindh, Pakistan
+              </span>
             </div>
           </div>
 
