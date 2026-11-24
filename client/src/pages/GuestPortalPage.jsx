@@ -148,7 +148,6 @@ const DINING_MENU = [
     price: 2400,
     timeEst: '25 mins',
     tag: 'Artisanal Brioche',
-    image: '/Images/dining/club-sandwich.webp',
   },
   {
     id: 'dining-2',
@@ -158,7 +157,6 @@ const DINING_MENU = [
     price: 4800,
     timeEst: '35 mins',
     tag: 'Wild Catch',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
   },
   {
     id: 'dining-3',
@@ -168,7 +166,6 @@ const DINING_MENU = [
     price: 3200,
     timeEst: '20 mins',
     tag: 'Morning Bakery',
-    image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=700&q=80',
   },
   {
     id: 'dining-4',
@@ -178,7 +175,6 @@ const DINING_MENU = [
     price: 1600,
     timeEst: '15 mins',
     tag: 'Seasonal Organic',
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=700&q=80',
   },
   {
     id: 'dining-5',
@@ -188,7 +184,6 @@ const DINING_MENU = [
     price: 1200,
     timeEst: '10 mins',
     tag: 'Single Origin',
-    image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=700&q=80',
   },
 ]
 
@@ -1534,55 +1529,44 @@ export default function GuestPortalPage() {
                   return (
                     <div
                       key={item.id}
-                      className="bg-white border border-slate-200/90 rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
+                      className="bg-white border border-slate-200/90 rounded-xl p-6 shadow-xs hover:border-slate-300 hover:shadow-sm transition-all flex flex-col justify-between space-y-5"
                     >
-                      <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                        <div className="absolute top-3 inset-x-3 flex items-center justify-between">
-                          {item.tag && (
-                            <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md text-[#FFF0CA] font-mono text-[10px] font-bold rounded-lg border border-white/10 uppercase tracking-wider">
-                              {item.tag}
-                            </span>
-                          )}
-                          <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-slate-200 font-mono text-[10px] font-semibold rounded-lg ml-auto">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="px-2.5 py-1 bg-amber-50 text-amber-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-md border border-amber-200/80">
+                            {item.tag}
+                          </span>
+                          <span className="font-mono text-xs text-slate-500">
                             {item.timeEst}
                           </span>
                         </div>
-                      </div>
 
-                      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                        <div className="space-y-1.5">
-                          <div className="flex items-baseline justify-between gap-2">
-                            <h3 className="font-serif-grand text-lg text-slate-900">
-                              {item.title}
-                            </h3>
-                            <span className="font-mono text-xs font-bold text-slate-900 shrink-0">
-                              PKR {item.price.toLocaleString()}
-                            </span>
-                          </div>
-                          <p className="text-xs text-slate-600 leading-relaxed">
-                            {item.description}
-                          </p>
+                        <div className="flex items-baseline justify-between gap-2 pt-1">
+                          <h3 className="font-serif-grand text-lg text-slate-900">
+                            {item.title}
+                          </h3>
+                          <span className="font-mono text-xs font-bold text-slate-900 shrink-0">
+                            PKR {item.price.toLocaleString()}
+                          </span>
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={() => handleRequestService(item)}
-                          disabled={isOrdered}
-                          className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
-                            isOrdered
-                              ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
-                              : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
-                          }`}
-                        >
-                          {isOrdered ? 'Added to Room Bill ✓' : `Order to ${currentBooking.roomNumber || 'Suite 301'} →`}
-                        </button>
+                        <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                          {item.description}
+                        </p>
                       </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleRequestService(item)}
+                        disabled={isOrdered}
+                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
+                          isOrdered
+                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
+                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
+                        }`}
+                      >
+                        {isOrdered ? 'Added to Room Bill ✓' : `Order to ${currentBooking.roomNumber || 'Suite 301'} →`}
+                      </button>
                     </div>
                   )
                 })}
