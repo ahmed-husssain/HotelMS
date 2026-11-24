@@ -97,68 +97,16 @@ export default function PaymentVerifyPage() {
             }, 1000)
           }
         } else {
-          throw new Error(response.message || 'Payment verification could not be completed.')
+          throw new Error(response.message || 'Payment verification could not be completed with Safepay.')
         }
       } catch (err) {
-        console.warn('[PaymentVerify] Backend handshake unavailable, completing in resilient client mode:', err.message)
-
-        // Resilient Fallback: Retrieve session data passed via router state or sessionStorage
-        const savedSession =
-          location.state?.bookingSession ||
-          (() => {
-            try {
-              return JSON.parse(sessionStorage.getItem('stayza_checkout_session') || '{}')
-            } catch {
-              return {}
-            }
-          })()
-
-        const roomNumber = savedSession.roomNumber || (bookingRef.match(/ST-(\d+)/) || [])[1] || '301'
-        const suiteName = savedSession.residence?.name || `Suite ${roomNumber}`
-        const total = savedSession.total || savedSession.totalAmount || 497200
-        const advance = savedSession.advance || savedSession.advanceAmount || Math.round(total * 0.3)
-        const balance = total - advance
-
-        const clientBooking = {
-          bookingRef: bookingRef || savedSession.bookingRef || `ST-${roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`,
-          roomNumber,
-          residence: savedSession.residence || {
-            roomNumber,
-            name: suiteName,
-            tier: 'Presidential Penthouse',
-            nightlyRate: Math.round(total / (savedSession.nights || 2)),
-          },
-          nights: savedSession.nights || 2,
-          guestDossier: savedSession.guestDossier || {
-            fullName: 'Guest',
-            email: 'guest@stayza.com',
-            phone: '+92 300 0000000',
-          },
-          total,
-          advance,
-          balance,
-          sindhTax: savedSession.sindhTax || Math.round(total * 0.13),
-          receiptNumber: `RCP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
-          safepayRef: trackerToken || `SPF-${Date.now()}`,
-          paymentMethod: 'SAFEPAY_ONLINE',
-          createdAt: new Date().toISOString(),
-        }
-
-        if (linkReservationCode) {
-          linkReservationCode(clientBooking.bookingRef, clientBooking.roomNumber)
-        }
-        if (createReservation) {
-          createReservation(clientBooking)
-        }
-
+        console.error('[PaymentVerify] Verification error:', err.message)
         if (isMounted) {
-          setStatus('success')
-          setTimeout(() => {
-            navigate('/confirmation', {
-              state: { booking: clientBooking },
-              replace: true,
-            })
-          }, 1000)
+          setStatus('error')
+          setErrorMessage(
+            err.message ||
+              'Payment could not be verified with Safepay. If funds were deducted, please contact hotel concierge.'
+          )
         }
       }
     }

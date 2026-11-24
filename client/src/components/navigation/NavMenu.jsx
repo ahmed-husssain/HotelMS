@@ -46,6 +46,8 @@ export default function NavMenu({
           <img
             src={activePreview.image}
             alt={activePreview.title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transition-all duration-700 filter brightness-[0.88] scale-100"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-10 lg:p-14 text-white">

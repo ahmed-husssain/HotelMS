@@ -56,7 +56,7 @@ export default function Navbar({ onOpenDrawer }) {
         tag: 'SUITE 301',
         title: 'The Cliffside Suite',
         subtitle: 'Suspended above the Arabian Sea with private infinity plunge pool and basalt stone courtyard.',
-        image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1400&q=85',
+        image: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1795019369/hotel-suites/suite-301/suite-301-bedroom.webp',
       },
     },
     {
@@ -69,7 +69,7 @@ export default function Navbar({ onOpenDrawer }) {
         tag: 'THE ESTATE',
         title: 'Sindh Coast Sanctuary',
         subtitle: '42 secluded oceanfront acres featuring cliffside architecture, farm-to-table dining, and mineral thermal springs.',
-        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=85',
+        image: '/Images/estate/clifftop-sanctuary.webp',
       },
     },
     {
@@ -82,7 +82,7 @@ export default function Navbar({ onOpenDrawer }) {
         tag: 'GUEST PORTAL',
         title: 'Your Reservation & Digital Key',
         subtitle: 'Manage your active reservation, request in-room dining, view your live bill, and access your digital key.',
-        image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85',
+        image: '/Images/estate/complete-privacy.webp',
       },
     },
   ], [])

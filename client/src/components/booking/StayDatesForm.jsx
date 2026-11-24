@@ -21,6 +21,7 @@ export default function StayDatesForm({
   isAvailable,
   isCheckingAvailability,
   roomNumber = '301',
+  bookedRanges = [],
 }) {
   const todayStr = new Date().toISOString().split('T')[0]
   const maxDateStr = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
@@ -98,6 +99,40 @@ export default function StayDatesForm({
           />
         </div>
       </div>
+
+      {/* Live Unavailable Alert Banner */}
+      {!isAvailable && !isCheckingAvailability && (
+        <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-lg text-xs font-mono text-rose-800 flex items-start gap-2.5 animate-in fade-in duration-200">
+          <svg className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+          </svg>
+          <div>
+            <strong className="font-bold block">Suite {roomNumber} is already reserved for these dates.</strong>
+            <span className="text-[11px] text-rose-700">Please choose different stay dates or select another suite from our collection.</span>
+          </div>
+        </div>
+      )}
+
+      {/* Booked Ranges Note */}
+      {bookedRanges && bookedRanges.length > 0 && (
+        <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-lg text-xs font-mono text-amber-900 space-y-1">
+          <div className="font-semibold flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
+            <span>Currently Reserved Dates for Suite {roomNumber}:</span>
+          </div>
+          <div className="flex flex-wrap gap-2 pt-0.5">
+            {bookedRanges.map((range, idx) => {
+              const inStr = new Date(range.checkIn).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+              const outStr = new Date(range.checkOut).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+              return (
+                <span key={idx} className="bg-white/80 border border-amber-300/60 px-2 py-0.5 rounded text-[11px] font-medium">
+                  {inStr} &ndash; {outStr} (Reserved)
+                </span>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Quick Duration Selector Pills */}
       <div>

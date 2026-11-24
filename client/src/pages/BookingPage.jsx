@@ -14,6 +14,7 @@ import {
   createPaymentSession,
   cancelPaymentSession,
   fetchRoomQuote,
+  fetchRoomDetails,
 } from '../services/api'
 
 export default function BookingPage() {
@@ -74,6 +75,27 @@ export default function BookingPage() {
   // 3. Live Availability Verification against MongoDB
   const [isAvailable, setIsAvailable] = useState(true)
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false)
+  const [bookedRanges, setBookedRanges] = useState([])
+
+  // Load upcoming booked ranges for the active suite across all 7 residences
+  useEffect(() => {
+    let isCurrent = true
+    const loadSuiteRanges = async () => {
+      if (!selectedResidence?.roomNumber) return
+      try {
+        const res = await fetchRoomDetails(selectedResidence.roomNumber)
+        if (isCurrent && res?.data?.bookedRanges) {
+          setBookedRanges(res.data.bookedRanges)
+        }
+      } catch (err) {
+        console.warn('[Booking] Could not fetch booked ranges:', err.message)
+      }
+    }
+    loadSuiteRanges()
+    return () => {
+      isCurrent = false
+    }
+  }, [selectedResidence?.roomNumber])
 
   useEffect(() => {
     let isCurrent = true
@@ -91,7 +113,7 @@ export default function BookingPage() {
         }
       } catch (err) {
         console.warn('[Booking] Live availability check notice:', err.message)
-        if (isCurrent) setIsAvailable(true)
+        if (isCurrent) setIsAvailable(false)
       } finally {
         if (isCurrent) setIsCheckingAvailability(false)
       }
@@ -276,30 +298,14 @@ export default function BookingPage() {
 
       setActiveCheckoutSession(sessionData)
     } catch (apiErr) {
-      console.warn('[Booking] API issue:', apiErr.message)
-      const fallbackRef = `TH-${selectedResidence.roomNumber}-${Math.floor(1000 + Math.random() * 9000)}`
-      const trackerToken = `track_${fallbackRef.toLowerCase()}_${Date.now()}`
-      const checkoutUrl = `https://sandbox.api.getsafepay.com/checkout?env=sandbox&beacon=${trackerToken}&order_id=${encodeURIComponent(
-        fallbackRef
-      )}&source=magento2&webhooks=true&redirect_url=${encodeURIComponent(
-        window.location.origin + '/payment/verify?ref=' + fallbackRef
-      )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve?cancelled=true&ref=' + fallbackRef)}`
-
-      const fallbackSession = {
-        bookingRef: fallbackRef,
-        trackerToken,
-        checkoutUrl,
-        advanceAmount: advanceDeposit,
-        totalAmount: totalValuation,
-        currency: 'PKR',
-        roomNumber: selectedResidence.roomNumber,
-        residence: selectedResidence,
-        nights,
-        guestDossier,
-        sindhTax,
-      }
-
-      setActiveCheckoutSession(fallbackSession)
+      console.error('[Booking] Hold creation failed:', apiErr.message)
+      setIsAvailable(false)
+      setFormErrors((prev) => ({
+        ...prev,
+        submit:
+          apiErr.message ||
+          'This suite is no longer available for the selected dates. Please choose another date or suite.',
+      }))
     } finally {
       setIsProcessing(false)
     }
@@ -446,6 +452,7 @@ export default function BookingPage() {
               isAvailable={isAvailable}
               isCheckingAvailability={isCheckingAvailability}
               roomNumber={selectedResidence.roomNumber}
+              bookedRanges={bookedRanges}
             />
 
             <GuestInfoForm
