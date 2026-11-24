@@ -387,12 +387,12 @@
               "script": {
                 "exec": [
                   "pm.test(\"Quote returns 200\", () => pm.response.to.have.status(200));",
-                  "const data = pm.response.json().data;",
+                  "var qd = pm.response.json().data;",
                   "pm.test(\"13% Sindh tax calculated correctly\", () => {",
-                  "  pm.expect(data.pricing.taxPercent).to.eql(13);",
+                  "  pm.expect(qd.pricing.taxPercent).to.eql(13);",
                   "});",
                   "pm.test(\"30% advance deposit calculated correctly\", () => {",
-                  "  pm.expect(data.pricing.advancePercent).to.eql(30);",
+                  "  pm.expect(qd.pricing.advancePercent).to.eql(30);",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -663,7 +663,7 @@
               "script": {
                 "exec": [
                   "pm.test(\"Housekeeping dashboard returns 200\", () => pm.response.to.have.status(200));",
-                  "pm.expect(pm.response.json().data.rooms).to.be.an(\"array\");"
+                  "pm.expect(pm.response.json().data.inventory).to.be.an(\"array\");"
                 ],
                 "type": "text/javascript"
               }
