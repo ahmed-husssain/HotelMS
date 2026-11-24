@@ -1,0 +1,820 @@
+{
+  "info": {
+    "_postman_id": "c8271a9e-8390-4e20-94a1-stayzahms001",
+    "name": "Stayza LuxuryStay HMS — Complete API Collection",
+    "description": "Production API testing suite for Stayza Hotel Management System (HMS), covering Zero-Trust pricing, 5-minute atomic holds, Safepay advance deposits, Front Desk PMS operations, Housekeeping turnovers, and GM Admin governance.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://hotel-ms-mu.vercel.app/api",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "receptionToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "housekeepingToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "activeBookingRef",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. System & Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"API Status is OPERATIONAL\", () => pm.expect(pm.response.json().status).to.eql(\"OPERATIONAL\"));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "API Manifest & Endpoints Index",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Manifest has endpoints index\", () => pm.expect(pm.response.json().endpoints).to.be.an(\"object\"));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02. Authentication & Authorization",
+      "item": [
+        {
+          "name": "Login as General Manager (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@stayza.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Admin login succeeds with 200\", () => pm.response.to.have.status(200));",
+                  "const res = pm.response.json();",
+                  "pm.expect(res.data.user.role).to.eql(\"admin\");",
+                  "pm.collectionVariables.set(\"adminToken\", res.data.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login as Receptionist (Front Desk)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"reception@stayza.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Receptionist login succeeds with 200\", () => pm.response.to.have.status(200));",
+                  "const res = pm.response.json();",
+                  "pm.expect(res.data.user.role).to.eql(\"receptionist\");",
+                  "pm.collectionVariables.set(\"receptionToken\", res.data.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login as Housekeeper",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cleaning@stayza.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Housekeeping login succeeds with 200\", () => pm.response.to.have.status(200));",
+                  "const res = pm.response.json();",
+                  "pm.expect(res.data.user.role).to.eql(\"housekeeping\");",
+                  "pm.collectionVariables.set(\"housekeepingToken\", res.data.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify Auth Profile (GET /auth/me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Auth profile matches logged in user\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data.role).to.eql(\"admin\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03. Suite Inventory & Availability",
+      "item": [
+        {
+          "name": "Get All Published Suites",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Suites list returns 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Total suites equals 7\", () => pm.expect(pm.response.json().count).to.eql(7));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filter Suites by Date Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms?checkIn=2026-12-01&checkOut=2026-12-05",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms"
+              ],
+              "query": [
+                {
+                  "key": "checkIn",
+                  "value": "2026-12-01"
+                },
+                {
+                  "key": "checkOut",
+                  "value": "2026-12-05"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Filter returns 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"isFilteredByDates is true\", () => pm.expect(pm.response.json().isFilteredByDates).to.be.true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Single Suite Details with Booked Ranges (Suite 301)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/301",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                "301"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Suite 301 details returned\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"bookedRanges array exists\", () => pm.expect(pm.response.json().data.bookedRanges).to.be.an(\"array\"));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04. Bookings & Zero-Trust Pricing Engine",
+      "item": [
+        {
+          "name": "Get Server-Side Verified Price Quote",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": \"301\",\n  \"checkInDate\": \"2026-12-01\",\n  \"checkOutDate\": \"2026-12-03\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings/quote",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "quote"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Quote returns 200\", () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json().data;",
+                  "pm.test(\"13% Sindh tax calculated correctly\", () => {",
+                  "  pm.expect(data.pricing.taxPercent).to.eql(13);",
+                  "});",
+                  "pm.test(\"30% advance deposit calculated correctly\", () => {",
+                  "  pm.expect(data.pricing.advancePercent).to.eql(30);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Initiate 5-Minute Pessimistic Hold",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": \"301\",\n  \"checkInDate\": \"2026-12-24\",\n  \"checkOutDate\": \"2026-12-26\",\n  \"guestDetails\": {\n    \"name\": \"Postman VIP Guest\",\n    \"email\": \"postman.vip@stayza.com\",\n    \"phone\": \"+92 300 8899112\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings/hold",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "hold"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Hold created with 201\", () => pm.response.to.have.status(201));",
+                  "const res = pm.response.json();",
+                  "pm.collectionVariables.set(\"activeBookingRef\", res.data.bookingReference);",
+                  "pm.test(\"Hold duration is 5 minutes in future\", () => {",
+                  "  const expires = new Date(res.data.holdExpiresAt).getTime();",
+                  "  pm.expect(expires).to.be.above(Date.now());",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lookup In-Stay Reservation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/lookup?ref=TH-301-9041",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "lookup"
+              ],
+              "query": [
+                {
+                  "key": "ref",
+                  "value": "TH-301-9041"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Lookup returns 200\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data.roomNumber).to.include(\"301\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05. Safepay Gateway & Settlement",
+      "item": [
+        {
+          "name": "Initiate Safepay 30% Advance Checkout Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingReference\": \"{{activeBookingRef}}\",\n  \"successUrl\": \"https://stayza.web.app/payment/verify\",\n  \"cancelUrl\": \"https://stayza.web.app/reserve\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/checkout-session",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "checkout-session"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Checkout session initialized\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data.checkoutUrl).to.include(\"safepay\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancel Checkout & Release Hold",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingReference\": \"{{activeBookingRef}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/cancel-session",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "cancel-session"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Hold released successfully\", () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06. Front Desk Operations (PMS)",
+      "item": [
+        {
+          "name": "Get Live PMS Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{receptionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/staff/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "staff",
+                "dashboard"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"PMS dashboard returns 200\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data.rooms).to.be.an(\"array\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Current Shift Summary & Z-Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{receptionToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/staff/shifts/current",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "staff",
+                "shifts",
+                "current"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Shift summary returns 200\", () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07. Housekeeping & Inventory Operations",
+      "item": [
+        {
+          "name": "Get Housekeeping Turnover Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{housekeepingToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/housekeeping/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "housekeeping",
+                "dashboard"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Housekeeping dashboard returns 200\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data.rooms).to.be.an(\"array\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08. General Manager & Admin Governance",
+      "item": [
+        {
+          "name": "Get Executive Analytics (5 Real Metrics)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/analytics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "analytics"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Executive analytics returns 200\", () => pm.response.to.have.status(200));",
+                  "const d = pm.response.json().data;",
+                  "pm.expect(d.revenue).to.be.an(\"object\");",
+                  "pm.expect(d.occupancy).to.be.an(\"object\");",
+                  "pm.expect(d.pricingYield.adr).to.be.above(0);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Staff Directory",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/staff",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "staff"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Staff directory returns 200\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data).to.be.an(\"array\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Guest CRM Directory",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/guests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "guests"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Guest CRM directory returns 200\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data).to.be.an(\"array\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Central Activity Audit Trail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/audit-logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "audit-logs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Audit logs return 200\", () => pm.response.to.have.status(200));",
+                  "pm.expect(pm.response.json().data).to.be.an(\"array\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
