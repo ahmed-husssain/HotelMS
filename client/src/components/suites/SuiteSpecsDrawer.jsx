@@ -213,7 +213,7 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
 
           {/* Editorial Philosophy Statement */}
           <div className="border-l-2 border-[#D4AF37] pl-4 py-0.5">
-            <p className="font-serif italic text-sm text-slate-700 leading-relaxed font-light">
+            <p className="font-sans-clean italic text-sm text-slate-700 leading-relaxed font-light">
               "{residence.description || 'Spacious oceanfront residence designed for comfort, natural light, and quiet privacy.'}"
             </p>
           </div>

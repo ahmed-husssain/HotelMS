@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -47,6 +47,14 @@ function CasaMomoParallaxImage({
 }) {
   const containerRef = useRef(null)
   const imgRef = useRef(null)
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  // Fast-track if the image is already cached or decoded
+  useEffect(() => {
+    if (imgRef.current?.complete && imgRef.current?.naturalWidth > 0) {
+      setIsLoaded(true)
+    }
+  }, [src])
 
   useEffect(() => {
     const container = containerRef.current
@@ -99,13 +107,31 @@ function CasaMomoParallaxImage({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden will-change-transform ${containerClassName}`}
+      className={`relative overflow-hidden will-change-transform bg-[#11140E] ${containerClassName}`}
     >
+      {/* Luxury Editorial Loading Indicator */}
+      {!isLoaded && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#11140E] text-[#D8D2C2] select-none pointer-events-none transition-opacity duration-500">
+          <div className="w-8 h-8 rounded-full border border-white/10 border-t-[#D8D2C2] animate-spin mb-3" />
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#D8D2C2]/85">
+              Loading Sanctuary Visual...
+            </span>
+          </div>
+        </div>
+      )}
+
       <img
         ref={imgRef}
         src={src}
         alt={alt}
-        className={`absolute left-0 right-0 w-full object-cover will-change-transform select-none ${className}`}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setIsLoaded(true)}
+        className={`absolute left-0 right-0 w-full object-cover will-change-transform select-none transition-opacity duration-700 ease-out ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        } ${className}`}
         style={{
           top: `-${intensity}%`,
           height: `${100 + 2 * intensity}%`,
@@ -157,7 +183,7 @@ function CasaMomoWordReveal({ text, className = '' }) {
   return (
     <p ref={containerRef} className={className}>
       {words.map((word, i) => (
-        <span key={i} className="casa-word inline-block mr-[0.25em] transition-opacity duration-150">
+        <span key={i} className="casa-word inline-block mr-[0.25em] py-0.5 transition-opacity duration-150">
           {word}
         </span>
       ))}
@@ -183,9 +209,17 @@ export default function EstatePage() {
   // Real, authentic resort photography
   const HERO_IMG = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2400&q=85'
   const BEACH_IMG = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85'
-  const DINING_IMG = '/Images/estate/coastal-dining.jpg'
-  const SPA_IMG = '/Images/estate/wellness-spa.jpg'
-  const VALET_IMG = '/Images/estate/complete-privacy.jpg'
+  const DINING_IMG = '/Images/estate/coastal-dining.webp'
+  const SPA_IMG = '/Images/estate/wellness-spa.webp'
+  const VALET_IMG = '/Images/estate/complete-privacy.webp'
+
+  // Eager background preloading for estate sanctuary photography
+  useEffect(() => {
+    [DINING_IMG, SPA_IMG, VALET_IMG].forEach((src) => {
+      const img = new Image()
+      img.src = src
+    })
+  }, [])
 
   // Hero Expanding Photo Animation (Exact Casa Momo "Video/Image Grow" effect)
   useEffect(() => {
@@ -255,7 +289,7 @@ export default function EstatePage() {
       >
         {/* Grand Editorial Headline */}
         <div className="max-w-5xl mx-auto text-center space-y-4 my-auto py-6">
-          <h1 className="font-serif-grand text-4xl sm:text-7xl lg:text-8xl font-light text-slate-900 tracking-tight leading-[1.02]">
+          <h1 className="font-serif-grand text-4xl sm:text-7xl lg:text-8xl font-light text-slate-900 tracking-tight leading-[1.12]">
             An Oceanfront Sanctuary Built into the Coast.
           </h1>
           <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto font-normal leading-relaxed">
@@ -306,7 +340,7 @@ export default function EstatePage() {
             </span>
             <CasaMomoWordReveal
               text="Located on an untouched stretch of the Sindh coastline, Stayza spans forty-two secluded acres between raw bedrock and sky. Designed for quiet privacy, open space, and the unbroken rhythm of the sea."
-              className="font-serif-grand text-2xl sm:text-4xl lg:text-5xl text-slate-900 font-light leading-snug"
+              className="font-sans-clean text-2xl sm:text-4xl lg:text-5xl text-slate-900 font-light leading-relaxed tracking-tight"
             />
           </div>
 
@@ -471,7 +505,7 @@ export default function EstatePage() {
             <CasaMomoParallaxImage
               src={DINING_IMG}
               alt="Open-air seaside dining overlooking the ocean"
-              containerClassName="h-[60vh] sm:h-[75vh] w-full shadow-2xl bg-slate-950"
+              containerClassName="h-[60vh] sm:h-[75vh] w-full shadow-2xl bg-[#11140E]"
               intensity={18}
               scaleGrow={true}
             />
@@ -522,7 +556,7 @@ export default function EstatePage() {
             <CasaMomoParallaxImage
               src={SPA_IMG}
               alt="Outdoor geothermal mineral hot spring pool over ocean surf"
-              containerClassName="h-[60vh] sm:h-[75vh] w-full shadow-2xl bg-slate-950"
+              containerClassName="h-[60vh] sm:h-[75vh] w-full shadow-2xl bg-[#11140E]"
               intensity={18}
               scaleGrow={true}
             />
