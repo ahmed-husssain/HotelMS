@@ -185,7 +185,7 @@ export default function EstatePage() {
   const BEACH_IMG = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85'
   const DINING_IMG = '/Images/estate/coastal-dining.jpg'
   const SPA_IMG = '/Images/estate/wellness-spa.jpg'
-  const VALET_IMG = 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=85'
+  const VALET_IMG = '/Images/estate/complete-privacy.jpg'
 
   // Hero Expanding Photo Animation (Exact Casa Momo "Video/Image Grow" effect)
   useEffect(() => {
@@ -589,7 +589,7 @@ export default function EstatePage() {
           <div className="lg:col-span-6">
             <CasaMomoParallaxImage
               src={VALET_IMG}
-              alt="Underground valet portal and private residence entrance"
+              alt="Private residence entrance, pergola and travertine pathway overlooking the ocean"
               containerClassName="h-80 sm:h-[480px] w-full rounded-[4px] shadow-xl border border-slate-200"
               intensity={15}
             />
