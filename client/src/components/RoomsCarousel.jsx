@@ -235,7 +235,7 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
       {/* 1. Main Architectural Cinema Stage with Integrated Lower-Third Editorial Interface */}
       <div
         data-cursor={isVisible70 ? 'Swipe Gallery' : 'Scroll to Focus'}
-        className="relative w-full aspect-[16/11] sm:aspect-[16/10] lg:aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[82vh] overflow-hidden bg-slate-900 border border-slate-200/90 group-hover/card:border-slate-400 transition-colors duration-500 shadow-md rounded-[2px] select-none"
+        className="relative w-full aspect-[16/11] sm:aspect-[16/10] lg:aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[82vh] overflow-hidden bg-slate-900 shadow-xl rounded-[2px] select-none"
       >
         {/* Embla Viewport — Covers 100% of the stage for full-bleed touch & swipe */}
         <div ref={shouldInitCarousel ? emblaRef : null} className="absolute inset-0 overflow-hidden w-full h-full">
@@ -302,57 +302,47 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
           </button>
         </div>
 
-        {/* Unified Lower-Third Editorial Interface (Lives directly on the picture) */}
-        <div className="absolute inset-x-0 bottom-0 z-20 pointer-events-none bg-gradient-to-t from-black/90 via-black/55 to-transparent pt-14 sm:pt-24 pb-4 sm:pb-7 px-4 sm:px-8">
+        {/* Unified Lower-Third Editorial Interface — The Pure Whisper (Clean, Calm, Borderless) */}
+        <div className="absolute inset-x-0 bottom-0 z-20 pointer-events-none bg-gradient-to-t from-black/80 via-black/35 to-transparent pt-16 sm:pt-24 pb-5 sm:pb-7 px-4 sm:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6">
             
-            {/* Left: Suite Number, Name & Single-line Specs */}
+            {/* Left: Suite Name & Clean Whisper Specs (No shouting labels) */}
             <div className="space-y-1 sm:space-y-1.5 max-w-2xl">
-              <span className="text-[10px] font-mono tracking-[0.25em] font-bold text-[#FAF8F5]/90 uppercase block select-none">
-                0{index + 1} &bull; RESIDENCE
-              </span>
-              
-              <h2 className="font-serif-grand text-xl sm:text-3xl lg:text-4xl text-white font-light tracking-tight leading-tight drop-shadow-sm">
+              <h2 className="font-serif-grand text-2xl sm:text-3xl lg:text-4xl text-white font-normal tracking-tight leading-tight drop-shadow-md">
                 {residence.name}
               </h2>
 
               {/* Single-line Whisper Specs directly on the picture */}
-              <div className="flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1 pt-0.5 text-[10px] sm:text-xs font-mono text-slate-200">
+              <div className="flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-0.5 text-xs sm:text-sm font-mono text-slate-200 drop-shadow-sm pt-1">
                 {residence.specs.slice(0, 4).map((item, idx) => (
                   <React.Fragment key={idx}>
                     {idx > 0 && <span className="text-white/40 select-none">&bull;</span>}
-                    <span>
-                      <span className="text-white/60 font-normal">{item.label} </span>
-                      <strong className="text-white font-semibold">{item.value}</strong>
-                    </span>
+                    <span>{item.value}</span>
                   </React.Fragment>
                 ))}
               </div>
             </div>
 
-            {/* Right: Pricing & Signature Kinetic Reserve Button */}
-            <div className="flex items-center justify-between md:justify-end gap-3 sm:gap-6 shrink-0 pt-1 md:pt-0">
-              <div className="text-left md:text-right">
-                <div className="flex items-baseline md:justify-end gap-1.5">
-                  <span className="text-xs font-semibold text-slate-300">PKR</span>
-                  <span className="text-xl sm:text-3xl font-bold text-white tracking-tight">
+            {/* Right: Clean Price & Signature Kinetic Reserve Button */}
+            <div className="flex items-center justify-between md:justify-end gap-4 sm:gap-6 shrink-0 pt-1 md:pt-0">
+              <div className="text-left md:text-right font-mono">
+                <div className="flex items-baseline md:justify-end gap-1.5 text-white">
+                  <span className="text-xs text-slate-300 font-medium">PKR</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-[#FFF0CA] tracking-tight">
                     {residence.nightlyRate.toLocaleString()}
                   </span>
-                  <span className="text-xs text-slate-300 font-normal">/ Night</span>
+                  <span className="text-xs text-slate-300 font-normal">/ night</span>
                 </div>
-                <span className="text-[9px] sm:text-[10px] font-mono tracking-wider text-[#FAF8F5]/90 uppercase block mt-0.5">
-                  30% Deposit (PKR {Math.round(residence.nightlyRate * 0.3).toLocaleString()})
-                </span>
               </div>
 
-              <div className="flex items-center gap-2 sm:gap-2.5">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                 {onOpenSpecs && (
                   <button
                     type="button"
                     onClick={() => onOpenSpecs(residence)}
-                    className="pointer-events-auto px-2.5 py-1.5 text-[10px] font-mono tracking-wider uppercase text-slate-300 hover:text-white underline transition-colors cursor-pointer min-h-[44px] flex items-center"
+                    className="pointer-events-auto px-2.5 py-1.5 text-xs font-mono tracking-wider uppercase text-slate-300 hover:text-white underline transition-colors cursor-pointer min-h-[44px] flex items-center"
                   >
-                    Suite Details
+                    Details
                   </button>
                 )}
                 <div className="pointer-events-auto">
