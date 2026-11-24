@@ -20,8 +20,18 @@
 }
 
 /* Option 3 • Perfected Sculptural Architectural Typography */
+/* Smart Glyph Fix: Replaces the idiosyncratic flat-cut lowercase 'g' in Syne with Inter's smooth natural 'g' */
+@font-face {
+  font-family: 'SyneG';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: local('Inter'), local('Inter-Regular'), local('Inter-Bold'), url(https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format('woff2');
+  unicode-range: U+0067;
+}
+
 .font-cinzel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'SyneG', 'Syne', sans-serif;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -29,7 +39,7 @@
 
 .font-serif-grand,
 .font-syne {
-  font-family: 'Syne', sans-serif;
+  font-family: 'SyneG', 'Syne', sans-serif;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
@@ -55,14 +65,14 @@
 
 /* Standardized Typography Hierarchy Utility Tokens */
 .type-h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'SyneG', 'Syne', sans-serif;
   font-weight: 700;
   letter-spacing: 0.03em;
   line-height: 1.15;
 }
 
 .type-h2 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'SyneG', 'Syne', sans-serif;
   font-weight: 600;
   letter-spacing: 0.03em;
   line-height: 1.25;
