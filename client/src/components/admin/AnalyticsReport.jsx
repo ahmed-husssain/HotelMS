@@ -165,7 +165,7 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Total Gross Revenue
+              Total Money Collected
             </span>
             <span className="font-mono font-bold text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               PKR {revenue.grossRevenue.toLocaleString()}
@@ -177,11 +177,11 @@ export default function AnalyticsReport({ rooms = [] }) {
 
           <div className="pt-3 border-t border-slate-100 text-[11px] font-mono space-y-1.5">
             <div className="flex justify-between text-slate-600">
-              <span>Online Advance (30%):</span>
+              <span>Paid Online (30% Deposit):</span>
               <strong className="text-emerald-900">PKR {revenue.advanceTotal.toLocaleString()}</strong>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>Desk Settlements (70%):</span>
+              <span>Paid at Desk (70% Balance):</span>
               <strong className="text-slate-900">PKR {revenue.balanceTotal.toLocaleString()}</strong>
             </div>
             {revenue.extrasTotal > 0 && (
@@ -229,13 +229,13 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Average Room Rate
+              Average Price Per Night Sold
             </span>
             <span className="font-mono font-bold text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               PKR {pricingYield.adr.toLocaleString()}
             </span>
             <span className="text-[10px] font-mono text-emerald-800 font-semibold block mt-1">
-              RevPAR: PKR {pricingYield.revPar.toLocaleString()} / Suite
+              Daily Earnings / Suite (RevPAR): PKR {pricingYield.revPar.toLocaleString()}
             </span>
           </div>
 
@@ -245,7 +245,7 @@ export default function AnalyticsReport({ rooms = [] }) {
               <strong className="text-slate-900">{pricingYield.totalRoomNights} Nights</strong>
             </div>
             <div className="flex justify-between">
-              <span>Gross Tariff Volume:</span>
+              <span>Total Suite Booking Value:</span>
               <strong className="text-slate-900">PKR {pricingYield.totalRoomRevenue.toLocaleString()}</strong>
             </div>
           </div>
@@ -255,27 +255,27 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Booking Conversion Rate
+              Bookings Completed vs Dropped
             </span>
             <span className="font-mono font-bold text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               {bookingFunnel.conversionRate}%
             </span>
             <span className="text-[10px] font-mono text-slate-500 block mt-1">
-              Checkout Conversion Funnel
+              5-Min Reservation Timer Completion
             </span>
           </div>
 
           <div className="pt-3 border-t border-slate-100 text-[11px] font-mono space-y-1 text-slate-600">
             <div className="flex justify-between">
-              <span>Confirmed Stays:</span>
+              <span>Completed Stays:</span>
               <strong className="text-emerald-900">{bookingFunnel.confirmedStays}</strong>
             </div>
             <div className="flex justify-between">
-              <span>Holds Initiated:</span>
+              <span>Total Holds Started:</span>
               <strong className="text-slate-900">{bookingFunnel.totalHoldsInitiated}</strong>
             </div>
             <div className="flex justify-between">
-              <span>Drop-Off Rate:</span>
+              <span>Expired / Cancelled:</span>
               <strong className="text-red-700">{bookingFunnel.abandonmentRate}%</strong>
             </div>
           </div>
@@ -289,10 +289,10 @@ export default function AnalyticsReport({ rooms = [] }) {
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h4 className="font-serif-grand text-lg text-slate-900">
-                In-Stay Concierge &amp; Incidental Leaderboard (M5)
+                Extra Services Revenue Leaderboard
               </h4>
               <p className="text-xs font-mono text-slate-500 mt-0.5">
-                Highest-grossing luxury ancillary services ordered via /my-stay &amp; Front Desk folios
+                Highest-grossing services ordered by guests (Dining, Spa, Helicopter Transfer)
               </p>
             </div>
             <span className="px-2.5 py-1 bg-amber-50 border border-amber-200 text-amber-950 font-mono text-xs font-bold rounded">

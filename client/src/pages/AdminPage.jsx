@@ -11,7 +11,15 @@ import HotelSettings from '../components/admin/HotelSettings'
 import ActivityLog from '../components/admin/ActivityLog'
 
 export default function AdminPage() {
-  const { currentUser, staffAccounts, createStaffAccount, toggleStaffStatus, logout } = useAuth()
+  const {
+    currentUser,
+    staffAccounts,
+    createStaffAccount,
+    toggleStaffStatus,
+    updateStaffAccount,
+    deleteStaffAccount,
+    logout,
+  } = useAuth()
   const {
     rooms,
     systemSettings,
@@ -39,7 +47,7 @@ export default function AdminPage() {
           <span className="text-slate-300">|</span>
           <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-900 font-bold uppercase tracking-wider">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            <span>GENERAL MANAGER EXECUTIVE CONSOLE</span>
+            <span>GENERAL MANAGER &bull; HOTEL MANAGEMENT PANEL</span>
           </div>
         </div>
 
@@ -71,12 +79,12 @@ export default function AdminPage() {
         {/* Navigation Tabs */}
         <div className="flex border-b border-slate-200 overflow-x-auto text-xs font-mono">
           {[
-            { id: 'ANALYTICS', label: 'Executive Analytics' },
-            { id: 'STAFF', label: `Staff Governance (${staffAccounts?.length || 0})` },
-            { id: 'GUESTS', label: 'Guest Directory' },
-            { id: 'RESIDENCES', label: 'Tariffs & Inventory' },
-            { id: 'SETTINGS', label: 'Tax & Settings' },
-            { id: 'AUDIT', label: 'Activity Log' },
+            { id: 'ANALYTICS', label: 'Revenue & Performance' },
+            { id: 'STAFF', label: `Hotel Staff Team (${staffAccounts?.length || 0})` },
+            { id: 'GUESTS', label: 'Guest Profiles & Stays' },
+            { id: 'RESIDENCES', label: 'Room Rates & Availability' },
+            { id: 'SETTINGS', label: 'Hotel Policies & Taxes' },
+            { id: 'AUDIT', label: 'System History & Logs' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -101,6 +109,8 @@ export default function AdminPage() {
             staffAccounts={staffAccounts}
             onCreateStaff={createStaffAccount}
             onToggleStatus={toggleStaffStatus}
+            onUpdateStaff={updateStaffAccount}
+            onDeleteStaff={deleteStaffAccount}
           />
         )}
 

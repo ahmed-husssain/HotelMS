@@ -1,7 +1,7 @@
-# Stayza Resorts & Suites — Client Application
+# Stayza — Client Application
 
-> **Frontend Client for Stayza Hotel Management System**  
-> Built with React 19, Vite 8, Tailwind CSS v4, React Router v7, and Socket.IO Client. Delivers an executive-grade luxury aesthetic with responsive layouts, accessible touch targets, and zero-trust backend integration.
+> **Frontend application for the Stayza Hotel Management System.**  
+> Built with React 19, Vite 8, Tailwind CSS v4, and React Router v7. Provides a clean, responsive guest reservation experience and staff management dashboards.
 
 [![React 19](https://img.shields.io/badge/React-19-0F172A?style=for-the-badge&logo=react)](https://react.dev)
 [![Vite 8](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev)
@@ -9,40 +9,38 @@
 
 ---
 
-## 📑 Page Routes & Portal Directory
+## 🧭 Page Routes & Features
 
-The client application automatically routes users based on their role and authentication status:
+### Guest Experience
+* **`/` (Home):** Hero banner, featured luxury suites, resort grounds tour, and room feature details.
+* **`/suites` (All Suites):** Filter suites by category (*Oceanfront Villa*, *Beach Suite*, *Horizon Penthouse*).
+* **`/book` (Booking):** Date search, live price summary with 13% tax, 5-minute room hold timer, and Safepay online payment launcher.
+* **`/verify-payment`:** Verifies the Safepay transaction and confirms the booking.
+* **`/confirmation`:** Booking confirmation voucher with copyable confirmation code and invoice download link.
+* **`/my-stay` (Guest Portal):** Self-service hub for in-house guests:
+  * Digital room key with PIN.
+  * In-room service orders (dining, extra towels, experiences).
+  * Real-time room folio bill.
+  * Review and feedback form.
 
-### Public & Guest Pages
-* **`/` (Landing Page):** Full-screen hero section, luxury suite showcase, interactive specifications drawer, and resort grounds monograph.
-* **`/suites` (Suites Catalog):** Curated 7-suite catalog organized into collections (*Oceanfront Villa*, *Beach Suite*, *Horizon Penthouse*).
-* **`/book` (Booking Engine):** Interactive date picker, live nightly price calculator, 13% Sindh tax computation, 5-minute pessimistic hold timer, and Safepay checkout launcher.
-* **`/verify-payment`:** Instant payment confirmation screen polling the Safepay checkout session.
-* **`/confirmation`:** Booking confirmation voucher with copyable confirmation code, guest details, and invoice download link.
-* **`/my-stay` (Guest Portal):** Self-service guest hub featuring:
-  * Interactive digital room key with animated PIN code.
-  * In-stay room service catalog with instant ordering.
-  * Live room folio bill with real-time charge breakdown.
-  * 5-star review and feedback modal.
-
-### Operations & Staff Portals
-* **`/login` & `/register`:** Unified authentication portal with automatic role detection and clean password visibility controls.
-* **`/front-desk` (PMS Desk):** Receptionist console featuring the Today's Arrivals queue, check-in modal, extra service charge poster, 7-suite Room Rack with live status updates, and shift closing summary.
-* **`/housekeeping` (Housekeeping Hub):** Daily cleaning queue with 4-step room certification, live guest requests feed, maintenance issue logger with room lock, and linen/supplies stock tracker.
-* **`/admin` (General Manager Suite):** Executive analytics dashboard showing live occupancy %, Average Daily Rate (ADR), RevPAR, gross revenue, staff RBAC manager, room rate editor, and activity audit logs with CSV export.
+### Staff & Operations Portals
+* **`/login` & `/register`:** Clean authentication form that automatically directs users to their assigned workspace based on their role.
+* **`/front-desk`:** Reception console with today's arrivals, guest check-in/out, extra room charges, a color-coded room rack, and cashier shift closing.
+* **`/housekeeping`:** Cleaning queue with step-by-step checklists, incoming guest requests, maintenance issue reports, and linen stock levels.
+* **`/admin`:** General manager dashboard with occupancy %, daily rates, staff accounts, room price editor, and activity audit logs with CSV export.
 
 ---
 
-## 🏗 State Management & Architecture
+## 🏗 Frontend Architecture
 
-* **`AuthContext.jsx`:** Manages JWT session tokens, active user profiles, role enforcement, and auto-login on refresh.
-* **`HotelDataContext.jsx`:** Real-time data store managing rooms inventory, bookings, active cleaning tasks, maintenance tickets, and incoming service requests.
-* **`api.js`:** Clean HTTP service handling communication with the Express backend, automatically injecting Bearer tokens into request headers.
-* **Zero-Trust Pricing:** Nightly rates and taxes are calculated exclusively on the backend. The frontend only displays verified server quotes.
+* **`AuthContext.jsx`:** Stores the active JWT login token, user profile, and handles automatic login on page refresh.
+* **`HotelDataContext.jsx`:** Manages rooms, bookings, cleaning tasks, and guest service requests in real time.
+* **`api.js`:** Connects to the Express backend and automatically attaches the user's login token to requests.
+* **Server-Validated Pricing:** Room rates, nights, taxes, and advance splits are always verified with the server to prevent browser tampering.
 
 ---
 
-## 🛠 Local Development & Scripts
+## 🛠 Local Setup
 
 ### 1. Install Dependencies
 ```bash
@@ -50,35 +48,21 @@ cd client
 npm install
 ```
 
-### 2. Configure Environment Variables
-Create a `.env` file in the `client/` folder:
+### 2. Configure Environment
+Create a `.env` file inside `client/`:
 ```env
 VITE_API_URL=http://localhost:5000/api
 VITE_SOCKET_URL=http://localhost:5000
 ```
-*(For production, these point to your deployed backend API on Vercel).*
 
-### 3. Start Development Server
+### 3. Run Development Server
 ```bash
 npm run dev
-# Vite runs locally on http://localhost:5173
+# Opens at http://localhost:5173
 ```
 
 ### 4. Build for Production
 ```bash
 npm run build
-# Compiles optimized static assets into client/dist/
+# Creates optimized files in client/dist/
 ```
-
-### 5. Preview Production Build
-```bash
-npm run preview
-```
-
----
-
-## 🎨 UI/UX Design Standards
-
-* **Typography Hierarchy:** `Syne` for grand headlines, `Inter` for clean interface copy, and `Space Grotesk` for pricing numerals.
-* **Accessibility & Touch Targets:** All buttons maintain a minimum 40–44px touch area. Text sizes strictly follow readable body sizes (`11px` to `16px`) with high-contrast text.
-* **Mobile-First Layout:** Responsive flex and grid structures with zero horizontal scrolling (`overflow-x: hidden`).

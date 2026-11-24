@@ -6,6 +6,8 @@ import {
   fetchAdminStaff,
   createAdminStaff,
   toggleAdminStaffStatus,
+  updateAdminStaff,
+  deleteAdminStaff,
 } from '../services/api'
 
 /**
@@ -462,6 +464,48 @@ export function AuthProvider({ children }) {
   }
 
   /**
+   * Admin Function: Update staff member details
+   */
+  const updateStaffAccount = async (id, updatedFields) => {
+    const roleLabels = {
+      receptionist: 'Front Desk Receptionist',
+      housekeeping: 'Housekeeping Staff',
+      admin: 'Operations Manager',
+    }
+
+    setStaffAccounts((prev) =>
+      prev.map((acc) => {
+        if (acc.id === id) {
+          return {
+            ...acc,
+            ...updatedFields,
+            roleLabel: updatedFields.role ? (roleLabels[updatedFields.role] || updatedFields.role) : acc.roleLabel,
+          }
+        }
+        return acc
+      })
+    )
+
+    try {
+      await updateAdminStaff(id, updatedFields)
+    } catch (err) {
+      console.warn('[Staff Update] Remote Atlas sync warning:', err.message)
+    }
+  }
+
+  /**
+   * Admin Function: Delete staff member
+   */
+  const deleteStaffAccount = async (id) => {
+    setStaffAccounts((prev) => prev.filter((acc) => acc.id !== id))
+    try {
+      await deleteAdminStaff(id)
+    } catch (err) {
+      console.warn('[Staff Delete] Remote Atlas sync warning:', err.message)
+    }
+  }
+
+  /**
    * Link an active reservation code to the current logged-in guest session
    */
   const linkReservationCode = (code, suiteNumber = null) => {
@@ -512,6 +556,27 @@ export function AuthProvider({ children }) {
    * Log out active session & purge JWT tokens
    */
   const logout = () => {
+    if (currentUser) {
+      try {
+        const savedAudit = localStorage.getItem('stayza_hotel_audit')
+        const logs = savedAudit ? JSON.parse(savedAudit) : []
+        const now = new Date()
+        const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+        const newLog = {
+          id: `LOG-${Math.floor(700 + Math.random() * 300)}`,
+          timestamp: `${dateStr}, ${timeStr} PKT`,
+          actor: currentUser.name || 'User',
+          action: 'USER_LOGOUT',
+          category: 'SECURITY',
+          details: `${currentUser.name} (${currentUser.role}) signed out of the console.`,
+        }
+        localStorage.setItem('stayza_hotel_audit', JSON.stringify([newLog, ...logs]))
+      } catch (e) {
+        console.warn('Failed to record logout audit log:', e)
+      }
+    }
+
     setCurrentUser(null)
     localStorage.removeItem('stayza_auth_user')
     localStorage.removeItem('habitas_auth_user')
@@ -531,6 +596,8 @@ export function AuthProvider({ children }) {
         setAuthenticatedSession,
         createStaffAccount,
         toggleStaffStatus,
+        updateStaffAccount,
+        deleteStaffAccount,
         isAuthenticated: !!currentUser,
       }}
     >

@@ -306,6 +306,134 @@ async function toggleStaffStatus(req, res) {
   }
 }
 
+// @desc    Update staff account details (Name, Email, Role, Phone, Shift)
+// @route   PUT /api/admin/staff/:id
+// @access  Private (Admin Only)
+async function updateStaffAccount(req, res) {
+  try {
+    const { id } = req.params
+    const { name, email, role, phone, shiftStatus } = req.body
+
+    const staff = await User.findById(id)
+    if (!staff) {
+      return res.status(404).json({ success: false, message: 'Staff member not found.' })
+    }
+
+    const validRoles = ['receptionist', 'housekeeping', 'admin']
+    if (role && !validRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid role. Permitted staff roles: ${validRoles.join(', ')}`,
+      })
+    }
+
+    // Safety guard: General manager cannot remove their own admin role
+    if (String(staff._id) === String(req.user._id) && role && role !== 'admin') {
+      return res.status(400).json({
+        success: false,
+        message: 'You cannot remove your own General Manager role.',
+      })
+    }
+
+    // If changing email, check uniqueness
+    if (email && email.toLowerCase().trim() !== staff.email.toLowerCase()) {
+      const existing = await User.findOne({ email: email.toLowerCase().trim() })
+      if (existing) {
+        return res.status(400).json({
+          success: false,
+          message: 'An account with this email address already exists.',
+        })
+      }
+      staff.email = email.toLowerCase().trim()
+    }
+
+    if (name) staff.name = name.trim()
+    if (role) staff.role = role
+    if (phone !== undefined) staff.phone = phone.trim()
+    if (shiftStatus !== undefined) staff.shiftStatus = shiftStatus.trim()
+
+    await staff.save()
+
+    // Audit Log Entry
+    await ActivityLog.create({
+      userId: req.user._id,
+      actorName: req.user.name || 'General Manager',
+      action: 'STAFF_ACCOUNT_UPDATED',
+      category: 'SECURITY',
+      details: `Updated staff profile for ${staff.name} (${staff.role}, ${staff.email}).`,
+      targetModel: 'User',
+      targetId: staff._id.toString(),
+    })
+
+    res.status(200).json({
+      success: true,
+      message: `Staff member ${staff.name} updated successfully.`,
+      data: {
+        id: staff._id,
+        name: staff.name,
+        email: staff.email,
+        role: staff.role,
+        phone: staff.phone,
+        shiftStatus: staff.shiftStatus,
+        isActive: staff.isActive,
+      },
+    })
+  } catch (error) {
+    console.error('[AdminController.updateStaffAccount] Error:', error.message)
+    res.status(500).json({ success: false, message: error.message })
+  }
+}
+
+// @desc    Delete staff account
+// @route   DELETE /api/admin/staff/:id
+// @access  Private (Admin Only)
+async function deleteStaffAccount(req, res) {
+  try {
+    const { id } = req.params
+    const staff = await User.findById(id)
+
+    if (!staff) {
+      return res.status(404).json({ success: false, message: 'Staff member not found.' })
+    }
+
+    if (String(staff._id) === String(req.user._id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'General Managers cannot delete their own administrative account.',
+      })
+    }
+
+    await User.findByIdAndDelete(id)
+
+    // Audit Log Entry
+    await ActivityLog.create({
+      userId: req.user._id,
+      actorName: req.user.name || 'General Manager',
+      action: 'STAFF_ACCOUNT_DELETED',
+      category: 'SECURITY',
+      details: `Permanently removed staff account ${staff.name} (${staff.email}, role: ${staff.role}).`,
+      targetModel: 'User',
+      targetId: id,
+    })
+
+    res.status(200).json({
+      success: true,
+      message: `Staff account for ${staff.name} deleted successfully.`,
+      data: { id },
+    })
+  } catch (error) {
+    console.error('[AdminController.deleteStaffAccount] Error:', error.message)
+    res.status(500).json({ success: false, message: error.message })
+  }
+}
+      data: staff,
+    })
+  } catch (error) {
+    console.error('[AdminController.toggleStaffStatus] Error:', error.message)
+    res.status(500).json({ success: false, message: error.message })
+  }
+}
+
 // @desc    Get Guest Directory with aggregated lifetime spend & stays
 // @route   GET /api/admin/guests
 // @access  Private (Admin Only)
@@ -332,6 +460,10 @@ async function getGuestDirectory(req, res) {
       else if (lifetimeSpend > 800000) tier = 'VIP GOLD'
       else if (totalStays >= 2) tier = 'RETURNING RESIDENT'
 
+      // Latest / Active booking details
+      const activeBooking = guestBookings.find((b) => ['CONFIRMED', 'CHECKED_IN'].includes(b.status)) || guestBookings[guestBookings.length - 1]
+      const cleanRef = activeBooking?.bookingReference ? activeBooking.bookingReference.split('?')[0].split('&')[0] : (g.activeReservationCode || '')
+
       return {
         id: g._id,
         name: g.name,
@@ -340,7 +472,16 @@ async function getGuestDirectory(req, res) {
         tier,
         totalStays,
         lifetimeSpend,
-        activeReservationCode: g.activeReservationCode || '',
+        activeReservationCode: cleanRef,
+        suiteNumber: activeBooking?.roomNumber || 'Suite 301',
+        checkInDate: activeBooking?.checkInDate || null,
+        checkOutDate: activeBooking?.checkOutDate || null,
+        numberOfNights: activeBooking?.numberOfNights || 1,
+        bookingStatus: activeBooking?.status || 'CONFIRMED',
+        advancePaid: activeBooking?.pricingSnapshot?.advanceDepositAmount || 0,
+        balanceDue: activeBooking?.pricingSnapshot?.balanceDueAtDesk || 0,
+        totalStayAmount: activeBooking?.pricingSnapshot?.totalAmount || 0,
+        cnic: activeBooking?.guestDetails?.cnic || '42101-*******-1',
         preferences: g.preferences
           ? `${g.preferences.pillowType || 'Custom Pillow'}, Climate: ${g.preferences.climatePreference || '21°C'}`
           : 'High-thread-count Egyptian linen, Silent check-in',
@@ -420,22 +561,31 @@ async function updateRoomRate(req, res) {
   }
 }
 
-// @desc    Get immutable audit log trail
+// @desc    Get immutable audit log trail with full date & time formatting and sanitized references
 // @route   GET /api/admin/audit-logs
 // @access  Private (Admin Only)
 async function getAuditLogs(req, res) {
   try {
     const logs = await ActivityLog.find({}).sort({ createdAt: -1 }).limit(100)
 
-    const formatted = logs.map((l) => ({
-      id: l._id,
-      timestamp: new Date(l.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' PKT',
-      actor: l.actorName || 'System Operator',
-      action: l.action,
-      category: l.category,
-      details: l.details,
-      createdAt: l.createdAt,
-    }))
+    const formatted = logs.map((l) => {
+      const d = new Date(l.createdAt)
+      const dateStr = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      const timeStr = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+      const cleanDetails = (l.details || '')
+        .replace(/\?order_id=[^ &]*/g, '')
+        .replace(/\?ref=[^ &]*/g, '')
+
+      return {
+        id: l._id,
+        timestamp: `${dateStr}, ${timeStr} PKT`,
+        actor: l.actorName || 'System Operator',
+        action: l.action,
+        category: l.category,
+        details: cleanDetails,
+        createdAt: l.createdAt,
+      }
+    })
 
     res.status(200).json({
       success: true,
@@ -450,6 +600,14 @@ async function getAuditLogs(req, res) {
 module.exports = {
   getExecutiveAnalytics,
   getStaffAccounts,
+  createStaffAccount,
+  toggleStaffStatus,
+  updateStaffAccount,
+  deleteStaffAccount,
+  getGuestDirectory,
+  updateRoomRate,
+  getAuditLogs,
+}
   createStaffAccount,
   toggleStaffStatus,
   getGuestDirectory,

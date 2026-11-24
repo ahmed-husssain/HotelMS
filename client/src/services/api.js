@@ -261,6 +261,19 @@ export async function toggleAdminStaffStatus(id) {
   })
 }
 
+export async function updateAdminStaff(id, payload) {
+  return request(`/admin/staff/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function deleteAdminStaff(id) {
+  return request(`/admin/staff/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  })
+}
+
 export async function fetchAdminGuests() {
   return request('/admin/guests')
 }

@@ -60,6 +60,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    shiftStatus: {
+      type: String,
+      trim: true,
+      default: 'Standard Duty',
+    },
     preferences: {
       pillowType: { type: String, default: 'Feather & Down' },
       dietaryNotes: { type: String, default: '' },

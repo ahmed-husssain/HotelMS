@@ -1,7 +1,7 @@
-# Stayza Resorts & Suites — Hotel Management System (HMS)
+# Stayza — Luxury Hotel Management System (HMS)
 
-> **Modern MERN Stack Hotel Management System & Guest Reservation Engine**  
-> Features zero-trust pricing calculations, atomic 5-minute concurrency holds, Safepay sandbox checkout, real-time Socket.IO synchronization, and automated server-side PDF invoices.
+> **A modern hotel booking and operations platform built with the MERN stack.**  
+> Features real-time room availability with 5-minute temporary holds, 30% online advance deposits via Safepay, front desk check-in, live housekeeping updates, and a self-service guest portal with digital room keys.
 
 [![MERN Stack](https://img.shields.io/badge/Stack-MERN-064E3B?style=for-the-badge)](https://mongodb.com)
 [![React 19](https://img.shields.io/badge/React-19-0F172A?style=for-the-badge&logo=react)](https://react.dev)
@@ -20,104 +20,73 @@
 
 ---
 
-## 📑 Table of Contents
+## 📖 What is Stayza?
 
-1. [Project Overview](#-project-overview)
-2. [Key Features](#-key-features)
-3. [User Roles & Access Control](#-user-roles--access-control)
-4. [System Architecture](#-system-architecture)
-5. [Technology Stack](#-technology-stack)
-6. [Project Structure](#-project-structure)
-7. [Local Setup & Installation](#-local-setup--installation)
-8. [Test Accounts & Credentials](#-test-accounts--credentials)
+**Stayza** is a full-stack hotel management web application designed to connect guests and hotel staff seamlessly:
+
+* **For Guests:** Browse luxury suites, check real-time availability, hold a room for 5 minutes during checkout, pay a 30% advance deposit online via Safepay, and manage their stay with a digital room key, room service orders, and live billing.
+* **For Front Desk:** View arriving guests, check guests in/out, collect the remaining 70% balance at the desk, post extra room charges, view a visual room rack, and close daily cashier shifts.
+* **For Housekeeping:** Track dirty and cleaning rooms, complete step-by-step cleaning checklists, report maintenance issues, deliver guest requests, and track linen inventory.
+* **For General Managers:** Monitor live occupancy rates, average daily room rates, revenue metrics, manage staff accounts, adjust room prices, and view activity logs.
 
 ---
 
-## 🏨 Project Overview
+## ✨ Key Features
 
-**Stayza Resorts & Suites** is an end-to-end hospitality management application designed to handle real-world hotel workflows:
-
-* **For Guests:** Explore luxury suites, check real-time availability, lock rooms with a 5-minute temporary hold, pay a 30% advance deposit via Safepay, and manage their stay via a self-service guest portal (digital key, room service ordering, live billing).
-* **For Hotel Staff:** Streamline operations with dedicated role-based portals for Front Desk Receptionists, Housekeeping, and General Management.
-* **For Examiners & Developers:** Clean, standard, zero-trust codebase where all financial calculations and room availability are validated strictly on the backend to prevent tampering.
-
----
-
-## 🚀 Key Features
-
-### 1. Guest Journey & Booking Engine
-* **Dynamic Room Showcase:** Categorized luxury suites (Oceanfront Villa, Beach Suite, Horizon Penthouse) with high-resolution photography and expandable room feature drawers.
-* **Atomic 5-Minute Room Hold:** When a guest proceeds to checkout, the system places a temporary 5-minute hold (`holdExpiresAt`) on the room in MongoDB, preventing double-booking race conditions.
-* **Zero-Trust Pricing:** Nightly rates, date calculations, the 13% Sindh Sales Tax, 30% online advance deposit, and 70% front-desk balance are calculated exclusively on the backend (`pricingService.js`).
-* **Safepay Sandbox Payments:** Secure online advance deposit collection with automatic transaction verification.
-* **Guest Portal (`/my-stay`):** Instant access to interactive digital room keys, room service ordering, live room folio bills, and 5-star review submissions.
+### 1. Guest Booking Journey
+* **Suite Showcase:** Browse luxury suites (Oceanfront Villa, Beach Suite, Horizon Penthouse) with high-resolution photos and room specs.
+* **5-Minute Temporary Room Hold:** When a guest begins checkout, the room is temporarily held in MongoDB for 5 minutes to prevent double-booking. If checkout is canceled or times out, the room is automatically released.
+* **Server-Side Pricing & Tax:** Room rates, nights, 13% Sindh Sales Tax, 30% online advance deposit, and 70% balance due at front desk are calculated securely on the server to prevent tampering.
+* **Online Payment (Safepay):** Pay the 30% advance deposit online with automated transaction verification.
+* **Guest Portal (`/my-stay`):** Self-service hub with an animated digital room key, room service ordering, live room bill, and review submission.
 
 ### 2. Front Desk Operations (`/front-desk`)
-* **Arrivals & In-House Board:** View guests checking in today, in-house residents, and departures.
-* **Check-In & Check-Out:** Collect the remaining 70% balance at check-out and automatically record settlement.
-* **7-Suite Room Rack:** Visual grid showing live room statuses (*Available*, *Occupied*, *Needs Cleaning*, *In Cleaning*, *Maintenance*).
-* **Extra Services & Charges:** Post additional dining or laundry charges directly to the guest's room bill.
-* **Shift Closing:** Daily cashier shift handover report tracking collected cash and online revenue.
+* **Arrivals & In-House Desk:** View today's arriving guests, in-house guests, and departures in real time.
+* **Check-In & Check-Out:** Assign clean rooms, check guests in, and collect the remaining 70% balance at check-out.
+* **Visual Room Rack:** Color-coded grid showing real-time room statuses (*Available*, *Occupied*, *Needs Cleaning*, *In Cleaning*, *Maintenance*).
+* **Extra Room Charges:** Add dining or extra service charges directly to any guest's room bill.
+* **Daily Shift Closing:** Cashier shift summary tracking collected cash and online deposits.
 
-### 3. Housekeeping & Facilities (`/housekeeping`)
-* **Daily Cleaning Queue:** Check out/in-house cleaning workflow with step-by-step checklist certification.
-* **Live Guest Requests:** Receive incoming service orders (extra towels, mineral water, room dining) from guests in real time.
-* **Maintenance Ticketing:** Report room defects, mark priority levels, and lock rooms out of inventory until resolved.
-* **Supplies & Linen Inventory:** Track stock counts for everyday hotel amenities with quick restock controls.
+### 3. Housekeeping Operations (`/housekeeping`)
+* **Daily Cleaning Queue:** View rooms that need cleaning after checkout and complete step-by-step cleaning checklists.
+* **Guest Service Requests:** Receive incoming requests (extra towels, water bottles, snacks) directly from guests in real time.
+* **Maintenance Reporting:** Report broken items, lock rooms from booking until fixed, and log repairs.
+* **Supplies & Linen Inventory:** Track stock counts for everyday room supplies with quick restock buttons.
 
-### 4. Executive Management & Admin (`/admin`)
-* **Hotel Analytics:** Live occupancy rate %, Average Daily Rate (ADR), RevPAR, and gross collected revenue.
-* **Staff Management (RBAC):** Create and manage staff accounts across 4 roles (*Guest*, *Receptionist*, *Housekeeping*, *Admin*).
-* **Room Pricing Manager:** Update base nightly rates per suite on MongoDB in real time.
-* **Activity Log:** Audit trail of all staff operations, status updates, and check-ins with one-click CSV export.
+### 4. Manager & Admin Dashboard (`/admin`)
+* **Hotel Statistics:** Live occupancy rate %, Average Daily Rate (ADR), RevPAR, and total revenue.
+* **Staff Management:** Create and manage staff accounts with specific roles (*Front Desk*, *Housekeeping*, *Admin*).
+* **Room Price Editor:** Update nightly room rates directly in MongoDB Atlas.
+* **Activity Log:** Searchable history of staff operations, rate adjustments, and check-ins with one-click CSV export.
 
-### 5. Automated PDF Invoices & Receipts
-* Server-side PDF generation via `pdfkit` streaming official tax vouchers directly to guests and staff via `GET /api/bookings/:reference/invoice`.
+### 5. Automated PDF Invoices
+* Downloadable official PDF invoices and payment receipts generated on the fly via `GET /api/bookings/:reference/invoice`.
 
 ---
 
-## 👥 User Roles & Access Control
+## 👥 User Roles & Access
 
-Role-Based Access Control (RBAC) is enforced cryptographically on the Express backend via JWT tokens:
+Access is secured on the backend using JWT tokens:
 
-| Role | Access URL | Permissions |
+| Role | Access Route | What They Can Do |
 | :--- | :--- | :--- |
-| **Guest** | `/my-stay` | Search suites, reserve rooms, pay 30% advance, unlock digital key, order room service. |
-| **Receptionist** | `/front-desk` | View arrivals, execute check-in/out, post extra charges, manage Room Rack, close cashier shifts. |
-| **Housekeeping** | `/housekeeping` | Complete room cleaning checklists, report maintenance issues, deliver guest requests, restock inventory. |
-| **Admin** | `/admin` | Access financial analytics, update room prices, provision staff accounts, inspect activity logs. |
-
----
-
-## 🏛 System Architecture
-
-```mermaid
-flowchart TD
-    Guest["Guest Browser\n(React 19 + Vite)"] -->|1. Search Dates & Hold Room| API["Express Backend API\n(Node.js)"]
-    Staff["Staff Dashboard\n(Front Desk / Housekeeping)"] -->|Live Updates| API
-    
-    API -->|2. Atomic Concurrency & Hold| DB[(MongoDB Atlas)]
-    API -->|3. Zero-Trust Pricing| Pricing["pricingService.js\n(13% Sindh Tax + 30% Split)"]
-    API -->|4. Checkout Session| Safepay["Safepay Sandbox\n(Payment Gateway)"]
-    
-    API -->|5. Real-Time Sync| Sockets["Socket.IO Server"]
-    Sockets -.->|Instant Status Broadcast| Staff
-    API -->|6. Binary Stream| PDF["pdfkit Invoice Service"]
-```
+| **Guest** | `/my-stay` | Search suites, book rooms, pay 30% deposit, unlock digital key, order room service. |
+| **Front Desk** | `/front-desk` | View arrivals, check-in/out guests, add room charges, monitor room rack, close shifts. |
+| **Housekeeping** | `/housekeeping` | Complete cleaning checklists, report maintenance, deliver guest requests, restock linen. |
+| **Admin** | `/admin` | View revenue analytics, update room rates, manage staff accounts, inspect activity logs. |
 
 ---
 
 ## 🛠 Technology Stack
 
-| Layer | Technologies |
+| Layer | Tools |
 | :--- | :--- |
-| **Frontend** | React 19, Vite 8, Tailwind CSS v4, React Router v7, Lucide Icons, GSAP & Lenis smooth scroll |
-| **Backend** | Node.js, Express.js, JWT (jsonwebtoken), bcryptjs, Morgan logger |
-| **Database** | MongoDB Atlas with Mongoose ODM (strict schema validation) |
-| **Payments** | Safepay Sandbox (Hosted Checkout & Webhook Reconciliation) |
-| **Real-Time** | Socket.IO (instant synchronization between Housekeeping and Front Desk) |
-| **Documents** | PDFKit (in-memory binary PDF streaming) |
-| **Hosting** | Frontend on Firebase Hosting &middot; Backend on Vercel |
+| **Frontend** | React 19, Vite 8, Tailwind CSS v4, React Router v7, Lucide Icons |
+| **Backend** | Node.js, Express.js, JWT Authentication, bcryptjs, PDFKit |
+| **Database** | MongoDB Atlas with Mongoose ODM |
+| **Payments** | Safepay Sandbox (Online 30% Advance Deposit) |
+| **Real-Time** | Socket.IO (instant sync between Housekeeping and Front Desk) |
+| **Hosting** | Firebase Hosting (Frontend) &middot; Vercel (Backend API) |
 
 ---
 
@@ -127,36 +96,32 @@ flowchart TD
 Hotel-Management/
 ├── client/                     # Frontend React application
 │   ├── src/
-│   │   ├── components/         # Reusable UI, Admin, PMS, and Booking components
-│   │   ├── context/            # AuthContext & HotelDataContext
+│   │   ├── components/         # UI, Admin, Front Desk, and Housekeeping components
+│   │   ├── context/            # AuthContext (login) & HotelDataContext (rooms & tasks)
 │   │   ├── pages/              # LandingPage, BookingPage, FrontDeskPage, etc.
-│   │   └── services/           # api.js (backend HTTP client)
+│   │   └── services/           # api.js (backend API connection)
 │   ├── index.html
 │   ├── package.json
 │   └── vite.config.js
-├── server/                     # Backend Express REST API
+├── server/                     # Backend Express API
 │   ├── src/
-│   │   ├── config/             # MongoDB connection (db.js)
-│   │   ├── controllers/        # Business logic (booking, auth, room, staff, report)
-│   │   ├── middleware/         # auth.js (JWT) & rbac.js (Role guards)
+│   │   ├── config/             # MongoDB Atlas connection (db.js)
+│   │   ├── controllers/        # Booking, auth, room, staff, and payment logic
+│   │   ├── middleware/         # auth.js (JWT verify) & rbac.js (role guards)
 │   │   ├── models/             # Mongoose schemas (User, Room, Booking, Payment, etc.)
-│   │   ├── routes/             # Express API route definitions
+│   │   ├── routes/             # API routes (/api/auth, /api/rooms, /api/bookings, etc.)
 │   │   ├── services/           # availabilityService, pricingService, invoiceService
 │   │   └── utils/              # Database seed script (seedData.js)
-│   ├── server.js               # Application entry point & Socket.IO initialization
+│   ├── server.js               # Express entry point & Socket.IO server
 │   └── package.json
-└── docs/                       # Project specifications, rules, and drafts
+└── docs/                       # Project documentation & guides
 ```
 
 ---
 
 ## 💻 Local Setup & Installation
 
-### Prerequisites
-* **Node.js** v18+ installed
-* **MongoDB Atlas** cluster URI (or local MongoDB running)
-
-### 1. Clone the Repository
+### 1. Clone Repository
 ```bash
 git clone https://github.com/ahmed-husssain/HotelMS.git
 cd HotelMS
@@ -167,57 +132,52 @@ cd HotelMS
 cd server
 npm install
 
-# Create .env file
+# Create environment file
 copy .env.example .env
 ```
 
-Ensure `server/.env` contains your MongoDB connection string and credentials:
+Ensure `server/.env` contains your settings:
 ```env
 PORT=5000
 NODE_ENV=development
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_secret_jwt_key
 CLIENT_URL=http://localhost:5173
-SAFEPAY_API_KEY=your_sandbox_api_key
-SAFEPAY_SECRET_KEY=your_sandbox_secret_key
+SAFEPAY_API_KEY=your_safepay_key
+SAFEPAY_SECRET_KEY=your_safepay_secret
 ```
 
-Seed initial hotel inventory, suites, and staff accounts:
+Seed initial rooms, staff accounts, and test data:
 ```bash
 npm run seed
 ```
 
-Start the backend server:
+Start backend:
 ```bash
 npm run dev
 # Server runs on http://localhost:5000
 ```
 
 ### 3. Frontend Setup
-In a new terminal:
+In another terminal:
 ```bash
 cd client
 npm install
 npm run dev
-# Application opens on http://localhost:5173
+# App opens on http://localhost:5173
 ```
 
 ---
 
-## 🔑 Test Accounts & Credentials
+## 🔑 Pre-Configured Test Accounts
 
-The seed script (`npm run seed`) provisions pre-configured accounts for testing:
+Run `npm run seed` in `server/` to load these accounts:
 
-| Role | Email | Password | Access Route |
+| Role | Email | Password | Access Page |
 | :--- | :--- | :--- | :--- |
-| **General Manager (Admin)** | `admin@stayza.com` | `Password123!` | `/admin` |
-| **Front Desk Receptionist** | `reception@stayza.com` | `Password123!` | `/front-desk` |
-| **Housekeeping Lead** | `cleaning@stayza.com` | `Password123!` | `/housekeeping` |
-| **Registered Guest** | `guest@stayza.com` | `Password123!` | `/my-stay` |
+| **Admin (Manager)** | `admin@stayza.com` | `Password123!` | `/admin` |
+| **Front Desk** | `reception@stayza.com` | `Password123!` | `/front-desk` |
+| **Housekeeping** | `cleaning@stayza.com` | `Password123!` | `/housekeeping` |
+| **Guest** | `guest@stayza.com` | `Password123!` | `/my-stay` |
 
-*(You can also register a new guest account directly at `/register`)*
-
----
-
-## 📄 License & Academic Attribution
-Developed as an enterprise-grade academic eProject for the Aptech Learning curriculum (MERN Stack). All business logic, pricing services, and atomic availability holds are engineered from first principles.
+*(You can also register a fresh guest account anytime at `/register`)*

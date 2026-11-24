@@ -214,7 +214,7 @@ const INITIAL_MAINTENANCE_TICKETS = [
 const INITIAL_AUDIT_LOGS = [
   {
     id: 'LOG-701',
-    timestamp: '14:22 PKT',
+    timestamp: '24 Nov 2026, 14:22 PKT',
     actor: 'Sara Ahmed (Front Desk)',
     action: 'CHECKIN_COMPLETED',
     category: 'PMS',
@@ -222,7 +222,7 @@ const INITIAL_AUDIT_LOGS = [
   },
   {
     id: 'LOG-702',
-    timestamp: '13:05 PKT',
+    timestamp: '24 Nov 2026, 13:05 PKT',
     actor: 'Bilal Farooq (Housekeeping)',
     action: 'ROOM_CLEANING_CERTIFIED',
     category: 'HOUSEKEEPING',
@@ -230,7 +230,7 @@ const INITIAL_AUDIT_LOGS = [
   },
   {
     id: 'LOG-703',
-    timestamp: '11:15 PKT',
+    timestamp: '24 Nov 2026, 11:15 PKT',
     actor: 'Karim Mansoor (General Manager)',
     action: 'RATE_ADJUSTMENT',
     category: 'SETTINGS',
@@ -712,15 +712,22 @@ export function HotelDataProvider({ children }) {
     localStorage.setItem('stayza_hotel_audit', JSON.stringify(auditLogs))
   }, [auditLogs])
 
-  // Helper: Append Audit Log
+  // Helper: Append Audit Log with full date & time formatting and reference cleanup
   const addAuditLog = (action, category, details, actor = 'System Operator') => {
+    const now = new Date()
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+    const cleanDetails = (details || '')
+      .replace(/\?order_id=[^ &]*/g, '')
+      .replace(/\?ref=[^ &]*/g, '')
+
     const newLog = {
       id: `LOG-${Math.floor(700 + Math.random() * 300)}`,
-      timestamp: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' PKT',
+      timestamp: `${dateStr}, ${timeStr} PKT`,
       actor,
       action,
       category,
-      details,
+      details: cleanDetails,
     }
     setAuditLogs((prev) => [newLog, ...prev])
   }
@@ -734,6 +741,7 @@ export function HotelDataProvider({ children }) {
    * Adds booking to Arrivals and updates audit log
    */
   const createReservation = (bookingData) => {
+    const cleanBookingRef = (bookingData.bookingRef || '').split('?')[0].split('&')[0]
     const newArrival = {
       id: `ARR-${Math.floor(900 + Math.random() * 100)}`,
       guest: bookingData.guestDossier.fullName,
@@ -742,7 +750,7 @@ export function HotelDataProvider({ children }) {
       tier: bookingData.residence.tier,
       eta: '14:00 PKT',
       safepayRef: bookingData.safepayRef,
-      bookingRef: bookingData.bookingRef,
+      bookingRef: cleanBookingRef,
       status: 'Deposit Confirmed (30%)',
       advancePaid: bookingData.advance,
       totalValuation: bookingData.total,
@@ -753,7 +761,7 @@ export function HotelDataProvider({ children }) {
     addAuditLog(
       'ONLINE_RESERVATION_CREATED',
       'RESERVATION',
-      `New booking ${bookingData.bookingRef} by ${bookingData.guestDossier.fullName} for Suite ${bookingData.residence.roomNumber}. Advance: PKR ${bookingData.advance.toLocaleString()}.`,
+      `New booking ${cleanBookingRef} by ${bookingData.guestDossier.fullName} for Suite ${bookingData.residence.roomNumber}. Advance: PKR ${bookingData.advance.toLocaleString()}.`,
       bookingData.guestDossier.fullName
     )
     return newArrival

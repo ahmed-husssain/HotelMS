@@ -5,6 +5,8 @@ const {
   getStaffAccounts,
   createStaffAccount,
   toggleStaffStatus,
+  updateStaffAccount,
+  deleteStaffAccount,
   getGuestDirectory,
   updateRoomRate,
   getAuditLogs,
@@ -25,10 +27,12 @@ router.use(authorize('admin'))
 // 1. Executive Analytics (5 Real Metrics)
 router.get('/analytics', getExecutiveAnalytics)
 
-// 2. Staff Governance
+// 2. Staff Governance (Full CRUD)
 router.get('/staff', getStaffAccounts)
 router.post('/staff', createStaffAccount)
+router.put('/staff/:id', updateStaffAccount)
 router.patch('/staff/:id/status', toggleStaffStatus)
+router.delete('/staff/:id', deleteStaffAccount)
 
 // 3. Guest CRM & Directory
 router.get('/guests', getGuestDirectory)
