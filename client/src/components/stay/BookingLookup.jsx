@@ -64,7 +64,7 @@ export default function BookingLookup({
               <h2 className="font-serif-grand text-xl sm:text-2xl text-slate-900 font-light">
                 No Active Reservation
               </h2>
-              <p className="text-xs text-slate-600 max-w-xs mx-auto leading-relaxed font-sans pt-1">
+              <p className="text-xs text-slate-600 max-w-xs mx-auto leading-relaxed font-sans-clean pt-1">
                 You do not have a booked suite yet. Reserve a suite to unlock your digital room key and room services.
               </p>
             </div>

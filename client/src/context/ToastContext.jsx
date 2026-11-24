@@ -71,11 +71,11 @@ export function ToastProvider({ children }) {
                 
                 <div className="space-y-0.5">
                   {t.title && (
-                    <span className="text-[11px] font-sans font-semibold text-white block leading-tight">
+                    <span className="text-[11px] font-sans-clean font-semibold text-white block leading-tight">
                       {t.title}
                     </span>
                   )}
-                  <p className="text-xs font-sans text-slate-300 leading-snug">
+                  <p className="text-xs font-sans-clean text-slate-300 leading-snug">
                     {t.message}
                   </p>
                 </div>

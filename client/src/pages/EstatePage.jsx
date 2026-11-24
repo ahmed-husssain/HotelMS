@@ -515,17 +515,17 @@ export default function EstatePage() {
             <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <span className="text-slate-400 uppercase text-[10px] block">BREAKFAST</span>
               <strong className="text-slate-900 text-sm block">07:00 &ndash; 11:00</strong>
-              <p className="text-slate-600 font-sans text-xs">Fresh pastries, local fruit, and hand-brewed pour-overs beside the tide.</p>
+              <p className="text-slate-600 font-sans-clean text-xs">Fresh pastries, local fruit, and hand-brewed pour-overs beside the tide.</p>
             </div>
             <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <span className="text-slate-400 uppercase text-[10px] block">COASTAL DINNER</span>
               <strong className="text-slate-900 text-sm block">18:00 &ndash; 23:00</strong>
-              <p className="text-slate-600 font-sans text-xs">Wood-fired red snapper, wild sea bass, and herbs picked that morning.</p>
+              <p className="text-slate-600 font-sans-clean text-xs">Wood-fired red snapper, wild sea bass, and herbs picked that morning.</p>
             </div>
             <div className="p-6 bg-white border border-slate-200 rounded-[2px] space-y-2 hover:border-slate-400 hover:shadow-xs transition-all duration-300">
               <span className="text-slate-400 uppercase text-[10px] block">PRIVATE CHEF</span>
               <strong className="text-slate-900 text-sm block">In-Suite Service</strong>
-              <p className="text-slate-600 font-sans text-xs">Custom multi-course dinners prepared directly on your private terrace.</p>
+              <p className="text-slate-600 font-sans-clean text-xs">Custom multi-course dinners prepared directly on your private terrace.</p>
             </div>
           </div>
 

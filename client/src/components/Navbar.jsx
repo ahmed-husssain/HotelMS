@@ -17,7 +17,7 @@ function StaggeredWaveText({ text }) {
           <span
             key={index}
             className="relative inline-block overflow-hidden align-top select-none leading-tight"
-            style={{ height: '1.15em' }}
+            style={{ height: '1.3em' }}
           >
             <span className="invisible">{char === ' ' ? '\u00A0' : char}</span>
             <span

@@ -167,7 +167,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
               Total Gross Revenue
             </span>
-            <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
+            <span className="font-mono font-bold text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               PKR {revenue.grossRevenue.toLocaleString()}
             </span>
             <span className="text-[10px] font-mono text-emerald-800 font-semibold block mt-1">
@@ -199,7 +199,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
               Live Occupancy Rate
             </span>
-            <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
+            <span className="font-mono font-bold text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               {occupancy.occupancyRate}%
             </span>
             <span className="text-[10px] font-mono text-slate-500 block mt-1">
@@ -231,7 +231,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
               Average Room Rate
             </span>
-            <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
+            <span className="font-mono font-bold text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               PKR {pricingYield.adr.toLocaleString()}
             </span>
             <span className="text-[10px] font-mono text-emerald-800 font-semibold block mt-1">
@@ -257,7 +257,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
               Booking Conversion Rate
             </span>
-            <span className="font-serif-grand text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
+            <span className="font-mono font-bold text-2xl lg:text-3xl text-slate-900 mt-2 block tracking-tight">
               {bookingFunnel.conversionRate}%
             </span>
             <span className="text-[10px] font-mono text-slate-500 block mt-1">

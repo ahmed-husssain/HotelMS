@@ -131,7 +131,7 @@ export default function Footer() {
               <a href="mailto:hello@stayza.com" className="inline-flex items-center min-h-[28px] py-1 text-[11px] text-[#44403C] hover:text-[#121619] transition-colors">
                 hello@stayza.com
               </a>
-              <span className="text-[11px] text-[#78716C] leading-normal pt-1 font-sans">
+              <span className="text-[11px] text-[#78716C] leading-normal pt-1 font-sans-clean">
                 Beachfront Avenue, Coastal Highway, Thatta, Sindh, Pakistan
               </span>
             </div>

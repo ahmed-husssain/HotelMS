@@ -308,7 +308,9 @@ export default function ResidenceSpread({ residence, index, onReserve, onOpenSpe
         <div className="sm:hidden flex items-center justify-between py-2 px-3 bg-white border border-slate-200/90 rounded-[2px] font-mono text-[10px] text-slate-800 shadow-2xs">
           <span className="font-semibold">{residence.specs?.find(s => s.label === 'AREA')?.value || '210 M²'}</span>
           <span className="text-slate-300">&bull;</span>
-          <span className="truncate max-w-[125px] font-semibold">{residence.specs?.find(s => s.label === 'VIEW')?.value || '360° Ocean'}</span>
+          <span className="truncate max-w-[160px] font-semibold" title={residence.specs?.find(s => s.label === 'VIEW')?.value || '360° Ocean'}>
+            {residence.specs?.find(s => s.label === 'VIEW')?.value || '360° Ocean'}
+          </span>
           <span className="text-slate-300">&bull;</span>
           <span className="font-semibold">{residence.specs?.find(s => s.label === 'BED')?.value || 'King Bed'}</span>
         </div>

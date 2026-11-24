@@ -848,7 +848,7 @@ export default function GuestPortalPage() {
                 <span className="w-5 h-5 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
                   {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
                 </span>
-                <span className="font-mono text-xs text-slate-800 font-semibold max-w-[80px] truncate">
+                <span className="font-mono text-xs text-slate-800 font-semibold max-w-[120px] sm:max-w-[180px] truncate">
                   {currentUser.name ? currentUser.name.split(' ')[0] : 'Guest'}
                 </span>
               </button>
@@ -997,7 +997,7 @@ export default function GuestPortalPage() {
                 <span className="w-5 h-5 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
                   {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
                 </span>
-                <span className="font-mono text-xs font-semibold text-slate-800 max-w-[120px] truncate">
+                <span className="font-mono text-xs font-semibold text-slate-800 max-w-[160px] sm:max-w-[220px] truncate">
                   {currentUser.name || 'Guest Profile'}
                 </span>
               </button>
