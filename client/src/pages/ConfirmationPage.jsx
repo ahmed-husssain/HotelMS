@@ -29,6 +29,7 @@ export default function ConfirmationPage() {
   const booking = {
     ...rawBooking,
     bookingRef: displayBookingRef,
+    guestEmail: rawBooking.guestEmail || rawBooking.email || currentUser?.email || '',
   }
 
   const handleCopyCode = async () => {

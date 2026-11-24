@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { downloadBookingInvoice } from '../../services/api'
 
 export default function CheckoutInvoiceModal({
   isOpen,
@@ -9,6 +10,7 @@ export default function CheckoutInvoiceModal({
 }) {
   const [paymentMethod, setPaymentMethod] = useState('CASH')
   const [isProcessing, setIsProcessing] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
   const [isRendered, setIsRendered] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -51,6 +53,23 @@ export default function CheckoutInvoiceModal({
 
   const handlePrint = () => {
     window.print()
+  }
+
+  const handleDownloadPDF = async () => {
+    const bookingRef = selectedRoom?.bookingRef || (selectedRoom?.roomNumber ? `ST-${selectedRoom.roomNumber.replace(/\D/g, '')}-9041` : '')
+    if (!bookingRef) {
+      window.print()
+      return
+    }
+    setIsDownloading(true)
+    try {
+      await downloadBookingInvoice(bookingRef)
+    } catch (err) {
+      console.warn('[CheckoutInvoiceModal] PDF download fallback to print:', err.message)
+      window.print()
+    } finally {
+      setIsDownloading(false)
+    }
   }
 
   const roomSubtotal = (selectedRoom.nightlyRate || 0) * (selectedRoom.nights || 1)
@@ -206,14 +225,25 @@ export default function CheckoutInvoiceModal({
         )}
 
         {/* Action Controls */}
-        <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
-          <button
-            type="button"
-            onClick={handlePrint}
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono uppercase font-bold rounded-[2px] transition-colors cursor-pointer"
-          >
-            Print Tax Receipt &darr;
-          </button>
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={isDownloading}
+              onClick={handleDownloadPDF}
+              className="px-3.5 py-2 bg-slate-900 hover:bg-slate-950 text-white text-xs font-mono uppercase font-bold rounded-[2px] transition-colors cursor-pointer disabled:opacity-60 flex items-center gap-1.5 shadow-2xs"
+            >
+              <span>{isDownloading ? 'Generating...' : 'Download PDF'}</span>
+              <span>&darr;</span>
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono uppercase font-bold rounded-[2px] transition-colors cursor-pointer"
+            >
+              Print Receipt
+            </button>
+          </div>
 
           <button
             type="button"

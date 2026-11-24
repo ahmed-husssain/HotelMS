@@ -116,6 +116,46 @@ export async function submitStayFeedback(reference, feedback) {
   })
 }
 
+export async function downloadBookingInvoice(bookingRef, guestEmail = '') {
+  const token =
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('stayza_auth_token') || localStorage.getItem('habitas_auth_token')
+      : null
+
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  }
+
+  const queryParams = new URLSearchParams()
+  if (guestEmail) queryParams.set('email', guestEmail)
+
+  const url = `${API_BASE}/bookings/${encodeURIComponent(bookingRef)}/invoice${
+    queryParams.toString() ? `?${queryParams.toString()}` : ''
+  }`
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers,
+  })
+
+  if (!res.ok) {
+    const err = new Error(`Invoice download failed with status ${res.status}`)
+    err.status = res.status
+    throw err
+  }
+
+  const blob = await res.blob()
+  const blobUrl = window.URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = blobUrl
+  a.download = `Stayza-Invoice-${bookingRef}.pdf`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000)
+  return true
+}
+
 // 4. Staff & Front Desk PMS Operations
 export async function fetchStaffDashboard() {
   return request('/staff/dashboard')

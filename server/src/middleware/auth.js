@@ -119,4 +119,84 @@ async function verifyBookingOwnerOrStaff(req, res, next) {
   }
 }
 
-module.exports = { protect, verifyBookingOwnerOrStaff }
+/**
+ * Verify Invoice Access Middleware
+ * 
+ * Verifies caller has right to download the official PDF tax document:
+ * 1. Authorized Staff ('admin', 'receptionist', 'housekeeping')
+ * 2. Authenticated Guest owner (by user ID, email, or active reservation code)
+ * 3. Guest with matching booking reference AND reservation email (?email=...)
+ */
+async function verifyInvoiceAccess(req, res, next) {
+  try {
+    let token = null
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+      token = req.headers.authorization.split(' ')[1]
+    } else if (req.query && req.query.token) {
+      token = req.query.token
+    }
+
+    if (token && JWT_SECRET) {
+      try {
+        const decoded = jwt.verify(token, JWT_SECRET)
+        const user = await User.findById(decoded.id).select('-password')
+        if (user && user.isActive) {
+          req.user = user
+        }
+      } catch {
+        // Token invalid or expired; fall back to reference/email verification
+      }
+    }
+
+    const reference = req.params.reference || req.query.ref
+    if (!reference) {
+      return res.status(400).json({ success: false, message: 'Reservation reference is required.' })
+    }
+
+    const Booking = require('../models/Booking')
+    const booking = await Booking.findOne({
+      bookingReference: new RegExp('^' + reference.trim() + '$', 'i'),
+    })
+
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'Reservation not found.' })
+    }
+
+    // 1. Staff access
+    if (req.user && ['admin', 'receptionist', 'housekeeping'].includes(req.user.role)) {
+      req.booking = booking
+      return next()
+    }
+
+    // 2. Authenticated owner access
+    if (req.user) {
+      const isOwnerId = booking.guest && req.user._id && booking.guest.toString() === req.user._id.toString()
+      const isOwnerEmail = booking.guestDetails?.email && req.user.email &&
+        booking.guestDetails.email.toLowerCase() === req.user.email.toLowerCase()
+      const isCodeMatch = req.user.activeReservationCode &&
+        req.user.activeReservationCode.toUpperCase() === reference.toUpperCase()
+
+      if (isOwnerId || isOwnerEmail || isCodeMatch) {
+        req.booking = booking
+        return next()
+      }
+    }
+
+    // 3. Guest lookup verification via query email (?email=...)
+    const queryEmail = (req.query.email || '').trim().toLowerCase()
+    if (queryEmail && booking.guestDetails?.email && booking.guestDetails.email.toLowerCase() === queryEmail) {
+      req.booking = booking
+      return next()
+    }
+
+    return res.status(403).json({
+      success: false,
+      message: 'Access denied. Please log in or provide your reservation email to download this invoice.',
+    })
+  } catch (error) {
+    console.error('[verifyInvoiceAccess] Error:', error.message)
+    res.status(500).json({ success: false, message: 'Authorization check failed.' })
+  }
+}
+
+module.exports = { protect, verifyBookingOwnerOrStaff, verifyInvoiceAccess }

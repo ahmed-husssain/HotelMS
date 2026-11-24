@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { downloadBookingInvoice } from '../../services/api'
 
 /**
  * InvoicePreviewModal — Mobile-First, Minimal Luxury Hotel Tax Document
@@ -13,6 +14,7 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
   const [copied, setCopied] = useState(false)
   const [isRendered, setIsRendered] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
@@ -74,16 +76,15 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
   }
 
   const handleDownloadPDF = async () => {
+    setIsDownloading(true)
     try {
-      const res = await fetch(`/api/bookings/${bookingRef}/invoice`, { method: 'HEAD' })
-      if (res.ok && res.headers.get('content-type')?.includes('application/pdf')) {
-        window.open(`/api/bookings/${bookingRef}/invoice`, '_blank')
-        return
-      }
-    } catch {
-      // Fallback to print
+      await downloadBookingInvoice(bookingRef, booking?.guestEmail || booking?.email || '')
+    } catch (err) {
+      console.warn('[Invoice] Binary download fallback to print:', err.message)
+      window.print()
+    } finally {
+      setIsDownloading(false)
     }
-    window.print()
   }
 
   const handleCopySummary = () => {
@@ -141,10 +142,11 @@ Balance: PKR ${balanceDue.toLocaleString()}`
 
             <button
               type="button"
+              disabled={isDownloading}
               onClick={handleDownloadPDF}
-              className="px-3 py-1.5 bg-white text-slate-900 hover:bg-slate-100 text-xs font-semibold rounded transition-colors cursor-pointer flex items-center gap-1 shadow-xs touch-target"
+              className="px-3 py-1.5 bg-white text-slate-900 hover:bg-slate-100 text-xs font-semibold rounded transition-colors cursor-pointer flex items-center gap-1 shadow-xs touch-target disabled:opacity-60"
             >
-              <span>Download PDF</span>
+              <span>{isDownloading ? 'Generating PDF...' : 'Download PDF'}</span>
               <span>&darr;</span>
             </button>
 

@@ -540,13 +540,20 @@ async function downloadInvoice(req, res) {
       return res.status(400).json({ success: false, message: 'Please provide a booking reference' })
     }
 
-    // Locate booking in MongoDB (case-insensitive)
-    const booking = await Booking.findOne({
-      bookingReference: new RegExp('^' + reference + '$', 'i'),
-    }).populate('room')
+    // Locate booking in MongoDB (case-insensitive) or reuse from middleware
+    let booking = req.booking
+    if (!booking) {
+      booking = await Booking.findOne({
+        bookingReference: new RegExp('^' + reference + '$', 'i'),
+      })
+    }
 
     if (!booking) {
       return res.status(404).json({ success: false, message: 'Reservation not found' })
+    }
+
+    if (!booking.populated('room')) {
+      await booking.populate('room')
     }
 
     // Fetch any associated payments (e.g. 30% online advance deposit)
