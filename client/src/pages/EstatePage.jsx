@@ -183,8 +183,8 @@ export default function EstatePage() {
   // Real, authentic resort photography
   const HERO_IMG = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2400&q=85'
   const BEACH_IMG = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85'
-  const DINING_IMG = '/images/estate/coastal-dining.jpg'
-  const SPA_IMG = '/images/estate/wellness-spa.jpg'
+  const DINING_IMG = '/Images/estate/coastal-dining.jpg'
+  const SPA_IMG = '/Images/estate/wellness-spa.jpg'
   const VALET_IMG = 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=85'
 
   // Hero Expanding Photo Animation (Exact Casa Momo "Video/Image Grow" effect)

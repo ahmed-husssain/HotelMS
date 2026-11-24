@@ -8,6 +8,13 @@
         ".git/**",
         "**/node_modules/**"
       ],
+      "redirects": [
+        {
+          "source": "/images/:path*",
+          "destination": "/Images/:path*",
+          "type": 301
+        }
+      ],
       "rewrites": [
         {
           "source": "**",
@@ -76,6 +83,13 @@
         "firebase.json",
         ".git/**",
         "**/node_modules/**"
+      ],
+      "redirects": [
+        {
+          "source": "/images/:path*",
+          "destination": "/Images/:path*",
+          "type": 301
+        }
       ],
       "rewrites": [
         {
