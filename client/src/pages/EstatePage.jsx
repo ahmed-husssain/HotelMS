@@ -183,8 +183,8 @@ export default function EstatePage() {
   // Real, authentic resort photography
   const HERO_IMG = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2400&q=85'
   const BEACH_IMG = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85'
-  const DINING_IMG = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2400&q=85'
-  const SPA_IMG = 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=2400&q=85'
+  const DINING_IMG = '/images/estate/coastal-dining.jpg'
+  const SPA_IMG = '/images/estate/wellness-spa.jpg'
   const VALET_IMG = 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=85'
 
   // Hero Expanding Photo Animation (Exact Casa Momo "Video/Image Grow" effect)
@@ -251,19 +251,8 @@ export default function EstatePage() {
       {/* ========================================================= */}
       <section
         ref={heroContainerRef}
-        className="relative pt-28 pb-16 sm:pb-24 px-4 sm:px-8 lg:px-14 flex flex-col items-center justify-between min-h-[92vh] overflow-hidden"
+        className="relative pt-32 sm:pt-36 pb-16 sm:pb-24 px-4 sm:px-8 lg:px-14 flex flex-col items-center justify-between min-h-[92vh] overflow-hidden"
       >
-        {/* Top Eyebrow Tag */}
-        <div className="max-w-7xl w-full mx-auto flex items-center justify-between text-xs font-mono uppercase tracking-[0.25em] text-slate-500 pb-8">
-          <div className="flex items-center gap-2 font-bold text-emerald-900">
-            <span className="w-2 h-2 rounded-full bg-emerald-700" />
-            <span>STAYZA RESORT &bull; SINDH COAST</span>
-          </div>
-          <span className="hidden sm:inline-block text-slate-400 font-medium">
-            42 ACRES &bull; 7 PRIVATE SUITES
-          </span>
-        </div>
-
         {/* Grand Editorial Headline */}
         <div className="max-w-5xl mx-auto text-center space-y-4 my-auto py-6">
           <h1 className="font-serif-grand text-4xl sm:text-7xl lg:text-8xl font-light text-slate-900 tracking-tight leading-[1.02]">
