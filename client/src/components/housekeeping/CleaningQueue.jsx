@@ -20,6 +20,23 @@ export default function CleaningQueue({
   const [activeFilter, setActiveFilter] = useState('ALL') // 'ALL' | 'DIRTY' | 'CLEANING' | 'READY'
   const [selectedDetailRoom, setSelectedDetailRoom] = useState(null)
 
+  // Body scroll lock effect when room detail drawer is open
+  useEffect(() => {
+    if (!selectedDetailRoom) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setSelectedDetailRoom(null)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedDetailRoom])
+
   // Quick Counts
   const dirtyCount = rooms.filter((r) => r.status === 'DIRTY').length
   const cleaningCount = rooms.filter((r) => r.status === 'CLEANING').length
@@ -330,7 +347,7 @@ export default function CleaningQueue({
             className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-40"
             onClick={() => setSelectedDetailRoom(null)}
           />
-          <aside className="fixed top-0 right-0 h-full w-full max-w-md bg-[#FAF8F5] border-l border-slate-300 shadow-2xl z-50 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto">
+          <aside className="fixed top-0 right-0 h-full w-full max-w-md bg-[#FAF8F5] border-l border-slate-300 shadow-2xl z-50 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto overscroll-contain">
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                 <div>

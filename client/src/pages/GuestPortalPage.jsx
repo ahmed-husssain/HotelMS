@@ -148,7 +148,7 @@ const DINING_MENU = [
     price: 2400,
     timeEst: '25 mins',
     tag: 'Artisanal Brioche',
-    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=700&q=80',
+    image: '/Images/dining/club-sandwich.webp',
   },
   {
     id: 'dining-2',
@@ -288,6 +288,23 @@ export default function GuestPortalPage() {
   const [activeTab, setActiveTab] = useState('suite') // 'suite' | 'dining' | 'spa' | 'concierge' | 'folio'
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
+
+  // Body scroll lock effect for Profile & Settings Modal
+  useEffect(() => {
+    if (!isProfileModalOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsProfileModalOpen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isProfileModalOpen])
 
   // Portal Authentication State
   const [bookingCode, setBookingCode] = useState(() => initialRef || currentUser?.activeReservationCode || '')
@@ -1960,11 +1977,11 @@ export default function GuestPortalPage() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="guest-profile-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in overscroll-contain"
           onClick={() => setIsProfileModalOpen(false)}
         >
           <div
-            className="w-full max-w-md bg-white border border-slate-200/90 rounded-2xl shadow-2xl p-5 sm:p-6 space-y-5"
+            className="w-full max-w-md bg-white border border-slate-200/90 rounded-2xl shadow-2xl p-5 sm:p-6 space-y-5 max-h-[90vh] overflow-y-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}

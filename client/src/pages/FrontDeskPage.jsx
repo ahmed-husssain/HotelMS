@@ -36,6 +36,23 @@ export default function FrontDeskPage() {
   const [isZReportOpen, setIsZReportOpen] = useState(false)
   const [isNoShowModalOpen, setIsNoShowModalOpen] = useState(false)
 
+  // Lock body scroll when No-Show confirmation modal is active
+  useEffect(() => {
+    if (!isNoShowModalOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsNoShowModalOpen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isNoShowModalOpen])
+
   // Calculations for KPI Ribbons
   const occupiedCount = rooms.filter((r) => r.status === 'OCCUPIED').length
   const availableCount = rooms.filter((r) => r.status === 'AVAILABLE').length
@@ -313,8 +330,13 @@ export default function FrontDeskPage() {
 
       {/* Luxury In-App Confirmation Modal for No-Show */}
       {isNoShowModalOpen && noShowArrival && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-[#FAF8F5] border border-stone-200/90 rounded-sm max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-6">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="no-show-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overscroll-contain"
+        >
+          <div className="bg-[#FAF8F5] border border-stone-200/90 rounded-sm max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto overscroll-contain">
             <div className="space-y-1.5 border-b border-stone-200/80 pb-4">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-red-600 font-bold block">
                 Reservation Forfeit Warning

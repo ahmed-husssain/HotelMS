@@ -42,13 +42,19 @@ export default function SafepayCheckoutModal({
     return () => clearInterval(interval)
   }, [])
 
-  // Keyboard accessibility: Escape to dismiss
+  // Keyboard accessibility: Escape to dismiss & Body Scroll Lock
   useEffect(() => {
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onCancel()
     }
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
   }, [onCancel])
 
   if (!session || !isRendered) return null
@@ -69,13 +75,6 @@ export default function SafepayCheckoutModal({
         )}&source=magento2&webhooks=true&redirect_url=${encodeURIComponent(
           window.location.origin + '/payment/verify?ref=' + session.bookingRef
         )}&cancel_url=${encodeURIComponent(window.location.origin + '/reserve?cancelled=true&ref=' + session.bookingRef)}`
-
-  const handleSimulatedSettle = () => {
-    navigate(
-      `/payment/verify?ref=${session.bookingRef}&tracker=${session.trackerToken || 'track_' + session.bookingRef}`,
-      { state: { bookingSession: session } }
-    )
-  }
 
   return (
     <div
@@ -185,15 +184,9 @@ export default function SafepayCheckoutModal({
         </div>
 
         {/* Footer */}
-        <div className="bg-slate-50 px-6 py-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+        <div className="bg-slate-50 px-6 py-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
           <span>Protected by Safepay Sandbox</span>
-          <button
-            type="button"
-            onClick={handleSimulatedSettle}
-            className="text-[10px] text-slate-400 hover:text-slate-600 underline cursor-pointer"
-          >
-            Demo Instant Confirmation
-          </button>
+          <span>Official 256-Bit SSL Encrypted</span>
         </div>
       </div>
     </div>
