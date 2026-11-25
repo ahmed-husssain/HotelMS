@@ -83,11 +83,11 @@ export default function HousekeepingPage() {
               className="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-mono font-bold text-slate-900 cursor-pointer min-h-[36px] hover:border-slate-900 transition-colors"
               aria-label="Filter Housekeeping by Property"
             >
-              <option value="all">📍 All Properties (15 Keys)</option>
-              <option value="sindh-coast">🌊 Sindh Coast (4 Keys)</option>
-              <option value="hunza">🏔️ Hunza Valley (4 Keys)</option>
+              <option value="all">📍 All Properties (18 Keys)</option>
+              <option value="sindh-coast">🌊 Sindh Coast (5 Keys)</option>
+              <option value="hunza">🏔️ Hunza Valley (5 Keys)</option>
               <option value="lahore">🏛️ Lahore Estate (4 Keys)</option>
-              <option value="murree">🌲 Murree Pines (3 Keys)</option>
+              <option value="murree">🌲 Murree Pines (4 Keys)</option>
             </select>
           </div>
         </div>

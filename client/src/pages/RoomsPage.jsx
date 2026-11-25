@@ -10,31 +10,31 @@ import { useAuth } from '../context/AuthContext'
 
 /**
  * Curated Architectural Collections by Destination Property
- * Groups 15 suites into 4 physical hotel sanctuary locations across Pakistan:
- * - Sindh Coast (Karachi, Sindh) — 4 Suites
- * - Hunza Valley (Gilgit-Baltistan) — 4 Suites
+ * Groups 18 suites into 4 physical hotel sanctuary locations across Pakistan:
+ * - Sindh Coast (Karachi, Sindh) — 5 Suites
+ * - Hunza Valley (Gilgit-Baltistan) — 5 Suites
  * - Lahore Estate (Old Lahore, Punjab) — 4 Suites
- * - Murree Pines (Bhurban, Punjab) — 3 Suites
+ * - Murree Pines (Bhurban, Punjab) — 4 Suites
  */
 const ARCHITECTURAL_COLLECTIONS = [
   {
     id: 'all',
     label: 'All Properties',
-    keys: '15 Suites',
-    subtitle: '15 Curated Sanctuaries Across Pakistan',
+    keys: '18 Suites',
+    subtitle: '18 Curated Sanctuaries Across Pakistan',
     matcher: () => true,
   },
   {
     id: 'sindh-coast',
     label: 'Sindh Coast',
-    keys: '4 Suites',
+    keys: '5 Suites',
     subtitle: 'Cliffside Ocean Sanctuary • Karachi, Sindh',
     matcher: (r) => r.locationId === 'sindh-coast',
   },
   {
     id: 'hunza',
     label: 'Hunza Valley',
-    keys: '4 Suites',
+    keys: '5 Suites',
     subtitle: 'Karakoram Alpine Glacial Sanctuary • Gilgit-Baltistan',
     matcher: (r) => r.locationId === 'hunza',
   },
@@ -42,14 +42,14 @@ const ARCHITECTURAL_COLLECTIONS = [
     id: 'lahore',
     label: 'Lahore Estate',
     keys: '4 Suites',
-    subtitle: 'Heritage Mughal Courtyard Estate • Old Lahore, Punjab',
+    subtitle: 'Cultural Heritage Estate • Old Lahore, Punjab',
     matcher: (r) => r.locationId === 'lahore',
   },
   {
     id: 'murree',
     label: 'Murree Pines',
-    keys: '3 Suites',
-    subtitle: 'Cedar Forest Mountain Chalet • Bhurban, Punjab',
+    keys: '4 Suites',
+    subtitle: 'Cedar Forest Mountain Retreat • Bhurban, Punjab',
     matcher: (r) => r.locationId === 'murree',
   },
 ]
@@ -136,7 +136,7 @@ export default function RoomsPage() {
           {/* Subtle Monograph Eyebrow */}
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-mono tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
-              ROOMS &amp; SUITES &bull; 15 LUXURY RESIDENCES ACROSS PAKISTAN
+              ROOMS &amp; SUITES &bull; 18 LUXURY RESIDENCES ACROSS PAKISTAN
             </span>
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:inline-block">
               {activeCollection.subtitle}

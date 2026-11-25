@@ -428,14 +428,14 @@ export default function EstatePage() {
                 02 &bull; LIVING SPACES
               </span>
               <h2 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light leading-tight">
-                Seven Oceanfront Residences.
+                Eighteen Private Residences.
               </h2>
             </div>
             <Link
               to="/suites"
               className="px-6 py-3 bg-slate-900 text-white font-mono text-xs uppercase tracking-wider rounded-[2px] hover:bg-emerald-950 transition-colors shrink-0 flex items-center gap-2"
             >
-              <span>Explore All 7 Suites</span>
+              <span>Explore All 18 Suites</span>
               <CasaMomoArrow className="text-[#FFF0CA]" />
             </Link>
           </div>
@@ -666,7 +666,7 @@ export default function EstatePage() {
       <section className="py-24 sm:py-32 px-5 sm:px-12 lg:px-20 bg-[#0E1201] text-[#FAF8F5] text-center select-none border-t border-slate-800">
         <div className="max-w-3xl mx-auto space-y-6">
           <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#FFF0CA] font-bold block">
-            STAYZA RESIDENCES &bull; 7 PRIVATE SUITES
+            STAYZA RESIDENCES &bull; 18 PRIVATE SUITES
           </span>
           <h2 className="font-serif-grand text-3xl sm:text-6xl font-light tracking-tight text-white leading-tight">
             Reserve Your Stay on the Coast.
@@ -679,7 +679,7 @@ export default function EstatePage() {
               to="/suites"
               className="w-full sm:w-auto px-8 py-4 bg-[#FFF0CA] text-slate-950 font-bold uppercase tracking-wider rounded-[2px] hover:bg-white transition-colors min-h-[44px] flex items-center justify-center gap-2"
             >
-              <span>Explore the 7 Suites</span>
+              <span>Explore All 18 Suites</span>
               <CasaMomoArrow className="text-slate-950" />
             </Link>
             <Link

@@ -40,7 +40,7 @@ import { useAuth } from './AuthContext'
 import { RESIDENCES } from '../data/residences'
 import { LOCATIONS } from '../data/locations'
 
-// Initial Seed Rooms (All 15 Luxury Suites Across Pakistan)
+// Initial Seed Rooms (All 18 Luxury Suites Across Pakistan)
 const INITIAL_ROOMS = RESIDENCES.map((res) => {
   const isOccupied = res.roomNumber === 'SC-301'
   const isDirty = res.roomNumber === 'SC-204'

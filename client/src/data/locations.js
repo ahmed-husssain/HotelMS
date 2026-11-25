@@ -21,7 +21,7 @@ export const LOCATIONS = [
     email: 'coast@stayza.com',
     arrivalTransfer: 'Private Ocean Chauffeur from Karachi Jinnah Int’l (KHI)',
     valetBay: 'Subterranean Lift & Cliffside Valet',
-    suitesCount: 4,
+    suitesCount: 5,
     description: 'Perched on rugged limestone cliffs overlooking the Arabian Sea, featuring heated plunge pools and panoramic ocean horizons.',
   },
   {
@@ -37,7 +37,7 @@ export const LOCATIONS = [
     email: 'hunza@stayza.com',
     arrivalTransfer: 'Alpine Helipad Transfer from Gilgit Airport (GIL)',
     valetBay: 'Heated Mountain Carport & Private Helipad Pad #2',
-    suitesCount: 4,
+    suitesCount: 5,
     description: 'Nestled beneath Rakaposhi and Ultar Sar peaks, featuring heated cedar spa baths, stone fireplaces, and glacier views.',
   },
   {
@@ -69,7 +69,7 @@ export const LOCATIONS = [
     email: 'murree@stayza.com',
     arrivalTransfer: 'Mountain Express Chauffeur from Islamabad Int’l (ISB)',
     valetBay: 'Covered Timber Ridge Carport #1',
-    suitesCount: 3,
+    suitesCount: 4,
     description: 'Enclosed in aromatic pine forest, offering cantilevered mountain ridge lofts, private saunas, and forest balconies.',
   },
 ]
