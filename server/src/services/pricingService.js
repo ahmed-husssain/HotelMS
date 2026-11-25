@@ -48,12 +48,13 @@ function calculatePricing(baseNightlyRate, checkInDate, checkOutDate) {
   const nightlyRate = Math.max(0, Math.round(baseNightlyRate))
   const subtotal = nightlyRate * numberOfNights
 
-  // 5. 13% Sindh Hospitality Tax
-  const taxPercent = 13
-  const taxAmount = Math.round((subtotal * taxPercent) / 100)
-  const totalAmount = subtotal + taxAmount
+  // 5. All-Inclusive Luxury Tariff (0% additional provincial tax surcharge)
+  // Transparent luxury pricing: The quoted nightly rate is all-inclusive.
+  const taxPercent = 0
+  const taxAmount = 0
+  const totalAmount = subtotal
 
-  // 6. 30% Advance Deposit vs 70% Balance Due
+  // 6. 30% Online Advance Deposit vs 70% Balance Due at Front Desk
   const advancePercent = 30
   const advanceAmount = Math.round((totalAmount * advancePercent) / 100)
   const balanceDue = totalAmount - advanceAmount

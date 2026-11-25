@@ -9,29 +9,42 @@ const { findAvailableRooms, getRoomBookedRanges } = require('../services/availab
  * Broadcasts status and turnover events across WebSocket bus to all staff.
  */
 
-// Helper to resolve room by MongoDB ObjectId or roomNumber string ('301', 'Suite 301')
+// Helper to resolve room by MongoDB ObjectId or roomNumber string ('SC-301', '301', 'Suite 301', 'HZ-101')
 async function resolveRoom(id) {
   if (!id) return null
   if (id.match(/^[0-9a-fA-F]{24}$/)) {
     return await Room.findById(id)
   }
-  const cleanNumber = String(id).replace(/\D/g, '')
-  return await Room.findOne({
+  
+  // 1. Direct exact or case-insensitive match (e.g. 'SC-301', 'HZ-101', 'Suite 301')
+  const directMatch = await Room.findOne({
     $or: [
       { roomNumber: id },
-      { roomNumber: `Suite ${cleanNumber}` },
+      { roomNumber: new RegExp(`^${id}$`, 'i') },
+      { roomNumber: `Suite ${id}` },
+    ],
+  })
+  if (directMatch) return directMatch
+
+  // 2. Clean numeric fallback if an un-prefixed number was passed (e.g. '301')
+  const cleanNumber = String(id).replace(/\D/g, '')
+  if (!cleanNumber) return null
+
+  return await Room.findOne({
+    $or: [
       { roomNumber: cleanNumber },
+      { roomNumber: `Suite ${cleanNumber}` },
       { roomNumber: new RegExp(cleanNumber, 'i') },
     ],
   })
 }
 
-// @desc    Get all suites with optional date-range availability filter
+// @desc    Get all suites with optional date-range & location availability filter
 // @route   GET /api/rooms
 // @access  Public
 async function getAllRooms(req, res) {
   try {
-    const { checkIn, checkOut, guests, category } = req.query
+    const { checkIn, checkOut, guests, category, location } = req.query
 
     // 1. If date range is specified, run availability query
     if (checkIn && checkOut) {
@@ -41,6 +54,9 @@ async function getAllRooms(req, res) {
       let result = availableRooms
       if (category && category !== 'all') {
         result = result.filter((r) => r.roomType === category.toLowerCase())
+      }
+      if (location && location !== 'all') {
+        result = result.filter((r) => r.locationId === location.toLowerCase())
       }
 
       return res.status(200).json({
@@ -55,6 +71,9 @@ async function getAllRooms(req, res) {
     const query = { isPublished: true }
     if (category && category !== 'all') {
       query.roomType = category.toLowerCase()
+    }
+    if (location && location !== 'all') {
+      query.locationId = location.toLowerCase()
     }
 
     const rooms = await Room.find(query).sort({ floor: 1, roomNumber: 1 })

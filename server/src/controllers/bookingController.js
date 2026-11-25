@@ -14,13 +14,25 @@ const { generateInvoicePDF } = require('../services/invoiceService')
  * and live /my-stay Guest OS automation.
  */
 
-// Helper to resolve a room by MongoDB ObjectId or room number string (e.g. '301', 'res-301', 'Suite 301')
+// Helper to resolve a room by MongoDB ObjectId or room number string (e.g. 'SC-301', '301', 'res-301', 'Suite 301')
 async function resolveRoom(roomId) {
   if (!roomId) return null
   if (mongoose.Types.ObjectId.isValid(roomId)) {
     const room = await Room.findById(roomId)
     if (room) return room
   }
+
+  // 1. Direct exact or regex match on roomNumber (e.g. 'SC-301', 'HZ-101')
+  const directMatch = await Room.findOne({
+    $or: [
+      { roomNumber: roomId },
+      { roomNumber: new RegExp(`^${roomId}$`, 'i') },
+      { roomNumber: `Suite ${roomId}` },
+    ],
+  })
+  if (directMatch) return directMatch
+
+  // 2. Fallback to clean digits
   const cleanNumber = String(roomId).replace(/\D/g, '')
   if (cleanNumber) {
     return await Room.findOne({
@@ -165,6 +177,8 @@ async function createHold(req, res) {
         balanceDue: pricing.balanceDue,
         currency: 'PKR',
       }
+      existingHold.locationId = room.locationId || 'sindh-coast'
+      existingHold.locationName = room.city || 'Stayza Coastal Sanctuary'
       existingHold.guestDetails.name = guestDetails.name.trim()
       existingHold.guestDetails.phone = guestDetails.phone || existingHold.guestDetails.phone || '+92 300 0000000'
       existingHold.guestDetails.identificationNumber = (guestDetails.identificationNumber || existingHold.guestDetails.identificationNumber || '').trim()
@@ -197,6 +211,8 @@ async function createHold(req, res) {
       bookingReference,
       guest: guestUserId,
       room: room._id,
+      locationId: room.locationId || 'sindh-coast',
+      locationName: room.city || 'Stayza Coastal Sanctuary',
       roomNumber: room.roomNumber,
       checkInDate: new Date(checkInDate),
       checkOutDate: new Date(checkOutDate),
@@ -319,6 +335,7 @@ async function confirmBooking(req, res) {
     await Payment.create({
       bookingId: booking._id,
       guestId: booking.guest || null,
+      locationId: booking.locationId || 'sindh-coast',
       transactionType: 'ADVANCE_30',
       paymentMethod,
       amount: advancePaid,

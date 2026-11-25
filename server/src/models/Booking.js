@@ -47,6 +47,17 @@ const bookingSchema = new mongoose.Schema(
       required: [true, 'Booking must be assigned to a room'],
       index: true,
     },
+    locationId: {
+      type: String,
+      enum: ['sindh-coast', 'hunza', 'lahore', 'murree'],
+      default: 'sindh-coast',
+      index: true,
+    },
+    locationName: {
+      type: String,
+      default: 'Stayza Coastal Sanctuary',
+      trim: true,
+    },
     roomNumber: {
       type: String,
       required: true,

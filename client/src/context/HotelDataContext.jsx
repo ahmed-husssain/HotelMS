@@ -37,100 +37,56 @@ import { useAuth } from './AuthContext'
  * Single source of truth across Front Desk PMS, Housekeeping, GM Admin, and Guest Portal.
  */
 
-// Initial Seed Rooms (Aligned across all terminals)
-const INITIAL_ROOMS = [
-  {
-    roomNumber: 'Suite 301',
-    name: 'The Horizon Penthouse',
-    tier: 'PRESIDENTIAL SUITE',
-    category: 'penthouse',
-    nightlyRate: 110000,
-    status: 'OCCUPIED',
-    guest: 'Dr. Tariq Khan',
-    phone: '+92 300 8921455',
-    checkIn: '15 Nov 2026',
-    checkOut: '18 Nov 2026',
-    nights: 3,
-    advancePaid: 111870,
-    balanceDue: 261030,
-    folioNumber: 'FOL-301-89',
-    assignedCleaner: 'Bilal Farooq',
-    cleaningTasks: { linen: true, bathSalts: true, minibar: false, inspection: false },
-    priority: 'HIGH',
-    checkoutTime: '11:00 AM',
-    nextArrival: '02:00 PM (Dr. Tariq Khan)',
-    incidentals: [
-      { id: 'inc-1', item: 'Coastal Helipad Transfer', amount: 25000, time: '15 Nov, 14:30' },
-      { id: 'inc-2', item: 'Sommelier Wine Reserve', amount: 35000, time: '16 Nov, 20:15' },
-    ],
-  },
-  {
-    roomNumber: 'Suite 302',
-    name: 'The Courtyard Villa',
-    tier: 'PRIVATE COURTYARD VILLA',
-    category: 'villa',
-    nightlyRate: 75000,
-    status: 'DIRTY',
-    guest: null,
-    phone: null,
-    checkIn: null,
-    checkOut: null,
-    nights: 0,
-    advancePaid: 0,
-    balanceDue: 0,
-    folioNumber: null,
-    assignedCleaner: 'Zubair Shah',
-    cleaningTasks: { linen: false, bathSalts: false, minibar: false, inspection: false },
-    priority: 'URGENT',
-    checkoutTime: '11:30 AM',
-    nextArrival: '01:30 PM (Ambassador Malik)',
-    incidentals: [],
-  },
-  {
-    roomNumber: 'Suite 303',
-    name: 'The Overwater Pavilion',
-    tier: 'ROYAL OCEAN PAVILION',
-    category: 'overwater',
-    nightlyRate: 95000,
-    status: 'AVAILABLE',
-    guest: null,
-    phone: null,
-    checkIn: null,
-    checkOut: null,
-    nights: 0,
-    advancePaid: 0,
-    balanceDue: 0,
-    folioNumber: null,
-    assignedCleaner: 'Bilal Farooq',
-    cleaningTasks: { linen: true, bathSalts: true, minibar: true, inspection: true },
-    priority: 'NORMAL',
-    checkoutTime: 'Yesterday',
-    nextArrival: 'Tomorrow',
-    incidentals: [],
-  },
-  {
-    roomNumber: 'Suite 201',
-    name: 'The Beach Suite',
-    tier: 'GARDEN & LAGOON RESIDENCE',
-    category: 'sanctuary',
-    nightlyRate: 65000,
-    status: 'AVAILABLE',
-    guest: null,
-    phone: null,
-    checkIn: null,
-    checkOut: null,
-    nights: 0,
-    advancePaid: 0,
-    balanceDue: 0,
-    folioNumber: null,
-    assignedCleaner: 'Khurram Ali',
-    cleaningTasks: { linen: true, bathSalts: true, minibar: true, inspection: true },
-    priority: 'NORMAL',
-    checkoutTime: '2 Days Ago',
-    nextArrival: 'Open',
-    incidentals: [],
-  },
-]
+import { RESIDENCES } from '../data/residences'
+import { LOCATIONS } from '../data/locations'
+
+// Initial Seed Rooms (All 15 Luxury Suites Across Pakistan)
+const INITIAL_ROOMS = RESIDENCES.map((res) => {
+  const isOccupied = res.roomNumber === 'SC-301'
+  const isDirty = res.roomNumber === 'SC-204'
+  return {
+    roomNumber: res.roomNumber,
+    name: res.name,
+    tier: res.tier,
+    category: res.category,
+    locationId: res.locationId || 'sindh-coast',
+    locationName: res.locationName || 'Stayza Coastal Sanctuary',
+    city: res.city || 'Karachi, Sindh',
+    nightlyRate: res.nightlyRate,
+    status: isOccupied ? 'OCCUPIED' : isDirty ? 'DIRTY' : 'AVAILABLE',
+    guest: isOccupied ? 'Dr. Tariq Khan' : null,
+    phone: isOccupied ? '+92 300 8921455' : null,
+    checkIn: isOccupied ? '24 Nov 2026' : null,
+    checkOut: isOccupied ? '28 Nov 2026' : null,
+    nights: isOccupied ? 4 : 0,
+    advancePaid: isOccupied ? 132000 : 0,
+    balanceDue: isOccupied ? 308000 : 0,
+    folioNumber: isOccupied ? 'FOL-SC301-89' : null,
+    assignedCleaner:
+      res.locationId === 'hunza'
+        ? 'Khurram Ali'
+        : res.locationId === 'lahore'
+        ? 'Hamza Malik'
+        : res.locationId === 'murree'
+        ? 'Usman Qazi'
+        : 'Bilal Farooq',
+    cleaningTasks: {
+      linen: !isDirty,
+      bathSalts: !isDirty,
+      minibar: !isDirty && !isOccupied,
+      inspection: !isDirty && !isOccupied,
+    },
+    priority: isDirty ? 'HIGH' : 'NORMAL',
+    checkoutTime: isOccupied ? '11:00 AM' : 'Ready',
+    nextArrival: isOccupied ? '28 Nov (Open)' : 'Open',
+    incidentals: isOccupied
+      ? [
+          { id: 'inc-1', item: 'Coastal Helipad Transfer', amount: 25000, time: '24 Nov, 14:30' },
+          { id: 'inc-2', item: 'Seafood Tasting Dinner', amount: 15000, time: '25 Nov, 20:15' },
+        ]
+      : [],
+  }
+})
 
 // Initial Expected Arrivals (PMS Queue)
 const INITIAL_ARRIVALS = [
@@ -241,6 +197,9 @@ const INITIAL_AUDIT_LOGS = [
 const HotelDataContext = createContext(null)
 
 export function HotelDataProvider({ children }) {
+  // Active Multi-Property Filter: 'all' | 'sindh-coast' | 'hunza' | 'lahore' | 'murree'
+  const [selectedLocation, setSelectedLocation] = useState('all')
+
   // 1. Rooms Inventory
   const [rooms, setRooms] = useState(() => {
     try {
@@ -1350,6 +1309,9 @@ export function HotelDataProvider({ children }) {
   }
 
   const value = {
+    selectedLocation,
+    setSelectedLocation,
+    locations: LOCATIONS,
     rooms,
     arrivals,
     guestRequests,

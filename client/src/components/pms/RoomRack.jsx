@@ -36,8 +36,11 @@ export default function RoomRack({
     return true
   })
 
-  const getFloorLabel = (roomNumber = '') => {
-    if (roomNumber.includes('301') || roomNumber.includes('501')) return 'Level 04 (Penthouse / Top Floor)'
+  const getFloorLabel = (roomNumber = '', room = {}) => {
+    if (room.locationId === 'hunza' || roomNumber.startsWith('HZ')) return 'Karakoram Alpine Ridge'
+    if (room.locationId === 'lahore' || roomNumber.startsWith('LH')) return 'Mughal Courtyard Veranda'
+    if (room.locationId === 'murree' || roomNumber.startsWith('MR')) return 'Bhurban Cedar Ridge'
+    if (roomNumber.includes('301') || roomNumber.includes('501')) return 'Level 04 (Penthouse)'
     if (roomNumber.includes('401') || roomNumber.includes('201') || roomNumber.includes('302')) {
       return 'Level 02 (Ocean & Courtyard)'
     }
@@ -176,12 +179,12 @@ export default function RoomRack({
                           <strong className="font-serif-grand text-sm text-slate-900 block font-bold">
                             {room.name}
                           </strong>
-                          <span className="text-[10px] text-slate-400 uppercase tracking-wider">
-                            {room.tier || 'Luxury Suite'}
+                          <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
+                            {room.tier || 'Luxury Suite'} &bull; {room.city || (room.locationId === 'hunza' ? 'Hunza' : room.locationId === 'lahore' ? 'Lahore' : room.locationId === 'murree' ? 'Murree' : 'Sindh Coast')}
                           </span>
                         </td>
                         <td className="py-3.5 px-4 text-slate-500">
-                          {getFloorLabel(room.roomNumber)}
+                          {getFloorLabel(room.roomNumber, room)}
                         </td>
                         <td className="py-3.5 px-4 font-bold text-slate-900">
                           PKR {room.nightlyRate?.toLocaleString()}

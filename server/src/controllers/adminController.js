@@ -4,6 +4,7 @@ const Room = require('../models/Room')
 const Booking = require('../models/Booking')
 const Payment = require('../models/Payment')
 const ActivityLog = require('../models/ActivityLog')
+const { LOCATIONS } = require('../config/locations')
 
 /**
  * Stayza HMS — Admin & Executive Analytics Controller
@@ -17,10 +18,21 @@ const ActivityLog = require('../models/ActivityLog')
 // @access  Private (Admin Only)
 async function getExecutiveAnalytics(req, res) {
   try {
+    const { location } = req.query
+
+    // Multi-Property Location Filtering
+    const paymentQuery = { status: 'SUCCEEDED' }
+    const roomQuery = {}
+    if (location && location !== 'all') {
+      paymentQuery.locationId = location.toLowerCase()
+      roomQuery.locationId = location.toLowerCase()
+    }
+
     // -------------------------------------------------------------
     // METRIC 1: Gross Realized Revenue & Payment Split (PRD FR-6.2, TRD §2.4)
     // -------------------------------------------------------------
-    const payments = await Payment.find({ status: 'SUCCEEDED' })
+    const payments = await Payment.find(paymentQuery)
+    const allPayments = await Payment.find({ status: 'SUCCEEDED' })
 
     const advancePayments = payments.filter((p) => p.transactionType === 'ADVANCE_30')
     const balancePayments = payments.filter((p) => p.transactionType === 'BALANCE_70')
@@ -45,7 +57,29 @@ async function getExecutiveAnalytics(req, res) {
     // -------------------------------------------------------------
     // METRIC 2: Live Occupancy Rate & Operational Distribution (PRD FR-6.1, TRD §2.2)
     // -------------------------------------------------------------
-    const rooms = await Room.find({})
+    const rooms = await Room.find(roomQuery)
+    const allRooms = await Room.find({})
+
+    // Multi-Property Location Executive Distribution
+    const locationsOverview = LOCATIONS.map((loc) => {
+      const locRooms = allRooms.filter((r) => (r.locationId || 'sindh-coast') === loc.id)
+      const locOccupied = locRooms.filter((r) => r.status === 'OCCUPIED').length
+      const locPayments = allPayments.filter((p) => (p.locationId || 'sindh-coast') === loc.id)
+      const locRevenue = locPayments.reduce((sum, p) => sum + p.amount, 0)
+      return {
+        id: loc.id,
+        code: loc.code,
+        name: loc.name,
+        shortName: loc.shortName,
+        city: loc.city,
+        province: loc.province,
+        totalSuites: locRooms.length || loc.suitesCount,
+        occupiedSuites: locOccupied,
+        availableSuites: Math.max(0, (locRooms.length || loc.suitesCount) - locOccupied),
+        occupancyRate: locRooms.length > 0 ? Math.round((locOccupied / locRooms.length) * 100) : 0,
+        revenue: locRevenue,
+      }
+    })
     const totalRooms = rooms.length
     const occupiedCount = rooms.filter((r) => r.status === 'OCCUPIED').length
     const availableCount = rooms.filter((r) => r.status === 'AVAILABLE').length
@@ -119,6 +153,7 @@ async function getExecutiveAnalytics(req, res) {
     res.status(200).json({
       success: true,
       data: {
+        locationsOverview,
         // Metric 1: Revenue & Split
         revenue: {
           grossRevenue,

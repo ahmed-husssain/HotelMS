@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useHotelData } from '../context/HotelDataContext'
@@ -12,14 +12,27 @@ import ShiftClosingModal from '../components/pms/ShiftClosingModal'
 export default function FrontDeskPage() {
   const { currentUser, logout } = useAuth()
   const {
-    rooms,
-    arrivals,
+    rooms: allRooms,
+    arrivals: allArrivals,
+    selectedLocation,
+    setSelectedLocation,
     checkInGuest,
     checkOutGuest,
     markNoShow,
     addIncidental,
     systemSettings,
   } = useHotelData()
+
+  // Filter rooms & arrivals based on active branch selection
+  const rooms = useMemo(() => {
+    if (!selectedLocation || selectedLocation === 'all') return allRooms
+    return allRooms.filter((r) => (r.locationId || 'sindh-coast') === selectedLocation)
+  }, [allRooms, selectedLocation])
+
+  const arrivals = useMemo(() => {
+    if (!selectedLocation || selectedLocation === 'all') return allArrivals
+    return allArrivals.filter((a) => (a.locationId || 'sindh-coast') === selectedLocation)
+  }, [allArrivals, selectedLocation])
 
   // Terminal Navigation Tab: 'QUEUE' | 'RACK'
   const [activeTab, setActiveTab] = useState('QUEUE')
@@ -138,15 +151,24 @@ export default function FrontDeskPage() {
             </div>
           </div>
 
-          {/* Sub Row: Shift Closing Button */}
-          <div className="flex items-center justify-between pt-1 border-t border-slate-200/50">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
-              Shift Active &bull; {arrivals.length} Incoming
-            </span>
+          {/* Sub Row: Shift Closing Button & Property Selector */}
+          <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/50">
+            <select
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              className="bg-white border border-slate-300 rounded px-2 py-1 text-[11px] font-mono font-bold text-slate-800 cursor-pointer min-h-[38px] max-w-[170px]"
+              aria-label="Filter by Property Mobile"
+            >
+              <option value="all">All Branches (15)</option>
+              <option value="sindh-coast">Sindh Coast (4)</option>
+              <option value="hunza">Hunza Valley (4)</option>
+              <option value="lahore">Lahore Estate (4)</option>
+              <option value="murree">Murree Pines (3)</option>
+            </select>
             <button
               type="button"
               onClick={() => setIsZReportOpen(true)}
-              className="px-3 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs min-h-[38px] flex items-center"
+              className="px-3 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs min-h-[38px] flex items-center shrink-0"
             >
               Shift Closing &rarr;
             </button>
@@ -168,6 +190,19 @@ export default function FrontDeskPage() {
               <span className="font-serif-grand text-base font-bold tracking-tight text-slate-900">STAYZA</span>
               <span className="text-slate-300">/</span>
               <span className="text-xs font-mono uppercase tracking-widest text-slate-600 font-semibold">Front Desk Operations</span>
+              <span className="text-slate-300">/</span>
+              <select
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-mono font-bold text-slate-900 cursor-pointer min-h-[36px] hover:border-slate-900 transition-colors"
+                aria-label="Filter by Property"
+              >
+                <option value="all">📍 All Properties (15 Keys)</option>
+                <option value="sindh-coast">🌊 Sindh Coast (4 Keys)</option>
+                <option value="hunza">🏔️ Hunza Valley (4 Keys)</option>
+                <option value="lahore">🏛️ Lahore Estate (4 Keys)</option>
+                <option value="murree">🌲 Murree Pines (3 Keys)</option>
+              </select>
             </div>
           </div>
 

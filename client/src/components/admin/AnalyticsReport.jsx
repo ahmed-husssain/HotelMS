@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { fetchAdminAnalytics } from '../../services/api'
+import { LOCATIONS } from '../../data/locations'
 
 /**
  * LuxuryStay / Stayza HMS — Executive Analytics Report (PRD Module 6)
@@ -153,13 +154,70 @@ export default function AnalyticsReport({ rooms = [] }) {
         </div>
 
         <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-[2px] shrink-0 font-mono text-[10px] text-slate-300">
-          <span>Sindh GST: <strong className="text-white">13%</strong></span>
+          <span>Pricing: <strong className="text-white">All-Inclusive Luxury</strong></span>
           <span className="text-slate-600">|</span>
           <span>Advance Split: <strong className="text-white">30% / 70%</strong></span>
         </div>
       </div>
 
-      {/* 2. PRIMARY KPI METRIC CARDS */}
+      {/* 2. MULTI-PROPERTY LOCATIONS OVERVIEW (Pakistan Portfolio) */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-mono uppercase tracking-[0.2em] font-extrabold text-slate-900">
+            Pakistan Hotel Portfolio &bull; 4 Physical Properties (15 Suites)
+          </span>
+          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:inline-block">
+            Multi-Branch Real-Time Overview
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {LOCATIONS.map((loc) => {
+            const locRooms = (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === loc.id)
+            const totalSuites = locRooms.length || loc.suitesCount
+            const occupied = locRooms.filter((r) => r.status === 'OCCUPIED').length
+            const available = locRooms.filter((r) => r.status === 'AVAILABLE' || r.status === 'INSPECTED').length
+            const occPercent = totalSuites > 0 ? Math.round((occupied / totalSuites) * 100) : 0
+
+            return (
+              <div
+                key={loc.id}
+                className="p-4 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-3 hover:border-slate-400 transition-colors"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded-[2px] uppercase">
+                      {loc.code} &bull; {loc.province}
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-emerald-800">
+                      {occPercent}% Occupied
+                    </span>
+                  </div>
+                  <h4 className="font-serif-grand text-base font-bold text-slate-900 leading-tight">
+                    {loc.name}
+                  </h4>
+                  <p className="text-[11px] font-mono text-slate-500 mt-0.5">
+                    {loc.city}
+                  </p>
+                </div>
+
+                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Capacity</span>
+                    <span className="font-bold text-slate-900">{totalSuites} Suites</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] text-slate-400 block uppercase">Available</span>
+                    <span className="font-bold text-emerald-700">{available} Ready</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* 3. PRIMARY KPI METRIC CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* METRIC 1: Gross Realized Revenue */}
         <div className="p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-4">

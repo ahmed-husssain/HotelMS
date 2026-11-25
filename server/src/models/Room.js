@@ -17,6 +17,17 @@ const roomSchema = new mongoose.Schema(
       uppercase: true,
       index: true,
     },
+    locationId: {
+      type: String,
+      enum: ['sindh-coast', 'hunza', 'lahore', 'murree'],
+      default: 'sindh-coast',
+      index: true,
+    },
+    city: {
+      type: String,
+      default: 'Karachi',
+      trim: true,
+    },
     name: {
       type: String,
       required: [true, 'Please provide suite name'],
@@ -131,7 +142,8 @@ const roomSchema = new mongoose.Schema(
   }
 )
 
-// Compound Index for fast date/type availability queries
+// Compound Indexes for fast date/type/location availability queries
 roomSchema.index({ roomType: 1, status: 1 })
+roomSchema.index({ locationId: 1, status: 1 })
 
 module.exports = mongoose.model('Room', roomSchema)

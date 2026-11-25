@@ -23,10 +23,13 @@ export default function BookingPage() {
   const { currentUser } = useAuth()
   const { systemSettings } = useHotelData()
 
-  // 1. Resolve Active Suite (?room=301, ?room=204, etc.)
+  // 1. Resolve Active Suite (?room=SC-301, ?room=301, ?room=HZ-101, etc.)
   const roomParam = searchParams.get('room')
   const selectedResidence = useMemo(() => {
-    const match = RESIDENCES.find((r) => r.roomNumber === roomParam)
+    if (!roomParam) return RESIDENCES[0]
+    const match = RESIDENCES.find(
+      (r) => r.roomNumber === roomParam || r.displayNumber === roomParam || r.id === roomParam
+    )
     return match || RESIDENCES[0]
   }, [roomParam])
 
@@ -358,13 +361,13 @@ export default function BookingPage() {
         <div className="mb-8 border-b border-slate-200/80 pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <span className="text-[11px] font-mono tracking-[0.2em] font-extrabold text-emerald-900 uppercase block mb-1">
-              SUITE {selectedResidence.roomNumber} &bull; {selectedResidence.tier}
+              {selectedResidence.locationName || 'Stayza Sanctuary'} &bull; SUITE {selectedResidence.roomNumber}
             </span>
             <h1 className="font-serif-grand text-2xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
               {selectedResidence.name}
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 font-mono mt-1">
-              PKR {selectedResidence.nightlyRate.toLocaleString()} / Night &bull; Oceanfront Luxury Stay
+              PKR {selectedResidence.nightlyRate.toLocaleString()} / Night &bull; {selectedResidence.city || 'Pakistan'}
             </p>
           </div>
 

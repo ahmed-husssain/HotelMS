@@ -53,6 +53,8 @@ async function getDashboard(req, res) {
       return {
         _id: room._id,
         roomNumber: room.roomNumber,
+        locationId: room.locationId || 'sindh-coast',
+        city: room.city || 'Karachi',
         name: room.name,
         tier: room.tier,
         category: room.roomType,
@@ -79,6 +81,7 @@ async function getDashboard(req, res) {
     const formattedArrivals = confirmedArrivals.map((b) => ({
       id: b._id,
       bookingRef: b.bookingReference,
+      locationId: b.locationId || 'sindh-coast',
       guest: b.guestDetails?.name || 'Valued Guest',
       phone: b.guestDetails?.phone || '+92 300 0000000',
       roomNumber: b.roomNumber,
@@ -220,6 +223,7 @@ async function checkInGuest(req, res) {
         await Payment.create({
           bookingId: booking._id,
           guestId: booking.guest || null,
+          locationId: booking.locationId || 'sindh-coast',
           transactionType: 'BALANCE_70',
           paymentMethod: normalizedMethod,
           amount: balanceAmt,
@@ -375,6 +379,7 @@ async function checkOutGuest(req, res) {
       await Payment.create({
         bookingId: booking._id,
         guestId: booking.guest || null,
+        locationId: booking.locationId || 'sindh-coast',
         transactionType: 'BALANCE_70',
         paymentMethod: normalizedMethod,
         amount: balanceRemaining,

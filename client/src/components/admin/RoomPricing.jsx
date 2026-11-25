@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useToast } from '../../context/ToastContext'
 
 export default function RoomPricing({
@@ -10,6 +10,12 @@ export default function RoomPricing({
   const [editingRoom, setEditingRoom] = useState(null)
   const [newRate, setNewRate] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [locationFilter, setLocationFilter] = useState('all')
+
+  const filteredRooms = useMemo(() => {
+    if (!locationFilter || locationFilter === 'all') return rooms
+    return rooms.filter((r) => (r.locationId || 'sindh-coast') === locationFilter)
+  }, [rooms, locationFilter])
 
   const handleStartEdit = (room) => {
     setEditingRoom(room.roomNumber)
@@ -67,12 +73,36 @@ export default function RoomPricing({
 
   return (
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs overflow-hidden">
-      <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+      <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 className="font-serif-grand text-xl text-slate-900">Residences Catalog &amp; Dynamic Tariffs</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            Manage base nightly tariffs, live catalog display, and maintenance refurbishment modes
+            Manage base nightly tariffs, live catalog display, and maintenance refurbishment modes across all 4 properties
           </p>
+        </div>
+
+        {/* Branch Filter Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono shrink-0">
+          {[
+            { id: 'all', label: 'All (15)' },
+            { id: 'sindh-coast', label: 'Sindh Coast' },
+            { id: 'hunza', label: 'Hunza' },
+            { id: 'lahore', label: 'Lahore' },
+            { id: 'murree', label: 'Murree' },
+          ].map((loc) => (
+            <button
+              key={loc.id}
+              type="button"
+              onClick={() => setLocationFilter(loc.id)}
+              className={`px-2.5 py-1 rounded-[2px] cursor-pointer uppercase text-[10px] font-bold transition-colors ${
+                locationFilter === loc.id
+                  ? 'bg-slate-900 text-[#FFF0CA]'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {loc.label}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -88,14 +118,16 @@ export default function RoomPricing({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {rooms.map((room) => {
+            {filteredRooms.map((room) => {
               const isEditing = editingRoom === room.roomNumber
 
               return (
                 <tr key={room.roomNumber} className="hover:bg-slate-50/80 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-slate-900">
                     {room.name}
-                    <span className="block text-[10px] text-slate-400 font-normal">{room.roomNumber}</span>
+                    <span className="block text-[10px] text-slate-400 font-normal">
+                      {room.roomNumber} &bull; {room.city || (room.locationId === 'hunza' ? 'Hunza Valley' : room.locationId === 'lahore' ? 'Old Lahore' : room.locationId === 'murree' ? 'Murree Pines' : 'Sindh Coast')}
+                    </span>
                   </td>
                   <td className="py-3.5 px-4 text-slate-600">{room.tier}</td>
                   <td className="py-3.5 px-4 font-bold text-slate-900">

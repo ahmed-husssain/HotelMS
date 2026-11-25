@@ -219,8 +219,11 @@ export default function CleaningQueue({
                               <span className="font-serif-grand text-2xl font-bold text-slate-900 block leading-tight">
                                 {room.roomNumber}
                               </span>
-                              <span className="text-xs text-slate-500 font-sans-clean font-medium">
+                              <span className="text-xs text-slate-500 font-sans-clean font-medium block">
                                 {room.name || room.tier || 'Luxury Suite'}
+                              </span>
+                              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
+                                {room.city || (room.locationId === 'hunza' ? 'Hunza Valley' : room.locationId === 'lahore' ? 'Old Lahore' : room.locationId === 'murree' ? 'Murree Pines' : 'Sindh Coast')}
                               </span>
                             </div>
                             <span className={`inline-block text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 border rounded-[2px] shrink-0 ${statusClasses}`}>

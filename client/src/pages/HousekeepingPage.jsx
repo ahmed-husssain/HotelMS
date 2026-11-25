@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useHotelData } from '../context/HotelDataContext'
@@ -21,16 +21,24 @@ import SuppliesInventory from '../components/housekeeping/SuppliesInventory'
 export default function HousekeepingPage() {
   const { currentUser, logout } = useAuth()
   const {
-    rooms,
+    rooms: allRooms,
     guestRequests,
     maintenanceTickets,
     inventory,
+    selectedLocation,
+    setSelectedLocation,
     updateCleaningTask,
     certifyRoomReady,
     markServiceDelivered,
     createMaintenanceTicket,
     restockInventory,
   } = useHotelData()
+
+  // Filter rooms based on active branch selection
+  const rooms = useMemo(() => {
+    if (!selectedLocation || selectedLocation === 'all') return allRooms
+    return allRooms.filter((r) => (r.locationId || 'sindh-coast') === selectedLocation)
+  }, [allRooms, selectedLocation])
 
   // Navigation Tabs: 'CLEANING' | 'REQUESTS' | 'MAINTENANCE' | 'SUPPLIES'
   const [activeTab, setActiveTab] = useState('CLEANING')
@@ -68,6 +76,19 @@ export default function HousekeepingPage() {
             <span className="font-serif-grand text-base font-bold tracking-tight text-slate-900">STAYZA</span>
             <span className="text-slate-300">/</span>
             <span className="text-xs font-mono uppercase tracking-widest text-slate-600 font-semibold">Housekeeping &amp; Turns</span>
+            <span className="text-slate-300 hidden sm:inline">/</span>
+            <select
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              className="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-mono font-bold text-slate-900 cursor-pointer min-h-[36px] hover:border-slate-900 transition-colors"
+              aria-label="Filter Housekeeping by Property"
+            >
+              <option value="all">📍 All Properties (15 Keys)</option>
+              <option value="sindh-coast">🌊 Sindh Coast (4 Keys)</option>
+              <option value="hunza">🏔️ Hunza Valley (4 Keys)</option>
+              <option value="lahore">🏛️ Lahore Estate (4 Keys)</option>
+              <option value="murree">🌲 Murree Pines (3 Keys)</option>
+            </select>
           </div>
         </div>
 

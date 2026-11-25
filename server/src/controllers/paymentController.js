@@ -226,6 +226,7 @@ async function verifyCheckoutSession(req, res) {
       paymentRecord = await Payment.create({
         bookingId: booking._id,
         guestId: booking.guest || null,
+        locationId: booking.locationId || 'sindh-coast',
         transactionType: 'ADVANCE_30',
         paymentMethod: 'SAFEPAY_ONLINE',
         amount: advancePaid,
@@ -344,6 +345,7 @@ async function handleWebhook(req, res) {
     const payment = await Payment.create({
       bookingId: booking._id,
       guestId: booking.guest || null,
+      locationId: booking.locationId || 'sindh-coast',
       transactionType: 'ADVANCE_30',
       paymentMethod: 'SAFEPAY_ONLINE',
       amount: advancePaid,

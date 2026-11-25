@@ -18,6 +18,12 @@ const paymentSchema = new mongoose.Schema(
       required: [true, 'Payment must be linked to a booking'],
       index: true,
     },
+    locationId: {
+      type: String,
+      enum: ['sindh-coast', 'hunza', 'lahore', 'murree'],
+      default: 'sindh-coast',
+      index: true,
+    },
     guestId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

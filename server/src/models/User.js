@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema(
       default: 'guest',
       index: true,
     },
+    assignedLocation: {
+      type: String,
+      enum: ['sindh-coast', 'hunza', 'lahore', 'murree', 'all'],
+      default: 'all',
+    },
     phone: {
       type: String,
       trim: true,

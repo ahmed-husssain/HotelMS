@@ -5,36 +5,52 @@ import Footer from '../components/Footer'
 import RoomsCarousel from '../components/RoomsCarousel'
 import SuiteSpecsDrawer from '../components/suites/SuiteSpecsDrawer'
 import { RESIDENCES } from '../data/residences'
+import { LOCATIONS } from '../data/locations'
 import { useAuth } from '../context/AuthContext'
 
 /**
- * Curated Architectural Collections (Doc Option A)
- * Eliminates scroll fatigue by grouping 7 suites into 3 intimate collections of 2-3 keys
+ * Curated Architectural Collections by Destination Property
+ * Groups 15 suites into 4 physical hotel sanctuary locations across Pakistan:
+ * - Sindh Coast (Karachi, Sindh) — 4 Suites
+ * - Hunza Valley (Gilgit-Baltistan) — 4 Suites
+ * - Lahore Estate (Old Lahore, Punjab) — 4 Suites
+ * - Murree Pines (Bhurban, Punjab) — 3 Suites
  */
 const ARCHITECTURAL_COLLECTIONS = [
   {
-    id: 'penthouses',
-    label: 'Penthouses',
-    keys: '2 Suites',
-    matcher: (r) => r.roomNumber === '301' || r.roomNumber === '302',
-  },
-  {
-    id: 'villas',
-    label: 'Private Villas',
-    keys: '3 Suites',
-    matcher: (r) => r.roomNumber === '204' || r.roomNumber === '401' || r.roomNumber === '501',
-  },
-  {
-    id: 'overwater',
-    label: 'Overwater & Cliff',
-    keys: '2 Suites',
-    matcher: (r) => r.roomNumber === '102' || r.roomNumber === '201',
-  },
-  {
     id: 'all',
-    label: 'All Suites',
-    keys: '7 Suites',
+    label: 'All Properties',
+    keys: '15 Suites',
+    subtitle: '15 Curated Sanctuaries Across Pakistan',
     matcher: () => true,
+  },
+  {
+    id: 'sindh-coast',
+    label: 'Sindh Coast',
+    keys: '4 Suites',
+    subtitle: 'Cliffside Ocean Sanctuary • Karachi, Sindh',
+    matcher: (r) => r.locationId === 'sindh-coast',
+  },
+  {
+    id: 'hunza',
+    label: 'Hunza Valley',
+    keys: '4 Suites',
+    subtitle: 'Karakoram Alpine Glacial Sanctuary • Gilgit-Baltistan',
+    matcher: (r) => r.locationId === 'hunza',
+  },
+  {
+    id: 'lahore',
+    label: 'Lahore Estate',
+    keys: '4 Suites',
+    subtitle: 'Heritage Mughal Courtyard Estate • Old Lahore, Punjab',
+    matcher: (r) => r.locationId === 'lahore',
+  },
+  {
+    id: 'murree',
+    label: 'Murree Pines',
+    keys: '3 Suites',
+    subtitle: 'Cedar Forest Mountain Chalet • Bhurban, Punjab',
+    matcher: (r) => r.locationId === 'murree',
   },
 ]
 
@@ -43,33 +59,40 @@ export default function RoomsPage() {
   const [searchParams] = useSearchParams()
   const { currentUser } = useAuth()
   const requestedRoom = searchParams.get('room')
+  const requestedLocation = searchParams.get('location')
 
   // Architectural Specs Drawer State
   const [activeSpecsSuite, setActiveSpecsSuite] = useState(null)
 
-  // Auto-resolve collection if deep-linked via ?room=XXX
+  // Auto-resolve collection if deep-linked via ?location=xxx or ?room=xxx
   const initialCollectionId = useMemo(() => {
-    if (!requestedRoom) return 'penthouses'
-    const found = ARCHITECTURAL_COLLECTIONS.find((c) =>
-      c.id !== 'all' && RESIDENCES.filter(c.matcher).some((r) => r.roomNumber === requestedRoom)
-    )
-    return found ? found.id : 'all'
-  }, [requestedRoom])
+    if (requestedLocation) {
+      const matchLoc = ARCHITECTURAL_COLLECTIONS.find((c) => c.id === requestedLocation.toLowerCase())
+      if (matchLoc) return matchLoc.id
+    }
+    if (requestedRoom) {
+      const found = ARCHITECTURAL_COLLECTIONS.find((c) =>
+        c.id !== 'all' && RESIDENCES.filter(c.matcher).some((r) => r.roomNumber === requestedRoom || r.displayNumber === requestedRoom)
+      )
+      if (found) return found.id
+    }
+    return 'all'
+  }, [requestedRoom, requestedLocation])
 
-  // Curated Collection Setting (2-3 keys per view)
   const [selectedCollectionId, setSelectedCollectionId] = useState(initialCollectionId)
 
   // Sync collection state dynamically if query param changes
   useEffect(() => {
-    if (requestedRoom) {
+    if (requestedLocation) {
+      const matchLoc = ARCHITECTURAL_COLLECTIONS.find((c) => c.id === requestedLocation.toLowerCase())
+      if (matchLoc) setSelectedCollectionId(matchLoc.id)
+    } else if (requestedRoom) {
       const match = ARCHITECTURAL_COLLECTIONS.find((c) =>
-        c.id !== 'all' && RESIDENCES.filter(c.matcher).some((r) => r.roomNumber === requestedRoom)
+        c.id !== 'all' && RESIDENCES.filter(c.matcher).some((r) => r.roomNumber === requestedRoom || r.displayNumber === requestedRoom)
       )
-      if (match) {
-        setSelectedCollectionId(match.id)
-      }
+      if (match) setSelectedCollectionId(match.id)
     }
-  }, [requestedRoom])
+  }, [requestedRoom, requestedLocation])
 
   // Smooth scroll requested suite into view
   useEffect(() => {
@@ -91,7 +114,7 @@ export default function RoomsPage() {
     )
   }, [selectedCollectionId])
 
-  // Pure Curated Filter: 2-3 keys per collection
+  // Pure Curated Filter: 3-4 keys per property view
   const filteredSuites = useMemo(() => {
     return RESIDENCES.filter(activeCollection.matcher)
   }, [activeCollection])
@@ -106,17 +129,17 @@ export default function RoomsPage() {
       {/* 1. Minimal Fixed Navbar */}
       <Navbar onOpenDrawer={() => handleOpenReservation(RESIDENCES[0])} />
 
-      {/* 2. Low-Profile Architectural Masthead (Clean, Poised, Suites Immediately Visible) */}
+      {/* 2. Low-Profile Architectural Masthead */}
       <header className="pt-24 sm:pt-28 pb-4 sm:pb-6 px-4 sm:px-12 border-b border-slate-200/80 bg-gradient-to-b from-white/70 to-transparent">
         <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4">
           
           {/* Subtle Monograph Eyebrow */}
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-mono tracking-[0.3em] font-extrabold text-emerald-900 uppercase">
-              ROOMS &amp; SUITES &bull; 7 PRIVATE SUITES
+              ROOMS &amp; SUITES &bull; 15 LUXURY RESIDENCES ACROSS PAKISTAN
             </span>
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:inline-block">
-              100% Oceanfront
+              {activeCollection.subtitle}
             </span>
           </div>
 
@@ -137,12 +160,12 @@ export default function RoomsPage() {
 
           {/* Grand Architectural Serif Title */}
           <h1 className="font-serif-grand text-3xl sm:text-5xl text-slate-900 font-light tracking-tight leading-tight">
-            Luxury Ocean Suites &amp; Villas.
+            Curated Sanctuaries &amp; Residences.
           </h1>
 
-          {/* Quiet Luxury Editorial Navigation Tabs */}
+          {/* Quiet Luxury Destination Filter Tabs */}
           <div className="pt-1 sm:pt-2">
-            <nav aria-label="Suite Collections" className="flex items-center gap-4 sm:gap-10 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
+            <nav aria-label="Hotel Locations" className="flex items-center gap-4 sm:gap-8 overflow-x-auto pb-1 scrollbar-none text-xs font-mono tracking-wider">
               {ARCHITECTURAL_COLLECTIONS.map((col, idx) => {
                 const isActive = selectedCollectionId === col.id
                 return (
@@ -181,7 +204,7 @@ export default function RoomsPage() {
         </div>
       </header>
 
-      {/* 3. The Curated Suites Showcase (Only 2-3 suites per collection, Zero Scroll Fatigue) */}
+      {/* 3. The Curated Suites Showcase (3-4 suites per destination, Zero Scroll Fatigue) */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 space-y-12 sm:space-y-16">
         {filteredSuites.map((residence, idx) => (
           <div key={residence.id} id={`suite-card-${residence.roomNumber}`}>
