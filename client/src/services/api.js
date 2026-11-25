@@ -62,6 +62,26 @@ export async function fetchCurrentUser() {
   return request('/auth/me')
 }
 
+export async function updatePassword(currentPassword, newPassword) {
+  return request('/auth/update-password', {
+    method: 'POST',
+    body: JSON.stringify({ currentPassword, newPassword }),
+  })
+}
+
+export async function sendPasswordOtp() {
+  return request('/auth/send-password-otp', {
+    method: 'POST',
+  })
+}
+
+export async function resetPasswordWithOtp(otp, newPassword) {
+  return request('/auth/reset-password-otp', {
+    method: 'POST',
+    body: JSON.stringify({ otp, newPassword }),
+  })
+}
+
 // 1. Reservation & Pricing
 export async function fetchRoomQuote(roomId, checkInDate, checkOutDate) {
   return request('/bookings/quote', {

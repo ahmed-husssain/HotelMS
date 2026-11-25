@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import BrandLogo from '../components/BrandLogo'
 import { RESIDENCES } from '../data/residences'
@@ -13,6 +13,9 @@ import {
   updateStaySettings,
   orderStayService,
   submitStayFeedback,
+  updatePassword,
+  sendPasswordOtp,
+  resetPasswordWithOtp,
 } from '../services/api'
 
 // Bespoke Luxury SVG Icons for Portal Navigation & Services
@@ -282,24 +285,173 @@ export default function GuestPortalPage() {
   // Navigation & View State
   const [activeTab, setActiveTab] = useState('suite') // 'suite' | 'dining' | 'spa' | 'concierge' | 'folio'
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
 
-  // Body scroll lock effect for Profile & Settings Modal
+  // Guest Portal Scoped Theme State (Light = Warm Daylight, Dark = Midnight Lounge)
+  const [guestTheme, setGuestTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('stayza_guest_portal_theme') || 'light'
+    }
+    return 'light'
+  })
+
+  const handleToggleTheme = (newTheme) => {
+    const chosen = newTheme || (guestTheme === 'dark' ? 'light' : 'dark')
+    setGuestTheme(chosen)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('stayza_guest_portal_theme', chosen)
+    }
+    toast.success(
+      `Lighting switched to ${chosen === 'dark' ? 'Midnight Lounge (Dark)' : 'Warm Daylight (Light)'}`,
+      'Portal Theme'
+    )
+  }
+
+  // Sleek Anchored Profile & Settings Dropdown Tab State
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
+  const [profileTab, setProfileTab] = useState('account') // 'account' | 'theme' | 'password'
+  const profileDropdownRef = useRef(null)
+
+  // Password Management State (Standard vs Option B: Email OTP)
+  const [passwordMode, setPasswordMode] = useState('standard') // 'standard' | 'otp'
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showCurrentPass, setShowCurrentPass] = useState(false)
+  const [showNewPass, setShowNewPass] = useState(false)
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
+
+  // Option B: Email OTP Reset State
+  const [otpCode, setOtpCode] = useState('')
+  const [otpNewPassword, setOtpNewPassword] = useState('')
+  const [otpConfirmPassword, setOtpConfirmPassword] = useState('')
+  const [showOtpNewPass, setShowOtpNewPass] = useState(false)
+  const [isSendingOtp, setIsSendingOtp] = useState(false)
+  const [isResettingWithOtp, setIsResettingWithOtp] = useState(false)
+  const [otpSent, setOtpSent] = useState(false)
+  const [otpCooldown, setOtpCooldown] = useState(0)
+  const [demoOtpHint, setDemoOtpHint] = useState('')
+
+  // Close Profile Dropdown on Click Outside or Escape Key
   useEffect(() => {
-    if (!isProfileModalOpen) return
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    if (!isProfileDropdownOpen) return
+
+    const handleClickOutside = (e) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target)) {
+        if (e.target.closest('[data-profile-trigger]')) return
+        setIsProfileDropdownOpen(false)
+      }
+    }
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setIsProfileModalOpen(false)
+      if (e.key === 'Escape') setIsProfileDropdownOpen(false)
     }
+
+    window.addEventListener('mousedown', handleClickOutside)
+    window.addEventListener('touchstart', handleClickOutside)
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      document.body.style.overflow = originalOverflow
+      window.removeEventListener('mousedown', handleClickOutside)
+      window.removeEventListener('touchstart', handleClickOutside)
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isProfileModalOpen])
+  }, [isProfileDropdownOpen])
+
+  // OTP 60-Second Cooldown Countdown
+  useEffect(() => {
+    if (otpCooldown <= 0) return
+    const timer = setInterval(() => {
+      setOtpCooldown((prev) => (prev > 0 ? prev - 1 : 0))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [otpCooldown])
+
+  // Handler: Standard Password Update (when current password is known)
+  const handleStandardPasswordSubmit = async (e) => {
+    e.preventDefault()
+    if (!currentPassword) {
+      toast.error('Please enter your current password.', 'Password Update')
+      return
+    }
+    if (newPassword.length < 6) {
+      toast.error('New password must be at least 6 characters.', 'Password Update')
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error('New passwords do not match.', 'Password Update')
+      return
+    }
+
+    setIsUpdatingPassword(true)
+    try {
+      await updatePassword(currentPassword, newPassword)
+      toast.success('Your account password has been updated.', 'Password Changed')
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+      setProfileTab('account')
+    } catch (err) {
+      toast.error(err.message || 'Failed to update password.', 'Update Failed')
+    } finally {
+      setIsUpdatingPassword(false)
+    }
+  }
+
+  // Handler: Request 6-digit OTP code to registered email (Option B)
+  const handleRequestPasswordOtp = async () => {
+    if (otpCooldown > 0) return
+    setIsSendingOtp(true)
+    try {
+      const res = await sendPasswordOtp()
+      setOtpSent(true)
+      setOtpCooldown(60)
+      if (res.data?.demoOtp) {
+        setDemoOtpHint(res.data.demoOtp)
+      }
+      toast.success(
+        `6-digit verification code sent to ${currentUser?.email || 'your email'}`,
+        'Verification Sent'
+      )
+    } catch (err) {
+      toast.error(err.message || 'Could not send verification code.', 'Dispatch Error')
+    } finally {
+      setIsSendingOtp(false)
+    }
+  }
+
+  // Handler: Verify OTP and reset password (Option B)
+  const handleResetPasswordWithOtpSubmit = async (e) => {
+    e.preventDefault()
+    if (!otpCode || otpCode.trim().length !== 6) {
+      toast.error('Please enter the 6-digit code received in your email.', 'Invalid Code')
+      return
+    }
+    if (otpNewPassword.length < 6) {
+      toast.error('New password must be at least 6 characters.', 'Password Reset')
+      return
+    }
+    if (otpNewPassword !== otpConfirmPassword) {
+      toast.error('New passwords do not match.', 'Password Reset')
+      return
+    }
+
+    setIsResettingWithOtp(true)
+    try {
+      await resetPasswordWithOtp(otpCode.trim(), otpNewPassword)
+      toast.success('Your password has been reset successfully. Please keep it safe.', 'Password Reset')
+      setOtpCode('')
+      setOtpNewPassword('')
+      setOtpConfirmPassword('')
+      setOtpSent(false)
+      setDemoOtpHint('')
+      setPasswordMode('standard')
+      setProfileTab('account')
+    } catch (err) {
+      toast.error(err.message || 'Invalid or expired code. Please try again.', 'Reset Failed')
+    } finally {
+      setIsResettingWithOtp(false)
+    }
+  }
 
   // Portal Authentication State
   const [bookingCode, setBookingCode] = useState(() => initialRef || currentUser?.activeReservationCode || '')
@@ -828,40 +980,70 @@ export default function GuestPortalPage() {
 
   return (
     <div
-      className="min-h-screen overflow-x-hidden bg-[#FAF8F5] text-slate-900 font-sans-clean antialiased selection:bg-emerald-100 selection:text-emerald-950 flex flex-col justify-between"
+      data-guest-theme={guestTheme}
+      className={`min-h-screen overflow-x-hidden font-sans-clean antialiased flex flex-col justify-between transition-colors duration-300 ${
+        guestTheme === 'dark'
+          ? 'stayza-guest-dark bg-[#0B1120] text-slate-100 selection:bg-emerald-900 selection:text-emerald-100'
+          : 'bg-[#FAF8F5] text-slate-900 selection:bg-emerald-100 selection:text-emerald-950'
+      }`}
     >
       {/* ============================================================== */}
       {/* 1. TOP ESSENTIAL APP DOCK (ZERO CLUTTER, 44PX TARGETS)        */}
       {/* ============================================================== */}
-      <header className="shrink-0 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-slate-200/80 z-40">
+      <header
+        className={`shrink-0 backdrop-blur-md border-b z-40 transition-colors duration-300 relative ${
+          guestTheme === 'dark'
+            ? 'bg-[#0B1120]/95 border-slate-800/80 text-slate-100'
+            : 'bg-[#FAF8F5]/95 border-slate-200/80 text-slate-900'
+        }`}
+      >
         {/* Mobile Header (<768px) */}
         <div className="md:hidden">
           {/* Mobile Tier 1: Brand & Guest Identity */}
-          <div className="px-4 py-2.5 flex items-center justify-between border-b border-slate-200/50">
+          <div className={`px-4 py-2.5 flex items-center justify-between border-b ${
+            guestTheme === 'dark' ? 'border-slate-800/60' : 'border-slate-200/50'
+          }`}>
             <div className="flex items-center gap-2.5">
               <Link
                 to="/"
-                className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-950 transition-colors"
+                className={`w-8 h-8 flex items-center justify-center transition-colors ${
+                  guestTheme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-950'
+                }`}
                 title="Return to Overview"
               >
                 &larr;
               </Link>
-              <BrandLogo variant="wordmark" theme="dark" size="sm" />
+              <BrandLogo variant="wordmark" theme={guestTheme === 'dark' ? 'light' : 'dark'} size="sm" />
             </div>
 
             {/* Guest Profile Trigger */}
             {currentUser ? (
               <button
                 type="button"
-                onClick={() => setIsProfileModalOpen(true)}
-                className="flex items-center gap-1.5 py-1 px-2.5 bg-white border border-slate-200 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95"
+                data-profile-trigger="mobile"
+                onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
+                className={`flex items-center gap-1.5 py-1 px-2.5 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95 border ${
+                  isProfileDropdownOpen
+                    ? 'border-emerald-600 ring-2 ring-emerald-500/20'
+                    : guestTheme === 'dark'
+                    ? 'bg-slate-900 border-slate-700 text-slate-200'
+                    : 'bg-white border-slate-200 text-slate-800'
+                }`}
                 title="View Guest Profile & Settings"
+                aria-expanded={isProfileDropdownOpen}
               >
                 <span className="w-5 h-5 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
                   {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
                 </span>
-                <span className="font-mono text-xs text-slate-800 font-semibold max-w-[120px] sm:max-w-[180px] truncate">
+                <span className="font-mono text-xs font-semibold max-w-[120px] sm:max-w-[180px] truncate">
                   {currentUser.name ? currentUser.name.split(' ')[0] : 'Guest'}
+                </span>
+                <span
+                  className={`text-[9px] transition-transform duration-200 ${
+                    isProfileDropdownOpen ? 'rotate-180 text-emerald-600' : 'text-slate-400'
+                  }`}
+                >
+                  ▼
                 </span>
               </button>
             ) : (
@@ -1114,107 +1296,114 @@ export default function GuestPortalPage() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
                 {/* Left: Apple Wallet-Grade Digital Keycard & Suite Showcase */}
                 <div className="lg:col-span-7 space-y-4">
-                  {/* 1. APPLE WALLET-STYLE DIGITAL ROOM PASS */}
-                  <div className="bg-gradient-to-br from-[#12161F] via-[#0E1117] to-[#1C160F] text-white border border-amber-500/30 rounded-2xl p-6 sm:p-7 shadow-2xl relative overflow-hidden group">
-                    {/* Ambient Gold Radial Shine */}
-                    <div className="absolute -top-16 -right-16 w-56 h-56 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-
+                  {/* 1. APPLE WALLET-GRADE DIGITAL ROOM PASS (Quiet Luxury Version 2C) */}
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={handleTriggerDigitalKey}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleTriggerDigitalKey() }}
+                    className="touch-target w-full text-left bg-[#1C1A18] text-[#F3EFEA] border border-[#2F2C28] rounded-2xl p-6 sm:p-7 shadow-lg relative overflow-hidden select-none group cursor-pointer transition-all duration-300 hover:border-[#3E3A34] active:scale-[0.99]"
+                    title="Tap pass or hold device to door to unlock"
+                  >
                     {/* Pass Header */}
-                    <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono tracking-[0.25em] text-amber-300 uppercase font-bold">
-                          STAYZA &bull; DIGITAL ROOM PASS
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5 font-mono text-[10px] text-amber-300 tracking-widest uppercase">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                        <span>NFC ACTIVE</span>
-                        <NfcWaveIcon className="w-4 h-4 text-amber-300 ml-0.5" />
-                      </div>
-                    </div>
-
-                    {/* Pass Core Information */}
-                    <div className="py-5 sm:py-6 space-y-1">
-                      <span className="text-[11px] font-mono tracking-[0.25em] text-slate-400 uppercase block font-semibold">
-                        GUEST RESIDENCE
+                    <div className="flex items-center justify-between pb-4 border-b border-[#2F2C28]">
+                      <span className="font-mono text-[10px] tracking-[0.22em] text-[#D8CEBE] uppercase font-semibold">
+                        STAYZA &bull; DIGITAL ROOM PASS
                       </span>
-                      <h2 className="font-serif-grand text-3xl sm:text-4xl text-white block tracking-tight">
-                        {currentBooking.roomNumber || 'Suite 301'}
-                      </h2>
-                      <p className="font-mono text-xs sm:text-sm text-amber-200/90 font-medium tracking-wide">
-                        {currentBooking.residence?.name || 'The Horizon Penthouse'}
-                      </p>
-                    </div>
-
-                    {/* Metadata Chips Grid */}
-                    <div className="grid grid-cols-3 gap-2 py-3 px-3.5 bg-white/5 border border-white/10 rounded-xl font-mono text-[11px] text-slate-300 mb-5">
-                      <div>
-                        <span className="text-[9px] text-slate-400 block uppercase">PRIMARY GUEST</span>
-                        <span className="text-white font-bold truncate block">{currentBooking.guestName}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-slate-400 block uppercase">VALID DATES</span>
-                        <span className="text-slate-200 block truncate">{currentBooking.checkIn} – {currentBooking.checkOut}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-slate-400 block uppercase">ACCESS CHIP</span>
-                        <span className="text-emerald-400 font-bold block truncate">RFID #8921-A3</span>
+                      <div className="flex items-center gap-2 font-mono text-[10px] text-[#A89E90] tracking-widest uppercase">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#D8CEBE]" />
+                        <span>KEY ACTIVE</span>
+                        <NfcWaveIcon className="w-3.5 h-3.5 text-[#D8CEBE]" />
                       </div>
                     </div>
 
-                    {/* Contactless Unlock Zone */}
-                    {keyUnlockedToast ? (
-                      <div className="w-full bg-emerald-950/90 border border-emerald-500/70 rounded-xl p-4 flex flex-col gap-2 shadow-lg animate-fade-in">
-                        <div className="flex items-center justify-between font-mono text-xs sm:text-sm text-emerald-200">
-                          <div className="flex items-center gap-2">
-                            <LockOpenIcon className="w-4 h-4 text-emerald-400 shrink-0" />
-                            <span className="font-bold tracking-wider">DOOR UNLATCHED &bull; TURN HANDLE</span>
+                    {/* 2-Column Balanced Core */}
+                    <div className="py-5 sm:py-6 grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
+                      {/* Left: Suite Details & Metadata */}
+                      <div className="sm:col-span-8 space-y-4">
+                        <div>
+                          <span className="font-mono text-[10px] tracking-[0.2em] text-[#9A9184] uppercase font-medium block">
+                            GUEST RESIDENCE
+                          </span>
+                          <h2 className="font-serif-grand text-3xl sm:text-4xl text-[#F3EFEA] tracking-tight leading-none mt-1">
+                            {currentBooking.roomNumber || 'Suite 301'}
+                          </h2>
+                          <p className="font-sans-clean text-sm text-[#D8CEBE] font-normal tracking-wide mt-1">
+                            {currentBooking.residence?.name || 'The Horizon Penthouse'}
+                          </p>
+                        </div>
+
+                        {/* Metadata Grid */}
+                        <div className="grid grid-cols-3 gap-2.5 py-2.5 px-3 bg-black/20 border border-[#2F2C28] rounded-xl font-mono text-[11px]">
+                          <div>
+                            <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase">PRIMARY GUEST</span>
+                            <span className="font-sans-clean text-[#F3EFEA] font-medium truncate block text-xs mt-0.5">
+                              {currentBooking.guestName}
+                            </span>
                           </div>
-                          <span className="text-[11px] text-emerald-300 font-mono">
-                            Relocks in {keyRelockRemaining}s
+                          <div>
+                            <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase">VALID DATES</span>
+                            <span className="font-mono text-[#D8CEBE] truncate block text-xs mt-0.5">
+                              {currentBooking.checkIn} – {currentBooking.checkOut}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase">ACCESS REF</span>
+                            <span className="font-mono text-[#D8CEBE] font-medium truncate block text-xs mt-0.5">
+                              RFID #8921-A3
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Architectural Monogram Seal & Interaction Target */}
+                      <div className="sm:col-span-4 flex flex-col items-center justify-center">
+                        <div className="w-24 h-24 rounded-2xl border border-[#2F2C28] bg-black/30 p-3 flex flex-col items-center justify-center shadow-xs group-hover:border-[#D8CEBE]/40 transition-colors">
+                          {isKeyUnlocking ? (
+                            <SpinnerIcon className="w-8 h-8 text-[#D8CEBE] animate-spin" />
+                          ) : (
+                            <svg className="w-10 h-10 text-[#D8CEBE]" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                              <path d="M 14 36 L 50 22 L 86 36" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                              <line x1="28" y1="38" x2="28" y2="78" strokeWidth="2.5" strokeLinecap="round" />
+                              <line x1="72" y1="38" x2="72" y2="78" strokeWidth="2.5" strokeLinecap="round" />
+                              <path d="M 38 78 L 38 52 C 38 45.4 43.4 40 50 40 C 56.6 40 62 45.4 62 52 L 62 78" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+                              <line x1="16" y1="78" x2="84" y2="78" strokeWidth="3" strokeLinecap="round" />
+                              <circle cx="50" cy="50" r="3.5" fill="currentColor" />
+                            </svg>
+                          )}
+                          <span className="font-mono text-[8px] text-[#9A9184] uppercase tracking-[0.25em] mt-1.5 font-semibold text-center block">
+                            {isKeyUnlocking ? 'DISENGAGING' : 'RESIDENCE KEY'}
                           </span>
                         </div>
-                        {/* Auto-relock countdown bar */}
-                        <div className="w-full bg-emerald-900/60 h-1.5 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-emerald-400 transition-all duration-1000 ease-linear rounded-full"
-                            style={{ width: `${(keyRelockRemaining / 12) * 100}%` }}
-                          />
+                        <span className="font-mono text-[9px] text-[#7A7267] uppercase tracking-[0.16em] mt-1.5 block">
+                          {isKeyUnlocking ? 'Unlocking...' : 'Tap Card To Unlock'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Dynamic Door Unlock Feedback Banner */}
+                    {keyUnlockedToast && (
+                      <div className="pt-3 border-t border-[#2F2C28] animate-fade-in">
+                        <div className="bg-[#24211D] border border-[#3C3730] rounded-xl p-3 flex flex-col gap-2 shadow-xs">
+                          <div className="flex items-center justify-between font-mono text-xs text-[#E8DFD3]">
+                            <div className="flex items-center gap-2">
+                              <LockOpenIcon className="w-4 h-4 text-[#D8CEBE] shrink-0" />
+                              <span className="font-bold tracking-wider">DOOR UNLATCHED &bull; TURN HANDLE</span>
+                            </div>
+                            <span className="text-[11px] text-[#9A9184] font-mono">
+                              Relocks in {keyRelockRemaining}s
+                            </span>
+                          </div>
+                          {/* Auto-relock countdown bar */}
+                          <div className="w-full bg-black/40 h-1 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-[#D8CEBE] transition-all duration-1000 ease-linear rounded-full"
+                              style={{ width: `${(keyRelockRemaining / 12) * 100}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
-                    ) : (
-                      <div className="relative">
-                        {isKeyUnlocking && (
-                          <span className="absolute inset-0 rounded-xl bg-amber-400/30 animate-ping pointer-events-none" />
-                        )}
-                        <button
-                          type="button"
-                          onClick={handleTriggerDigitalKey}
-                          disabled={isKeyUnlocking}
-                          className={`touch-target w-full py-4 px-6 font-mono text-xs sm:text-sm font-bold uppercase tracking-widest rounded-xl shadow-xl flex items-center justify-center gap-3 transition-all cursor-pointer active:scale-[0.98] ${
-                            isKeyUnlocking
-                              ? 'bg-amber-400 text-slate-950 ring-4 ring-amber-300/40 scale-[1.01]'
-                              : 'bg-gradient-to-r from-[#E5C158] via-[#F3E5AB] to-[#D4AF37] text-slate-950 hover:brightness-105'
-                          }`}
-                        >
-                          {isKeyUnlocking ? (
-                            <>
-                              <SpinnerIcon className="w-5 h-5 text-slate-950" />
-                              <span>Disengaging Deadbolt...</span>
-                            </>
-                          ) : (
-                            <>
-                              <NfcWaveIcon className="w-5 h-5 text-slate-950" />
-                              <span>Hold Near Door to Unlock</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
                     )}
-
-                    <p className="text-[10px] font-mono text-slate-400 text-center mt-3 tracking-wide">
-                      BLE Contactless Access &bull; Hold device within 5cm of door lock escutcheon
-                    </p>
                   </div>
 
                   {/* 2. CINEMATIC SUITE PREVIEW CARD */}

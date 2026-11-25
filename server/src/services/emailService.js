@@ -401,7 +401,75 @@ async function sendCheckoutInvoiceEmail(booking, payments = []) {
   }
 }
 
+/**
+ * Trigger 3: Send One-Time Passcode (OTP) for Guest Password Reset
+ */
+async function sendPasswordResetOtpEmail({ email, name, otp }) {
+  try {
+    if (!email) {
+      return { success: false, reason: 'NO_RECIPIENT_EMAIL' }
+    }
+
+    const transporter = await getTransporter()
+    if (!transporter) {
+      console.log(`[EmailService] Simulation Mode: OTP for ${email} is: [${otp}]`)
+      return { success: true, simulated: true, otp }
+    }
+
+    const guestName = name || 'Valued Guest'
+    const contentHtml = `
+      <div style="display: inline-block; background-color: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px;">
+        Security Verification
+      </div>
+      <h2 style="margin: 0 0 12px 0; color: #0F172A; font-size: 20px; font-weight: 700;">
+        Reset Your Stayza Account Password
+      </h2>
+      <p style="margin: 0 0 16px 0;">Dear ${guestName},</p>
+      <p style="margin: 0 0 20px 0;">
+        We received a request to reset the password for your Stayza account. Use the 6-digit verification code below to authorize this change:
+      </p>
+
+      <div style="background-color: #F8FAFC; border: 2px dashed #CBD5E1; border-radius: 8px; padding: 24px; text-align: center; margin-bottom: 24px;">
+        <span style="font-family: monospace, 'Courier New', Courier; font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #065F46;">
+          ${otp}
+        </span>
+        <div style="margin-top: 8px; font-size: 12px; color: #64748B;">
+          This verification code expires in 10 minutes.
+        </div>
+      </div>
+
+      <p style="margin: 0 0 12px 0; font-size: 13px; color: #64748B;">
+        If you did not request this password reset, please ignore this email or notify the front desk immediately. Your current password will remain unchanged.
+      </p>
+    `
+
+    const html = wrapEmailLayout({
+      preheader: `Your Stayza verification code is ${otp}`,
+      contentHtml,
+    })
+
+    const info = await transporter.sendMail({
+      from: `"Stayza Security & Concierge" <${process.env.SMTP_FROM || 'concierge@stayza.com'}>`,
+      to: email,
+      subject: `${otp} is your Stayza verification code`,
+      html,
+    })
+
+    console.log(`[EmailService] Password reset OTP dispatched to ${email} (MessageId: ${info.messageId})`)
+    const previewUrl = nodemailer.getTestMessageUrl(info)
+    if (previewUrl) {
+      console.log(`[EmailService] Virtual Preview URL: ${previewUrl}`)
+    }
+
+    return { success: true, messageId: info.messageId, previewUrl, otp }
+  } catch (err) {
+    console.error('[EmailService.sendPasswordResetOtpEmail] Error dispatching OTP email:', err.message)
+    return { success: false, error: err.message, otp }
+  }
+}
+
 module.exports = {
   sendBookingConfirmationEmail,
   sendCheckoutInvoiceEmail,
+  sendPasswordResetOtpEmail,
 }

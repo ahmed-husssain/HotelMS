@@ -75,6 +75,14 @@ const userSchema = new mongoose.Schema(
       dietaryNotes: { type: String, default: '' },
       climatePreference: { type: String, default: '21°C' },
     },
+    resetPasswordOtp: {
+      type: String,
+      default: null,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
     isActive: {
       type: Boolean,
       default: true,

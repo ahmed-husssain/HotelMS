@@ -255,3 +255,22 @@ html.lenis, html.lenis body {
   width: 0 !important;
   height: 0 !important;
 }
+
+/* Guest Portal Scoped Dark Mode (Midnight Lounge) */
+.stayza-guest-dark {
+  background-color: #0B1120 !important;
+  color: #F8FAFC !important;
+}
+.stayza-guest-dark .guest-surface {
+  background-color: #0F172A !important;
+  border-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+.stayza-guest-dark .guest-subsurface {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #F1F5F9 !important;
+}
+.stayza-guest-dark .guest-muted {
+  color: #94A3B8 !important;
+}
