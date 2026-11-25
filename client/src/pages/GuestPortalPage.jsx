@@ -1058,10 +1058,14 @@ export default function GuestPortalPage() {
 
           {/* Mobile Tier 2: Suite Status, DND Switch, Bill */}
           {isUnlocked && (
-            <div className="px-4 py-2 bg-slate-50/90 flex items-center justify-between gap-2 border-b border-slate-200/40">
+            <div className={`px-4 py-2 flex items-center justify-between gap-2 border-b ${
+              guestTheme === 'dark'
+                ? 'bg-[#0F172A]/90 border-slate-800/60'
+                : 'bg-slate-50/90 border-slate-200/40'
+            }`}>
               <div className="flex items-center gap-1.5 font-mono text-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
-                <span className="font-bold text-slate-900 uppercase tracking-wide">
+                <span className={`font-bold uppercase tracking-wide ${guestTheme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
                   {currentBooking.roomNumber || 'Suite 301'}
                 </span>
               </div>
@@ -1111,16 +1115,18 @@ export default function GuestPortalPage() {
           <div className="flex items-center gap-3 sm:gap-4">
             <Link
               to="/"
-              className="touch-target text-xs font-mono tracking-wider text-slate-500 hover:text-slate-950 uppercase transition-colors"
+              className={`touch-target text-xs font-mono tracking-wider uppercase transition-colors ${
+                guestTheme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-950'
+              }`}
               title="Return to Overview"
             >
               <span>&larr;</span>
               <span className="hidden md:inline ml-1">Overview</span>
             </Link>
 
-            <div className="h-4 w-[1px] bg-slate-200 hidden sm:block" />
+            <div className={`h-4 w-[1px] hidden sm:block ${guestTheme === 'dark' ? 'bg-slate-800' : 'bg-slate-200'}`} />
 
-            <BrandLogo variant="wordmark" theme="dark" size="sm" />
+            <BrandLogo variant="wordmark" theme={guestTheme === 'dark' ? 'light' : 'dark'} size="sm" />
           </div>
 
           {/* Center: Suite Identifier & Live Dot (Zero Huge Banner) */}
@@ -1128,10 +1134,10 @@ export default function GuestPortalPage() {
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
               <div className="flex items-baseline gap-1.5 font-mono text-xs sm:text-sm">
-                <span className="font-bold text-slate-900 uppercase tracking-wider">
+                <span className={`font-bold uppercase tracking-wider ${guestTheme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
                   {currentBooking.roomNumber || 'Suite 301'}
                 </span>
-                <span className="hidden sm:inline text-slate-500 text-xs tracking-wide">
+                <span className={`hidden sm:inline text-xs tracking-wide ${guestTheme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
                   &bull; Checked In
                 </span>
               </div>
@@ -1184,15 +1190,30 @@ export default function GuestPortalPage() {
             {currentUser ? (
               <button
                 type="button"
-                onClick={() => setIsProfileModalOpen(true)}
-                className="flex items-center gap-2 py-1.5 px-3 bg-white border border-slate-200 hover:border-slate-400 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95"
+                data-profile-trigger="desktop"
+                onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
+                className={`flex items-center gap-2 py-1.5 px-3 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95 border ${
+                  isProfileDropdownOpen
+                    ? 'border-emerald-600 ring-2 ring-emerald-500/20'
+                    : guestTheme === 'dark'
+                    ? 'bg-slate-900 border-slate-700 hover:border-slate-500 text-slate-200'
+                    : 'bg-white border-slate-200 hover:border-slate-400 text-slate-800'
+                }`}
                 title="Guest Profile & Account Settings"
+                aria-expanded={isProfileDropdownOpen}
               >
                 <span className="w-5 h-5 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
                   {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
                 </span>
-                <span className="font-mono text-xs font-semibold text-slate-800 max-w-[160px] sm:max-w-[220px] truncate">
+                <span className="font-mono text-xs font-semibold max-w-[160px] sm:max-w-[220px] truncate">
                   {currentUser.name || 'Guest Profile'}
+                </span>
+                <span
+                  className={`text-[9px] transition-transform duration-200 ${
+                    isProfileDropdownOpen ? 'rotate-180 text-emerald-600' : 'text-slate-400'
+                  }`}
+                >
+                  ▼
                 </span>
               </button>
             ) : (
@@ -1208,7 +1229,9 @@ export default function GuestPortalPage() {
 
         {/* 5 HORIZONTAL SEGMENTED EXPERIENCE TABS */}
         {isUnlocked && (
-          <div className="border-t border-slate-200/60 bg-[#FAF8F5]">
+          <div className={`border-t transition-colors duration-300 ${
+            guestTheme === 'dark' ? 'border-slate-800/60 bg-[#0B1120]' : 'border-slate-200/60 bg-[#FAF8F5]'
+          }`}>
             <nav
               aria-label="Guest Operations Navigation"
               className="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none"
@@ -1232,7 +1255,11 @@ export default function GuestPortalPage() {
                     }}
                     className={`touch-target px-4 sm:px-5 py-2.5 rounded-full font-mono text-xs sm:text-[13px] font-semibold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 active:scale-95 ${
                       isActive
-                        ? 'bg-slate-900 text-[#FFF0CA] shadow-sm'
+                        ? guestTheme === 'dark'
+                          ? 'bg-emerald-600 text-white shadow-sm'
+                          : 'bg-slate-900 text-[#FFF0CA] shadow-sm'
+                        : guestTheme === 'dark'
+                        ? 'bg-slate-900/80 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
                         : 'bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80'
                     }`}
                   >
@@ -1243,6 +1270,537 @@ export default function GuestPortalPage() {
               })}
             </nav>
           </div>
+        )}
+
+        {/* Sleek Anchored Profile & Settings Dropdown Tab */}
+        {isProfileDropdownOpen && (
+          <>
+            {/* Mobile Backdrop Overlay for Instant Tap-Outside Dismissal */}
+            <div
+              className="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-2xs md:hidden"
+              onClick={() => setIsProfileDropdownOpen(false)}
+              aria-hidden="true"
+            />
+
+            {/* Dropdown Container */}
+            <div
+              ref={profileDropdownRef}
+              role="dialog"
+              aria-modal="false"
+              aria-label="Guest Profile and Settings"
+              className={`fixed top-[56px] left-3 right-3 md:fixed md:top-[64px] md:left-auto md:right-8 md:w-[430px] max-h-[85vh] overflow-y-auto overscroll-contain z-50 rounded-2xl shadow-2xl border transition-all duration-200 p-4 sm:p-5 space-y-4 animate-in fade-in slide-in-from-top-2 ${
+                guestTheme === 'dark'
+                  ? 'bg-[#0F172A] border-slate-800 text-slate-100 shadow-slate-950/90'
+                  : 'bg-white border-slate-200/90 text-slate-900 shadow-2xl'
+              }`}
+            >
+              {/* Dropdown Header */}
+              <div className="flex items-center justify-between border-b pb-3 border-slate-200/60 dark:border-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-full bg-emerald-900 text-white font-mono text-sm font-bold flex items-center justify-center shadow-xs">
+                    {(currentUser?.name || currentBooking.guestName || 'G').charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h3 className="font-syne font-bold text-sm sm:text-base leading-tight">
+                      {currentUser?.name || currentBooking.guestName || 'Guest Profile'}
+                    </h3>
+                    <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                      Verified Stayza Guest
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsProfileDropdownOpen(false)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-mono cursor-pointer transition-colors ${
+                    guestTheme === 'dark'
+                      ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                  }`}
+                  aria-label="Close profile dropdown"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* 3 Internal Segmented Control Tabs */}
+              <div
+                role="tablist"
+                className={`grid grid-cols-3 p-1 rounded-xl font-mono text-xs font-semibold ${
+                  guestTheme === 'dark' ? 'bg-slate-900/90 border border-slate-800' : 'bg-slate-100'
+                }`}
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={profileTab === 'account'}
+                  onClick={() => setProfileTab('account')}
+                  className={`py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
+                    profileTab === 'account'
+                      ? guestTheme === 'dark'
+                        ? 'bg-slate-800 text-white shadow-xs'
+                        : 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  👤 Account
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={profileTab === 'theme'}
+                  onClick={() => setProfileTab('theme')}
+                  className={`py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
+                    profileTab === 'theme'
+                      ? guestTheme === 'dark'
+                        ? 'bg-slate-800 text-white shadow-xs'
+                        : 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  🎨 Theme
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={profileTab === 'password'}
+                  onClick={() => setProfileTab('password')}
+                  className={`py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
+                    profileTab === 'password'
+                      ? guestTheme === 'dark'
+                        ? 'bg-slate-800 text-white shadow-xs'
+                        : 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  🔒 Password
+                </button>
+              </div>
+
+              {/* TAB 1: ACCOUNT OVERVIEW */}
+              {profileTab === 'account' && (
+                <div className="space-y-3 font-mono text-xs animate-in fade-in duration-150">
+                  <div className={`p-3 rounded-xl space-y-2 border ${
+                    guestTheme === 'dark' ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200/80'
+                  }`}>
+                    <div className="flex items-center justify-between border-b pb-1.5 border-slate-200/50 dark:border-slate-800">
+                      <span className="text-slate-400 text-[10px] uppercase">EMAIL ADDRESS</span>
+                      <span className="font-bold text-right truncate max-w-[200px]">
+                        {currentUser?.email || currentBooking.guestEmail || 'guest@stayza.com'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between border-b pb-1.5 border-slate-200/50 dark:border-slate-800">
+                      <span className="text-slate-400 text-[10px] uppercase">PHONE NUMBER</span>
+                      <span className="font-bold text-right">
+                        {currentUser?.phone || currentBooking.guestPhone || '+92 300 1234567'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 text-[10px] uppercase">RESERVATION REF</span>
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400 text-right">
+                        {currentBooking.bookingRef || 'TH-301-4575'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* In-Residence Information */}
+                  <div className={`p-3 rounded-xl space-y-1.5 border ${
+                    guestTheme === 'dark' ? 'bg-amber-950/20 border-amber-900/40 text-amber-200' : 'bg-amber-50/60 border-amber-200/80'
+                  }`}>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400 font-semibold">ASSIGNED SUITE</span>
+                      <span className="font-bold">
+                        {currentBooking.roomNumber || 'Suite 301'} &bull; {currentBooking.residence?.name || 'The Horizon Penthouse'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400 font-semibold">STAY DURATION</span>
+                      <span>
+                        {currentBooking.checkIn} – {currentBooking.checkOut} ({currentBooking.nights} Nights)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="space-y-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsProfileDropdownOpen(false)
+                        setIsInvoiceOpen(true)
+                      }}
+                      className="touch-target w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98]"
+                    >
+                      <FolioIcon className="w-4 h-4" />
+                      <span>Preview &amp; Download PDF Invoice</span>
+                    </button>
+
+                    {currentUser ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false)
+                          logout()
+                        }}
+                        className={`touch-target w-full py-2 px-4 font-mono text-xs uppercase font-semibold tracking-wider rounded-xl transition-colors cursor-pointer border ${
+                          guestTheme === 'dark'
+                            ? 'bg-slate-900 hover:bg-rose-950/40 border-slate-800 text-slate-300 hover:text-rose-300'
+                            : 'bg-slate-100 hover:bg-rose-50 border-slate-200 text-slate-600 hover:text-rose-700'
+                        }`}
+                      >
+                        Sign Out of Account
+                      </button>
+                    ) : (
+                      <Link
+                        to="/login?redirect=/my-stay"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                        className="touch-target w-full py-2 px-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-colors text-center block"
+                      >
+                        Sign In with Existing Account
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: PORTAL THEME TOGGLE (SCOPED STRICTLY TO GUEST OS) */}
+              {profileTab === 'theme' && (
+                <div className="space-y-3 font-mono text-xs animate-in fade-in duration-150">
+                  <div>
+                    <p className="text-slate-400 text-[11px] leading-relaxed">
+                      Customize your in-suite portal lighting mood. This setting applies exclusively to your Guest OS.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5 pt-1">
+                    {/* Warm Daylight Swatch */}
+                    <button
+                      type="button"
+                      onClick={() => handleToggleTheme('light')}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-3 touch-target ${
+                        guestTheme === 'light'
+                          ? 'border-emerald-600 bg-amber-50/50 shadow-xs ring-2 ring-emerald-500/20'
+                          : guestTheme === 'dark'
+                          ? 'border-slate-800 bg-slate-900/60 hover:border-slate-700 text-slate-300'
+                          : 'border-slate-200 bg-slate-50 hover:border-slate-300 text-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-base">☀️</span>
+                        {guestTheme === 'light' ? (
+                          <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-full uppercase">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-slate-400 uppercase">Select</span>
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100">Warm Daylight</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Classic Stayza alabaster linen</div>
+                      </div>
+                    </button>
+
+                    {/* Midnight Lounge Swatch */}
+                    <button
+                      type="button"
+                      onClick={() => handleToggleTheme('dark')}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-3 touch-target ${
+                        guestTheme === 'dark'
+                          ? 'border-emerald-500 bg-emerald-950/30 shadow-xs ring-2 ring-emerald-500/20'
+                          : 'border-slate-200 bg-slate-50 hover:border-slate-300 text-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-base">🌙</span>
+                        {guestTheme === 'dark' ? (
+                          <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-full uppercase">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-slate-400 uppercase">Select</span>
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100">Midnight Lounge</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Deep obsidian ambient night</div>
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className={`p-2.5 rounded-xl border text-[11px] flex items-center gap-2 ${
+                    guestTheme === 'dark' ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+                  }`}>
+                    <span className="text-emerald-600">✓</span>
+                    <span>Saved locally. Staff consoles and public pages remain unaffected.</span>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: PASSWORD & SECURITY (OPTION B EMAIL OTP + STANDARD) */}
+              {profileTab === 'password' && (
+                <div className="space-y-3 font-mono text-xs animate-in fade-in duration-150">
+                  {/* Sub-mode selector */}
+                  <div className={`flex items-center p-0.5 rounded-lg border text-[11px] ${
+                    guestTheme === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-200'
+                  }`}>
+                    <button
+                      type="button"
+                      onClick={() => setPasswordMode('standard')}
+                      className={`flex-1 py-1.5 rounded-md text-center font-semibold transition-all cursor-pointer ${
+                        passwordMode === 'standard'
+                          ? guestTheme === 'dark' ? 'bg-slate-800 text-white shadow-2xs' : 'bg-white text-slate-900 shadow-2xs'
+                          : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'
+                      }`}
+                    >
+                      Standard Update
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPasswordMode('otp')}
+                      className={`flex-1 py-1.5 rounded-md text-center font-semibold transition-all cursor-pointer ${
+                        passwordMode === 'otp'
+                          ? guestTheme === 'dark' ? 'bg-slate-800 text-white shadow-2xs' : 'bg-white text-slate-900 shadow-2xs'
+                          : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'
+                      }`}
+                    >
+                      Email Code (OTP)
+                    </button>
+                  </div>
+
+                  {/* SUBMODE 1: STANDARD PASSWORD UPDATE */}
+                  {passwordMode === 'standard' && (
+                    <form onSubmit={handleStandardPasswordSubmit} className="space-y-3">
+                      <div>
+                        <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
+                          Current Password
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showCurrentPass ? 'text' : 'password'}
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            placeholder="Enter current password"
+                            required
+                            className={`w-full px-3 py-2 pr-10 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                              guestTheme === 'dark'
+                                ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
+                                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
+                            }`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowCurrentPass(!showCurrentPass)}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px] font-bold"
+                          >
+                            {showCurrentPass ? 'HIDE' : 'SHOW'}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
+                          New Password (Min 6 Characters)
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showNewPass ? 'text' : 'password'}
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Enter new password"
+                            required
+                            minLength={6}
+                            className={`w-full px-3 py-2 pr-10 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                              guestTheme === 'dark'
+                                ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
+                                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
+                            }`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNewPass(!showNewPass)}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px] font-bold"
+                          >
+                            {showNewPass ? 'HIDE' : 'SHOW'}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
+                          Confirm New Password
+                        </label>
+                        <input
+                          type="password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="Confirm new password"
+                          required
+                          className={`w-full px-3 py-2 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                            guestTheme === 'dark'
+                              ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
+                              : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
+                          }`}
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isUpdatingPassword}
+                        className="touch-target w-full py-2.5 px-4 bg-emerald-800 hover:bg-emerald-700 text-white font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+                      >
+                        {isUpdatingPassword ? 'Updating Password...' : 'Update Password'}
+                      </button>
+
+                      <div className="text-center pt-1">
+                        <button
+                          type="button"
+                          onClick={() => setPasswordMode('otp')}
+                          className="text-[11px] text-emerald-600 dark:text-emerald-400 underline hover:opacity-80 cursor-pointer"
+                        >
+                          Don't know current password? Reset with email code &rarr;
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* SUBMODE 2: OPTION B (EMAIL OTP RESET) */}
+                  {passwordMode === 'otp' && (
+                    <div className="space-y-3">
+                      <div className={`p-3 rounded-xl border text-[11px] space-y-2 ${
+                        guestTheme === 'dark' ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+                      }`}>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
+                          <span>✉️</span>
+                          <span>Registered Email Verification</span>
+                        </div>
+                        <p className="text-[10px] text-slate-400">
+                          We will send a 6-digit one-time passcode to:
+                        </p>
+                        <div className="font-bold text-emerald-600 dark:text-emerald-400 break-all">
+                          {currentUser?.email || currentBooking.guestEmail || 'guest@stayza.com'}
+                        </div>
+
+                        {/* Request Code Button */}
+                        <button
+                          type="button"
+                          onClick={handleRequestPasswordOtp}
+                          disabled={isSendingOtp || otpCooldown > 0}
+                          className="touch-target w-full mt-1 py-2 px-3 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold rounded-lg transition-all disabled:opacity-50 cursor-pointer shadow-xs"
+                        >
+                          {isSendingOtp
+                            ? 'Sending Code...'
+                            : otpCooldown > 0
+                            ? `Resend Code in ${otpCooldown}s`
+                            : otpSent
+                            ? 'Resend Verification Code'
+                            : 'Send 6-Digit Code'}
+                        </button>
+                      </div>
+
+                      {demoOtpHint && (
+                        <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-500 text-[10px] flex items-center justify-between">
+                          <span>Demo Verification Code:</span>
+                          <span className="font-mono font-bold tracking-widest text-xs bg-emerald-500/20 px-2 py-0.5 rounded">
+                            {demoOtpHint}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Reset Password Form once OTP requested or ready */}
+                      <form onSubmit={handleResetPasswordWithOtpSubmit} className="space-y-2.5">
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
+                            6-Digit Verification Code
+                          </label>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            value={otpCode}
+                            onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                            placeholder="123456"
+                            required
+                            className={`w-full px-3 py-2 text-center text-base tracking-[0.3em] font-bold rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                              guestTheme === 'dark'
+                                ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-600'
+                                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-300'
+                            }`}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
+                            New Password (Min 6 Characters)
+                          </label>
+                          <div className="relative">
+                            <input
+                              type={showOtpNewPass ? 'text' : 'password'}
+                              value={otpNewPassword}
+                              onChange={(e) => setOtpNewPassword(e.target.value)}
+                              placeholder="Enter new password"
+                              required
+                              minLength={6}
+                              className={`w-full px-3 py-2 pr-10 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                                guestTheme === 'dark'
+                                  ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
+                                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
+                              }`}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowOtpNewPass(!showOtpNewPass)}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px] font-bold"
+                            >
+                              {showOtpNewPass ? 'HIDE' : 'SHOW'}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
+                            Confirm New Password
+                          </label>
+                          <input
+                            type="password"
+                            value={otpConfirmPassword}
+                            onChange={(e) => setOtpConfirmPassword(e.target.value)}
+                            placeholder="Confirm new password"
+                            required
+                            className={`w-full px-3 py-2 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                              guestTheme === 'dark'
+                                ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
+                                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
+                            }`}
+                          />
+                        </div>
+
+                        <button
+                          type="submit"
+                          disabled={isResettingWithOtp || !otpCode}
+                          className="touch-target w-full py-2.5 px-4 bg-emerald-800 hover:bg-emerald-700 text-white font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+                        >
+                          {isResettingWithOtp ? 'Verifying & Resetting...' : 'Verify Code & Set Password'}
+                        </button>
+
+                        <div className="text-center pt-1">
+                          <button
+                            type="button"
+                            onClick={() => setPasswordMode('standard')}
+                            className="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-white cursor-pointer"
+                          >
+                            &larr; Return to standard password change
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </>
         )}
       </header>
 
@@ -2143,119 +2701,6 @@ export default function GuestPortalPage() {
         booking={invoiceBookingData}
         type="FINAL_TAX_INVOICE"
       />
-
-      {/* Guest Profile & Settings Modal */}
-      {isProfileModalOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="guest-profile-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in overscroll-contain"
-          onClick={() => setIsProfileModalOpen(false)}
-        >
-          <div
-            className="w-full max-w-md bg-white border border-slate-200/90 rounded-2xl shadow-2xl p-5 sm:p-6 space-y-5 max-h-[90vh] overflow-y-auto overscroll-contain"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-full bg-emerald-900 text-white font-mono text-sm font-bold flex items-center justify-center shadow-xs">
-                  {(currentUser?.name || currentBooking.guestName || 'G').charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h3 id="guest-profile-modal-title" className="font-syne font-bold text-base text-slate-900">
-                    Guest Profile &amp; Settings
-                  </h3>
-                  <span className="text-[10px] font-mono text-emerald-800 uppercase tracking-widest font-semibold flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                    Verified Stayza Guest
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setIsProfileModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-sm font-mono cursor-pointer transition-colors"
-                aria-label="Close profile modal"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Profile Information List */}
-            <div className="space-y-3 font-mono text-xs">
-              <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-2">
-                <div className="flex items-center justify-between border-b border-slate-200/50 pb-1.5">
-                  <span className="text-slate-400 text-[10px] uppercase">FULL NAME</span>
-                  <span className="font-bold text-slate-900 text-right">{currentUser?.name || currentBooking.guestName}</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-slate-200/50 pb-1.5">
-                  <span className="text-slate-400 text-[10px] uppercase">EMAIL ADDRESS</span>
-                  <span className="font-bold text-slate-900 text-right truncate max-w-[200px]">{currentUser?.email || currentBooking.guestEmail || 'guest@stayza.com'}</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-slate-200/50 pb-1.5">
-                  <span className="text-slate-400 text-[10px] uppercase">MOBILE NUMBER</span>
-                  <span className="font-bold text-slate-900 text-right">{currentUser?.phone || currentBooking.guestPhone || '+92 300 1234567'}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400 text-[10px] uppercase">ACTIVE RESERVATION</span>
-                  <span className="font-bold text-emerald-800 text-right">{currentBooking.bookingRef || 'TH-301-4575'}</span>
-                </div>
-              </div>
-
-              {/* In-Residence Information */}
-              <div className="p-3 bg-amber-50/60 border border-amber-200/80 rounded-xl space-y-1.5">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-500 font-semibold">ASSIGNED SUITE</span>
-                  <span className="font-bold text-slate-900">{currentBooking.roomNumber || 'Suite 301'} &bull; {currentBooking.residence?.name || 'The Horizon Penthouse'}</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-500 font-semibold">STAY DURATION</span>
-                  <span className="text-slate-700">{currentBooking.checkIn} – {currentBooking.checkOut} ({currentBooking.nights} Nights)</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="space-y-2 pt-1">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsProfileModalOpen(false)
-                  setIsInvoiceOpen(true)
-                }}
-                className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98]"
-              >
-                <FolioIcon className="w-4 h-4" />
-                <span>Preview &amp; Download PDF Invoice</span>
-              </button>
-
-              {currentUser ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsProfileModalOpen(false)
-                    logout()
-                  }}
-                  className="w-full py-2 px-4 bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-600 font-mono text-xs uppercase font-semibold tracking-wider rounded-xl transition-colors cursor-pointer"
-                >
-                  Sign Out of Account
-                </button>
-              ) : (
-                <Link
-                  to="/login?redirect=/my-stay"
-                  onClick={() => setIsProfileModalOpen(false)}
-                  className="w-full py-2 px-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-colors text-center block"
-                >
-                  Sign In with Existing Account
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
