@@ -25,15 +25,6 @@ const KeyIcon = ({ className = "w-4 h-4" }) => (
   </svg>
 )
 
-const NfcWaveIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M6 8.5a7 7 0 0 1 12 0" />
-    <path d="M8.5 11.5a3.5 3.5 0 0 1 7 0" />
-    <path d="M11 14.5a.5.5 0 0 1 2 0" />
-    <path d="M3.5 5.5a11 11 0 0 1 17 0" />
-  </svg>
-)
-
 const LockClosedIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -308,7 +299,7 @@ export default function GuestPortalPage() {
 
   // Sleek Anchored Profile & Settings Dropdown Tab State
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
-  const [profileTab, setProfileTab] = useState('account') // 'account' | 'theme' | 'password'
+  const [profileTab, setProfileTab] = useState('account') // 'account' | 'orders' | 'theme' | 'password'
   const profileDropdownRef = useRef(null)
 
   // Password Management State (Standard vs Option B: Email OTP)
@@ -602,29 +593,17 @@ export default function GuestPortalPage() {
 
   const [orderedServices, setOrderedServices] = useState(DEMO_BOOKING.initialServices)
   const [serviceFeedbackNotice, setServiceFeedbackNotice] = useState('')
+  const [orderingServiceId, setOrderingServiceId] = useState(null)
+  const [isCheckingOut, setIsCheckingOut] = useState(false)
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false)
 
   // Interactive In-Stay Controls
   const [isDND, setIsDND] = useState(false)
-  const [isKeyUnlocking, setIsKeyUnlocking] = useState(false)
-  const [keyUnlockedToast, setKeyUnlockedToast] = useState(false)
-  const [keyRelockRemaining, setKeyRelockRemaining] = useState(0)
   const [climateMode, setClimateMode] = useState('ocean') // 'ocean' (20°C), 'cedar' (24°C), 'eco' (22°C)
   const [climateTemp, setClimateTemp] = useState(21)
   const [wifiCopied, setWifiCopied] = useState(false)
   const [valetRequested, setValetRequested] = useState(false)
   const [expressCheckoutNotice, setExpressCheckoutNotice] = useState(false)
-
-  // Auto-relock countdown timer for digital keycard
-  useEffect(() => {
-    if (keyRelockRemaining <= 0) {
-      setKeyUnlockedToast(false)
-      return
-    }
-    const timer = setInterval(() => {
-      setKeyRelockRemaining((prev) => (prev > 1 ? prev - 1 : 0))
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [keyRelockRemaining])
 
   // Feedback State
   const [reviewRating, setReviewRating] = useState(5)
@@ -817,6 +796,8 @@ export default function GuestPortalPage() {
 
   // Dispatch In-Stay Guest Service
   const handleRequestService = async (service) => {
+    const sId = service.id || service.title
+    if (orderingServiceId) return
     const alreadyOrdered = orderedServices.some((s) => s.id === service.id || s.title === service.title)
     if (alreadyOrdered) {
       setServiceFeedbackNotice(`"${service.title}" is already added to your bill.`)
@@ -824,13 +805,13 @@ export default function GuestPortalPage() {
       return
     }
 
+    setOrderingServiceId(sId)
+
     const newItem = {
       ...service,
       id: service.id || `srv-${Date.now()}`,
       time: 'Just now',
     }
-
-    setOrderedServices((prev) => [...prev, newItem])
 
     // Dispatches to backend MongoDB Atlas
     try {
@@ -841,7 +822,11 @@ export default function GuestPortalPage() {
       })
     } catch (err) {
       console.warn('[GuestPortal] Incidental save fallback:', err.message)
+    } finally {
+      setOrderingServiceId(null)
     }
+
+    setOrderedServices((prev) => [...prev, newItem])
 
     // Dispatches live request to Housekeeping & PMS context
     requestGuestService(
@@ -855,33 +840,6 @@ export default function GuestPortalPage() {
     setServiceFeedbackNotice(`Request sent to front desk: "${service.title}" added to your bill.`)
     toast.success(`"${service.title}" added to your room bill`, 'Service Requested')
     setTimeout(() => setServiceFeedbackNotice(''), 4500)
-  }
-
-  // Digital Key Trigger with Apple Contactless Ripple & Haptic feedback
-  const handleTriggerDigitalKey = async () => {
-    if (isKeyUnlocking) return
-    setIsKeyUnlocking(true)
-
-    // Tactile haptic pulse on supported devices
-    if (navigator?.vibrate) {
-      navigator.vibrate([35, 45, 35])
-    }
-
-    try {
-      await toggleDigitalDoor(currentBooking.bookingRef)
-    } catch (err) {
-      console.warn('[GuestPortal] Unlock fallback:', err.message)
-    }
-
-    setTimeout(() => {
-      setIsKeyUnlocking(false)
-      setKeyUnlockedToast(true)
-      setKeyRelockRemaining(12)
-      if (navigator?.vibrate) {
-        navigator.vibrate([60, 40, 60])
-      }
-      toast.success(`${currentBooking.roomNumber || 'Suite 301'} deadbolt disengaged`, 'Suite Door Unlocked')
-    }, 1200)
   }
 
   // Fluid iOS-style Do Not Disturb toggle
@@ -966,7 +924,8 @@ export default function GuestPortalPage() {
 
   // Express Checkout Request
   const handleRequestCheckout = () => {
-    setExpressCheckoutNotice(true)
+    if (isCheckingOut) return
+    setIsCheckingOut(true)
     requestGuestService(
       currentBooking.roomNumber || 'Suite 301',
       currentBooking.guestName,
@@ -974,14 +933,20 @@ export default function GuestPortalPage() {
       0,
       'Front Desk'
     )
+    setExpressCheckoutNotice(true)
     toast.info('Front desk notified for departure and valet assistance', 'Checkout Requested')
-    setTimeout(() => setExpressCheckoutNotice(false), 7000)
+    setTimeout(() => {
+      setExpressCheckoutNotice(false)
+      setIsCheckingOut(false)
+    }, 7000)
   }
 
   return (
     <div
       data-guest-theme={guestTheme}
-      className={`min-h-screen overflow-x-hidden font-sans-clean antialiased flex flex-col justify-between transition-colors duration-300 ${
+      className={`font-sans-clean antialiased flex flex-col justify-between transition-colors duration-300 ${
+        !isUnlocked ? 'h-[100dvh] overflow-hidden' : 'min-h-screen overflow-x-hidden'
+      } ${
         guestTheme === 'dark'
           ? 'stayza-guest-dark bg-[#0B1120] text-slate-100 selection:bg-emerald-900 selection:text-emerald-100'
           : 'bg-[#FAF8F5] text-slate-900 selection:bg-emerald-100 selection:text-emerald-950'
@@ -1237,7 +1202,7 @@ export default function GuestPortalPage() {
               className="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none"
             >
               {[
-                { id: 'suite', label: 'My Suite & Key', Icon: KeyIcon },
+                { id: 'suite', label: 'My Suite', Icon: KeyIcon },
                 { id: 'dining', label: 'In-Suite Dining', Icon: DiningIcon },
                 { id: 'spa', label: 'Cedar Spa & Linens', Icon: SpaIcon },
                 { id: 'concierge', label: 'Butler & Services', Icon: ButlerIcon },
@@ -1325,10 +1290,10 @@ export default function GuestPortalPage() {
                 </button>
               </div>
 
-              {/* 3 Internal Segmented Control Tabs */}
+              {/* 4 Internal Segmented Control Tabs */}
               <div
                 role="tablist"
-                className={`grid grid-cols-3 p-1 rounded-xl font-mono text-xs font-semibold ${
+                className={`grid grid-cols-4 p-1 rounded-xl font-mono text-[11px] sm:text-xs font-semibold ${
                   guestTheme === 'dark' ? 'bg-slate-900/90 border border-slate-800' : 'bg-slate-100'
                 }`}
               >
@@ -1337,7 +1302,7 @@ export default function GuestPortalPage() {
                   role="tab"
                   aria-selected={profileTab === 'account'}
                   onClick={() => setProfileTab('account')}
-                  className={`py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
+                  className={`py-1.5 sm:py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
                     profileTab === 'account'
                       ? guestTheme === 'dark'
                         ? 'bg-slate-800 text-white shadow-xs'
@@ -1350,9 +1315,30 @@ export default function GuestPortalPage() {
                 <button
                   type="button"
                   role="tab"
+                  aria-selected={profileTab === 'orders'}
+                  onClick={() => setProfileTab('orders')}
+                  className={`py-1.5 sm:py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
+                    profileTab === 'orders'
+                      ? guestTheme === 'dark'
+                        ? 'bg-slate-800 text-white shadow-xs'
+                        : 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <span className="sm:hidden">Orders</span>
+                  <span className="hidden sm:inline">Orders</span>
+                  {orderedServices?.length > 0 && (
+                    <span className="ml-1 px-1 py-0.2 rounded-full text-[9px] bg-emerald-500 text-white font-bold">
+                      {orderedServices.length}
+                    </span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  role="tab"
                   aria-selected={profileTab === 'theme'}
                   onClick={() => setProfileTab('theme')}
-                  className={`py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
+                  className={`py-1.5 sm:py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
                     profileTab === 'theme'
                       ? guestTheme === 'dark'
                         ? 'bg-slate-800 text-white shadow-xs'
@@ -1367,7 +1353,7 @@ export default function GuestPortalPage() {
                   role="tab"
                   aria-selected={profileTab === 'password'}
                   onClick={() => setProfileTab('password')}
-                  className={`py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
+                  className={`py-1.5 sm:py-2 px-1 text-center rounded-lg transition-all cursor-pointer truncate ${
                     profileTab === 'password'
                       ? guestTheme === 'dark'
                         ? 'bg-slate-800 text-white shadow-xs'
@@ -1423,6 +1409,26 @@ export default function GuestPortalPage() {
                     </div>
                   </div>
 
+                  {/* Orders & Requests Quick Access */}
+                  <div
+                    onClick={() => setProfileTab('orders')}
+                    className={`p-3 rounded-xl border flex items-center justify-between cursor-pointer transition-all active:scale-[0.99] ${
+                      guestTheme === 'dark'
+                        ? 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                        : 'bg-slate-50 border-slate-200/80 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                        Orders &amp; Requests
+                      </span>
+                      <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
+                        {orderedServices?.length || 0} active
+                      </span>
+                    </div>
+                    <span className="text-xs font-mono text-slate-400">&rarr;</span>
+                  </div>
+
                   {/* Actions */}
                   <div className="space-y-2 pt-1">
                     <button
@@ -1465,15 +1471,76 @@ export default function GuestPortalPage() {
                 </div>
               )}
 
-              {/* TAB 2: PORTAL THEME TOGGLE (SCOPED STRICTLY TO GUEST OS) */}
-              {profileTab === 'theme' && (
+              {/* TAB 2: IN-STAY ORDERS & REQUESTS */}
+              {profileTab === 'orders' && (
                 <div className="space-y-3 font-mono text-xs animate-in fade-in duration-150">
-                  <div>
-                    <p className="text-slate-400 text-[11px] leading-relaxed">
-                      Customize your in-suite portal lighting mood. This setting applies exclusively to your Guest OS.
-                    </p>
+                  <div className="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                      Orders &amp; Requests ({orderedServices?.length || 0})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsProfileDropdownOpen(false)
+                        setActiveTab('folio')
+                      }}
+                      className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+                    >
+                      View Room Bill &rarr;
+                    </button>
                   </div>
 
+                  {(!orderedServices || orderedServices.length === 0) ? (
+                    <div className={`p-6 rounded-xl text-center space-y-2 border ${
+                      guestTheme === 'dark' ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200/80'
+                    }`}>
+                      <p className="text-slate-500 text-xs">No active orders or requests yet.</p>
+                      <p className="text-[11px] text-slate-400">
+                        Order in-suite dining or request spa &amp; butler services from the portal.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                      {orderedServices.map((item, idx) => (
+                        <div
+                          key={item.id || idx}
+                          className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 ${
+                            guestTheme === 'dark'
+                              ? 'bg-slate-900/60 border-slate-800'
+                              : 'bg-white border-slate-200/90 shadow-2xs'
+                          }`}
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                                {item.category || 'Service'}
+                              </span>
+                              <span className="text-[10px] text-slate-400">
+                                {item.time || 'In Stay'}
+                              </span>
+                            </div>
+                            <span className="text-xs font-bold block truncate mt-1 text-slate-900 dark:text-slate-100">
+                              {item.title}
+                            </span>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="font-mono text-xs font-bold block text-slate-900 dark:text-slate-100">
+                              {item.price === 0 ? 'Complimentary' : `PKR ${Number(item.price).toLocaleString()}`}
+                            </span>
+                            <span className="text-[9px] text-emerald-600 dark:text-emerald-400 uppercase font-semibold">
+                              Dispatched ✓
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 3: PORTAL THEME TOGGLE (SCOPED STRICTLY TO GUEST OS) */}
+              {profileTab === 'theme' && (
+                <div className="space-y-3 font-mono text-xs animate-in fade-in duration-150">
                   <div className="grid grid-cols-2 gap-2.5 pt-1">
                     {/* Warm Daylight Swatch */}
                     <button
@@ -1872,17 +1939,16 @@ export default function GuestPortalPage() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
                 {/* Left: Apple Wallet-Grade Digital Keycard & Suite Showcase */}
                 <div className="lg:col-span-7 space-y-4">
-                  {/* 1. APPLE WALLET-GRADE DIGITAL ROOM PASS (Clean Static Luxury) */}
+                  {/* 1. LUXURY IN-RESIDENCE SUITE PASS (Clean Static Luxury) */}
                   <div className="w-full bg-[#1C1A18] text-[#F3EFEA] border border-[#2F2C28] rounded-2xl p-6 sm:p-7 shadow-xl relative overflow-hidden select-none">
                     {/* Pass Header */}
                     <div className="flex items-center justify-between pb-4 border-b border-[#2F2C28]">
                       <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.25em] text-[#D8CEBE] uppercase font-semibold">
-                        STAYZA &bull; DIGITAL ROOM PASS
+                        STAYZA &bull; IN-RESIDENCE SUITE PASS
                       </span>
                       <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px] text-[#A89E90] tracking-widest uppercase">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#D8CEBE]" />
-                        <span>KEY ACTIVE</span>
-                        <NfcWaveIcon className="w-3.5 h-3.5 text-[#D8CEBE]" />
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-emerald-400 font-bold">IN RESIDENCE</span>
                       </div>
                     </div>
 
@@ -1900,7 +1966,7 @@ export default function GuestPortalPage() {
                         </p>
                       </div>
 
-                      {/* Residence Key Monogram Badge (Static & Clean) */}
+                      {/* Residence Monogram Badge */}
                       <div className="shrink-0 flex flex-col items-center">
                         <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-[#2F2C28] bg-black/25 flex flex-col items-center justify-center p-2.5">
                           <svg className="w-8 h-8 sm:w-9 sm:h-9 text-[#D8CEBE]" viewBox="0 0 100 100" fill="none" stroke="currentColor">
@@ -1912,7 +1978,7 @@ export default function GuestPortalPage() {
                             <circle cx="50" cy="50" r="3.5" fill="currentColor" />
                           </svg>
                           <span className="font-mono text-[8px] text-[#9A9184] uppercase tracking-[0.22em] mt-1.5 font-semibold text-center block">
-                            RESIDENCE KEY
+                            SUITE PASS
                           </span>
                         </div>
                       </div>
@@ -1933,9 +1999,9 @@ export default function GuestPortalPage() {
                         </span>
                       </div>
                       <div>
-                        <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase font-medium">ACCESS REF</span>
+                        <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase font-medium">FOLIO REF</span>
                         <span className="font-mono text-[#D8CEBE] font-medium block mt-0.5 truncate">
-                          RFID #8921-A3
+                          FOLIO #{currentBooking.bookingRef || 'TH-301'}
                         </span>
                       </div>
                     </div>
@@ -2101,15 +2167,25 @@ export default function GuestPortalPage() {
                     </div>
                     <button
                       type="button"
+                      disabled={orderedServices.some((s) => s.id === 'butler-call') || orderingServiceId === 'butler-call'}
                       onClick={() => handleRequestService({
                         id: 'butler-call',
                         title: 'Direct Butler Room Consultation',
                         price: 0,
                         category: 'Front Desk',
                       })}
-                      className="touch-target px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer active:scale-95 shrink-0"
+                      className="touch-target px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer active:scale-95 shrink-0 disabled:opacity-75 disabled:cursor-not-allowed flex items-center gap-1.5"
                     >
-                      Request Butler &rarr;
+                      {orderingServiceId === 'butler-call' ? (
+                        <>
+                          <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
+                          <span>Calling...</span>
+                        </>
+                      ) : orderedServices.some((s) => s.id === 'butler-call') ? (
+                        <span>Butler Requested ✓</span>
+                      ) : (
+                        <span>Request Butler &rarr;</span>
+                      )}
                     </button>
                   </div>
 
@@ -2121,69 +2197,117 @@ export default function GuestPortalPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <button
                         type="button"
+                        disabled={orderedServices.some((s) => s.id === 'linen-quick') || orderingServiceId === 'linen-quick'}
                         onClick={() => handleRequestService({
                           id: 'linen-quick',
                           title: 'Fresh Egyptian Linens & Extra Pillows',
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
                       >
                         <BedIcon className="w-5 h-5 text-amber-800 shrink-0" />
-                        <div>
+                        <div className="flex-1">
                           <span className="font-bold text-slate-900 block text-xs">Fresh Linens</span>
-                          <span className="text-[11px] text-slate-500">Complimentary</span>
+                          <span className="text-[11px] text-slate-500">
+                            {orderingServiceId === 'linen-quick' ? (
+                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                                <span>Requesting...</span>
+                              </span>
+                            ) : orderedServices.some((s) => s.id === 'linen-quick') ? (
+                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                            ) : (
+                              'Complimentary'
+                            )}
+                          </span>
                         </div>
                       </button>
 
                       <button
                         type="button"
+                        disabled={orderedServices.some((s) => s.id === 'turndown-quick') || orderingServiceId === 'turndown-quick'}
                         onClick={() => handleRequestService({
                           id: 'turndown-quick',
                           title: 'Evening Turn-Down & Aromatherapy Mist',
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
                       >
                         <CandleIcon className="w-5 h-5 text-amber-800 shrink-0" />
-                        <div>
+                        <div className="flex-1">
                           <span className="font-bold text-slate-900 block text-xs">Turn-Down Setup</span>
-                          <span className="text-[11px] text-slate-500">Cedar Mist &bull; Free</span>
+                          <span className="text-[11px] text-slate-500">
+                            {orderingServiceId === 'turndown-quick' ? (
+                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                                <span>Requesting...</span>
+                              </span>
+                            ) : orderedServices.some((s) => s.id === 'turndown-quick') ? (
+                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                            ) : (
+                              'Cedar Mist • Free'
+                            )}
+                          </span>
                         </div>
                       </button>
 
                       <button
                         type="button"
+                        disabled={orderedServices.some((s) => s.id === 'water-ice-quick') || orderingServiceId === 'water-ice-quick'}
                         onClick={() => handleRequestService({
                           id: 'water-ice-quick',
                           title: 'In-Suite Ice Bucket & Mineral Water Carafe',
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
                       >
                         <DiningIcon className="w-5 h-5 text-amber-800 shrink-0" />
-                        <div>
+                        <div className="flex-1">
                           <span className="font-bold text-slate-900 block text-xs">Ice &amp; Mineral Water</span>
-                          <span className="text-[11px] text-slate-500">Complimentary</span>
+                          <span className="text-[11px] text-slate-500">
+                            {orderingServiceId === 'water-ice-quick' ? (
+                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                                <span>Requesting...</span>
+                              </span>
+                            ) : orderedServices.some((s) => s.id === 'water-ice-quick') ? (
+                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                            ) : (
+                              'Complimentary'
+                            )}
+                          </span>
                         </div>
                       </button>
 
                       <button
                         type="button"
+                        disabled={orderedServices.some((s) => s.id === 'spa-towels-quick') || orderingServiceId === 'spa-towels-quick'}
                         onClick={() => handleRequestService({
                           id: 'spa-towels-quick',
                           title: 'Plush Bath Towels & Cedar Robes',
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3"
+                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
                       >
                         <SpaIcon className="w-5 h-5 text-amber-800 shrink-0" />
-                        <div>
+                        <div className="flex-1">
                           <span className="font-bold text-slate-900 block text-xs">Extra Towels &amp; Robes</span>
-                          <span className="text-[11px] text-slate-500">Complimentary</span>
+                          <span className="text-[11px] text-slate-500">
+                            {orderingServiceId === 'spa-towels-quick' ? (
+                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                                <span>Requesting...</span>
+                              </span>
+                            ) : orderedServices.some((s) => s.id === 'spa-towels-quick') ? (
+                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                            ) : (
+                              'Complimentary'
+                            )}
+                          </span>
                         </div>
                       </button>
                     </div>
@@ -2282,14 +2406,23 @@ export default function GuestPortalPage() {
                       <button
                         type="button"
                         onClick={() => handleRequestService(item)}
-                        disabled={isOrdered}
-                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
+                        disabled={isOrdered || orderingServiceId === (item.id || item.title)}
+                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
                           isOrdered
                             ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
+                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm disabled:opacity-75'
                         }`}
                       >
-                        {isOrdered ? 'Added to Room Bill ✓' : `Order to ${currentBooking.roomNumber || 'Suite 301'} →`}
+                        {isOrdered ? (
+                          'Added to Room Bill ✓'
+                        ) : orderingServiceId === (item.id || item.title) ? (
+                          <>
+                            <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
+                            <span>Adding to Bill...</span>
+                          </>
+                        ) : (
+                          `Order to ${currentBooking.roomNumber || 'Suite 301'} →`
+                        )}
                       </button>
                     </div>
                   )
@@ -2352,14 +2485,23 @@ export default function GuestPortalPage() {
                       <button
                         type="button"
                         onClick={() => handleRequestService(item)}
-                        disabled={isOrdered}
-                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
+                        disabled={isOrdered || orderingServiceId === (item.id || item.title)}
+                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
                           isOrdered
                             ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
+                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm disabled:opacity-75'
                         }`}
                       >
-                        {isOrdered ? 'Service Requested ✓' : 'Request Service →'}
+                        {isOrdered ? (
+                          'Service Requested ✓'
+                        ) : orderingServiceId === (item.id || item.title) ? (
+                          <>
+                            <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
+                            <span>Requesting...</span>
+                          </>
+                        ) : (
+                          'Request Service →'
+                        )}
                       </button>
                     </div>
                   )
@@ -2422,14 +2564,23 @@ export default function GuestPortalPage() {
                       <button
                         type="button"
                         onClick={() => handleRequestService(item)}
-                        disabled={isOrdered}
-                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] ${
+                        disabled={isOrdered || orderingServiceId === (item.id || item.title)}
+                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
                           isOrdered
                             ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm'
+                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm disabled:opacity-75'
                         }`}
                       >
-                        {isOrdered ? 'Reserved & Posted ✓' : 'Reserve Experience →'}
+                        {isOrdered ? (
+                          'Reserved & Posted ✓'
+                        ) : orderingServiceId === (item.id || item.title) ? (
+                          <>
+                            <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
+                            <span>Reserving...</span>
+                          </>
+                        ) : (
+                          'Reserve Experience →'
+                        )}
                       </button>
                     </div>
                   )
@@ -2485,11 +2636,21 @@ export default function GuestPortalPage() {
                   </button>
                   <button
                     type="button"
+                    disabled={isCheckingOut}
                     onClick={handleRequestCheckout}
-                    className="touch-target px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-lg transition-colors cursor-pointer shadow-sm active:scale-95 flex items-center gap-1.5"
+                    className="touch-target px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-lg transition-colors cursor-pointer shadow-sm active:scale-95 flex items-center gap-1.5 disabled:opacity-75 disabled:cursor-not-allowed"
                   >
-                    <span>Request Express Checkout</span>
-                    <span>→</span>
+                    {isCheckingOut ? (
+                      <>
+                        <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
+                        <span>Notifying Front Desk...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Request Express Checkout</span>
+                        <span>→</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -2588,15 +2749,20 @@ export default function GuestPortalPage() {
                   <form
                     onSubmit={async (e) => {
                       e.preventDefault()
-                      setReviewSubmitted(true)
+                      if (isSubmittingFeedback) return
+                      setIsSubmittingFeedback(true)
                       try {
                         await submitStayFeedback(currentBooking.bookingRef, {
                           rating: reviewRating,
                           comment: reviewComment,
                         })
+                        setReviewSubmitted(true)
                         toast.success('Your feedback has been delivered to General Manager Tariq J.', 'THANK YOU')
                       } catch (err) {
                         console.warn('[GuestPortal] Feedback submit fallback:', err.message)
+                        setReviewSubmitted(true)
+                      } finally {
+                        setIsSubmittingFeedback(false)
                       }
                     }}
                     className="space-y-4"
@@ -2638,10 +2804,20 @@ export default function GuestPortalPage() {
 
                     <button
                       type="submit"
-                      className="touch-target px-6 py-3 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-sm"
+                      disabled={isSubmittingFeedback}
+                      className="touch-target px-6 py-3 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs uppercase font-bold tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 shadow-sm disabled:opacity-60"
                     >
-                      <span>Submit Stay Feedback</span>
-                      <span>→</span>
+                      {isSubmittingFeedback ? (
+                        <>
+                          <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
+                          <span>Delivering Feedback...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Submit Stay Feedback</span>
+                          <span>→</span>
+                        </>
+                      )}
                     </button>
                   </form>
                 )}
@@ -2655,18 +2831,10 @@ export default function GuestPortalPage() {
       {/* 3. ULTRA-MINIMAL GUEST FOOTER (ONLY WHEN IN-RESIDENCE)          */}
       {/* ============================================================== */}
       {isUnlocked && (
-        <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2 px-4 sm:px-8">
+        <footer className="shrink-0 border-t border-slate-200/60 bg-[#FAF8F5] py-2.5 px-4 sm:px-8">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-500">
-            <span className="uppercase tracking-widest text-[9px] text-slate-400">STAYZA IN-RESIDENCE ROOM BILL</span>
-            <div className="flex items-center gap-4">
-              <button
-                type="button"
-                onClick={() => setIsUnlocked(false)}
-                className="text-slate-600 hover:text-slate-950 underline cursor-pointer"
-              >
-                Switch Reservation
-              </button>
-            </div>
+            <span className="uppercase tracking-widest text-[9px] text-slate-400">STAYZA LUXURY RESIDENCES &bull; IN-RESIDENCE GUEST OS</span>
+            <span className="text-[10px] text-slate-400 font-mono">FOLIO #{currentBooking?.bookingRef || 'TH-301'} &bull; 24/7 BUTLER CONCIERGE ACTIVE</span>
           </div>
         </footer>
       )}

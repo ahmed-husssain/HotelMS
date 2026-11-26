@@ -310,7 +310,7 @@ export default function CheckInModal({
           </div>
 
           <div className="p-3 bg-emerald-50 border border-emerald-200/80 rounded-[2px] text-[11px] font-mono text-emerald-900">
-            Digital NFC Room Pass will be synchronized automatically to guest mobile app.
+            In-Residence Suite Pass will be synchronized automatically to guest mobile portal.
           </div>
 
           {/* Actions */}

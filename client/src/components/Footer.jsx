@@ -222,11 +222,11 @@ export default function Footer() {
                 className="group block py-1.5 border-b border-[#E5DFD5]/80 hover:border-[#121619] transition-colors"
               >
                 <div className="flex items-center justify-between text-[#121619]">
-                  <span className="font-medium group-hover:text-amber-800 transition-colors">Guest Portal &amp; Key</span>
+                  <span className="font-medium group-hover:text-amber-800 transition-colors">Guest In-Stay Portal</span>
                   <span className="font-mono text-xs text-[#57534E] group-hover:translate-x-1 transition-transform group-hover:text-[#121619]">&rarr;</span>
                 </div>
                 <span className="text-[10px] font-mono text-[#57534E] block mt-0.5">
-                  Digital NFC Key &bull; Room Service
+                  Suite Services &bull; In-Room Dining
                 </span>
               </Link>
 
