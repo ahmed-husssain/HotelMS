@@ -64,8 +64,11 @@ Thumbs.db
 .idea/
 Raw Images/
 optimized_images/
-client/public/Images/
-!client/public/images/estate/
+client/public/Images/*
+!client/public/Images/estate/
+!client/public/Images/concierge/
+!client/public/Images/spa/
+!client/public/Images/dining/
 client/public/typography-lab.html
 client/public/suites_layout_demo.html
 client/public/mobile_suites_demo.html

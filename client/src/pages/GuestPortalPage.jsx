@@ -142,6 +142,7 @@ const DINING_MENU = [
     price: 2400,
     timeEst: '25 mins',
     tag: 'Artisanal Brioche',
+    image: '/Images/dining/club-sandwich.webp',
   },
   {
     id: 'dining-2',
@@ -151,6 +152,7 @@ const DINING_MENU = [
     price: 4800,
     timeEst: '35 mins',
     tag: 'Wild Catch',
+    image: '/Images/estate/coastal-dining.webp',
   },
   {
     id: 'dining-3',
@@ -160,6 +162,7 @@ const DINING_MENU = [
     price: 3200,
     timeEst: '20 mins',
     tag: 'Morning Bakery',
+    image: '/Images/estate/clifftop-sanctuary.webp',
   },
   {
     id: 'dining-4',
@@ -169,6 +172,7 @@ const DINING_MENU = [
     price: 1600,
     timeEst: '15 mins',
     tag: 'Seasonal Organic',
+    image: '/Images/estate/private-beach.webp',
   },
   {
     id: 'dining-5',
@@ -178,28 +182,21 @@ const DINING_MENU = [
     price: 1200,
     timeEst: '10 mins',
     tag: 'Single Origin',
+    image: '/Images/estate/wellness-spa.webp',
   },
 ]
 
 // Cedar Spa & Housekeeping Catalog
 const SPA_HOUSEKEEPING_SERVICES = [
   {
-    id: 'spa-1',
-    category: 'Housekeeping',
-    title: 'Fresh Cotton Linens & Extra Pillows',
-    description: 'Fresh Egyptian cotton linen change and complimentary selection of feather down or firm pillows.',
-    price: 0,
-    timeEst: '15 mins',
-    badge: 'Complimentary',
-  },
-  {
-    id: 'spa-2',
-    category: 'Housekeeping',
-    title: 'Plush Bath Towels & Cedar Robes',
-    description: 'Fresh set of oversized organic cotton bath sheets, hand towels, and warm spa robes.',
-    price: 0,
-    timeEst: '15 mins',
-    badge: 'Complimentary',
+    id: 'spa-4',
+    category: 'Spa',
+    title: 'Relaxing In-Suite Aromatherapy Bath',
+    description: 'Natural mineral bath salts, jasmine petals, and warm cedar bath oils prepared in your tub.',
+    price: 4500,
+    timeEst: '30 mins',
+    badge: 'Signature Spa',
+    image: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1795019373/hotel-suites/suite-301/suite-301-bath.webp',
   },
   {
     id: 'spa-3',
@@ -209,15 +206,27 @@ const SPA_HOUSEKEEPING_SERVICES = [
     price: 0,
     timeEst: '20 mins',
     badge: 'Complimentary',
+    image: '/Images/spa/evening-turndown.webp',
   },
   {
-    id: 'spa-4',
-    category: 'Spa',
-    title: 'Relaxing In-Suite Aromatherapy Bath',
-    description: 'Natural mineral bath salts, jasmine petals, and warm cedar bath oils prepared in your tub.',
-    price: 4500,
-    timeEst: '30 mins',
-    badge: 'Signature',
+    id: 'spa-2',
+    category: 'Housekeeping',
+    title: 'Plush Bath Towels & Cedar Robes',
+    description: 'Fresh set of oversized organic cotton bath sheets, hand towels, and warm spa robes.',
+    price: 0,
+    timeEst: '15 mins',
+    badge: 'Complimentary',
+    image: '/Images/spa/plush-towels-robes.webp',
+  },
+  {
+    id: 'spa-1',
+    category: 'Housekeeping',
+    title: 'Fresh Cotton Linens & Extra Pillows',
+    description: 'Fresh Egyptian cotton linen change and complimentary selection of feather down or firm pillows.',
+    price: 0,
+    timeEst: '15 mins',
+    badge: 'Complimentary',
+    image: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1795019369/hotel-suites/suite-301/suite-301-bedroom.webp',
   },
   {
     id: 'spa-5',
@@ -227,6 +236,7 @@ const SPA_HOUSEKEEPING_SERVICES = [
     price: 0,
     timeEst: '10 mins',
     badge: 'Complimentary',
+    image: 'https://res.cloudinary.com/v1rl3ras/image/upload/v1795019377/hotel-suites/suite-301/suite-301-vignette.webp',
   },
 ]
 
@@ -239,6 +249,7 @@ const BUTLER_SERVICES = [
     description: 'Private luxury sedan with chilled refreshments and valet luggage handling directly to your suite.',
     price: 12000,
     timeEst: 'Scheduled Pickup',
+    image: '/Images/concierge/private-chauffeur.webp',
   },
   {
     id: 'concierge-2',
@@ -247,6 +258,7 @@ const BUTLER_SERVICES = [
     description: 'Direct helicopter connection between estate helipad and Karachi Jinnah International Airport.',
     price: 25000,
     timeEst: 'Scheduled Flight',
+    image: '/Images/concierge/coastal-helipad.webp',
   },
   {
     id: 'concierge-3',
@@ -255,6 +267,7 @@ const BUTLER_SERVICES = [
     description: 'Private coastal boat cruise along the cliffs with evening refreshments.',
     price: 35000,
     timeEst: '17:00 – 19:00 PKT',
+    image: '/Images/concierge/sunset-boat-tour.webp',
   },
   {
     id: 'concierge-4',
@@ -263,6 +276,7 @@ const BUTLER_SERVICES = [
     description: 'Private cliffside fire pit setup with warm cedar blankets and herbal tea infusions.',
     price: 8500,
     timeEst: 'Evening Setup',
+    image: '/Images/concierge/stargazing-firepit.webp',
   },
 ]
 
@@ -2039,42 +2053,42 @@ export default function GuestPortalPage() {
                     </h3>
                   </div>
 
-                  {/* 1. APPLE HOMEKIT-STYLE CLIMATE CARD */}
-                  <div className="bg-white border border-slate-200/90 rounded-xl p-5 shadow-xs space-y-4">
+                  {/* 1. APPLE HOMEKIT-STYLE CLIMATE CARD (Quiet Luxury Console) */}
+                  <div className="bg-[#1C1A18] border border-[#2F2C28] rounded-2xl p-5 shadow-lg space-y-4 text-[#F3EFEA]">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <ThermometerIcon className="w-5 h-5 text-amber-800" />
-                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
+                        <ThermometerIcon className="w-5 h-5 text-[#D8CEBE]" />
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#F3EFEA]">
                           In-Suite Thermostat
                         </span>
                       </div>
-                      <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                      <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${
                         climateTemp <= 21
-                          ? 'bg-sky-50 text-sky-800'
+                          ? 'bg-sky-950/60 text-sky-300 border-sky-800/40'
                           : climateTemp <= 23
-                          ? 'bg-emerald-50 text-emerald-800'
-                          : 'bg-amber-50 text-amber-800'
+                          ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/40'
+                          : 'bg-amber-950/60 text-amber-300 border-amber-800/40'
                       }`}>
-                        {climateTemp <= 21 ? 'Cooling Active' : climateTemp <= 23 ? 'Optimal Balance' : 'Gentle Heating'}
+                        {climateTemp <= 21 ? 'Cooling Active' : climateTemp <= 23 ? 'Optimal Balance' : 'Cedar Warmth Active'}
                       </span>
                     </div>
 
                     {/* Large Stepper Display */}
-                    <div className="flex items-center justify-between py-2 px-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="flex items-center justify-between py-2.5 px-4 bg-black/40 rounded-xl border border-[#2F2C28]">
                       <button
                         type="button"
                         onClick={() => handleStepClimate(-1)}
-                        className="touch-target w-11 h-11 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-800 hover:bg-slate-100 active:scale-90 font-mono text-xl font-bold cursor-pointer transition-all shadow-2xs"
+                        className="touch-target w-11 h-11 flex items-center justify-center rounded-lg bg-[#25221F] border border-[#2F2C28] text-[#F3EFEA] hover:bg-[#322E2A] active:scale-90 font-mono text-xl font-bold cursor-pointer transition-all shadow-2xs"
                         aria-label="Decrease temperature by 1 degree"
                       >
                         −
                       </button>
 
                       <div className="text-center">
-                        <span className="font-serif-grand text-4xl font-bold text-slate-900 tracking-tight">
+                        <span className="font-serif-grand text-4xl font-bold text-[#F3EFEA] tracking-tight">
                           {climateTemp}°C
                         </span>
-                        <span className="text-[11px] font-mono text-slate-500 block uppercase tracking-wider">
+                        <span className="text-[10px] font-mono text-[#9A9184] block uppercase tracking-widest mt-0.5">
                           Suite Ambient
                         </span>
                       </div>
@@ -2082,7 +2096,7 @@ export default function GuestPortalPage() {
                       <button
                         type="button"
                         onClick={() => handleStepClimate(+1)}
-                        className="touch-target w-11 h-11 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-800 hover:bg-slate-100 active:scale-90 font-mono text-xl font-bold cursor-pointer transition-all shadow-2xs"
+                        className="touch-target w-11 h-11 flex items-center justify-center rounded-lg bg-[#25221F] border border-[#2F2C28] text-[#F3EFEA] hover:bg-[#322E2A] active:scale-90 font-mono text-xl font-bold cursor-pointer transition-all shadow-2xs"
                         aria-label="Increase temperature by 1 degree"
                       >
                         +
@@ -2102,16 +2116,16 @@ export default function GuestPortalPage() {
                             key={preset.id}
                             type="button"
                             onClick={() => handleSetClimatePreset(preset.id, preset.temp)}
-                            className={`min-h-[58px] py-2 px-1.5 flex flex-col items-center justify-center text-center font-mono rounded-lg border transition-all cursor-pointer active:scale-95 ${
+                            className={`min-h-[58px] py-2 px-1.5 flex flex-col items-center justify-center text-center font-mono rounded-xl border transition-all cursor-pointer active:scale-95 ${
                               isSelected
-                                ? 'bg-slate-900 text-[#FFF0CA] border-slate-900 shadow-xs'
-                                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+                                ? 'bg-[#FAF8F5] text-slate-900 border-white shadow-sm font-bold'
+                                : 'bg-black/40 text-[#A89E90] border-[#2F2C28] hover:text-[#F3EFEA] hover:border-[#3D3A34]'
                             }`}
                           >
                             <span className="text-[11px] font-bold leading-tight block text-center">
                               {preset.label}
                             </span>
-                            <span className={`text-[10px] font-bold mt-1 block ${isSelected ? 'text-amber-300' : 'text-emerald-800'}`}>
+                            <span className={`text-[10px] font-bold mt-1 block ${isSelected ? 'text-amber-800' : 'text-emerald-400'}`}>
                               {preset.temp}°C
                             </span>
                           </button>
@@ -2123,53 +2137,53 @@ export default function GuestPortalPage() {
                   {/* 2. WI-FI & VALET 2-COLUMN GRID */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {/* Wi-Fi Card */}
-                    <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs space-y-2">
+                    <div className="bg-[#1C1A18] border border-[#2F2C28] rounded-2xl p-4 shadow-xs space-y-2 text-[#F3EFEA]">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
-                          <WifiIcon className="w-4 h-4 text-amber-800" />
-                          <span className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">WI-FI</span>
+                          <WifiIcon className="w-4 h-4 text-[#D8CEBE]" />
+                          <span className="text-[10px] font-mono text-[#9A9184] uppercase font-bold tracking-wider">WI-FI</span>
                         </div>
                         <button
                           type="button"
                           onClick={handleCopyWifi}
-                          className="text-[11px] font-mono text-emerald-900 uppercase font-bold hover:underline cursor-pointer active:scale-95 transition-transform"
+                          className="text-[11px] font-mono text-emerald-400 uppercase font-bold hover:underline cursor-pointer active:scale-95 transition-transform"
                         >
                           {wifiCopied ? 'Copied ✓' : 'Copy'}
                         </button>
                       </div>
                       <div>
-                        <span className="font-mono text-xs font-bold text-slate-900 block truncate">Stayza_Guest</span>
-                        <span className="text-[11px] font-mono text-slate-500">Pass: pacific2026</span>
+                        <span className="font-mono text-xs font-bold text-[#F3EFEA] block truncate">Stayza_Guest</span>
+                        <span className="text-[11px] font-mono text-[#A89E90]">Pass: pacific2026</span>
                       </div>
                     </div>
 
                     {/* Valet Parking Card */}
-                    <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs space-y-2">
+                    <div className="bg-[#1C1A18] border border-[#2F2C28] rounded-2xl p-4 shadow-xs space-y-2 text-[#F3EFEA]">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
-                          <CarIcon className="w-4 h-4 text-amber-800" />
-                          <span className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">VALET BAY</span>
+                          <CarIcon className="w-4 h-4 text-[#D8CEBE]" />
+                          <span className="text-[10px] font-mono text-[#9A9184] uppercase font-bold tracking-wider">VALET BAY</span>
                         </div>
                         <button
                           type="button"
                           onClick={handleRequestValet}
-                          className="text-[11px] font-mono text-slate-900 uppercase font-bold hover:underline cursor-pointer active:scale-95 transition-transform"
+                          className="text-[11px] font-mono text-[#D8CEBE] uppercase font-bold hover:underline cursor-pointer active:scale-95 transition-transform"
                         >
                           {valetRequested ? 'Dispatched ✓' : 'Call Car'}
                         </button>
                       </div>
                       <div>
-                        <span className="font-mono text-xs font-bold text-slate-900 block">Bay #301</span>
-                        <span className="text-[11px] font-mono text-slate-500">Underground Floor P1</span>
+                        <span className="font-mono text-xs font-bold text-[#F3EFEA] block">Bay #301</span>
+                        <span className="text-[11px] font-mono text-[#A89E90]">Underground Floor P1</span>
                       </div>
                     </div>
                   </div>
 
                   {/* 3. HEAD BUTLER SERVICE TILE */}
-                  <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs flex items-center justify-between gap-3">
+                  <div className="bg-[#1C1A18] border border-[#2F2C28] rounded-2xl p-4 shadow-xs flex items-center justify-between gap-3 text-[#F3EFEA]">
                     <div>
-                      <span className="text-xs font-bold text-slate-900 block">Head Butler On Duty</span>
-                      <span className="text-xs text-slate-500 font-mono">Tariq J. &bull; In-Residence Concierge</span>
+                      <span className="text-xs font-bold text-[#F3EFEA] block">Head Butler On Duty</span>
+                      <span className="text-xs text-[#A89E90] font-mono">Tariq J. &bull; In-Residence Concierge</span>
                     </div>
                     <button
                       type="button"
@@ -2180,11 +2194,11 @@ export default function GuestPortalPage() {
                         price: 0,
                         category: 'Front Desk',
                       })}
-                      className="touch-target px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer active:scale-95 shrink-0 disabled:opacity-75 disabled:cursor-not-allowed flex items-center gap-1.5"
+                      className="touch-target px-4 py-2.5 bg-[#FAF8F5] text-slate-900 hover:bg-white font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-95 shrink-0 disabled:opacity-75 disabled:cursor-not-allowed flex items-center gap-1.5 shadow-xs"
                     >
                       {orderingServiceId === 'butler-call' ? (
                         <>
-                          <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
+                          <span className="w-3.5 h-3.5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin shrink-0" />
                           <span>Calling...</span>
                         </>
                       ) : orderedServices.some((s) => s.id === 'butler-call') ? (
@@ -2197,7 +2211,7 @@ export default function GuestPortalPage() {
 
                   {/* 4. ONE-TOUCH HOUSEKEEPING AMENITIES (2X2 GRID) */}
                   <div className="space-y-2">
-                    <span className="text-[11px] font-mono tracking-wider font-bold text-slate-400 uppercase block">
+                    <span className="text-[11px] font-mono tracking-wider font-bold text-[#9A9184] uppercase block">
                       QUICK ROOM SERVICES &bull; 1-TOUCH REQUEST
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -2210,19 +2224,19 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
+                        className="touch-target p-3.5 sm:p-4 bg-[#1C1A18] border border-[#2F2C28] hover:border-[#D8CEBE]/60 rounded-2xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed text-[#F3EFEA]"
                       >
-                        <BedIcon className="w-5 h-5 text-amber-800 shrink-0" />
+                        <BedIcon className="w-5 h-5 text-[#D8CEBE] shrink-0" />
                         <div className="flex-1">
-                          <span className="font-bold text-slate-900 block text-xs">Fresh Linens</span>
-                          <span className="text-[11px] text-slate-500">
+                          <span className="font-bold text-[#F3EFEA] block text-xs">Fresh Linens</span>
+                          <span className="text-[11px] text-[#A89E90]">
                             {orderingServiceId === 'linen-quick' ? (
-                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
-                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                              <span className="flex items-center gap-1 text-[#D8CEBE] font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-[#D8CEBE] border-t-transparent rounded-full animate-spin shrink-0" />
                                 <span>Requesting...</span>
                               </span>
                             ) : orderedServices.some((s) => s.id === 'linen-quick') ? (
-                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                              <span className="text-emerald-400 font-semibold">Requested ✓</span>
                             ) : (
                               'Complimentary'
                             )}
@@ -2239,19 +2253,19 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
+                        className="touch-target p-3.5 sm:p-4 bg-[#1C1A18] border border-[#2F2C28] hover:border-[#D8CEBE]/60 rounded-2xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed text-[#F3EFEA]"
                       >
-                        <CandleIcon className="w-5 h-5 text-amber-800 shrink-0" />
+                        <CandleIcon className="w-5 h-5 text-[#D8CEBE] shrink-0" />
                         <div className="flex-1">
-                          <span className="font-bold text-slate-900 block text-xs">Turn-Down Setup</span>
-                          <span className="text-[11px] text-slate-500">
+                          <span className="font-bold text-[#F3EFEA] block text-xs">Turn-Down Setup</span>
+                          <span className="text-[11px] text-[#A89E90]">
                             {orderingServiceId === 'turndown-quick' ? (
-                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
-                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                              <span className="flex items-center gap-1 text-[#D8CEBE] font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-[#D8CEBE] border-t-transparent rounded-full animate-spin shrink-0" />
                                 <span>Requesting...</span>
                               </span>
                             ) : orderedServices.some((s) => s.id === 'turndown-quick') ? (
-                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                              <span className="text-emerald-400 font-semibold">Requested ✓</span>
                             ) : (
                               'Cedar Mist • Free'
                             )}
@@ -2268,19 +2282,19 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
+                        className="touch-target p-3.5 sm:p-4 bg-[#1C1A18] border border-[#2F2C28] hover:border-[#D8CEBE]/60 rounded-2xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed text-[#F3EFEA]"
                       >
-                        <DiningIcon className="w-5 h-5 text-amber-800 shrink-0" />
+                        <DiningIcon className="w-5 h-5 text-[#D8CEBE] shrink-0" />
                         <div className="flex-1">
-                          <span className="font-bold text-slate-900 block text-xs">Ice &amp; Mineral Water</span>
-                          <span className="text-[11px] text-slate-500">
+                          <span className="font-bold text-[#F3EFEA] block text-xs">Ice &amp; Mineral Water</span>
+                          <span className="text-[11px] text-[#A89E90]">
                             {orderingServiceId === 'water-ice-quick' ? (
-                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
-                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                              <span className="flex items-center gap-1 text-[#D8CEBE] font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-[#D8CEBE] border-t-transparent rounded-full animate-spin shrink-0" />
                                 <span>Requesting...</span>
                               </span>
                             ) : orderedServices.some((s) => s.id === 'water-ice-quick') ? (
-                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                              <span className="text-emerald-400 font-semibold">Requested ✓</span>
                             ) : (
                               'Complimentary'
                             )}
@@ -2297,19 +2311,19 @@ export default function GuestPortalPage() {
                           price: 0,
                           category: 'Housekeeping',
                         })}
-                        className="touch-target p-3.5 sm:p-4 bg-white border border-slate-200 hover:border-slate-900 rounded-xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed"
+                        className="touch-target p-3.5 sm:p-4 bg-[#1C1A18] border border-[#2F2C28] hover:border-[#D8CEBE]/60 rounded-2xl text-left font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-xs flex items-center gap-3 disabled:opacity-75 disabled:cursor-not-allowed text-[#F3EFEA]"
                       >
-                        <SpaIcon className="w-5 h-5 text-amber-800 shrink-0" />
+                        <SpaIcon className="w-5 h-5 text-[#D8CEBE] shrink-0" />
                         <div className="flex-1">
-                          <span className="font-bold text-slate-900 block text-xs">Extra Towels &amp; Robes</span>
-                          <span className="text-[11px] text-slate-500">
+                          <span className="font-bold text-[#F3EFEA] block text-xs">Extra Towels &amp; Robes</span>
+                          <span className="text-[11px] text-[#A89E90]">
                             {orderingServiceId === 'spa-towels-quick' ? (
-                              <span className="flex items-center gap-1 text-amber-800 font-semibold">
-                                <span className="w-2.5 h-2.5 border-2 border-amber-800 border-t-transparent rounded-full animate-spin shrink-0" />
+                              <span className="flex items-center gap-1 text-[#D8CEBE] font-semibold">
+                                <span className="w-2.5 h-2.5 border-2 border-[#D8CEBE] border-t-transparent rounded-full animate-spin shrink-0" />
                                 <span>Requesting...</span>
                               </span>
                             ) : orderedServices.some((s) => s.id === 'spa-towels-quick') ? (
-                              <span className="text-emerald-700 font-semibold">Requested ✓</span>
+                              <span className="text-emerald-400 font-semibold">Requested ✓</span>
                             ) : (
                               'Complimentary'
                             )}
@@ -2377,59 +2391,85 @@ export default function GuestPortalPage() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {DINING_MENU.map((item) => {
                   const isOrdered = orderedServices.some((s) => s.id === item.id)
                   return (
                     <div
                       key={item.id}
-                      className="bg-white border border-slate-200/90 rounded-xl p-6 shadow-xs hover:border-slate-300 hover:shadow-sm transition-all flex flex-col justify-between space-y-5"
+                      className="bg-[#141210] border border-[#2F2C28] rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between group hover:border-[#D8CEBE]/50 transition-all duration-300"
                     >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="px-2.5 py-1 bg-amber-50 text-amber-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-md border border-amber-200/80">
+                      {/* Editorial Image & Overlay */}
+                      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-stone-900">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-[#1C1A18] flex items-center justify-center text-[#8C8477]">
+                            <DiningIcon className="w-10 h-10 opacity-30" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#141210] via-black/35 to-black/10 pointer-events-none" />
+
+                        {/* Top Badges */}
+                        <div className="absolute top-3 inset-x-3 flex items-center justify-between">
+                          <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-[#2F2C28] font-mono text-[10px] text-[#D8CEBE] font-bold uppercase tracking-wider">
                             {item.tag}
                           </span>
-                          <span className="font-mono text-xs text-slate-500">
+                          <span className="px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md border border-[#2F2C28] font-mono text-[10px] text-[#A89E90]">
                             {item.timeEst}
                           </span>
                         </div>
 
-                        <div className="flex items-baseline justify-between gap-2 pt-1">
-                          <h3 className="font-serif-grand text-lg text-slate-900">
-                            {item.title}
-                          </h3>
-                          <span className="font-mono text-xs font-bold text-slate-900 shrink-0">
+                        {/* Bottom Title & Price Overlay */}
+                        <div className="absolute bottom-3 inset-x-3 sm:inset-x-4 flex items-end justify-between gap-3">
+                          <div className="space-y-0.5 max-w-[70%]">
+                            <span className="font-mono text-[9px] text-[#A89E90] uppercase tracking-[0.2em] font-semibold block">
+                              In-Residence Culinary
+                            </span>
+                            <h3 className="font-serif-grand text-base sm:text-lg text-[#F3EFEA] font-bold tracking-tight line-clamp-1">
+                              {item.title}
+                            </h3>
+                          </div>
+                          <span className="font-mono text-xs font-bold text-[#F3EFEA] bg-black/70 px-2.5 py-1 rounded-lg border border-[#2F2C28] shrink-0">
                             PKR {item.price.toLocaleString()}
                           </span>
                         </div>
-
-                        <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                          {item.description}
-                        </p>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handleRequestService(item)}
-                        disabled={isOrdered || orderingServiceId === (item.id || item.title)}
-                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
-                          isOrdered
-                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm disabled:opacity-75'
-                        }`}
-                      >
-                        {isOrdered ? (
-                          'Added to Room Bill ✓'
-                        ) : orderingServiceId === (item.id || item.title) ? (
-                          <>
-                            <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
-                            <span>Adding to Bill...</span>
-                          </>
-                        ) : (
-                          `Order to ${currentBooking.roomNumber || 'Suite 301'} →`
-                        )}
-                      </button>
+                      {/* Content Description & Action */}
+                      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 space-y-4">
+                        <p className="font-sans-clean text-xs text-[#A89E90] leading-relaxed line-clamp-2">
+                          {item.description}
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRequestService(item)}
+                          disabled={isOrdered || orderingServiceId === (item.id || item.title)}
+                          className={`touch-target w-full min-h-[44px] py-2.5 px-4 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
+                            isOrdered
+                              ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-700/60'
+                              : 'bg-[#FAF8F5] text-slate-900 hover:bg-white shadow-sm disabled:opacity-75'
+                          }`}
+                        >
+                          {isOrdered ? (
+                            'Added to Room Bill ✓'
+                          ) : orderingServiceId === (item.id || item.title) ? (
+                            <>
+                              <span className="w-3.5 h-3.5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin shrink-0" />
+                              <span>Adding to Bill...</span>
+                            </>
+                          ) : (
+                            `Order to ${currentBooking.roomNumber || 'Suite 301'} →`
+                          )}
+                        </button>
+                      </div>
                     </div>
                   )
                 })}
@@ -2456,59 +2496,85 @@ export default function GuestPortalPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {SPA_HOUSEKEEPING_SERVICES.map((item) => {
                   const isOrdered = orderedServices.some((s) => s.id === item.id)
                   return (
                     <div
                       key={item.id}
-                      className="bg-white border border-slate-200/90 rounded-xl p-6 shadow-xs flex flex-col justify-between space-y-5"
+                      className="bg-[#141210] border border-[#2F2C28] rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between group hover:border-[#D8CEBE]/50 transition-all duration-300"
                     >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="px-2.5 py-1 bg-emerald-50 text-emerald-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-md border border-emerald-200">
+                      {/* Editorial Image & Overlay */}
+                      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-stone-900">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-[#1C1A18] flex items-center justify-center text-[#8C8477]">
+                            <SpaIcon className="w-10 h-10 opacity-30" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#141210] via-black/35 to-black/10 pointer-events-none" />
+
+                        {/* Top Badges */}
+                        <div className="absolute top-3 inset-x-3 flex items-center justify-between">
+                          <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-[#2F2C28] font-mono text-[10px] text-[#D8CEBE] font-bold uppercase tracking-wider">
                             {item.badge}
                           </span>
-                          <span className="font-mono text-xs text-slate-500">
+                          <span className="px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md border border-[#2F2C28] font-mono text-[10px] text-[#A89E90]">
                             {item.timeEst}
                           </span>
                         </div>
 
-                        <div className="flex items-baseline justify-between gap-2 pt-1">
-                          <h3 className="font-serif-grand text-lg text-slate-900">
-                            {item.title}
-                          </h3>
-                          <span className="font-mono text-xs font-bold text-slate-900 shrink-0">
+                        {/* Bottom Title & Price Overlay */}
+                        <div className="absolute bottom-3 inset-x-3 sm:inset-x-4 flex items-end justify-between gap-3">
+                          <div className="space-y-0.5 max-w-[70%]">
+                            <span className="font-mono text-[9px] text-[#A89E90] uppercase tracking-[0.2em] font-semibold block">
+                              {item.category === 'Spa' ? 'Signature Spa' : 'Housekeeping & Linens'}
+                            </span>
+                            <h3 className="font-serif-grand text-base sm:text-lg text-[#F3EFEA] font-bold tracking-tight line-clamp-1">
+                              {item.title}
+                            </h3>
+                          </div>
+                          <span className="font-mono text-xs font-bold text-[#F3EFEA] bg-black/70 px-2.5 py-1 rounded-lg border border-[#2F2C28] shrink-0">
                             {item.price === 0 ? 'COMPLIMENTARY' : `PKR ${item.price.toLocaleString()}`}
                           </span>
                         </div>
-
-                        <p className="text-xs text-slate-600 leading-relaxed">
-                          {item.description}
-                        </p>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handleRequestService(item)}
-                        disabled={isOrdered || orderingServiceId === (item.id || item.title)}
-                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
-                          isOrdered
-                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm disabled:opacity-75'
-                        }`}
-                      >
-                        {isOrdered ? (
-                          'Service Requested ✓'
-                        ) : orderingServiceId === (item.id || item.title) ? (
-                          <>
-                            <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
-                            <span>Requesting...</span>
-                          </>
-                        ) : (
-                          'Request Service →'
-                        )}
-                      </button>
+                      {/* Content Description & Action */}
+                      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 space-y-4">
+                        <p className="font-sans-clean text-xs text-[#A89E90] leading-relaxed line-clamp-2">
+                          {item.description}
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRequestService(item)}
+                          disabled={isOrdered || orderingServiceId === (item.id || item.title)}
+                          className={`touch-target w-full min-h-[44px] py-2.5 px-4 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
+                            isOrdered
+                              ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-700/60'
+                              : 'bg-[#FAF8F5] text-slate-900 hover:bg-white shadow-sm disabled:opacity-75'
+                          }`}
+                        >
+                          {isOrdered ? (
+                            'Service Requested ✓'
+                          ) : orderingServiceId === (item.id || item.title) ? (
+                            <>
+                              <span className="w-3.5 h-3.5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin shrink-0" />
+                              <span>Requesting...</span>
+                            </>
+                          ) : (
+                            'Request Service →'
+                          )}
+                        </button>
+                      </div>
                     </div>
                   )
                 })}
@@ -2535,59 +2601,85 @@ export default function GuestPortalPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {BUTLER_SERVICES.map((item) => {
                   const isOrdered = orderedServices.some((s) => s.id === item.id)
                   return (
                     <div
                       key={item.id}
-                      className="bg-white border border-slate-200/90 rounded-xl p-6 shadow-xs flex flex-col justify-between space-y-5"
+                      className="bg-[#141210] border border-[#2F2C28] rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between group hover:border-[#D8CEBE]/50 transition-all duration-300"
                     >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="px-2.5 py-1 bg-amber-50 text-amber-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-md border border-amber-200">
+                      {/* Editorial Image & Overlay */}
+                      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-stone-900">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-[#1C1A18] flex items-center justify-center text-[#8C8477]">
+                            <CarIcon className="w-10 h-10 opacity-30" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#141210] via-black/35 to-black/10 pointer-events-none" />
+
+                        {/* Top Badges */}
+                        <div className="absolute top-3 inset-x-3 flex items-center justify-between">
+                          <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-[#2F2C28] font-mono text-[10px] text-[#D8CEBE] font-bold uppercase tracking-wider">
                             {item.category}
                           </span>
-                          <span className="font-mono text-xs text-slate-500">
+                          <span className="px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md border border-[#2F2C28] font-mono text-[10px] text-[#A89E90]">
                             {item.timeEst}
                           </span>
                         </div>
 
-                        <div className="flex items-baseline justify-between gap-2 pt-1">
-                          <h3 className="font-serif-grand text-lg text-slate-900">
-                            {item.title}
-                          </h3>
-                          <span className="font-mono text-xs font-bold text-slate-900 shrink-0">
+                        {/* Bottom Title & Price Overlay */}
+                        <div className="absolute bottom-3 inset-x-3 sm:inset-x-4 flex items-end justify-between gap-3">
+                          <div className="space-y-0.5 max-w-[70%]">
+                            <span className="font-mono text-[9px] text-[#A89E90] uppercase tracking-[0.2em] font-semibold block">
+                              VIP Concierge Experience
+                            </span>
+                            <h3 className="font-serif-grand text-base sm:text-lg text-[#F3EFEA] font-bold tracking-tight line-clamp-1">
+                              {item.title}
+                            </h3>
+                          </div>
+                          <span className="font-mono text-xs font-bold text-[#F3EFEA] bg-black/70 px-2.5 py-1 rounded-lg border border-[#2F2C28] shrink-0">
                             PKR {item.price.toLocaleString()}
                           </span>
                         </div>
-
-                        <p className="text-xs text-slate-600 leading-relaxed">
-                          {item.description}
-                        </p>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handleRequestService(item)}
-                        disabled={isOrdered || orderingServiceId === (item.id || item.title)}
-                        className={`touch-target w-full py-3 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
-                          isOrdered
-                            ? 'bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold'
-                            : 'bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] shadow-sm disabled:opacity-75'
-                        }`}
-                      >
-                        {isOrdered ? (
-                          'Reserved & Posted ✓'
-                        ) : orderingServiceId === (item.id || item.title) ? (
-                          <>
-                            <span className="w-3.5 h-3.5 border-2 border-[#FFF0CA] border-t-transparent rounded-full animate-spin shrink-0" />
-                            <span>Reserving...</span>
-                          </>
-                        ) : (
-                          'Reserve Experience →'
-                        )}
-                      </button>
+                      {/* Content Description & Action */}
+                      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 space-y-4">
+                        <p className="font-sans-clean text-xs text-[#A89E90] leading-relaxed line-clamp-2">
+                          {item.description}
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRequestService(item)}
+                          disabled={isOrdered || orderingServiceId === (item.id || item.title)}
+                          className={`touch-target w-full min-h-[44px] py-2.5 px-4 font-mono text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 ${
+                            isOrdered
+                              ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-700/60'
+                              : 'bg-[#FAF8F5] text-slate-900 hover:bg-white shadow-sm disabled:opacity-75'
+                          }`}
+                        >
+                          {isOrdered ? (
+                            'Reserved & Posted ✓'
+                          ) : orderingServiceId === (item.id || item.title) ? (
+                            <>
+                              <span className="w-3.5 h-3.5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin shrink-0" />
+                              <span>Reserving...</span>
+                            </>
+                          ) : (
+                            'Reserve Experience →'
+                          )}
+                        </button>
+                      </div>
                     </div>
                   )
                 })}
