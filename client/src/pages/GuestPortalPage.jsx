@@ -1345,7 +1345,7 @@ export default function GuestPortalPage() {
                       : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  👤 Account
+                  Account
                 </button>
                 <button
                   type="button"
@@ -1360,7 +1360,7 @@ export default function GuestPortalPage() {
                       : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  🎨 Theme
+                  Theme
                 </button>
                 <button
                   type="button"
@@ -1375,7 +1375,7 @@ export default function GuestPortalPage() {
                       : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  🔒 Password
+                  Password
                 </button>
               </div>
 
@@ -1488,7 +1488,10 @@ export default function GuestPortalPage() {
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-base">☀️</span>
+                        <svg className="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <circle cx="12" cy="12" r="4" />
+                          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                        </svg>
                         {guestTheme === 'light' ? (
                           <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-full uppercase">
                             Active
@@ -1518,7 +1521,9 @@ export default function GuestPortalPage() {
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-base">🌙</span>
+                        <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                        </svg>
                         {guestTheme === 'dark' ? (
                           <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-full uppercase">
                             Active
@@ -1541,7 +1546,9 @@ export default function GuestPortalPage() {
                   <div className={`p-2.5 rounded-xl border text-[11px] flex items-center gap-2 ${
                     guestTheme === 'dark' ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
                   }`}>
-                    <span className="text-emerald-600">✓</span>
+                    <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
                     <span>Saved locally. Staff consoles and public pages remain unaffected.</span>
                   </div>
                 </div>
@@ -1681,7 +1688,10 @@ export default function GuestPortalPage() {
                         guestTheme === 'dark' ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
                       }`}>
                         <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-                          <span>✉️</span>
+                          <svg className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <rect width="20" height="16" x="2" y="4" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                          </svg>
                           <span>Registered Email Verification</span>
                         </div>
                         <p className="text-[10px] text-slate-400">
