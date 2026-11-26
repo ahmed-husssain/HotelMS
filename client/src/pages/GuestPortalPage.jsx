@@ -1199,7 +1199,7 @@ export default function GuestPortalPage() {
           }`}>
             <nav
               aria-label="Guest Operations Navigation"
-              className="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none"
+              className="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex items-center justify-start lg:justify-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none"
             >
               {[
                 { id: 'suite', label: 'My Suite', Icon: KeyIcon },
