@@ -977,15 +977,16 @@ export default function GuestPortalPage() {
         }`}
       >
         {/* Mobile Header (<768px) */}
+        {/* Mobile Header (<768px): Option B Single-Row Luxury Bar */}
         <div className="md:hidden">
-          {/* Mobile Tier 1: Brand & Guest Identity */}
-          <div className={`px-4 py-2.5 flex items-center justify-between border-b ${
-            guestTheme === 'dark' ? 'border-slate-800/60' : 'border-slate-200/50'
-          }`}>
-            <div className="flex items-center gap-2.5">
+          <div className={`px-4 py-2 flex items-center justify-between border-b ${
+            guestTheme === 'dark' ? 'border-slate-800/60 bg-[#0F172A]/90' : 'border-slate-200/50 bg-[#FAF8F5]/90'
+          } backdrop-blur-md`}>
+            {/* Left: Return & Brand */}
+            <div className="flex items-center gap-2">
               <Link
                 to="/"
-                className={`w-8 h-8 flex items-center justify-center transition-colors ${
+                className={`w-8 h-8 flex items-center justify-center transition-colors font-mono text-sm ${
                   guestTheme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-950'
                 }`}
                 title="Return to Overview"
@@ -995,97 +996,65 @@ export default function GuestPortalPage() {
               <BrandLogo variant="wordmark" theme={guestTheme === 'dark' ? 'light' : 'dark'} size="sm" />
             </div>
 
-            {/* Guest Profile Trigger */}
-            {currentUser ? (
-              <button
-                type="button"
-                data-profile-trigger="mobile"
-                onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
-                className={`flex items-center gap-1.5 py-1 px-2.5 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95 border ${
-                  isProfileDropdownOpen
-                    ? 'border-emerald-600 ring-2 ring-emerald-500/20'
-                    : guestTheme === 'dark'
-                    ? 'bg-slate-900 border-slate-700 text-slate-200'
-                    : 'bg-white border-slate-200 text-slate-800'
-                }`}
-                title="View Guest Profile & Settings"
-                aria-expanded={isProfileDropdownOpen}
-              >
-                <span className="w-5 h-5 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
-                  {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
-                </span>
-                <span className="font-mono text-xs font-semibold max-w-[120px] sm:max-w-[180px] truncate">
-                  {currentUser.name ? currentUser.name.split(' ')[0] : 'Guest'}
-                </span>
-                <span
-                  className={`text-[9px] transition-transform duration-200 ${
-                    isProfileDropdownOpen ? 'rotate-180 text-emerald-600' : 'text-slate-400'
-                  }`}
-                >
-                  ▼
-                </span>
-              </button>
-            ) : (
-              <Link
-                to="/login?redirect=/my-stay"
-                className="font-mono text-xs font-bold text-emerald-900 underline uppercase tracking-wider py-1 px-2"
-              >
-                Sign In
-              </Link>
-            )}
-          </div>
-
-          {/* Mobile Tier 2: Suite Status, DND Switch, Bill */}
-          {isUnlocked && (
-            <div className={`px-4 py-2 flex items-center justify-between gap-2 border-b ${
-              guestTheme === 'dark'
-                ? 'bg-[#0F172A]/90 border-slate-800/60'
-                : 'bg-slate-50/90 border-slate-200/40'
-            }`}>
-              <div className="flex items-center gap-1.5 font-mono text-xs">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
-                <span className={`font-bold uppercase tracking-wide ${guestTheme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
-                  {currentBooking.roomNumber || 'Suite 301'}
-                </span>
-              </div>
-
-              {/* Apple-Style Fluid DND Spring Switch */}
-              <div className="flex items-center gap-1.5">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
-                  {isDND ? 'Privacy On' : 'Privacy Off'}
-                </span>
+            {/* Right: Combined Suite & Bill Pill + Guest Profile */}
+            <div className="flex items-center gap-2">
+              {isUnlocked && (
                 <button
                   type="button"
-                  role="switch"
-                  aria-checked={isDND}
-                  aria-label="Toggle Do Not Disturb privacy"
-                  onClick={handleToggleDND}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus:outline-none"
+                  onClick={() => setActiveTab('folio')}
+                  className={`touch-target px-2.5 py-1 rounded-full font-mono text-[10px] font-bold shadow-2xs flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all border ${
+                    guestTheme === 'dark'
+                      ? 'bg-slate-900 border-slate-700 text-slate-200'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  }`}
+                  title="View Folio & Room Bill"
                 >
-                  <div
-                    className={`relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ease-in-out p-0.5 ${
-                      isDND ? 'bg-rose-600' : 'bg-slate-300'
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  <span>{currentBooking.roomNumber || 'Suite 301'}</span>
+                  <span className={guestTheme === 'dark' ? 'text-slate-600' : 'text-slate-300'}>|</span>
+                  <span className="text-emerald-700 dark:text-emerald-400 font-extrabold">
+                    PKR {Math.round(financials.totalStayAmount / 1000)}k
+                  </span>
+                </button>
+              )}
+
+              {/* Guest Profile Trigger */}
+              {currentUser ? (
+                <button
+                  type="button"
+                  data-profile-trigger="mobile"
+                  onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
+                  className={`flex items-center gap-1 py-1 px-1.5 rounded-full transition-all cursor-pointer shadow-2xs active:scale-95 border ${
+                    isProfileDropdownOpen
+                      ? 'border-emerald-600 ring-2 ring-emerald-500/20'
+                      : guestTheme === 'dark'
+                      ? 'bg-slate-900 border-slate-700 text-slate-200'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  }`}
+                  title="View Guest Profile & Settings"
+                  aria-expanded={isProfileDropdownOpen}
+                >
+                  <span className="w-6 h-6 rounded-full bg-emerald-800 text-white font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+                    {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G'}
+                  </span>
+                  <span
+                    className={`text-[9px] transition-transform duration-200 ${
+                      isProfileDropdownOpen ? 'rotate-180 text-emerald-600' : 'text-slate-400'
                     }`}
                   >
-                    <span
-                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out ${
-                        isDND ? 'translate-x-5' : 'translate-x-0'
-                      }`}
-                    />
-                  </div>
+                    ▼
+                  </span>
                 </button>
-              </div>
-
-              {/* Quick Bill Button */}
-              <button
-                type="button"
-                onClick={() => setActiveTab('folio')}
-                className="py-1.5 px-3 bg-slate-900 text-[#FFF0CA] font-mono text-[11px] font-bold uppercase tracking-wider rounded-[2px] active:scale-95 transition-all shadow-2xs cursor-pointer"
-              >
-                PKR {Math.round(financials.totalStayAmount / 1000)}k &rarr;
-              </button>
+              ) : (
+                <Link
+                  to="/login?redirect=/my-stay"
+                  className="font-mono text-xs font-bold text-emerald-900 underline uppercase tracking-wider py-1 px-2"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Desktop Header (>=768px) */}
@@ -1956,7 +1925,295 @@ export default function GuestPortalPage() {
           {/* ============================================================ */}
           {activeTab === 'suite' && (
             <div className="space-y-6 animate-fade-in">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+              {/* MOBILE VIEW (<1024px): Option B Streamlined Apple Wallet Experience */}
+              <div className="lg:hidden space-y-3.5">
+                {/* 1. Apple Wallet Metallic Pass Card */}
+                <div className="rounded-2xl p-4 sm:p-5 bg-[#1C1A18] text-[#F3EFEA] border border-[#2F2C28] shadow-lg space-y-3 select-none">
+                  <div className="flex items-center justify-between border-b border-[#2F2C28] pb-2.5">
+                    <span className="font-mono text-[10px] tracking-[0.2em] text-[#D8CEBE] uppercase font-semibold">
+                      Digital Key &bull; Suite Pass
+                    </span>
+                    {/* Embedded Privacy / DND Toggle */}
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={isDND}
+                      onClick={handleToggleDND}
+                      className={`touch-target px-2.5 py-1 rounded-full font-mono text-[9px] font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 border ${
+                        isDND
+                          ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                          : 'bg-white/10 text-slate-300 border-white/15 hover:bg-white/15'
+                      }`}
+                      title="Toggle Room Privacy"
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${isDND ? 'bg-rose-400' : 'bg-slate-400'}`} />
+                      <span>{isDND ? 'Privacy On' : 'Privacy Off'}</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between py-1">
+                    <div>
+                      <span className="font-mono text-[9px] text-[#9A9184] uppercase tracking-wider block">
+                        RESIDENCE
+                      </span>
+                      <h2 className="font-serif-grand text-3xl font-bold text-[#F3EFEA] leading-tight tracking-tight">
+                        {currentBooking.roomNumber || 'Suite 301'}
+                      </h2>
+                      <span className="font-sans text-xs text-[#D8CEBE] block mt-0.5">
+                        {currentBooking.residence?.name || 'The Horizon Penthouse'}
+                      </span>
+                    </div>
+                    <div className="w-12 h-12 rounded-xl bg-black/30 border border-[#2F2C28] flex items-center justify-center shrink-0">
+                      <svg className="w-6 h-6 text-[#D8CEBE]" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                        <path d="M 14 36 L 50 22 L 86 36" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                        <line x1="28" y1="38" x2="28" y2="78" strokeWidth="2.5" strokeLinecap="round" />
+                        <line x1="72" y1="38" x2="72" y2="78" strokeWidth="2.5" strokeLinecap="round" />
+                        <path d="M 38 78 L 38 52 C 38 45.4 43.4 40 50 40 C 56.6 40 62 45.4 62 52 L 62 78" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+                        <line x1="16" y1="78" x2="84" y2="78" strokeWidth="3" strokeLinecap="round" />
+                        <circle cx="50" cy="50" r="3.5" fill="currentColor" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="pt-2.5 border-t border-[#2F2C28] flex items-center justify-between font-mono text-[10px] text-white/70">
+                    <span className="truncate max-w-[150px]">{currentBooking.guestName}</span>
+                    <span className="text-[#FFF0CA] font-medium shrink-0">
+                      {currentBooking.checkIn} – {currentBooking.checkOut} ({currentBooking.nights}N)
+                    </span>
+                  </div>
+                </div>
+
+                {/* 2. 1-Touch Services Horizontal Swipe Ribbon */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-extrabold text-slate-400 block px-0.5">
+                    Quick Services &bull; 1-Tap
+                  </span>
+                  <div className="flex overflow-x-auto gap-2 no-scrollbar py-0.5">
+                    {/* Fresh Linens */}
+                    <button
+                      type="button"
+                      disabled={orderedServices.some((s) => s.id === 'linen-quick') || orderingServiceId === 'linen-quick'}
+                      onClick={() => handleRequestService({
+                        id: 'linen-quick',
+                        title: 'Fresh Egyptian Linens & Extra Pillows',
+                        price: 0,
+                        category: 'Housekeeping',
+                      })}
+                      className="shrink-0 px-3.5 py-2.5 bg-white border border-slate-200/90 hover:border-slate-400 rounded-xl flex items-center gap-2 shadow-2xs font-mono text-xs transition-all active:scale-95 disabled:opacity-75"
+                    >
+                      <BedIcon className="w-4 h-4 text-amber-800 shrink-0" />
+                      <span className="font-bold text-slate-900 text-xs whitespace-nowrap">
+                        {orderingServiceId === 'linen-quick' ? 'Requesting...' : orderedServices.some((s) => s.id === 'linen-quick') ? 'Linens ✓' : 'Linens'}
+                      </span>
+                      <span className="text-[9px] text-emerald-800 font-semibold">Free</span>
+                    </button>
+
+                    {/* Turndown */}
+                    <button
+                      type="button"
+                      disabled={orderedServices.some((s) => s.id === 'turndown-quick') || orderingServiceId === 'turndown-quick'}
+                      onClick={() => handleRequestService({
+                        id: 'turndown-quick',
+                        title: 'Evening Turn-Down & Aromatherapy Mist',
+                        price: 0,
+                        category: 'Housekeeping',
+                      })}
+                      className="shrink-0 px-3.5 py-2.5 bg-white border border-slate-200/90 hover:border-slate-400 rounded-xl flex items-center gap-2 shadow-2xs font-mono text-xs transition-all active:scale-95 disabled:opacity-75"
+                    >
+                      <CandleIcon className="w-4 h-4 text-amber-800 shrink-0" />
+                      <span className="font-bold text-slate-900 text-xs whitespace-nowrap">
+                        {orderingServiceId === 'turndown-quick' ? 'Requesting...' : orderedServices.some((s) => s.id === 'turndown-quick') ? 'Turndown ✓' : 'Turndown'}
+                      </span>
+                      <span className="text-[9px] text-emerald-800 font-semibold">Free</span>
+                    </button>
+
+                    {/* Ice & Water */}
+                    <button
+                      type="button"
+                      disabled={orderedServices.some((s) => s.id === 'water-ice-quick') || orderingServiceId === 'water-ice-quick'}
+                      onClick={() => handleRequestService({
+                        id: 'water-ice-quick',
+                        title: 'In-Suite Ice Bucket & Mineral Water Carafe',
+                        price: 0,
+                        category: 'Housekeeping',
+                      })}
+                      className="shrink-0 px-3.5 py-2.5 bg-white border border-slate-200/90 hover:border-slate-400 rounded-xl flex items-center gap-2 shadow-2xs font-mono text-xs transition-all active:scale-95 disabled:opacity-75"
+                    >
+                      <DiningIcon className="w-4 h-4 text-amber-800 shrink-0" />
+                      <span className="font-bold text-slate-900 text-xs whitespace-nowrap">
+                        {orderingServiceId === 'water-ice-quick' ? 'Requesting...' : orderedServices.some((s) => s.id === 'water-ice-quick') ? 'Ice & Water ✓' : 'Ice & Water'}
+                      </span>
+                      <span className="text-[9px] text-emerald-800 font-semibold">Free</span>
+                    </button>
+
+                    {/* Extra Towels */}
+                    <button
+                      type="button"
+                      disabled={orderedServices.some((s) => s.id === 'spa-towels-quick') || orderingServiceId === 'spa-towels-quick'}
+                      onClick={() => handleRequestService({
+                        id: 'spa-towels-quick',
+                        title: 'Plush Bath Towels & Cedar Robes',
+                        price: 0,
+                        category: 'Housekeeping',
+                      })}
+                      className="shrink-0 px-3.5 py-2.5 bg-white border border-slate-200/90 hover:border-slate-400 rounded-xl flex items-center gap-2 shadow-2xs font-mono text-xs transition-all active:scale-95 disabled:opacity-75"
+                    >
+                      <SpaIcon className="w-4 h-4 text-amber-800 shrink-0" />
+                      <span className="font-bold text-slate-900 text-xs whitespace-nowrap">
+                        {orderingServiceId === 'spa-towels-quick' ? 'Requesting...' : orderedServices.some((s) => s.id === 'spa-towels-quick') ? 'Towels ✓' : 'Towels'}
+                      </span>
+                      <span className="text-[9px] text-emerald-800 font-semibold">Free</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. Sleek Widescreen Suite Photo (21:9 ratio) */}
+                <div className="relative aspect-[21/9] rounded-xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xs">
+                  <img
+                    src={currentBooking.residence?.detailImage || 'https://res.cloudinary.com/v1rl3ras/image/upload/v1795019369/hotel-suites/suite-301/suite-301-bedroom.webp'}
+                    alt={`${currentBooking.roomNumber || 'Suite 301'} Master Bedroom`}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-2.5 inset-x-3 flex items-center justify-between text-white font-mono text-[11px]">
+                    <span className="font-semibold text-white/95">{currentBooking.roomNumber || 'Suite 301'} &bull; 210 m² Living Space</span>
+                    <span className="text-amber-300 font-bold text-[10px]">Private Plunge Pool</span>
+                  </div>
+                </div>
+
+                {/* 4. Compact Thermostat Card */}
+                <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <ThermometerIcon className="w-4 h-4 text-amber-800" />
+                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
+                        Thermostat ({climateTemp}°C)
+                      </span>
+                    </div>
+                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                      climateTemp <= 21
+                        ? 'bg-sky-50 text-sky-800'
+                        : climateTemp <= 23
+                        ? 'bg-emerald-50 text-emerald-800'
+                        : 'bg-amber-50 text-amber-800'
+                    }`}>
+                      {climateTemp <= 21 ? 'Cooling' : climateTemp <= 23 ? 'Balanced' : 'Heating'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between py-1.5 px-3 bg-slate-50 rounded-lg border border-slate-100">
+                    <button
+                      type="button"
+                      onClick={() => handleStepClimate(-1)}
+                      className="w-8 h-8 flex items-center justify-center rounded-md bg-white border border-slate-200 text-slate-800 font-mono text-base font-bold active:scale-90 shadow-2xs cursor-pointer"
+                      aria-label="Decrease temperature"
+                    >
+                      −
+                    </button>
+                    <div className="text-center">
+                      <span className="font-serif-grand text-2xl font-bold text-slate-900">{climateTemp}°C</span>
+                      <span className="text-[9px] font-mono text-slate-400 block uppercase">Suite Ambient</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleStepClimate(+1)}
+                      className="w-8 h-8 flex items-center justify-center rounded-md bg-white border border-slate-200 text-slate-800 font-mono text-base font-bold active:scale-90 shadow-2xs cursor-pointer"
+                      aria-label="Increase temperature"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-1.5 font-mono text-[10px]">
+                    {[
+                      { id: 'ocean', label: 'Ocean 20°', temp: 20 },
+                      { id: 'eco', label: 'Eco 22°', temp: 22 },
+                      { id: 'cedar', label: 'Cedar 24°', temp: 24 },
+                    ].map((preset) => {
+                      const isSelected = climateMode === preset.id && climateTemp === preset.temp
+                      return (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          onClick={() => handleSetClimatePreset(preset.id, preset.temp)}
+                          className={`py-1.5 rounded-md font-bold text-center transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-slate-900 text-[#FFF0CA]'
+                              : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100'
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* 5. Wi-Fi & Valet in 2-Column Split */}
+                <div className="grid grid-cols-2 gap-2.5">
+                  {/* Wi-Fi Card */}
+                  <div className="bg-white border border-slate-200/90 rounded-xl p-3 shadow-xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-mono text-slate-400 uppercase font-bold tracking-wider">WI-FI</span>
+                      <button
+                        type="button"
+                        onClick={handleCopyWifi}
+                        className="text-[10px] font-mono text-emerald-900 uppercase font-bold hover:underline cursor-pointer"
+                      >
+                        {wifiCopied ? 'Copied ✓' : 'Copy'}
+                      </button>
+                    </div>
+                    <span className="font-mono text-xs font-bold text-slate-900 block truncate">Stayza_Guest</span>
+                    <span className="text-[10px] font-mono text-slate-500 block">pacific2026</span>
+                  </div>
+
+                  {/* Valet Parking Card */}
+                  <div className="bg-white border border-slate-200/90 rounded-xl p-3 shadow-xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-mono text-slate-400 uppercase font-bold tracking-wider">VALET BAY</span>
+                      <button
+                        type="button"
+                        onClick={handleRequestValet}
+                        className="text-[10px] font-mono text-slate-900 uppercase font-bold hover:underline cursor-pointer"
+                      >
+                        {valetRequested ? 'Dispatched ✓' : 'Call'}
+                      </button>
+                    </div>
+                    <span className="font-mono text-xs font-bold text-slate-900 block">Bay #301</span>
+                    <span className="text-[10px] font-mono text-slate-500 block">Floor P1</span>
+                  </div>
+                </div>
+
+                {/* 6. Head Butler Tile */}
+                <div className="bg-white border border-slate-200/90 rounded-xl p-3 shadow-xs flex items-center justify-between gap-2">
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 block">Head Butler Tariq J.</span>
+                    <span className="text-[10px] text-slate-500 font-mono">In-Residence Concierge</span>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={orderedServices.some((s) => s.id === 'butler-call') || orderingServiceId === 'butler-call'}
+                    onClick={() => handleRequestService({
+                      id: 'butler-call',
+                      title: 'Direct Butler Room Consultation',
+                      price: 0,
+                      category: 'Front Desk',
+                    })}
+                    className="touch-target px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-[#FFF0CA] font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all active:scale-95 shrink-0 disabled:opacity-75 cursor-pointer"
+                  >
+                    {orderingServiceId === 'butler-call' ? (
+                      <span>Calling...</span>
+                    ) : orderedServices.some((s) => s.id === 'butler-call') ? (
+                      <span>Requested ✓</span>
+                    ) : (
+                      <span>Request Butler &rarr;</span>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* DESKTOP VIEW (>=1024px): 100% Unchanged Existing Layout */}
+              <div className="hidden lg:grid grid-cols-12 gap-5 sm:gap-6 items-start">
                 {/* Left: Apple Wallet-Grade Digital Keycard & Suite Showcase */}
                 <div className="lg:col-span-7 space-y-4">
                   {/* 1. LUXURY IN-RESIDENCE SUITE PASS (Clean Static Luxury) */}
