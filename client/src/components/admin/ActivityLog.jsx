@@ -69,7 +69,7 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
 
   // Export CSV
   const handleExportCSV = () => {
-    const headers = 'Log ID,Timestamp,Actor,Action,Category,Details\n'
+    const headers = 'Log ID,Timestamp,Performed By,Action,Category,Details\n'
     const rows = filteredLogs
       .map((l) => {
         const ts = formatTimestamp(l.timestamp, l.createdAt)
@@ -119,14 +119,14 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
         <div>
           <h3 className="font-serif-grand text-xl text-slate-900">System History &amp; Audit Trail</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            Immutable chronological record of logins, reservations, front desk check-ins, and tariff adjustments
+            Immutable chronological record of logins, reservations, front desk check-ins, and price changes
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <input
             type="text"
-            placeholder="Search by actor, action, or details..."
+            placeholder="Search by user, action, or details..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-900 w-48 sm:w-60"
@@ -142,7 +142,7 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
             <option value="RESERVATION">Bookings &amp; Holds</option>
             <option value="PMS">Front Desk Operations</option>
             <option value="HOUSEKEEPING">Housekeeping</option>
-            <option value="SETTINGS">Tariffs &amp; Settings</option>
+            <option value="SETTINGS">Prices &amp; Settings</option>
           </select>
 
           <button
@@ -171,7 +171,7 @@ export default function ActivityLog({ auditLogs: fallbackLogs = [] }) {
             <tr>
               <th className="py-3 px-5">Log ID</th>
               <th className="py-3 px-4">Date &amp; Time (PKT)</th>
-              <th className="py-3 px-4">Operator / Actor</th>
+              <th className="py-3 px-4">Performed By</th>
               <th className="py-3 px-4">Action Event</th>
               <th className="py-3 px-4">Category</th>
               <th className="py-3 px-5">Operational Details</th>

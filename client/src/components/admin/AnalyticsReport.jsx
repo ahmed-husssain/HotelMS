@@ -165,14 +165,14 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
           <div>
             <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-slate-400 font-semibold block">
-              Executive Property Filter
+              Filter by Location
             </span>
             <h3 className="font-serif-grand text-base sm:text-lg font-bold text-slate-900">
-              Select Branch Performance View
+              Select Hotel Branch
             </h3>
           </div>
           <span className="font-mono text-xs text-amber-900 font-semibold bg-amber-50 border border-amber-200/60 px-2.5 py-1 rounded-md self-start sm:self-auto">
-            Viewing: {activeBranchMeta.name} ({activeBranchMeta.suitesCount} Keys)
+            Viewing: {activeBranchMeta.name} ({activeBranchMeta.suitesCount} Suites)
           </span>
         </div>
 
@@ -187,11 +187,12 @@ export default function AnalyticsReport({ rooms = [] }) {
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            All 4 Branches &bull; {rooms.length || 18} Keys
+            All 4 Branches &bull; {rooms.length || 18} Suites
           </button>
           {LOCATIONS.map((loc) => {
             const count = (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === loc.id).length || loc.suitesCount
             const isSelected = selectedBranch === loc.id
+            const cleanName = loc.name.replace(/^Stayza\s+/i, '')
             return (
               <button
                 key={loc.id}
@@ -203,7 +204,7 @@ export default function AnalyticsReport({ rooms = [] }) {
                     : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
-                {loc.name} ({count})
+                {cleanName} ({count})
               </button>
             )
           })}
@@ -221,11 +222,12 @@ export default function AnalyticsReport({ rooms = [] }) {
                   : 'bg-slate-50 text-slate-700 border border-slate-200'
               }`}
             >
-              All (18 Keys)
+              All (18 Suites)
             </button>
             {LOCATIONS.map((loc) => {
               const count = (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === loc.id).length || loc.suitesCount
               const isSelected = selectedBranch === loc.id
+              const cleanShortName = loc.name.replace(/^Stayza\s+/i, '').split(' ')[0]
               return (
                 <button
                   key={loc.id}
@@ -237,7 +239,7 @@ export default function AnalyticsReport({ rooms = [] }) {
                       : 'bg-slate-50 text-slate-700 border border-slate-200'
                   }`}
                 >
-                  {loc.name.split(' ')[0]} ({count})
+                  {cleanShortName} ({count})
                 </button>
               )
             })}
@@ -255,7 +257,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             </span>
           </div>
           <h3 className="font-serif-grand text-xl sm:text-2xl text-white font-bold">
-            {selectedBranch === 'all' ? 'Consolidated Pakistan Portfolio Performance' : `${activeBranchMeta.name} Performance Overview`}
+            {selectedBranch === 'all' ? 'All 4 Branches Overview (Pakistan Portfolio)' : `${activeBranchMeta.name} Overview`}
           </h3>
           <p className="text-xs text-slate-300 font-mono">
             {activeBranchMeta.desc}
@@ -263,7 +265,7 @@ export default function AnalyticsReport({ rooms = [] }) {
         </div>
 
         <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 px-3.5 py-2 rounded-xl shrink-0 font-mono text-[10px] sm:text-[11px] text-slate-300">
-          <span>Active Keys: <strong className="text-white">{activeBranchMeta.suitesCount} Suites</strong></span>
+          <span>Total Rooms: <strong className="text-white">{activeBranchMeta.suitesCount} Suites</strong></span>
           <span className="text-slate-600">|</span>
           <span>Advance Split: <strong className="text-white">30% / 70%</strong></span>
         </div>
@@ -273,7 +275,7 @@ export default function AnalyticsReport({ rooms = [] }) {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-mono uppercase tracking-[0.2em] font-extrabold text-slate-900">
-            Pakistan Hotel Portfolio &bull; 4 Physical Properties (18 Suites)
+            Hotel Portfolio &bull; 4 Branches across Pakistan (18 Suites)
           </span>
           <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest hidden sm:inline-block">
             Click card to view branch analytics
@@ -408,7 +410,7 @@ export default function AnalyticsReport({ rooms = [] }) {
               PKR {pricingYield.adr.toLocaleString()}
             </span>
             <span className="text-[10px] font-mono text-emerald-800 font-semibold block mt-1">
-              Daily Earnings / Suite (RevPAR): PKR {pricingYield.revPar.toLocaleString()}
+              Daily Earnings / Room: PKR {pricingYield.revPar.toLocaleString()}
             </span>
           </div>
 
@@ -460,10 +462,10 @@ export default function AnalyticsReport({ rooms = [] }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              Active Key Inventory
+              Live Room Status
             </span>
             <h4 className="font-serif-grand text-base sm:text-lg font-bold text-slate-900">
-              {activeBranchMeta.name} &bull; Room Rack ({filteredRooms.length} Suites)
+              {activeBranchMeta.name} &bull; Room Status Grid ({filteredRooms.length} Suites)
             </h4>
           </div>
           <span className="font-mono text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md self-start sm:self-auto">
@@ -516,7 +518,7 @@ export default function AnalyticsReport({ rooms = [] }) {
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h4 className="font-serif-grand text-lg text-slate-900">
-                Extra Services Revenue Leaderboard
+                Extra Services &amp; Orders (Dining, Spa &amp; Rides)
               </h4>
               <p className="text-xs font-mono text-slate-500 mt-0.5">
                 Highest-grossing services ordered by guests (Dining, Spa, Helicopter Transfer)
@@ -555,7 +557,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             </div>
           ) : (
             <div className="py-6 text-center text-xs font-mono text-slate-400">
-              No extra incidental services posted to active folios yet.
+              No extra services ordered by guests yet.
             </div>
           )}
         </div>
@@ -601,7 +603,7 @@ export default function AnalyticsReport({ rooms = [] }) {
             </div>
 
             <div className="pt-2 text-[11px] text-slate-500 flex justify-between">
-              <span>Ancillary Folio Contribution:</span>
+              <span>Share from Extra Services:</span>
               <strong className="text-slate-900">{incidentals.ancillaryShare}% of Total Gross</strong>
             </div>
           </div>

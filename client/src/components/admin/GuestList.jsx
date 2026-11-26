@@ -199,9 +199,9 @@ export default function GuestList() {
               <th className="py-3 px-4">Contact Details</th>
               <th className="py-3 px-4">Loyalty Tier</th>
               <th className="py-3 px-4">Total Visits</th>
-              <th className="py-3 px-4">Lifetime Spend</th>
+              <th className="py-3 px-4">Total Spent</th>
               <th className="py-3 px-4">Current / Active Suite</th>
-              <th className="py-3 px-5 text-right">Dossier</th>
+              <th className="py-3 px-5 text-right">Profile</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -253,7 +253,7 @@ export default function GuestList() {
         </table>
       </div>
 
-      {/* 3. RICH GUEST DOSSIER MODAL */}
+      {/* 3. RICH GUEST PROFILE MODAL */}
       {isDossierOpen && selectedGuest && (
         <div
           data-lenis-prevent="true"

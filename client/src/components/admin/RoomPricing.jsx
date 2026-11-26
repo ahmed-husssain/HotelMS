@@ -27,7 +27,7 @@ export default function RoomPricing({
     if (!rateVal || rateVal <= 0) {
       showToast({
         type: 'error',
-        title: 'Invalid Tariff',
+        title: 'Invalid Price',
         message: 'Please specify a positive nightly rate in PKR.',
       })
       return
@@ -38,15 +38,15 @@ export default function RoomPricing({
       await onUpdateRate(roomNumber, rateVal)
       showToast({
         type: 'success',
-        title: 'Tariff Updated',
-        message: `${roomNumber} base nightly tariff set to PKR ${rateVal.toLocaleString()}.`,
+        title: 'Price Updated',
+        message: `${roomNumber} nightly price set to PKR ${rateVal.toLocaleString()}.`,
       })
       setEditingRoom(null)
     } catch (err) {
       showToast({
         type: 'error',
         title: 'Update Failed',
-        message: err.message || 'Could not update room tariff.',
+        message: err.message || 'Could not update room price.',
       })
     } finally {
       setIsSaving(false)
@@ -56,10 +56,10 @@ export default function RoomPricing({
   const handleToggleMaintenance = async (room) => {
     try {
       await onToggleMaintenance(room.roomNumber)
-      const nextMode = room.status === 'MAINTENANCE' ? 'Active Inventory' : 'Refurbishment'
+      const nextMode = room.status === 'MAINTENANCE' ? 'Ready for Guests' : 'Under Maintenance'
       showToast({
         type: 'info',
-        title: 'Inventory Mode Changed',
+        title: 'Room Status Changed',
         message: `${room.roomNumber} set to ${nextMode}.`,
       })
     } catch (err) {
@@ -75,9 +75,9 @@ export default function RoomPricing({
     <div className="bg-white border border-slate-200/90 rounded-[2px] shadow-xs overflow-hidden">
       <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="font-serif-grand text-xl text-slate-900">Residences Catalog &amp; Dynamic Tariffs</h3>
+          <h3 className="font-serif-grand text-xl text-slate-900">Room Rates &amp; Pricing</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            Manage base nightly tariffs, live catalog display, and maintenance refurbishment modes across all 4 properties
+            Manage nightly room prices and maintenance status across all 4 branches
           </p>
         </div>
 
@@ -110,10 +110,10 @@ export default function RoomPricing({
         <table className="w-full text-left text-xs font-mono">
           <thead className="bg-slate-50 border-b border-slate-200/80 text-[10px] text-slate-500 uppercase tracking-wider">
             <tr>
-              <th className="py-3 px-5">Residence</th>
+              <th className="py-3 px-5">Room / Suite</th>
               <th className="py-3 px-4">Tier</th>
-              <th className="py-3 px-4">Base Tariff / Night</th>
-              <th className="py-3 px-4">Operating Status</th>
+              <th className="py-3 px-4">Price Per Night</th>
+              <th className="py-3 px-4">Status</th>
               <th className="py-3 px-5 text-right">Actions</th>
             </tr>
           </thead>
@@ -171,7 +171,7 @@ export default function RoomPricing({
                           : 'bg-emerald-100 text-emerald-950'
                       }`}
                     >
-                      {room.status === 'MAINTENANCE' ? 'REFURBISHMENT' : 'ACTIVE INVENTORY'}
+                      {room.status === 'MAINTENANCE' ? 'UNDER MAINTENANCE' : 'READY FOR GUESTS'}
                     </span>
                   </td>
                   <td className="py-3.5 px-5 text-right space-x-2">
@@ -180,7 +180,7 @@ export default function RoomPricing({
                       onClick={() => handleStartEdit(room)}
                       className="px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider border border-slate-200 hover:border-slate-900 rounded-[2px] transition-colors cursor-pointer text-slate-700"
                     >
-                      Edit Rate
+                      Edit Price
                     </button>
                     <button
                       type="button"
@@ -191,7 +191,7 @@ export default function RoomPricing({
                           : 'border-amber-200 text-amber-800 hover:bg-amber-50'
                       }`}
                     >
-                      {room.status === 'MAINTENANCE' ? 'Reopen Suite' : 'Set Refurbishment'}
+                      {room.status === 'MAINTENANCE' ? 'Mark Available' : 'Mark Maintenance'}
                     </button>
                   </td>
                 </tr>

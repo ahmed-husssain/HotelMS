@@ -203,7 +203,7 @@ export default function StaffList({
         <div>
           <h3 className="font-serif-grand text-xl text-slate-900">Hotel Staff Team</h3>
           <p className="text-xs font-mono text-slate-500 mt-0.5">
-            Role-Based Access Control (RBAC) &bull; Receptionists, Housekeeping, Operations
+            Staff Roles &amp; Permissions &bull; Receptionists, Housekeeping, Operations
           </p>
         </div>
 
