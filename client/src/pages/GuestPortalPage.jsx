@@ -1872,114 +1872,73 @@ export default function GuestPortalPage() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
                 {/* Left: Apple Wallet-Grade Digital Keycard & Suite Showcase */}
                 <div className="lg:col-span-7 space-y-4">
-                  {/* 1. APPLE WALLET-GRADE DIGITAL ROOM PASS (Quiet Luxury Version 2C) */}
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={handleTriggerDigitalKey}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleTriggerDigitalKey() }}
-                    className="touch-target w-full text-left bg-[#1C1A18] text-[#F3EFEA] border border-[#2F2C28] rounded-2xl p-6 sm:p-7 shadow-lg relative overflow-hidden select-none group cursor-pointer transition-all duration-300 hover:border-[#3E3A34] active:scale-[0.99]"
-                    title="Tap pass or hold device to door to unlock"
-                  >
+                  {/* 1. APPLE WALLET-GRADE DIGITAL ROOM PASS (Clean Static Luxury) */}
+                  <div className="w-full bg-[#1C1A18] text-[#F3EFEA] border border-[#2F2C28] rounded-2xl p-6 sm:p-7 shadow-xl relative overflow-hidden select-none">
                     {/* Pass Header */}
                     <div className="flex items-center justify-between pb-4 border-b border-[#2F2C28]">
-                      <span className="font-mono text-[10px] tracking-[0.22em] text-[#D8CEBE] uppercase font-semibold">
+                      <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.25em] text-[#D8CEBE] uppercase font-semibold">
                         STAYZA &bull; DIGITAL ROOM PASS
                       </span>
-                      <div className="flex items-center gap-2 font-mono text-[10px] text-[#A89E90] tracking-widest uppercase">
+                      <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px] text-[#A89E90] tracking-widest uppercase">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#D8CEBE]" />
                         <span>KEY ACTIVE</span>
                         <NfcWaveIcon className="w-3.5 h-3.5 text-[#D8CEBE]" />
                       </div>
                     </div>
 
-                    {/* 2-Column Balanced Core */}
-                    <div className="py-5 sm:py-6 grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
-                      {/* Left: Suite Details & Metadata */}
-                      <div className="sm:col-span-8 space-y-4">
-                        <div>
-                          <span className="font-mono text-[10px] tracking-[0.2em] text-[#9A9184] uppercase font-medium block">
-                            GUEST RESIDENCE
-                          </span>
-                          <h2 className="font-serif-grand text-3xl sm:text-4xl text-[#F3EFEA] tracking-tight leading-none mt-1">
-                            {currentBooking.roomNumber || 'Suite 301'}
-                          </h2>
-                          <p className="font-sans-clean text-sm text-[#D8CEBE] font-normal tracking-wide mt-1">
-                            {currentBooking.residence?.name || 'The Horizon Penthouse'}
-                          </p>
-                        </div>
-
-                        {/* Metadata Grid */}
-                        <div className="grid grid-cols-3 gap-2.5 py-2.5 px-3 bg-black/20 border border-[#2F2C28] rounded-xl font-mono text-[11px]">
-                          <div>
-                            <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase">PRIMARY GUEST</span>
-                            <span className="font-sans-clean text-[#F3EFEA] font-medium truncate block text-xs mt-0.5">
-                              {currentBooking.guestName}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase">VALID DATES</span>
-                            <span className="font-mono text-[#D8CEBE] truncate block text-xs mt-0.5">
-                              {currentBooking.checkIn} – {currentBooking.checkOut}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase">ACCESS REF</span>
-                            <span className="font-mono text-[#D8CEBE] font-medium truncate block text-xs mt-0.5">
-                              RFID #8921-A3
-                            </span>
-                          </div>
-                        </div>
+                    {/* Upper Section: Room Info (Left) + Architectural Monogram Badge (Right) */}
+                    <div className="py-5 sm:py-6 flex items-start justify-between gap-4">
+                      <div className="space-y-1.5">
+                        <span className="font-mono text-[10px] tracking-[0.22em] text-[#9A9184] uppercase font-semibold block">
+                          GUEST RESIDENCE
+                        </span>
+                        <h2 className="font-serif-grand text-3xl sm:text-5xl font-bold text-[#F3EFEA] tracking-tight leading-none">
+                          {currentBooking.roomNumber || 'Suite 301'}
+                        </h2>
+                        <p className="font-sans-clean text-sm sm:text-base text-[#D8CEBE] font-normal tracking-wide pt-1">
+                          {currentBooking.residence?.name || 'The Horizon Penthouse'}
+                        </p>
                       </div>
 
-                      {/* Right: Architectural Monogram Seal & Interaction Target */}
-                      <div className="sm:col-span-4 flex flex-col items-center justify-center">
-                        <div className="w-24 h-24 rounded-2xl border border-[#2F2C28] bg-black/30 p-3 flex flex-col items-center justify-center shadow-xs group-hover:border-[#D8CEBE]/40 transition-colors">
-                          {isKeyUnlocking ? (
-                            <SpinnerIcon className="w-8 h-8 text-[#D8CEBE] animate-spin" />
-                          ) : (
-                            <svg className="w-10 h-10 text-[#D8CEBE]" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-                              <path d="M 14 36 L 50 22 L 86 36" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                              <line x1="28" y1="38" x2="28" y2="78" strokeWidth="2.5" strokeLinecap="round" />
-                              <line x1="72" y1="38" x2="72" y2="78" strokeWidth="2.5" strokeLinecap="round" />
-                              <path d="M 38 78 L 38 52 C 38 45.4 43.4 40 50 40 C 56.6 40 62 45.4 62 52 L 62 78" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-                              <line x1="16" y1="78" x2="84" y2="78" strokeWidth="3" strokeLinecap="round" />
-                              <circle cx="50" cy="50" r="3.5" fill="currentColor" />
-                            </svg>
-                          )}
-                          <span className="font-mono text-[8px] text-[#9A9184] uppercase tracking-[0.25em] mt-1.5 font-semibold text-center block">
-                            {isKeyUnlocking ? 'DISENGAGING' : 'RESIDENCE KEY'}
+                      {/* Residence Key Monogram Badge (Static & Clean) */}
+                      <div className="shrink-0 flex flex-col items-center">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-[#2F2C28] bg-black/25 flex flex-col items-center justify-center p-2.5">
+                          <svg className="w-8 h-8 sm:w-9 sm:h-9 text-[#D8CEBE]" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                            <path d="M 14 36 L 50 22 L 86 36" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                            <line x1="28" y1="38" x2="28" y2="78" strokeWidth="2.5" strokeLinecap="round" />
+                            <line x1="72" y1="38" x2="72" y2="78" strokeWidth="2.5" strokeLinecap="round" />
+                            <path d="M 38 78 L 38 52 C 38 45.4 43.4 40 50 40 C 56.6 40 62 45.4 62 52 L 62 78" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+                            <line x1="16" y1="78" x2="84" y2="78" strokeWidth="3" strokeLinecap="round" />
+                            <circle cx="50" cy="50" r="3.5" fill="currentColor" />
+                          </svg>
+                          <span className="font-mono text-[8px] text-[#9A9184] uppercase tracking-[0.22em] mt-1.5 font-semibold text-center block">
+                            RESIDENCE KEY
                           </span>
                         </div>
-                        <span className="font-mono text-[9px] text-[#7A7267] uppercase tracking-[0.16em] mt-1.5 block">
-                          {isKeyUnlocking ? 'Unlocking...' : 'Tap Card To Unlock'}
-                        </span>
                       </div>
                     </div>
 
-                    {/* Dynamic Door Unlock Feedback Banner */}
-                    {keyUnlockedToast && (
-                      <div className="pt-3 border-t border-[#2F2C28] animate-fade-in">
-                        <div className="bg-[#24211D] border border-[#3C3730] rounded-xl p-3 flex flex-col gap-2 shadow-xs">
-                          <div className="flex items-center justify-between font-mono text-xs text-[#E8DFD3]">
-                            <div className="flex items-center gap-2">
-                              <LockOpenIcon className="w-4 h-4 text-[#D8CEBE] shrink-0" />
-                              <span className="font-bold tracking-wider">DOOR UNLATCHED &bull; TURN HANDLE</span>
-                            </div>
-                            <span className="text-[11px] text-[#9A9184] font-mono">
-                              Relocks in {keyRelockRemaining}s
-                            </span>
-                          </div>
-                          {/* Auto-relock countdown bar */}
-                          <div className="w-full bg-black/40 h-1 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-[#D8CEBE] transition-all duration-1000 ease-linear rounded-full"
-                              style={{ width: `${(keyRelockRemaining / 12) * 100}%` }}
-                            />
-                          </div>
-                        </div>
+                    {/* Full-Width Metadata Tags Grid (Spacious, Zero Ellipsis Truncation) */}
+                    <div className="grid grid-cols-3 gap-3 py-3 px-4 bg-black/25 border border-[#2F2C28] rounded-xl font-mono text-[11px] sm:text-xs">
+                      <div>
+                        <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase font-medium">PRIMARY GUEST</span>
+                        <span className="font-sans-clean text-[#F3EFEA] font-medium block mt-0.5 truncate">
+                          {currentBooking.guestName}
+                        </span>
                       </div>
-                    )}
+                      <div>
+                        <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase font-medium">VALID DATES</span>
+                        <span className="font-mono text-[#D8CEBE] block mt-0.5 truncate">
+                          {currentBooking.checkIn} – {currentBooking.checkOut}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-[#8C8477] block tracking-wider uppercase font-medium">ACCESS REF</span>
+                        <span className="font-mono text-[#D8CEBE] font-medium block mt-0.5 truncate">
+                          RFID #8921-A3
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
                   {/* 2. CINEMATIC SUITE PREVIEW CARD */}
