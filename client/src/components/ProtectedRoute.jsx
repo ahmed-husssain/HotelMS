@@ -34,53 +34,65 @@ export default function ProtectedRoute({ allowedRoles, children }) {
     }
 
     return (
-      <div className="min-h-screen bg-[#0E1201] text-[#FAF8F5] p-6 sm:p-12 flex flex-col justify-between selection:bg-slate-700 selection:text-white">
-        <header className="max-w-4xl w-full mx-auto flex items-center justify-between">
-          <Link to="/" className="inline-block">
+      <div className="h-screen h-[100dvh] w-full bg-[#141210] text-[#F3EFEA] flex flex-col justify-between px-4 sm:px-8 py-5 sm:py-8 box-border select-none overflow-hidden">
+        {/* Top Header */}
+        <header className="max-w-4xl w-full mx-auto flex items-center justify-between shrink-0 pb-4 border-b border-[#2F2C28]">
+          <Link to="/" className="inline-block transition-opacity hover:opacity-80">
             <BrandLogo variant="full" theme="light" size="sm" />
           </Link>
-          <span className="font-mono text-xs text-red-400 bg-red-950/80 border border-red-800/80 px-2.5 py-1 rounded-[2px] uppercase tracking-wider">
-            ● RESTRICTED ACCESS
+          <span className="font-mono text-[10px] text-[#A89E90] uppercase tracking-widest font-semibold flex items-center gap-1.5 bg-black/40 border border-[#2F2C28] px-2.5 py-1 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D8CEBE]" />
+            Restricted
           </span>
         </header>
 
-        <main className="max-w-xl w-full mx-auto bg-[#FAF8F5] text-slate-900 border border-slate-300 rounded-[2px] p-8 sm:p-12 shadow-2xl my-auto space-y-6">
-          <div>
-            <span className="font-mono text-[10px] text-red-800 uppercase tracking-widest font-bold block mb-1">
-              AUTHORIZATION REQUIRED
+        {/* Center Card (Optical Center, Never Overflows) */}
+        <main className="my-auto max-w-md w-full mx-auto text-center space-y-5 px-2 shrink-0">
+          {/* Minimalist Lock Emblem */}
+          <div className="w-12 h-12 rounded-2xl bg-black/30 border border-[#2F2C28] flex items-center justify-center mx-auto text-[#D8CEBE]">
+            <svg className="w-5 h-5 text-[#D8CEBE]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+
+          {/* Typography */}
+          <div className="space-y-1.5">
+            <span className="font-mono text-[10px] text-[#9A9184] uppercase tracking-[0.22em] font-bold block">
+              Staff Workspace
             </span>
-            <h1 className="font-serif-grand text-3xl text-slate-900 font-light">
+            <h1 className="font-serif-grand text-2xl sm:text-3xl font-bold text-[#F3EFEA] tracking-tight">
               Access Restricted
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-              Your current active session as <strong>{currentUser.name}</strong> (<code>{currentUser.roleLabel || currentUser.role}</code>) does not possess authorization to view this workspace.
+            <p className="font-sans-clean text-[#A89E90] text-xs sm:text-sm leading-relaxed max-w-sm mx-auto">
+              You are signed in as <strong className="text-[#F3EFEA] font-semibold">{currentUser.name}</strong>. This area is reserved exclusively for hotel management and administrative staff.
             </p>
           </div>
 
-          <div className="p-3 bg-stone-100 border border-stone-200 rounded-[2px] text-xs font-mono text-stone-800">
-            <strong>Required Authorization:</strong> {allowedRoles.join(' or ').toUpperCase()} privileges.
-          </div>
-
-          <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 font-mono text-xs">
+          {/* Action Buttons (100% Mobile Touch Targets, min-h-[44px]) */}
+          <div className="pt-1 flex flex-col sm:flex-row items-center justify-center gap-2.5 font-mono text-xs">
             <Link
               to={authorizedWorkspace.path}
-              className="w-full sm:w-auto flex-1 text-center py-3 px-4 bg-[#0E1201] text-[#FAF8F5] font-bold uppercase tracking-wider rounded-[2px] hover:bg-slate-900 transition-colors"
+              className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-[#FAF8F5] text-slate-900 font-bold uppercase tracking-wider hover:bg-white transition-all shadow-sm flex items-center justify-center text-center cursor-pointer active:scale-[0.98]"
             >
-              Return to Your Workspace ({authorizedWorkspace.label}) &rarr;
+              Return to {authorizedWorkspace.label} &rarr;
             </Link>
             
             <button
               type="button"
               onClick={logout}
-              className="w-full sm:w-auto py-3 px-4 bg-slate-200 text-slate-800 font-bold uppercase tracking-wider rounded-[2px] hover:bg-slate-300 transition-colors cursor-pointer"
+              className="w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-xl bg-black/40 text-[#D8CEBE] border border-[#2F2C28] font-semibold uppercase tracking-wider hover:bg-black/60 transition-all cursor-pointer flex items-center justify-center text-center active:scale-[0.98]"
             >
-              Sign Out / Switch User
+              Sign Out
             </button>
           </div>
         </main>
 
-        <footer className="max-w-4xl w-full mx-auto text-center font-mono text-[10px] text-slate-500">
-          STAYZA HOTEL &bull; ROLE-BASED ACCESS CONTROL
+        {/* Footer */}
+        <footer className="max-w-4xl w-full mx-auto text-center shrink-0 pt-4 border-t border-[#2F2C28]">
+          <span className="font-mono text-[10px] text-[#7A7267] tracking-wider uppercase">
+            Stayza Resorts &bull; Role-Based Security Guard
+          </span>
         </footer>
       </div>
     )
