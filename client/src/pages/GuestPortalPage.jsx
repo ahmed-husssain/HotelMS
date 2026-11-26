@@ -1687,17 +1687,17 @@ export default function GuestPortalPage() {
                       <div className={`p-3 rounded-xl border text-[11px] space-y-2 ${
                         guestTheme === 'dark' ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
                       }`}>
-                        <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-                          <svg className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <div className={`flex items-center gap-1.5 font-bold ${guestTheme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                          <svg className={`w-3.5 h-3.5 ${guestTheme === 'dark' ? 'text-emerald-400' : 'text-emerald-700'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                             <rect width="20" height="16" x="2" y="4" rx="2" />
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                           </svg>
                           <span>Registered Email Verification</span>
                         </div>
-                        <p className="text-[10px] text-slate-400">
+                        <p className={`text-[10px] ${guestTheme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
                           We will send a 6-digit one-time passcode to:
                         </p>
-                        <div className="font-bold text-emerald-600 dark:text-emerald-400 break-all">
+                        <div className={`font-bold break-all ${guestTheme === 'dark' ? 'text-emerald-400' : 'text-emerald-800'}`}>
                           {currentUser?.email || currentBooking.guestEmail || 'guest@stayza.com'}
                         </div>
 
