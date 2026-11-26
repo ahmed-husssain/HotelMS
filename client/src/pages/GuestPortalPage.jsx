@@ -1501,38 +1501,44 @@ export default function GuestPortalPage() {
                     </div>
                   ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                      {orderedServices.map((item, idx) => (
-                        <div
-                          key={item.id || idx}
-                          className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 ${
-                            guestTheme === 'dark'
-                              ? 'bg-slate-900/60 border-slate-800'
-                              : 'bg-white border-slate-200/90 shadow-2xs'
-                          }`}
-                        >
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                                {item.category || 'Service'}
-                              </span>
-                              <span className="text-[10px] text-slate-400">
-                                {item.time || 'In Stay'}
+                      {orderedServices.map((item, idx) => {
+                        const isDark = guestTheme === 'dark'
+                        return (
+                          <div
+                            key={item.id || idx}
+                            className={`p-3 rounded-xl border flex items-center justify-between gap-3 transition-colors ${
+                              isDark
+                                ? 'bg-slate-900/90 border-slate-800'
+                                : 'bg-slate-50/80 border-slate-200/90 shadow-2xs'
+                            }`}
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <span className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
+                                  isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-200/80 text-slate-700'
+                                }`}>
+                                  {item.category || 'Service'}
+                                </span>
+                                <span className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                                  {item.time || 'In Stay'}
+                                </span>
+                              </div>
+                              <span className={`text-xs font-bold block truncate mt-1 ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                                {item.title}
                               </span>
                             </div>
-                            <span className="text-xs font-bold block truncate mt-1 text-slate-900 dark:text-slate-100">
-                              {item.title}
-                            </span>
+                            <div className="text-right shrink-0">
+                              <span className={`font-mono text-xs font-extrabold block ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                                {item.price === 0 ? 'Complimentary' : `PKR ${Number(item.price).toLocaleString()}`}
+                              </span>
+                              <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wide flex items-center justify-end gap-1">
+                                <span>Dispatched</span>
+                                <span className="text-emerald-600">✓</span>
+                              </span>
+                            </div>
                           </div>
-                          <div className="text-right shrink-0">
-                            <span className="font-mono text-xs font-bold block text-slate-900 dark:text-slate-100">
-                              {item.price === 0 ? 'Complimentary' : `PKR ${Number(item.price).toLocaleString()}`}
-                            </span>
-                            <span className="text-[9px] text-emerald-600 dark:text-emerald-400 uppercase font-semibold">
-                              Dispatched ✓
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </div>
