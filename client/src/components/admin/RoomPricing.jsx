@@ -84,7 +84,7 @@ export default function RoomPricing({
         {/* Branch Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono shrink-0">
           {[
-            { id: 'all', label: 'All (15)' },
+            { id: 'all', label: `All (${rooms.length || 18})` },
             { id: 'sindh-coast', label: 'Sindh Coast' },
             { id: 'hunza', label: 'Hunza' },
             { id: 'lahore', label: 'Lahore' },
