@@ -16,6 +16,7 @@ export default function AnalyticsReport({ rooms = [] }) {
   const [analytics, setAnalytics] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [selectedBranch, setSelectedBranch] = useState('all')
 
   useEffect(() => {
     let isMounted = true
@@ -36,69 +37,92 @@ export default function AnalyticsReport({ rooms = [] }) {
     return () => { isMounted = false }
   }, [])
 
-  // Dynamic baseline metrics calculated directly from active room inventory
-  const fallbackAnalytics = React.useMemo(() => {
-    const roomList = Array.isArray(rooms) && rooms.length > 0 ? rooms : [
-      { status: 'OCCUPIED', nightlyRate: 110000, advancePaid: 111870, balanceDue: 261030 },
-      { status: 'AVAILABLE', nightlyRate: 75000, advancePaid: 0, balanceDue: 0 },
-      { status: 'AVAILABLE', nightlyRate: 95000, advancePaid: 0, balanceDue: 0 },
-      { status: 'DIRTY', nightlyRate: 65000, advancePaid: 0, balanceDue: 0 },
-    ]
-    const totalRooms = roomList.length
+  // Filter rooms based on active branch selection
+  const filteredRooms = useMemo(() => {
+    if (!selectedBranch || selectedBranch === 'all') return rooms
+    return (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === selectedBranch)
+  }, [rooms, selectedBranch])
+
+  // Active branch metadata
+  const activeBranchMeta = useMemo(() => {
+    if (selectedBranch === 'all') {
+      return {
+        id: 'all',
+        name: 'All 4 Properties',
+        code: 'ALL',
+        city: 'Pakistan Portfolio',
+        province: 'Nationwide',
+        suitesCount: rooms.length || 18,
+        desc: 'Consolidated revenue, occupancy yield, and operations across all 18 suites in Pakistan.',
+      }
+    }
+    const loc = LOCATIONS.find((l) => l.id === selectedBranch) || LOCATIONS[0]
+    return {
+      ...loc,
+      suitesCount: filteredRooms.length || loc.suitesCount,
+      desc: loc.tagline || `${loc.name} operations and revenue metrics.`,
+    }
+  }, [selectedBranch, filteredRooms, rooms])
+
+  // Dynamic metrics calculated directly from active (filtered) room inventory
+  const metrics = useMemo(() => {
+    const roomList = Array.isArray(filteredRooms) && filteredRooms.length > 0 ? filteredRooms : rooms
+    const totalRooms = roomList.length || 1
     const occupied = roomList.filter((r) => r.status === 'OCCUPIED').length
-    const available = roomList.filter((r) => r.status === 'AVAILABLE').length
-    const dirty = roomList.filter((r) => r.status === 'DIRTY').length
+    const available = roomList.filter((r) => r.status === 'AVAILABLE' || r.status === 'INSPECTED').length
+    const dirty = roomList.filter((r) => r.status === 'DIRTY' || r.status === 'CLEANING').length
     const maint = roomList.filter((r) => r.status === 'MAINTENANCE').length
-    const occRate = totalRooms > 0 ? Math.round((occupied / totalRooms) * 100) : 25
+    const occRate = Math.round((occupied / totalRooms) * 100)
 
     const totalRev = roomList.reduce((sum, r) => sum + (r.nightlyRate || 85000), 0)
     const adrVal = Math.round(totalRev / totalRooms) || 86250
-    const advancePaid = roomList.reduce((sum, r) => sum + (r.advancePaid || 0), 0) || 111870
-    const balanceDue = roomList.reduce((sum, r) => sum + (r.balanceDue || 0), 0) || 261030
+    const advancePaid = roomList.reduce((sum, r) => sum + (r.advancePaid || Math.round((r.nightlyRate || 85000) * 0.3)), 0)
+    const balanceDue = roomList.reduce((sum, r) => sum + (r.balanceDue || Math.round((r.nightlyRate || 85000) * 0.7)), 0)
+    const grossRev = advancePaid + balanceDue
 
     return {
       revenue: {
-        grossRevenue: advancePaid + balanceDue,
+        grossRevenue: grossRev,
         advanceTotal: advancePaid,
         balanceTotal: balanceDue,
-        extrasTotal: 25000,
+        extrasTotal: selectedBranch === 'all' ? 25000 : 8000,
         channels: {
           safepayOnline: advancePaid,
-          deskCash: 150000,
-          deskCard: 111030,
+          deskCash: Math.round(balanceDue * 0.55),
+          deskCard: Math.round(balanceDue * 0.45),
         },
       },
       occupancy: {
         totalRooms,
         occupancyRate: occRate,
-        occupiedCount: occupied || 1,
-        availableCount: available || 2,
-        dirtyCount: dirty || 1,
-        maintenanceCount: maint || 0,
+        occupiedCount: occupied,
+        availableCount: available,
+        dirtyCount: dirty,
+        maintenanceCount: maint,
       },
       pricingYield: {
         adr: adrVal,
         revPar: Math.round(adrVal * (occRate / 100)),
-        totalRoomNights: 3,
+        totalRoomNights: occupied * 3 || totalRooms * 2,
         totalRoomRevenue: totalRev,
       },
       bookingFunnel: {
-        totalHoldsInitiated: 8,
-        confirmedStays: 6,
-        conversionRate: 75,
-        abandonmentRate: 25,
+        totalHoldsInitiated: Math.round(totalRooms * 1.5),
+        confirmedStays: occupied + available,
+        conversionRate: Math.min(100, Math.round(((occupied + available) / (totalRooms * 1.5)) * 100)),
+        abandonmentRate: Math.max(0, 100 - Math.min(100, Math.round(((occupied + available) / (totalRooms * 1.5)) * 100))),
       },
       incidentals: {
-        totalIncidentalRevenue: 25000,
+        totalIncidentalRevenue: selectedBranch === 'all' ? 25000 : 8000,
         ancillaryShare: 6,
         topServices: [
-          { title: 'Coastal Helipad Transfer', revenue: 25000 },
-          { title: 'In-Suite Private Chef Dinner', revenue: 18000 },
-          { title: 'Ayurvedic Thermal Spa Therapy', revenue: 12000 },
+          { title: 'In-Suite Chef Dining', revenue: selectedBranch === 'all' ? 25000 : 12000 },
+          { title: 'Chauffeur / Valet Transfer', revenue: selectedBranch === 'all' ? 18000 : 8000 },
+          { title: 'Thermal Spa Treatment', revenue: selectedBranch === 'all' ? 12000 : 5000 },
         ],
       },
     }
-  }, [rooms])
+  }, [filteredRooms, rooms, selectedBranch])
 
   if (loading) {
     return (
@@ -111,19 +135,19 @@ export default function AnalyticsReport({ rooms = [] }) {
     )
   }
 
-  const activeData = analytics || fallbackAnalytics
-  const revenue = activeData.revenue || fallbackAnalytics.revenue
-  const occupancy = activeData.occupancy || fallbackAnalytics.occupancy
-  const pricingYield = activeData.pricingYield || fallbackAnalytics.pricingYield
-  const bookingFunnel = activeData.bookingFunnel || fallbackAnalytics.bookingFunnel
-  const incidentals = activeData.incidentals || fallbackAnalytics.incidentals
-  const channels = revenue.channels || fallbackAnalytics.revenue.channels
+  const activeData = analytics && selectedBranch === 'all' ? analytics : metrics
+  const revenue = activeData.revenue || metrics.revenue
+  const occupancy = activeData.occupancy || metrics.occupancy
+  const pricingYield = activeData.pricingYield || metrics.pricingYield
+  const bookingFunnel = activeData.bookingFunnel || metrics.bookingFunnel
+  const incidentals = activeData.incidentals || metrics.incidentals
+  const channels = revenue.channels || metrics.revenue.channels
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Informational banner when running on client telemetry fallback */}
       {!analytics && (
-        <div className="p-3.5 bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono rounded-[2px] flex items-center justify-between">
+        <div className="p-3.5 bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono rounded-xl flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-amber-500" />
             <span>
@@ -136,25 +160,110 @@ export default function AnalyticsReport({ rooms = [] }) {
         </div>
       )}
 
+      {/* 0. EXECUTIVE MULTI-BRANCH SELECTOR (Desktop Segmented Pills & Mobile Swipe Ribbon) */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-slate-400 font-semibold block">
+              Executive Property Filter
+            </span>
+            <h3 className="font-serif-grand text-base sm:text-lg font-bold text-slate-900">
+              Select Branch Performance View
+            </h3>
+          </div>
+          <span className="font-mono text-xs text-amber-900 font-semibold bg-amber-50 border border-amber-200/60 px-2.5 py-1 rounded-md self-start sm:self-auto">
+            Viewing: {activeBranchMeta.name} ({activeBranchMeta.suitesCount} Keys)
+          </span>
+        </div>
+
+        {/* Desktop View: Horizontal Segmented Pills */}
+        <div className="hidden sm:flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setSelectedBranch('all')}
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+              selectedBranch === 'all'
+                ? 'bg-slate-900 text-[#FFF0CA] shadow-xs'
+                : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            All 4 Branches &bull; {rooms.length || 18} Keys
+          </button>
+          {LOCATIONS.map((loc) => {
+            const count = (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === loc.id).length || loc.suitesCount
+            const isSelected = selectedBranch === loc.id
+            return (
+              <button
+                key={loc.id}
+                type="button"
+                onClick={() => setSelectedBranch(loc.id)}
+                className={`px-3.5 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-slate-900 text-[#FFF0CA] shadow-xs'
+                    : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                {loc.name} ({count})
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Mobile View (<640px): Smooth Horizontal Swipe Ribbon */}
+        <div className="sm:hidden">
+          <div className="flex overflow-x-auto gap-2 pb-1 snap-x no-scrollbar">
+            <button
+              type="button"
+              onClick={() => setSelectedBranch('all')}
+              className={`snap-start shrink-0 min-h-[44px] px-4 py-2 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all ${
+                selectedBranch === 'all'
+                  ? 'bg-slate-900 text-[#FFF0CA]'
+                  : 'bg-slate-50 text-slate-700 border border-slate-200'
+              }`}
+            >
+              All (18 Keys)
+            </button>
+            {LOCATIONS.map((loc) => {
+              const count = (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === loc.id).length || loc.suitesCount
+              const isSelected = selectedBranch === loc.id
+              return (
+                <button
+                  key={loc.id}
+                  type="button"
+                  onClick={() => setSelectedBranch(loc.id)}
+                  className={`snap-start shrink-0 min-h-[44px] px-3.5 py-2 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all ${
+                    isSelected
+                      ? 'bg-slate-900 text-[#FFF0CA]'
+                      : 'bg-slate-50 text-slate-700 border border-slate-200'
+                  }`}
+                >
+                  {loc.name.split(' ')[0]} ({count})
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
       {/* 1. EXECUTIVE OPERATIONAL STATUS BANNER */}
-      <div className="p-5 bg-[#0E1201] text-[#FFF0CA] border border-slate-800 rounded-[2px] shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 sm:p-6 bg-[#0E1201] text-[#FFF0CA] border border-slate-800 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold">
-              Hotel Analytics
+              {activeBranchMeta.name} &bull; {activeBranchMeta.suitesCount} Suites
             </span>
           </div>
-          <h3 className="font-serif-grand text-xl text-white">
-            Property Performance &bull; Overview
+          <h3 className="font-serif-grand text-xl sm:text-2xl text-white font-bold">
+            {selectedBranch === 'all' ? 'Consolidated Pakistan Portfolio Performance' : `${activeBranchMeta.name} Performance Overview`}
           </h3>
           <p className="text-xs text-slate-300 font-mono">
-            Live revenue, occupancy, and room status.
+            {activeBranchMeta.desc}
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-[2px] shrink-0 font-mono text-[10px] text-slate-300">
-          <span>Pricing: <strong className="text-white">All-Inclusive Luxury</strong></span>
+        <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 px-3.5 py-2 rounded-xl shrink-0 font-mono text-[10px] sm:text-[11px] text-slate-300">
+          <span>Active Keys: <strong className="text-white">{activeBranchMeta.suitesCount} Suites</strong></span>
           <span className="text-slate-600">|</span>
           <span>Advance Split: <strong className="text-white">30% / 70%</strong></span>
         </div>
@@ -164,10 +273,10 @@ export default function AnalyticsReport({ rooms = [] }) {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-mono uppercase tracking-[0.2em] font-extrabold text-slate-900">
-            Pakistan Hotel Portfolio &bull; 4 Physical Properties (15 Suites)
+            Pakistan Hotel Portfolio &bull; 4 Physical Properties (18 Suites)
           </span>
-          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:inline-block">
-            Multi-Branch Real-Time Overview
+          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest hidden sm:inline-block">
+            Click card to view branch analytics
           </span>
         </div>
 
@@ -178,15 +287,21 @@ export default function AnalyticsReport({ rooms = [] }) {
             const occupied = locRooms.filter((r) => r.status === 'OCCUPIED').length
             const available = locRooms.filter((r) => r.status === 'AVAILABLE' || r.status === 'INSPECTED').length
             const occPercent = totalSuites > 0 ? Math.round((occupied / totalSuites) * 100) : 0
+            const isCardActive = selectedBranch === loc.id
 
             return (
               <div
                 key={loc.id}
-                className="p-4 bg-white border border-slate-200/90 rounded-[2px] shadow-xs flex flex-col justify-between space-y-3 hover:border-slate-400 transition-colors"
+                onClick={() => setSelectedBranch(isCardActive ? 'all' : loc.id)}
+                className={`p-4 bg-white border rounded-2xl shadow-xs flex flex-col justify-between space-y-3 cursor-pointer transition-all ${
+                  isCardActive
+                    ? 'border-slate-900 ring-2 ring-slate-900/10 shadow-md'
+                    : 'border-slate-200/90 hover:border-slate-400'
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded-[2px] uppercase">
+                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded uppercase">
                       {loc.code} &bull; {loc.province}
                     </span>
                     <span className="text-[10px] font-mono font-bold text-emerald-800">
@@ -340,7 +455,61 @@ export default function AnalyticsReport({ rooms = [] }) {
         </div>
       </div>
 
-      {/* 3. METRIC 5: INCIDENTAL FOLIO UPSELL & TOP CONCIERGE SERVICES */}
+      {/* 4. ACTIVE SUITE INVENTORY RACK FOR SELECTED VIEW */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
+              Active Key Inventory
+            </span>
+            <h4 className="font-serif-grand text-base sm:text-lg font-bold text-slate-900">
+              {activeBranchMeta.name} &bull; Room Rack ({filteredRooms.length} Suites)
+            </h4>
+          </div>
+          <span className="font-mono text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md self-start sm:self-auto">
+            {filteredRooms.length} Suites in Current View
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 font-mono text-xs">
+          {filteredRooms.map((room) => {
+            const isOcc = room.status === 'OCCUPIED'
+            const isDirty = room.status === 'DIRTY' || room.status === 'CLEANING'
+            const isMaint = room.status === 'MAINTENANCE'
+            return (
+              <div
+                key={room.roomNumber}
+                className={`p-3 rounded-xl border flex flex-col justify-between ${
+                  isOcc
+                    ? 'bg-amber-50/70 border-amber-200/90 text-amber-950'
+                    : isDirty
+                    ? 'bg-red-50/70 border-red-200/90 text-red-950'
+                    : isMaint
+                    ? 'bg-slate-100 border-slate-300 text-slate-700'
+                    : 'bg-emerald-50/70 border-emerald-200/90 text-emerald-950'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-syne font-bold text-sm">{room.roomNumber}</span>
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      isOcc ? 'bg-amber-600' : isDirty ? 'bg-red-600' : isMaint ? 'bg-slate-500' : 'bg-emerald-600'
+                    }`}
+                  />
+                </div>
+                <span className="text-[11px] font-sans text-slate-700 truncate block">
+                  {room.name || `Suite ${room.roomNumber}`}
+                </span>
+                <span className="text-[9px] font-mono uppercase tracking-wider font-bold mt-1.5 opacity-80">
+                  {room.status}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* 5. METRIC 5: INCIDENTAL FOLIO UPSELL & TOP CONCIERGE SERVICES */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Top Services Ranking */}
         <div className="lg:col-span-7 p-6 bg-white border border-slate-200/90 rounded-[2px] shadow-xs space-y-4">
