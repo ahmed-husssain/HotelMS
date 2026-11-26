@@ -2616,29 +2616,36 @@ export default function GuestPortalPage() {
               {/* In-Stay Active Dining Tracker Bar */}
               {orderedServices.filter((s) => s.category === 'Dining').length > 0 && (
                 <div className="p-4 bg-white border border-slate-200/90 rounded-xl shadow-xs space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                       <span className="font-mono text-xs font-bold uppercase tracking-wider text-slate-900">
-                        Kitchen Order Tracker &bull; {orderedServices.filter((s) => s.category === 'Dining').length} Items
+                        Kitchen Order Tracker &bull; {orderedServices.filter((s) => s.category === 'Dining').length}{' '}
+                        {orderedServices.filter((s) => s.category === 'Dining').length === 1 ? 'Item' : 'Items'}
                       </span>
                     </div>
-                    <span className="font-mono text-[11px] text-slate-500">
+                    <span className="font-mono text-[10px] sm:text-[11px] text-slate-500">
                       Dispatched to Executive Chef
                     </span>
                   </div>
                   <div className="divide-y divide-slate-100">
                     {orderedServices.filter((s) => s.category === 'Dining').slice(-3).map((item, idx) => (
-                      <div key={idx} className="py-2.5 flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-slate-900">{item.title}</span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
-                            {item.time || 'In-Kitchen'}
+                      <div key={idx} className="py-2.5 space-y-1.5 text-xs">
+                        {/* Tier 1: Item Title & Price */}
+                        <div className="flex items-start justify-between gap-3">
+                          <span className="font-medium text-slate-900 text-xs sm:text-sm leading-snug">
+                            {item.title}
+                          </span>
+                          <span className="font-mono font-bold text-slate-950 text-xs sm:text-sm shrink-0">
+                            PKR {item.price?.toLocaleString()}
                           </span>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="font-mono font-semibold text-slate-900">PKR {item.price?.toLocaleString()}</span>
-                          <span className="font-mono text-[10px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-bold uppercase">
+                        {/* Tier 2: Metadata & Status Badge */}
+                        <div className="flex items-center justify-between pt-0.5 text-[11px] font-mono">
+                          <span className="text-slate-500">
+                            Ordered: {item.time || 'In-Stay'} &bull; Suite {currentBooking.roomNumber || '301'}
+                          </span>
+                          <span className="font-mono text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded uppercase tracking-wider">
                             Preparing
                           </span>
                         </div>
@@ -2988,75 +2995,96 @@ export default function GuestPortalPage() {
                 </div>
               </div>
 
-              {/* Folio Breakdown */}
-              <div className="bg-white border border-slate-200/90 rounded-[2px] p-6 sm:p-8 shadow-xs space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 font-mono text-xs">
-                  <div>
-                    <span className="text-slate-400 uppercase text-[10px] block">RESERVATION REF</span>
-                    <strong className="text-slate-900">{currentBooking.bookingRef}</strong>
+              {/* Folio Breakdown — Option B (Tabular Minimalist Statement) */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-8 shadow-xs space-y-5">
+                {/* Clean Statement Header */}
+                <div className="space-y-2 pb-3.5 border-b border-slate-100">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <span className="font-mono text-[9px] text-slate-400 uppercase tracking-widest block">
+                        Guest Residence Statement
+                      </span>
+                      <h3 className="font-display font-bold text-sm sm:text-base text-slate-900">
+                        {currentBooking.residence?.name || 'Suite 301'} &bull; {currentBooking.guestName}
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[11px] font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg">
+                        REF: #{currentBooking.bookingRef}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-slate-400 uppercase text-[10px] block">PRIMARY GUEST</span>
-                    <strong className="text-slate-900">{currentBooking.guestName}</strong>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 uppercase text-[10px] block">STAY DATES</span>
-                    <strong className="text-slate-900">{currentBooking.checkIn} – {currentBooking.checkOut} ({currentBooking.nights} Nights)</strong>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 uppercase text-[10px] block">PAYMENT AUDIT</span>
-                    <span className="text-emerald-800 font-bold">SAFEPAY CONFIRMED</span>
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 pt-1">
+                    <span>
+                      Stay: {currentBooking.checkIn} – {currentBooking.checkOut} ({currentBooking.nights} Nights)
+                    </span>
+                    <span className="text-emerald-800 font-bold">
+                      Safepay Payment: Verified ✓
+                    </span>
                   </div>
                 </div>
 
                 {/* Line Items */}
-                <div className="space-y-3 text-xs">
+                <div className="space-y-2.5 text-xs">
                   <div className="flex justify-between py-2 border-b border-slate-100 text-slate-700">
                     <div>
-                      <span className="font-bold text-slate-900 block">
+                      <span className="font-medium text-slate-900 block text-xs sm:text-sm">
                         {currentBooking.residence?.name || 'Suite 301'} &bull; {currentBooking.nights} Nights
                       </span>
-                      <span className="text-[11px] text-slate-500 font-mono">
+                      <span className="text-[11px] text-slate-400 font-mono">
                         Base Rate: PKR {currentBooking.residence?.nightlyRate?.toLocaleString()} / night
                       </span>
                     </div>
-                    <span className="font-mono font-bold text-slate-900 text-sm">
+                    <span className="font-mono font-bold text-slate-900 text-xs sm:text-sm">
                       PKR {financials.roomSubtotal.toLocaleString()}
                     </span>
                   </div>
 
                   {orderedServices.map((service, idx) => (
-                    <div key={idx} className="flex justify-between py-2 border-b border-slate-100 text-slate-700 pl-3 border-l-2 border-emerald-800">
+                    <div key={idx} className="flex justify-between py-2 border-b border-slate-100 text-slate-700 pl-3 border-l-2 border-emerald-700">
                       <div>
-                        <span className="font-medium text-slate-900 block">{service.title}</span>
-                        <span className="text-[10px] text-slate-400 font-mono uppercase">{service.category} &bull; {service.time || 'In-Stay'}</span>
+                        <span className="font-medium text-slate-900 block text-xs sm:text-sm">{service.title}</span>
+                        <span className="text-[10px] text-slate-400 font-mono uppercase">
+                          {service.category} &bull; {service.time || 'In-Stay'}
+                        </span>
                       </div>
-                      <span className="font-mono font-medium text-slate-900">
+                      <span className="font-mono font-medium text-slate-900 text-xs sm:text-sm">
                         {service.price === 0 ? 'COMPLIMENTARY' : `+ PKR ${service.price.toLocaleString()}`}
                       </span>
                     </div>
                   ))}
 
-                  <div className="flex justify-between py-2 text-slate-600">
+                  <div className="flex justify-between py-2 text-slate-600 text-xs">
                     <span>Sindh Sales Tax (13%)</span>
                     <span className="font-mono font-medium text-slate-900">
                       PKR {financials.sindhTax.toLocaleString()}
                     </span>
                   </div>
 
-                  <div className="flex justify-between py-3 border-t-2 border-slate-900 text-slate-900 font-bold text-base">
-                    <span>Total Stay Valuation</span>
+                  <div className="flex justify-between py-2.5 border-t-2 border-slate-900 text-slate-900 font-bold text-sm sm:text-base">
+                    <span>Total Stay Amount</span>
                     <span className="font-mono">PKR {financials.totalStayAmount.toLocaleString()}</span>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 space-y-2">
-                    <div className="flex justify-between text-emerald-900 font-bold text-xs">
+                  <div className="pt-1 border-t border-slate-100 space-y-2">
+                    <div className="flex justify-between text-emerald-800 font-bold text-xs">
                       <span>Advance Deposit Paid (30% via Safepay)</span>
                       <span className="font-mono">- PKR {financials.advancePaid.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between text-slate-900 font-bold text-sm bg-slate-50 p-3.5 rounded-lg border border-slate-100">
-                      <span>Balance Due at Front Desk / Checkout</span>
-                      <span className="font-mono text-emerald-950">PKR {financials.balanceDue.toLocaleString()}</span>
+
+                    {/* High-Contrast Light Theme Balance Due Box (Option B) */}
+                    <div className="mt-2 p-3.5 sm:p-4 bg-white border-2 border-slate-900 rounded-xl flex items-center justify-between shadow-2xs">
+                      <div>
+                        <span className="font-mono text-[9px] uppercase font-bold text-slate-500 tracking-wider block">
+                          Remaining Balance Due
+                        </span>
+                        <span className="text-[11px] text-slate-600">
+                          Front Desk Settlement Upon Checkout
+                        </span>
+                      </div>
+                      <span className="font-mono font-bold text-sm sm:text-base text-slate-950">
+                        PKR {financials.balanceDue.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
