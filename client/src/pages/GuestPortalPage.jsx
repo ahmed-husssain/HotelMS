@@ -1415,9 +1415,9 @@ export default function GuestPortalPage() {
                         {currentBooking.roomNumber || 'Suite 301'} &bull; {currentBooking.residence?.name || 'The Horizon Penthouse'}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-slate-400 font-semibold">STAY DURATION</span>
-                      <span>
+                    <div className="flex items-center justify-between text-[11px] gap-2">
+                      <span className="text-slate-400 font-semibold shrink-0">STAY DURATION</span>
+                      <span className="text-right">
                         {currentBooking.checkIn} – {currentBooking.checkOut} ({currentBooking.nights} Nights)
                       </span>
                     </div>
@@ -1498,8 +1498,12 @@ export default function GuestPortalPage() {
                         )}
                       </div>
                       <div>
-                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100">Warm Daylight</div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">Classic Stayza alabaster linen</div>
+                        <div className={`font-bold text-xs ${guestTheme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                          Warm Daylight
+                        </div>
+                        <div className={`text-[10px] mt-0.5 ${guestTheme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                          Classic Stayza alabaster linen
+                        </div>
                       </div>
                     </button>
 
@@ -1524,8 +1528,12 @@ export default function GuestPortalPage() {
                         )}
                       </div>
                       <div>
-                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100">Midnight Lounge</div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">Deep obsidian ambient night</div>
+                        <div className={`font-bold text-xs ${guestTheme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>
+                          Midnight Lounge
+                        </div>
+                        <div className={`text-[10px] mt-0.5 ${guestTheme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+                          Deep obsidian ambient night
+                        </div>
                       </div>
                     </button>
                   </div>
