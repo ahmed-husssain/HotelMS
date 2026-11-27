@@ -866,7 +866,7 @@ export function HotelDataProvider({ children }) {
     const {
       paymentMethod = 'CASH',
       amountPaid = null,
-      actorName = 'Sara Ahmed (Front Desk)',
+      actorName = 'Front Desk Officer',
     } = typeof options === 'string' ? { actorName: options } : options
 
     const currentRoom = rooms.find((r) => r.roomNumber === roomNumber)
@@ -933,7 +933,7 @@ export function HotelDataProvider({ children }) {
    * Action C2: Mark No-Show (Invoked on /pms)
    * Releases assigned room to AVAILABLE and retains 30% advance deposit per cancellation policy
    */
-  const markNoShow = async (arrivalId, roomNumber, actorName = 'Sara Ahmed (Front Desk)') => {
+  const markNoShow = async (arrivalId, roomNumber, actorName = 'Front Desk Officer') => {
     const arrival = arrivals.find((a) => a.id === arrivalId || a.bookingRef === arrivalId)
     const bookingRef = arrival?.bookingRef || arrivalId
     const targetRoomNumber = roomNumber || arrival?.roomNumber
@@ -982,7 +982,7 @@ export function HotelDataProvider({ children }) {
    * Action C3: Close Cashier Shift (Z-Report Certification)
    * Updates shift lifecycle to CLOSED and certifies drawer balance
    */
-  const closeCashierShift = ({ countedCash, shiftNotes, actorName = 'Sara Ahmed (Front Desk)' }) => {
+  const closeCashierShift = ({ countedCash, shiftNotes, actorName = 'Front Desk Officer' }) => {
     const expected = openingFloat + cashCollected
     const variance = Number(countedCash || 0) - expected
 
@@ -1010,7 +1010,7 @@ export function HotelDataProvider({ children }) {
   /**
    * Action C4: Open / Handover Cashier Shift (Invoked when next receptionist arrives)
    */
-  const openCashierShift = (newStaffName = 'Sara Ahmed') => {
+  const openCashierShift = (newStaffName = 'Front Desk Officer') => {
     setShiftSession({
       status: 'OPEN',
       staffName: newStaffName,

@@ -153,8 +153,8 @@ export default function BookingPage() {
     const cnicDigits = (guestDossier.identificationNumber || '').replace(/\D/g, '')
     if (!cnicDigits) {
       errors.identificationNumber = 'CNIC / National ID is required'
-    } else if (cnicDigits.length < 5) {
-      errors.identificationNumber = 'Please enter a valid CNIC / ID number'
+    } else if (cnicDigits.length !== 13) {
+      errors.identificationNumber = 'Please enter a valid 13-digit CNIC (e.g. 42101-1234567-1)'
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -163,8 +163,10 @@ export default function BookingPage() {
     }
 
     const phoneDigits = (guestDossier.phone || '').replace(/\D/g, '')
-    if (!phoneDigits || phoneDigits.length < 8) {
-      errors.phone = 'Please provide a valid mobile number'
+    if (!phoneDigits || phoneDigits.length < 10) {
+      errors.phone = 'Please provide a valid mobile number (min. 10 digits)'
+    } else if (phoneDigits.length > 15) {
+      errors.phone = 'Phone number cannot exceed 15 digits'
     }
 
     setFormErrors(errors)

@@ -226,6 +226,7 @@ export default function ShiftClosingModal({
                 <input
                   type="text"
                   required
+                  maxLength={60}
                   value={nextStaffName}
                   onChange={(e) => setNextStaffName(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none focus:border-slate-900"

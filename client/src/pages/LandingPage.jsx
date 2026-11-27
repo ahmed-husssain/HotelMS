@@ -68,7 +68,7 @@ export default function LandingPage() {
             </h2>
           </div>
           <span className="text-xs text-slate-600 tracking-[0.15em] uppercase font-medium">
-            3 Private Suites &bull; Complete Seclusion &amp; Ocean Views
+            Featured Ocean Suites &bull; Complete Seclusion &amp; Ocean Views
           </span>
         </div>
 

@@ -111,7 +111,11 @@ export default function FrontDeskPage() {
 
   const handleConfirmNoShow = () => {
     if (!noShowArrival) return
-    markNoShow(noShowArrival.id, noShowArrival.roomNumber, currentUser?.name || 'Sara Ahmed (Front Desk)')
+    markNoShow(
+      noShowArrival.id,
+      noShowArrival.roomNumber,
+      currentUser?.name ? `${currentUser.name} (Front Desk)` : 'Front Desk Officer'
+    )
     setIsNoShowModalOpen(false)
     setNoShowArrival(null)
   }
@@ -519,7 +523,7 @@ export default function FrontDeskPage() {
             nights: selectedArrival?.nights,
             totalValuation: selectedArrival?.totalValuation,
             advancePaid: selectedArrival?.advancePaid,
-            actorName: currentUser?.name || 'Sara Ahmed (Front Desk)',
+            actorName: currentUser?.name ? `${currentUser.name} (Front Desk)` : 'Front Desk Officer',
           })
         }
       />
@@ -539,7 +543,7 @@ export default function FrontDeskPage() {
         onConfirmCheckout={(roomNumber, options) =>
           checkOutGuest(roomNumber, {
             ...options,
-            actorName: currentUser?.name || 'Sara Ahmed (Front Desk)',
+            actorName: currentUser?.name ? `${currentUser.name} (Front Desk)` : 'Front Desk Officer',
           })
         }
       />

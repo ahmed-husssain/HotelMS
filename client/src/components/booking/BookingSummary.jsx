@@ -85,7 +85,7 @@ export default function BookingSummary({
 
         {taxRate > 0 && sindhTax > 0 && (
           <div className="flex justify-between text-slate-600">
-            <span>Sindh Sales Tax ({taxRate}% SRB)</span>
+            <span>Provincial Sales Tax ({taxRate}%)</span>
             <span className="font-mono text-slate-900 font-semibold">PKR {sindhTax.toLocaleString()}</span>
           </div>
         )}
