@@ -34,8 +34,16 @@ export function ToastProvider({ children }) {
     error: (msg, title = 'Attention') => addToast(msg, 'error', title),
   }
 
+  // Backward-compatible showToast helper to prevent minification runtime errors
+  const showToast = useCallback(
+    ({ message = '', type = 'success', title = '' }) => {
+      addToast(message, type, title)
+    },
+    [addToast]
+  )
+
   return (
-    <ToastContext.Provider value={{ toast, addToast }}>
+    <ToastContext.Provider value={{ toast, addToast, showToast }}>
       {children}
 
       {/* Floating Toast Portal — Shadcn / Sonner Dark Obsidian Aesthetic */}
@@ -108,6 +116,7 @@ export function useToast() {
         error: (msg) => console.error('[Toast Error]:', msg),
       },
       addToast: () => {},
+      showToast: () => {},
     }
   }
   return context

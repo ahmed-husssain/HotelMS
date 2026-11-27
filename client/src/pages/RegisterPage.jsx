@@ -23,6 +23,8 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [agreeTerms, setAgreeTerms] = useState(false)
 
   // Custom Field-Level Validation State
@@ -46,8 +48,12 @@ export default function RegisterPage() {
         return ''
       case 'phone':
         if (!value.trim()) return 'Contact phone number is required.'
-        if (value.replace(/\D/g, '').length < 10) {
+        const phoneDigits = value.replace(/\D/g, '')
+        if (phoneDigits.length < 10) {
           return 'Please enter a valid phone number (at least 10 digits).'
+        }
+        if (phoneDigits.length > 15) {
+          return 'Phone number cannot exceed 15 digits.'
         }
         return ''
       case 'password':
@@ -85,7 +91,7 @@ export default function RegisterPage() {
   const handleChange = (field, value) => {
     if (field === 'name') setName(value)
     if (field === 'email') setEmail(value)
-    if (field === 'phone') setPhone(value)
+    if (field === 'phone') setPhone(value.replace(/[^\d+]/g, '').slice(0, 15))
     if (field === 'password') {
       setPassword(value)
       if (touched.confirmPassword && confirmPassword) {
@@ -299,17 +305,17 @@ export default function RegisterPage() {
                   htmlFor="reg-phone"
                   className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block mb-1"
                 >
-                  Contact Phone
+                  Contact Phone (Max 15 Digits)
                 </label>
                 <input
                   id="reg-phone"
                   type="tel"
-                  maxLength={20}
+                  maxLength={15}
                   placeholder="+92 300 1234567"
                   value={phone}
                   onChange={(e) => handleChange('phone', e.target.value)}
                   onBlur={() => handleBlur('phone')}
-                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono ${
+                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors ${
                     touched.phone && errors.phone
                       ? 'border-red-400 focus:border-red-600 bg-red-50/20'
                       : 'border-slate-300 focus:border-slate-900'
@@ -332,22 +338,42 @@ export default function RegisterPage() {
                 >
                   Password
                 </label>
-                <input
-                  id="reg-pass"
-                  type="password"
-                  minLength={6}
-                  maxLength={100}
-                  autoComplete="new-password"
-                  placeholder="Min 6 characters"
-                  value={password}
-                  onChange={(e) => handleChange('password', e.target.value)}
-                  onBlur={() => handleBlur('password')}
-                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono ${
-                    touched.password && errors.password
-                      ? 'border-red-400 focus:border-red-600 bg-red-50/20'
-                      : 'border-slate-300 focus:border-slate-900'
-                  }`}
-                />
+                <div className="relative">
+                  <input
+                    id="reg-pass"
+                    type={showPassword ? 'text' : 'password'}
+                    minLength={6}
+                    maxLength={100}
+                    autoComplete="new-password"
+                    placeholder="Min 6 characters"
+                    value={password}
+                    onChange={(e) => handleChange('password', e.target.value)}
+                    onBlur={() => handleBlur('password')}
+                    className={`w-full py-2 px-3 pr-9 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors ${
+                      touched.password && errors.password
+                        ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                        : 'border-slate-300 focus:border-slate-900'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-800 p-1 cursor-pointer"
+                    aria-label="Toggle password visibility"
+                  >
+                    {showPassword ? (
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
                 {touched.password && errors.password && (
                   <span className="text-[10px] text-red-600 font-mono mt-1 block">
                     {errors.password}
@@ -362,22 +388,42 @@ export default function RegisterPage() {
                 >
                   Confirm Password
                 </label>
-                <input
-                  id="reg-confirm"
-                  type="password"
-                  minLength={6}
-                  maxLength={100}
-                  autoComplete="new-password"
-                  placeholder="Re-type password"
-                  value={confirmPassword}
-                  onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                  onBlur={() => handleBlur('confirmPassword')}
-                  className={`w-full py-2 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors font-mono ${
-                    touched.confirmPassword && errors.confirmPassword
-                      ? 'border-red-400 focus:border-red-600 bg-red-50/20'
-                      : 'border-slate-300 focus:border-slate-900'
-                  }`}
-                />
+                <div className="relative">
+                  <input
+                    id="reg-confirm"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    minLength={6}
+                    maxLength={100}
+                    autoComplete="new-password"
+                    placeholder="Re-type password"
+                    value={confirmPassword}
+                    onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                    onBlur={() => handleBlur('confirmPassword')}
+                    className={`w-full py-2 px-3 pr-9 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors ${
+                      touched.confirmPassword && errors.confirmPassword
+                        ? 'border-red-400 focus:border-red-600 bg-red-50/20'
+                        : 'border-slate-300 focus:border-slate-900'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-800 p-1 cursor-pointer"
+                    aria-label="Toggle confirm password visibility"
+                  >
+                    {showConfirmPassword ? (
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
                 {touched.confirmPassword && errors.confirmPassword && (
                   <span className="text-[10px] text-red-600 font-mono mt-1 block">
                     {errors.confirmPassword}

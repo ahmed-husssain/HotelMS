@@ -274,7 +274,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => handlePasswordChange(e.target.value)}
                   onBlur={() => handleBlur('password')}
-                  className={`w-full py-2.5 px-3 bg-white border rounded-[2px] text-xs sm:text-sm text-slate-900 focus:outline-none transition-colors pr-10 font-mono ${
+                  className={`w-full py-2.5 px-3 bg-white border rounded-[2px] text-xs sm:text-sm font-medium text-slate-900 focus:outline-none transition-colors pr-10 ${
                     touched.password && errors.password
                       ? 'border-red-400 focus:border-red-600 bg-red-50/20'
                       : 'border-slate-300 focus:border-slate-900'

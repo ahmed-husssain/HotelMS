@@ -416,6 +416,7 @@ export function AuthProvider({ children }) {
       id: tempId,
       name: name.trim(),
       email: cleanEmail,
+      password,
       role,
       roleLabel: roleLabels[role] || role,
       phone: phone || 'Internal Extension',
@@ -436,7 +437,23 @@ export function AuthProvider({ children }) {
       }
     } catch (err) {
       console.warn('[Staff Create] Remote Atlas sync warning:', err.message)
-      throw err
+      const isNetworkOrProxyFailure =
+        !err.message ||
+        err.status === 404 ||
+        err.status >= 500 ||
+        err.message.toLowerCase().includes('failed to fetch') ||
+        err.message.toLowerCase().includes('networkerror') ||
+        err.message.toLowerCase().includes('backend api unavailable') ||
+        err.message.toLowerCase().includes('route not found') ||
+        err.message.toLowerCase().includes('cannot post') ||
+        err.message.toLowerCase().includes('not found') ||
+        err.message.toLowerCase().includes('non-json') ||
+        err.message.toLowerCase().includes('unexpected token') ||
+        err.message.includes('<!doctype')
+
+      if (!isNetworkOrProxyFailure) {
+        throw err
+      }
     }
 
     return newStaff

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export default function GuestInfoForm({
@@ -9,6 +9,8 @@ export default function GuestInfoForm({
   touched = {},
   setTouched = () => {},
 }) {
+  const [showPassword, setShowPassword] = useState(false)
+
   // Format CNIC as XXXXX-XXXXXXX-X (digits only, max 13 digits)
   const handleCNICChange = (e) => {
     const raw = e.target.value.replace(/\D/g, '').slice(0, 13)
@@ -21,9 +23,9 @@ export default function GuestInfoForm({
     setGuestDossier((prev) => ({ ...prev, identificationNumber: formatted }))
   }
 
-  // Phone: Digits, spaces, and optional leading + only (max 16 chars)
+  // Phone: Digits and optional leading + only (strict max 15 digits)
   const handlePhoneChange = (e) => {
-    let raw = e.target.value.replace(/[^\d+\s-]/g, '').slice(0, 16)
+    let raw = e.target.value.replace(/[^\d+]/g, '').slice(0, 15)
     if (raw.includes('+')) {
       raw = '+' + raw.replace(/\+/g, '')
     }
@@ -154,12 +156,12 @@ export default function GuestInfoForm({
         {/* 4. Phone Number */}
         <div>
           <label className="text-[11px] font-mono text-slate-500 uppercase tracking-wider font-semibold block mb-1.5">
-            Mobile Number <span className="text-rose-500">*</span>
+            Mobile Number (Max 15 Digits) <span className="text-rose-500">*</span>
           </label>
           <input
             type="tel"
             required
-            maxLength={20}
+            maxLength={15}
             value={guestDossier.phone}
             onChange={handlePhoneChange}
             onBlur={() => handleBlur('phone')}
@@ -188,15 +190,35 @@ export default function GuestInfoForm({
                 Instant Auto-Login
               </span>
             </div>
-            <input
-              type="password"
-              minLength={6}
-              maxLength={100}
-              value={guestDossier.password || ''}
-              onChange={(e) => setGuestDossier((prev) => ({ ...prev, password: e.target.value }))}
-              placeholder="Min. 6 characters (for digital key & in-suite controls)"
-              className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-md text-xs sm:text-sm font-medium text-slate-900 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none transition-all placeholder:text-slate-400"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                minLength={6}
+                maxLength={100}
+                value={guestDossier.password || ''}
+                onChange={(e) => setGuestDossier((prev) => ({ ...prev, password: e.target.value }))}
+                placeholder="Min. 6 characters (for digital key & in-suite controls)"
+                className="w-full px-3.5 py-2 pr-9 bg-white border border-slate-200 rounded-md text-xs sm:text-sm font-medium text-slate-900 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none transition-all placeholder:text-slate-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-800 p-1 cursor-pointer"
+                aria-label="Toggle password visibility"
+              >
+                {showPassword ? (
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
             <p className="text-[10px] text-slate-500 font-mono">
               Save your profile to access your digital room key, view invoices, and control suite climate anytime.
             </p>

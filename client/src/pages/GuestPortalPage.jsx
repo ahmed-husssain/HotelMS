@@ -323,6 +323,7 @@ export default function GuestPortalPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showCurrentPass, setShowCurrentPass] = useState(false)
   const [showNewPass, setShowNewPass] = useState(false)
+  const [showConfirmPass, setShowConfirmPass] = useState(false)
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
 
   // Option B: Email OTP Reset State
@@ -330,6 +331,7 @@ export default function GuestPortalPage() {
   const [otpNewPassword, setOtpNewPassword] = useState('')
   const [otpConfirmPassword, setOtpConfirmPassword] = useState('')
   const [showOtpNewPass, setShowOtpNewPass] = useState(false)
+  const [showOtpConfirmPass, setShowOtpConfirmPass] = useState(false)
   const [isSendingOtp, setIsSendingOtp] = useState(false)
   const [isResettingWithOtp, setIsResettingWithOtp] = useState(false)
   const [otpSent, setOtpSent] = useState(false)
@@ -1704,18 +1706,27 @@ export default function GuestPortalPage() {
                         <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
                           Confirm New Password
                         </label>
-                        <input
-                          type="password"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          placeholder="Confirm new password"
-                          required
-                          className={`w-full px-3 py-2 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
-                            guestTheme === 'dark'
-                              ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
-                              : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
-                          }`}
-                        />
+                        <div className="relative">
+                          <input
+                            type={showConfirmPass ? 'text' : 'password'}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm new password"
+                            required
+                            className={`w-full px-3 py-2 pr-10 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                              guestTheme === 'dark'
+                                ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
+                                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
+                            }`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPass(!showConfirmPass)}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px] font-bold cursor-pointer"
+                          >
+                            {showConfirmPass ? 'HIDE' : 'SHOW'}
+                          </button>
+                        </div>
                       </div>
 
                       <button
@@ -1838,18 +1849,27 @@ export default function GuestPortalPage() {
                           <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
                             Confirm New Password
                           </label>
-                          <input
-                            type="password"
-                            value={otpConfirmPassword}
-                            onChange={(e) => setOtpConfirmPassword(e.target.value)}
-                            placeholder="Confirm new password"
-                            required
-                            className={`w-full px-3 py-2 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
-                              guestTheme === 'dark'
-                                ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
-                                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
-                            }`}
-                          />
+                          <div className="relative">
+                            <input
+                              type={showOtpConfirmPass ? 'text' : 'password'}
+                              value={otpConfirmPassword}
+                              onChange={(e) => setOtpConfirmPassword(e.target.value)}
+                              placeholder="Confirm new password"
+                              required
+                              className={`w-full px-3 py-2 pr-10 text-xs rounded-xl border focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono ${
+                                guestTheme === 'dark'
+                                  ? 'bg-slate-900 border-slate-800 text-white placeholder-slate-500'
+                                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400'
+                              }`}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowOtpConfirmPass(!showOtpConfirmPass)}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px] font-bold cursor-pointer"
+                            >
+                              {showOtpConfirmPass ? 'HIDE' : 'SHOW'}
+                            </button>
+                          </div>
                         </div>
 
                         <button
