@@ -1,5 +1,5 @@
 import useEmblaCarousel from 'embla-carousel-react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import AnimatedButton from './AnimatedButton'
 import { getOptimizedImageUrl, getResponsiveSrcSet } from '../utils/cloudinary'
 
