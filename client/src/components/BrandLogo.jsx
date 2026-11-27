@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
  * - Travertine Lintel Base: Grounded coastal stone foundation
  * - Ocean Horizon Hairline: The Sindh coast meets the Arabian Sea
  * - Celestial Gold Keystone: Dawn sun marker (#D4AF37)
- * - Sculpted Wordmark: STAYZA in Syne Extrabold
+ * - Sculpted Wordmark: STAYZA in Manrope Extrabold
  */
 export default function BrandLogo({
   variant = 'full', // 'full' | 'emblem' | 'wordmark'

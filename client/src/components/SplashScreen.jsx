@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
  *     3. Foundation Travertine Lintel & Inner Sanctuary Arch
  *     4. Coastal Horizon Hairline
  *     5. Pure Alabaster Keystone Dot (#FAF8F5 — zero yellowish tint)
- * - Harmonious STAYZA wordmark (Syne) & SANCTUARY • RESIDENCES (Inter)
+ * - Harmonious STAYZA wordmark & SANCTUARY • RESIDENCES in Manrope Pure
  * - Smooth cinematic curtain dissolve into the hero
  * - Click/Tap anywhere to skip immediately
  */
