@@ -8,7 +8,7 @@ export default function StaffList({
   onUpdateStaff,
   onDeleteStaff,
 }) {
-  const { showToast, toast } = useToast()
+  const { showToast } = useToast()
 
   // Modal states
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
