@@ -47,17 +47,9 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
     }
   }, [isOpen, onClose])
 
-  if (!isRendered || !booking) return null
-
-  const residence = booking.residence || {
-    name: 'The Horizon Penthouse',
-    roomNumber: '301',
-    tier: 'PRESIDENTIAL SUITE',
-    nightlyRate: 110000,
-  }
-
-  // Exact duration calculation without hardcoded drift (Fix 4)
+  // Exact duration calculation without hardcoded drift (Fix 4) - MUST be called before any conditional return
   const nights = useMemo(() => {
+    if (!booking) return 1
     if (typeof booking.nights === 'number' && booking.nights > 0) return booking.nights
     if (typeof booking.numberOfNights === 'number' && booking.numberOfNights > 0) return booking.numberOfNights
     if (booking.checkIn && booking.checkOut) {
@@ -72,8 +64,17 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
       const diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24))
       if (!isNaN(diff) && diff > 0) return diff
     }
-    return 4
+    return 1
   }, [booking])
+
+  if (!isRendered || !booking) return null
+
+  const residence = booking.residence || {
+    name: 'The Horizon Penthouse',
+    roomNumber: '301',
+    tier: 'PRESIDENTIAL SUITE',
+    nightlyRate: 110000,
+  }
 
   // Dynamic guest info without hardcoded placeholders (Fix 3)
   const guestName = booking.guestName || booking.guestDetails?.name || 'Valued Guest'

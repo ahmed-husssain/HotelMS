@@ -142,23 +142,23 @@ export default function ConfirmationPage() {
               <span>Open My Room &amp; Digital Key</span>
               <span>&rarr;</span>
             </Link>
-            {currentUser && (currentUser.role === 'admin' || currentUser.role === 'receptionist') ? (
+            <button
+              type="button"
+              onClick={() => setIsInvoiceOpen(true)}
+              className="tactile flex-1 py-2.5 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] cursor-pointer flex items-center justify-center gap-1.5 min-h-[44px]"
+            >
+              <span>Preview &amp; Download Invoice</span>
+              <span>&rarr;</span>
+            </button>
+
+            {currentUser && (currentUser.role === 'admin' || currentUser.role === 'receptionist') && (
               <Link
                 to="/reception"
-                className="tactile flex-1 py-2.5 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] flex items-center justify-center gap-1 min-h-[44px]"
+                className="tactile flex-1 py-2.5 text-center bg-slate-100 border border-slate-300 hover:bg-slate-200 text-slate-800 text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] flex items-center justify-center gap-1 min-h-[44px]"
               >
                 <span>View Reception</span>
                 <span>&rarr;</span>
               </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setIsInvoiceOpen(true)}
-                className="tactile flex-1 py-2.5 text-center border border-slate-300 hover:bg-slate-50 text-slate-800 text-xs font-semibold font-mono uppercase tracking-wider transition-colors rounded-[2px] cursor-pointer flex items-center justify-center gap-1.5 min-h-[44px]"
-              >
-                <span>Preview &amp; Download Invoice</span>
-                <span>&rarr;</span>
-              </button>
             )}
           </div>
         </div>
