@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useHotelData } from '../../context/HotelDataContext'
+import AnimatedButton from '../AnimatedButton'
 
 /**
  * NavMenu — Expanding Circular Aperture Overlay Sheet
@@ -17,6 +18,16 @@ export default function NavMenu({
   currentUser,
   logout,
 }) {
+  const navigate = useNavigate()
+  const workspacePath =
+    currentUser?.role === 'admin'
+      ? '/admin'
+      : currentUser?.role === 'receptionist'
+      ? '/reception'
+      : currentUser?.role === 'housekeeping'
+      ? '/housekeeping'
+      : '/my-stay'
+
   let availableSuitesCount = null
   try {
     const hotelData = useHotelData()
@@ -72,7 +83,7 @@ export default function NavMenu({
         </div>
 
         {/* Right 55%: Navigation Index & Controls */}
-        <div className="w-full md:w-7/12 h-full flex flex-col justify-between p-6 sm:p-8 lg:p-10 overflow-y-auto overscroll-contain">
+        <div className="w-full md:w-7/12 h-full flex flex-col justify-between p-6 sm:p-8 lg:p-9 overflow-y-auto overscroll-contain scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {/* Top Bar: Clean Branding & Dedicated Close Button */}
           <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest border-b border-slate-200/80 pb-3 shrink-0">
             <div className="flex items-center gap-3">
@@ -142,69 +153,93 @@ export default function NavMenu({
               </button>
             </div>
 
-            {/* If Logged in as Staff: Exclusive Operational Workspace Access */}
-            {currentUser && currentUser.role !== 'guest' && (
-              <div className="pt-2">
-                <Link
-                  to={
-                    currentUser.role === 'admin'
-                      ? '/admin'
-                      : currentUser.role === 'receptionist'
-                      ? '/reception'
-                      : '/housekeeping'
-                  }
-                  onClick={onClose}
-                  className="w-full py-2.5 px-4 bg-emerald-950 text-emerald-200 border border-emerald-800/80 text-xs font-mono uppercase tracking-wider flex items-center justify-between hover:bg-emerald-900 transition-colors rounded-[2px]"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    <span>Open {currentUser.roleLabel || 'Staff'} Workspace</span>
-                  </span>
-                  <span>&rarr;</span>
-                </Link>
-              </div>
-            )}
+            {/* If Logged in as Staff: Exclusive Operational Workspace Module with Kinetic Wave Animation */}
+            {currentUser && currentUser.role !== 'guest' ? (
+              <div className="pt-2.5">
+                <div className="bg-white/85 border border-slate-300/90 rounded-[2px] p-2.5 px-3.5 flex items-center justify-between shadow-2xs">
+                  {/* Left: Staff Status Indicator */}
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="relative flex h-2 w-2 shrink-0">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600" />
+                    </span>
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-mono text-[10px] text-slate-500 uppercase tracking-widest leading-none truncate">
+                        {currentUser.roleLabel || `${currentUser.role} Staff`}
+                      </span>
+                      <span className="font-mono text-xs text-slate-900 font-bold mt-0.5 truncate">
+                        {currentUser.name}
+                      </span>
+                    </div>
+                  </div>
 
-            {/* Account Session Strip inside Menu */}
-            <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs font-mono">
-              {currentUser ? (
-                <div className="flex items-center justify-between w-full">
-                  <span className="text-slate-600">
-                    Signed in as <strong>{currentUser.name}</strong> ({currentUser.role})
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      logout()
-                      onClose()
-                    }}
-                    className="text-red-700 hover:text-red-900 font-bold underline cursor-pointer ml-2"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between w-full">
-                  <span className="text-slate-500">Guest Account:</span>
-                  <div className="flex items-center gap-3">
-                    <Link
-                      to="/login"
-                      onClick={onClose}
-                      className="text-slate-900 hover:text-amber-800 font-bold underline"
+                  {/* Right: Signature Kinetic AnimatedButton + Sign Out */}
+                  <div className="flex items-center gap-3 shrink-0">
+                    <AnimatedButton
+                      text="Workspace"
+                      size="xs"
+                      variant="primary"
+                      onClick={() => {
+                        onClose()
+                        navigate(workspacePath)
+                      }}
+                      className="h-8 px-3 text-[10px] tracking-[0.2em] bg-slate-900 hover:bg-emerald-950 text-[#FAF8F5]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout()
+                        onClose()
+                      }}
+                      className="text-slate-400 hover:text-red-700 text-[11px] font-mono underline transition-colors cursor-pointer ml-1"
                     >
-                      Sign In &rarr;
-                    </Link>
-                    <Link
-                      to="/register"
-                      onClick={onClose}
-                      className="text-slate-500 hover:text-slate-900"
-                    >
-                      Create Profile
-                    </Link>
+                      Sign Out
+                    </button>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              /* Account Session Strip inside Menu for Guests & Visitors */
+              <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs font-mono">
+                {currentUser ? (
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-slate-600">
+                      Signed in as <strong>{currentUser.name}</strong> ({currentUser.role})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout()
+                        onClose()
+                      }}
+                      className="text-red-700 hover:text-red-900 font-bold underline cursor-pointer ml-2"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-slate-500">Guest Account:</span>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        to="/login"
+                        onClick={onClose}
+                        className="text-slate-900 hover:text-amber-800 font-bold underline"
+                      >
+                        Sign In &rarr;
+                      </Link>
+                      <Link
+                        to="/register"
+                        onClick={onClose}
+                        className="text-slate-500 hover:text-slate-900"
+                      >
+                        Create Profile
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </nav>
 
           {/* Bottom Information & Metadata Strip */}
