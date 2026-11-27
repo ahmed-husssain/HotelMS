@@ -147,8 +147,8 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ErrorBoundary>
         <AuthProvider>
           <ToastProvider>
             <HotelDataProvider>
@@ -156,7 +156,7 @@ export default function App() {
             </HotelDataProvider>
           </ToastProvider>
         </AuthProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </BrowserRouter>
   )
 }

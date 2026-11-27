@@ -57,7 +57,7 @@ export default class ErrorBoundary extends React.Component {
           {/* Top Brand Header */}
           <header className="max-w-4xl w-full mx-auto flex items-center justify-between">
             <a href="/" className="inline-block">
-              <BrandLogo variant="full" theme="light" size="sm" />
+              <BrandLogo variant="full" theme="light" size="sm" to="" />
             </a>
             <span className="font-mono text-xs text-amber-300 bg-amber-950/80 border border-amber-800/80 px-2.5 py-1 rounded-[2px] uppercase tracking-wider">
               ● TEMPORARY STATE
@@ -78,10 +78,10 @@ export default class ErrorBoundary extends React.Component {
               </p>
             </div>
 
-            {/* Error Detail (Dev or sanitized) */}
-            {isDev && this.state.error && (
+            {/* Error Detail */}
+            {this.state.error && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs font-mono text-red-900 overflow-x-auto max-h-32">
-                <strong>Error:</strong> {this.state.error.toString()}
+                <strong>Detail:</strong> {this.state.error?.message || this.state.error?.toString()}
               </div>
             )}
 

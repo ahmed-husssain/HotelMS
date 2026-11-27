@@ -9,26 +9,10 @@ import { downloadBookingInvoice } from '../../services/api'
  *   compact top action bar, and easy-tap buttons.
  * - On Desktop: Publication-grade A4 layout with clean 4-column ledger and printable styling.
  */
-export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalInvoice = false }) {
+export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalInvoice = false, type }) {
   const invoiceRef = useRef(null)
   const [copied, setCopied] = useState(false)
-  const [isRendered, setIsRendered] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
-
-  useEffect(() => {
-    if (isOpen) {
-      setIsRendered(true)
-      const raf = requestAnimationFrame(() => {
-        requestAnimationFrame(() => setIsVisible(true))
-      })
-      return () => cancelAnimationFrame(raf)
-    } else {
-      setIsVisible(false)
-      const timer = setTimeout(() => setIsRendered(false), 200)
-      return () => clearTimeout(timer)
-    }
-  }, [isOpen])
 
   // Body scroll lock effect
   useEffect(() => {
@@ -67,9 +51,11 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
     return 1
   }, [booking])
 
-  if (!isRendered || !booking) return null
+  if (!isOpen || !booking) return null
 
-  const residence = booking.residence || {
+  const isFinal = Boolean(isFinalInvoice || type === 'FINAL_TAX_INVOICE')
+
+  const residence = booking.residence || booking.suite || {
     name: 'The Horizon Penthouse',
     roomNumber: '301',
     tier: 'PRESIDENTIAL SUITE',
@@ -89,11 +75,11 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
   const sindhTax = Math.round(netSubtotal * 0.13)
   const totalAmount = netSubtotal + sindhTax
   const advancePaid = booking.advance || Math.round(totalAmount * 0.3)
-  const balanceDue = isFinalInvoice ? 0 : Math.max(0, totalAmount - advancePaid)
+  const balanceDue = isFinal ? 0 : Math.max(0, totalAmount - advancePaid)
 
   const bookingRef = String(booking.bookingRef || 'ST-301-6077')
-  const invoiceNum = isFinalInvoice ? `INV-2026-${bookingRef.slice(-4)}` : `RCP-2026-${bookingRef.slice(-4)}`
-  const docTitle = isFinalInvoice ? 'Official Tax Invoice' : 'Advance Deposit Receipt'
+  const invoiceNum = isFinal ? `INV-2026-${bookingRef.slice(-4)}` : `RCP-2026-${bookingRef.slice(-4)}`
+  const docTitle = isFinal ? 'Official Tax Invoice' : 'Advance Deposit Receipt'
 
   const handlePrint = () => {
     window.print()
@@ -117,9 +103,9 @@ Ref: ${bookingRef}
 Invoice #: ${invoiceNum}
 Guest: ${booking.guestName || 'Valued Guest'}
 Suite: Suite ${residence.roomNumber} - ${residence.name}
-Total: PKR ${totalAmount.toLocaleString()}
-Advance Paid (30%): PKR ${advancePaid.toLocaleString()}
-Balance: PKR ${balanceDue.toLocaleString()}`
+Total: PKR ${(totalAmount || 0).toLocaleString()}
+Advance Paid (30%): PKR ${(advancePaid || 0).toLocaleString()}
+Balance: PKR ${(balanceDue || 0).toLocaleString()}`
 
     if (navigator?.clipboard) {
       navigator.clipboard.writeText(summary)
@@ -130,9 +116,7 @@ Balance: PKR ${balanceDue.toLocaleString()}`
 
   return (
     <div
-      className={`fixed inset-0 z-50 overflow-y-auto bg-black/60 p-0 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static transition-opacity duration-200 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
-      }`}
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 p-0 sm:p-6 flex justify-center items-start print:p-0 print:bg-white print:static transition-opacity duration-200 opacity-100"
       role="dialog"
       aria-modal="true"
       onClick={(e) => {
@@ -141,9 +125,7 @@ Balance: PKR ${balanceDue.toLocaleString()}`
     >
       {/* Modal Container: Full-width on mobile (no cramped side margins), centered card on desktop */}
       <div
-        className={`relative w-full max-w-2xl bg-white border-0 sm:border sm:border-slate-200 rounded-none sm:rounded-lg shadow-2xl my-0 sm:my-8 flex flex-col min-h-screen sm:min-h-0 overflow-hidden transition-all duration-200 print:border-none print:shadow-none print:w-full print:m-0 ${
-          isVisible ? 'scale-100' : 'scale-95'
-        }`}
+        className="relative w-full max-w-2xl bg-white border-0 sm:border sm:border-slate-200 rounded-none sm:rounded-lg shadow-2xl my-0 sm:my-8 flex flex-col min-h-screen sm:min-h-0 overflow-hidden print:border-none print:shadow-none print:w-full print:m-0 scale-100"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Bar: Clean, compact on mobile with touch-friendly 44px close button */}
@@ -254,19 +236,19 @@ Balance: PKR ${balanceDue.toLocaleString()}`
                   <span className="text-slate-500 text-xs">{residence.name}</span>
                 </div>
                 <span className="font-mono font-bold text-slate-900 text-sm whitespace-nowrap">
-                  PKR {suiteSubtotal.toLocaleString()}
+                  PKR {(suiteSubtotal || 0).toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between text-slate-600 text-xs pt-1.5 border-t border-slate-200/70">
                 <span>Duration: {nights} Nights</span>
-                <span>Rate: PKR {nightlyRate.toLocaleString()}/night</span>
+                <span>Rate: PKR {(nightlyRate || 0).toLocaleString()}/night</span>
               </div>
 
               {/* Any additional service line items */}
               {(booking.diningOrders || []).map((item, idx) => (
                 <div key={`m-item-${idx}`} className="flex justify-between pt-1 text-slate-700 border-t border-slate-200/50">
                   <span>{item.title}</span>
-                  <span className="font-mono font-medium">PKR {item.price?.toLocaleString()}</span>
+                  <span className="font-mono font-medium">PKR {(item.price || 0).toLocaleString()}</span>
                 </div>
               ))}
             </div>
@@ -289,16 +271,16 @@ Balance: PKR ${balanceDue.toLocaleString()}`
                       <span className="text-[11px] text-slate-500">{residence.name}</span>
                     </td>
                     <td className="py-2.5 px-3 text-center text-slate-600">{nights} Nights</td>
-                    <td className="py-2.5 px-3 text-right text-slate-600 font-mono">{nightlyRate.toLocaleString()}</td>
-                    <td className="py-2.5 px-3 text-right font-semibold text-slate-900 font-mono">{suiteSubtotal.toLocaleString()}</td>
+                    <td className="py-2.5 px-3 text-right text-slate-600 font-mono">{(nightlyRate || 0).toLocaleString()}</td>
+                    <td className="py-2.5 px-3 text-right font-semibold text-slate-900 font-mono">{(suiteSubtotal || 0).toLocaleString()}</td>
                   </tr>
 
                   {(booking.diningOrders || []).map((item, idx) => (
                     <tr key={`item-${idx}`}>
                       <td className="py-2 px-3 text-slate-800">{item.title}</td>
                       <td className="py-2 px-3 text-center text-slate-600">1</td>
-                      <td className="py-2 px-3 text-right text-slate-600 font-mono">{item.price?.toLocaleString()}</td>
-                      <td className="py-2 px-3 text-right font-medium text-slate-900 font-mono">{item.price?.toLocaleString()}</td>
+                      <td className="py-2 px-3 text-right text-slate-600 font-mono">{(item.price || 0).toLocaleString()}</td>
+                      <td className="py-2 px-3 text-right font-medium text-slate-900 font-mono">{(item.price || 0).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -311,26 +293,26 @@ Balance: PKR ${balanceDue.toLocaleString()}`
             <div className="w-full sm:w-80 space-y-2 text-xs">
               <div className="flex justify-between text-slate-600">
                 <span>Services Subtotal:</span>
-                <span className="font-mono text-slate-900 font-medium">PKR {netSubtotal.toLocaleString()}</span>
+                <span className="font-mono text-slate-900 font-medium">PKR {(netSubtotal || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-slate-600">
                 <span>Sindh Sales Tax (13%):</span>
-                <span className="font-mono text-slate-900 font-medium">PKR {sindhTax.toLocaleString()}</span>
+                <span className="font-mono text-slate-900 font-medium">PKR {(sindhTax || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-slate-900 font-bold border-t border-slate-200 pt-2 text-sm">
                 <span>Total Amount:</span>
-                <span className="font-mono">PKR {totalAmount.toLocaleString()}</span>
+                <span className="font-mono">PKR {(totalAmount || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-1.5 rounded border border-emerald-200">
                 <span>30% Advance Deposit Paid:</span>
-                <span className="font-mono">- PKR {advancePaid.toLocaleString()}</span>
+                <span className="font-mono">- PKR {(advancePaid || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between font-bold pt-1 text-xs">
                 <span className={balanceDue === 0 ? 'text-emerald-800' : 'text-amber-900'}>
                   {balanceDue === 0 ? 'Balance (Settled):' : 'Balance Due at Check-in:'}
                 </span>
                 <span className={`font-mono text-sm ${balanceDue === 0 ? 'text-emerald-800' : 'text-amber-900'}`}>
-                  PKR {balanceDue.toLocaleString()}
+                  PKR {(balanceDue || 0).toLocaleString()}
                 </span>
               </div>
             </div>
