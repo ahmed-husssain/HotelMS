@@ -56,7 +56,30 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
     nightlyRate: 110000,
   }
 
-  const nights = booking.nights || 2
+  // Exact duration calculation without hardcoded drift (Fix 4)
+  const nights = useMemo(() => {
+    if (typeof booking.nights === 'number' && booking.nights > 0) return booking.nights
+    if (typeof booking.numberOfNights === 'number' && booking.numberOfNights > 0) return booking.numberOfNights
+    if (booking.checkIn && booking.checkOut) {
+      const d1 = new Date(booking.checkIn)
+      const d2 = new Date(booking.checkOut)
+      const diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24))
+      if (!isNaN(diff) && diff > 0) return diff
+    }
+    if (booking.checkInDate && booking.checkOutDate) {
+      const d1 = new Date(booking.checkInDate)
+      const d2 = new Date(booking.checkOutDate)
+      const diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24))
+      if (!isNaN(diff) && diff > 0) return diff
+    }
+    return 4
+  }, [booking])
+
+  // Dynamic guest info without hardcoded placeholders (Fix 3)
+  const guestName = booking.guestName || booking.guestDetails?.name || 'Valued Guest'
+  const guestEmail = booking.guestEmail || booking.guestDetails?.email || booking.email || 'guest@stayza.com'
+  const guestPhone = booking.guestPhone || booking.guestDetails?.phone || booking.phone || '+92 300 0000000'
+
   const nightlyRate = residence.nightlyRate || 110000
   const suiteSubtotal = booking.suiteSubtotal || (nightlyRate * nights)
   const addonsTotal = (booking.selectedAddons || []).reduce((sum, item) => sum + (item.price || 0), 0)
@@ -199,9 +222,9 @@ Balance: PKR ${balanceDue.toLocaleString()}`
               <span className="font-semibold text-slate-500 uppercase tracking-wider text-[11px] block mb-1">
                 Guest Details
               </span>
-              <p className="font-bold text-sm text-slate-900">{booking.guestName || 'Ahmed Hussain'}</p>
-              <p className="text-slate-600 mt-0.5">{booking.guestPhone || '+92 300 0000000'}</p>
-              <p className="text-slate-600">{booking.guestEmail || 'ahmedhusssain117@gmail.com'}</p>
+              <p className="font-bold text-sm text-slate-900">{guestName}</p>
+              <p className="text-slate-600 mt-0.5">{guestPhone}</p>
+              <p className="text-slate-600">{guestEmail}</p>
             </div>
 
             <div className="sm:text-right border-t sm:border-t-0 pt-2.5 sm:pt-0 border-slate-200/80">
@@ -315,10 +338,9 @@ Balance: PKR ${balanceDue.toLocaleString()}`
           {/* Verification Notice */}
           <div className="bg-slate-50 border border-slate-200 rounded p-3 text-[11px] text-slate-600 leading-relaxed">
             <strong className="text-emerald-800 block mb-0.5">
-              [ Verified Reservation ] &bull; 30% Online Advance Deposit Confirmed
+              [ Confirmed Reservation ] &bull; 30% Advance Deposit Verified
             </strong>
-            This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.
-            Please present this booking reference or valid CNIC/Passport upon arrival at the Front Desk.
+            Official Stayza Hospitality Reservation Folio. Please present this booking reference or valid CNIC/Passport upon arrival at the Front Desk.
           </div>
 
           {/* Mobile Bottom Action: Full-width download button */}
@@ -334,8 +356,8 @@ Balance: PKR ${balanceDue.toLocaleString()}`
           </div>
 
           {/* Footer */}
-          <div className="pt-2 text-center text-[10px] text-slate-400">
-            Stayza Hotel &amp; Resort &bull; Beachfront Avenue, Thatta, Sindh &bull; www.stayza.com
+          <div className="pt-2 text-center text-[10px] text-slate-400 font-mono">
+            Stayza Luxury Hotels &bull; 24/7 Butler &amp; Concierge Service &bull; reservations@stayza.com
           </div>
         </div>
       </div>

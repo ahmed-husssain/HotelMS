@@ -56,7 +56,10 @@ export default function FrontDeskPage() {
     document.body.style.overflow = 'hidden'
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setIsNoShowModalOpen(false)
+      if (e.key === 'Escape') {
+        setIsNoShowModalOpen(false)
+        setNoShowArrival(null)
+      }
     }
     window.addEventListener('keydown', handleKeyDown)
 
@@ -363,28 +366,53 @@ export default function FrontDeskPage() {
         currentUser={currentUser}
       />
 
-      {/* Luxury In-App Confirmation Modal for No-Show */}
+      {/* In-App Confirmation Modal for No-Show & Room Release (Fix 5: Clean redesign & trap-free) */}
       {isNoShowModalOpen && noShowArrival && (
         <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="no-show-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overscroll-contain"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsNoShowModalOpen(false)
+              setNoShowArrival(null)
+            }
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overscroll-contain cursor-pointer"
         >
-          <div className="bg-[#FAF8F5] border border-stone-200/90 rounded-sm max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto overscroll-contain">
-            <div className="space-y-1.5 border-b border-stone-200/80 pb-4">
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-red-600 font-bold block">
-                Reservation Forfeit Warning
-              </span>
-              <h3 className="font-serif-grand text-xl font-bold text-slate-900">
-                Confirm No-Show Release
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Are you sure you want to declare a guest No-Show for Suite{' '}
-                <strong className="text-slate-900 font-mono">{noShowArrival.roomNumber}</strong>?
-              </p>
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="bg-[#FAF8F5] border border-stone-200/90 rounded-sm max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto overscroll-contain cursor-default"
+          >
+            {/* Header with Title & Dedicated Close (X) Button */}
+            <div className="flex items-start justify-between border-b border-stone-200/80 pb-3">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-amber-900 font-bold block">
+                  FRONT DESK &bull; UNCLAIMED RESERVATION
+                </span>
+                <h3 id="no-show-modal-title" className="font-serif-grand text-2xl font-bold text-slate-900 mt-0.5">
+                  Guest No-Show &amp; Room Release
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsNoShowModalOpen(false)
+                  setNoShowArrival(null)
+                }}
+                aria-label="Close modal"
+                className="w-8 h-8 rounded-full hover:bg-stone-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer transition-colors font-bold"
+              >
+                &times;
+              </button>
             </div>
 
+            <p className="text-xs text-slate-600 leading-relaxed">
+              The guest has not checked in for their scheduled arrival for Suite{' '}
+              <strong className="text-slate-900 font-mono">{noShowArrival.roomNumber}</strong>. Releasing this reservation will return the suite to <strong className="text-emerald-700 font-semibold">AVAILABLE</strong> on the room rack for walk-in arrivals.
+            </p>
+
+            {/* Summary Details */}
             <div className="bg-white border border-stone-200/80 rounded-sm p-4 space-y-2.5 text-xs font-mono">
               <div className="flex justify-between items-center">
                 <span className="text-slate-500 uppercase">Guest</span>
@@ -394,19 +422,22 @@ export default function FrontDeskPage() {
                 <span className="text-slate-500 uppercase">Reserved Suite</span>
                 <span className="font-bold text-slate-900">{noShowArrival.roomNumber}</span>
               </div>
+              {noShowArrival.bookingRef && (
+                <div className="flex justify-between items-center border-t border-slate-100 pt-2">
+                  <span className="text-slate-500 uppercase">Booking Reference</span>
+                  <span className="font-bold text-slate-900 font-mono">{noShowArrival.bookingRef}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center border-t border-slate-100 pt-2">
-                <span className="text-slate-500 uppercase">Advance Deposit (30%)</span>
-                <span className="font-bold text-red-700">
-                  PKR {Number(noShowArrival.advancePaid || 0).toLocaleString()} (Forfeited)
+                <span className="text-slate-500 uppercase">30% Advance Deposit</span>
+                <span className="font-bold text-slate-900 font-mono">
+                  PKR {Number(noShowArrival.advancePaid || 0).toLocaleString()}
                 </span>
               </div>
-              <p className="text-[11px] font-sans-clean text-slate-500 pt-1 leading-normal">
-                This suite will immediately be returned to{' '}
-                <strong className="text-emerald-700 font-semibold">AVAILABLE</strong> on the room rack and can be booked by walk-in guests.
-              </p>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-stone-200/60">
               <button
                 type="button"
                 onClick={() => {
@@ -420,9 +451,9 @@ export default function FrontDeskPage() {
               <button
                 type="button"
                 onClick={handleConfirmNoShow}
-                className="px-5 py-2.5 bg-red-700 hover:bg-red-800 text-white text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer shadow-sm"
+                className="px-5 py-2.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase tracking-wider font-bold rounded-xs transition-colors cursor-pointer shadow-sm"
               >
-                Forfeit &amp; Release Suite
+                Release Room to Available &rarr;
               </button>
             </div>
           </div>

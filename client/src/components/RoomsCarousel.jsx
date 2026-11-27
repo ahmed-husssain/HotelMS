@@ -221,6 +221,17 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
     [emblaApi, isVisible70, handleMagneticFocus]
   )
 
+  // Simple, elegant branch label without jargon (Fix 2)
+  const branchLabel = useMemo(() => {
+    const locMap = {
+      'sindh-coast': 'Sindh Coast',
+      hunza: 'Hunza Valley',
+      lahore: 'Lahore Estate',
+      murree: 'Murree Pines',
+    }
+    return locMap[residence.locationId] || residence.city?.split(',')[0] || 'Sanctuary'
+  }, [residence.locationId, residence.city])
+
   const gallery = residence.gallery && residence.gallery.length > 0
     ? residence.gallery
     : [{ title: residence.name, tag: 'OVERVIEW', url: residence.mainImage }]
@@ -254,13 +265,13 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
 
         {/* Top Floating Room Emblem */}
         <div className="absolute top-3.5 sm:top-5 inset-x-3.5 sm:inset-x-6 flex items-center justify-between pointer-events-none z-20">
-          {/* Room Number Badge */}
+          {/* Room Number Badge — Simple room code and branch location without jargon */}
           <span
-            className={`px-3 py-1 bg-[#0E1201]/55 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.2em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
+            className={`px-3 py-1 bg-[#0E1201]/75 backdrop-blur-md text-[9px] sm:text-[10px] font-mono tracking-[0.18em] font-bold text-[#FFF0CA] uppercase border border-white/10 rounded-[2px] shadow-xs transition-opacity duration-300 ${
               isVisible70 ? 'opacity-100' : 'opacity-40'
             }`}
           >
-            SUITE {residence.roomNumber} &bull; {residence.tier}
+            SUITE {residence.roomNumber} &bull; {branchLabel}
           </span>
 
           {/* Minimalist Slide Counter */}

@@ -29,7 +29,10 @@ export default function ConfirmationPage() {
   const booking = {
     ...rawBooking,
     bookingRef: displayBookingRef,
-    guestEmail: rawBooking.guestEmail || rawBooking.email || currentUser?.email || '',
+    guestName: rawBooking.guestName || currentUser?.name || 'Valued Guest',
+    guestEmail: rawBooking.guestEmail || rawBooking.email || currentUser?.email || 'guest@stayza.com',
+    guestPhone: rawBooking.guestPhone || currentUser?.phone || '+92 300 0000000',
+    nights: rawBooking.nights || rawBooking.numberOfNights || 4,
   }
 
   const handleCopyCode = async () => {

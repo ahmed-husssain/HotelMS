@@ -81,6 +81,17 @@ export default function RoomsPage() {
 
   const [selectedCollectionId, setSelectedCollectionId] = useState(initialCollectionId)
 
+  // Auto-dismiss welcome banner after 4 seconds (Fix 1)
+  const [showWelcome, setShowWelcome] = useState(() => searchParams.get('welcome') === 'true')
+  useEffect(() => {
+    if (showWelcome) {
+      const timer = setTimeout(() => {
+        setShowWelcome(false)
+      }, 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [showWelcome])
+
   // Sync collection state dynamically if query param changes
   useEffect(() => {
     if (requestedLocation) {
@@ -143,18 +154,20 @@ export default function RoomsPage() {
             </span>
           </div>
 
-          {/* Welcome Banner for Newly Registered Guests */}
-          {searchParams.get('welcome') === 'true' && (
-            <div className="p-3.5 sm:p-4 bg-[#0E1201] text-[#FAF8F5] border border-slate-800 rounded-[2px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono shadow-md">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <span>
-                  Welcome to Stayza{currentUser?.name ? `, ${currentUser.name}` : ''}! Choose your preferred residence to begin your reservation.
-                </span>
-              </div>
-              <span className="text-[10px] text-[#FFF0CA] uppercase tracking-widest font-semibold shrink-0">
-                Active Guest Session
+          {/* Welcome Banner for Newly Registered Guests (Auto-dismisses in 4s, clean styling) */}
+          {showWelcome && (
+            <div className="p-3.5 sm:p-4 bg-[#0E1201] text-[#FAF8F5] border border-slate-800 rounded-[2px] flex items-center justify-between gap-3 text-xs font-mono shadow-md animate-in fade-in duration-300">
+              <span className="leading-relaxed">
+                Welcome to Stayza{currentUser?.name ? `, ${currentUser.name}` : ''}! Choose your preferred residence to begin your reservation.
               </span>
+              <button
+                type="button"
+                onClick={() => setShowWelcome(false)}
+                className="text-slate-400 hover:text-white text-base leading-none px-2 py-1 rounded cursor-pointer transition-colors shrink-0"
+                aria-label="Dismiss welcome banner"
+              >
+                &times;
+              </button>
             </div>
           )}
 

@@ -55,6 +55,15 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
   // Calculate advance deposit preview
   const advanceDepositPreview = Math.round(residence.nightlyRate * 0.3)
 
+  const locMap = {
+    'sindh-coast': 'Sindh Coast',
+    hunza: 'Hunza Valley',
+    lahore: 'Lahore Estate',
+    murree: 'Murree Pines',
+  }
+  const branchLabel = locMap[residence.locationId] || residence.locationName || 'Stayza Sanctuary'
+  const locationAddress = residence.city || (residence.locationId === 'hunza' ? 'Karimabad, Hunza Valley, Gilgit-Baltistan' : 'Sindh Coast, Pakistan')
+
   // Architectural specifications mapped by suite tier for all 7 keys
   const specs = {
     '301': {
@@ -168,15 +177,18 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
           <div className="w-10 h-1 bg-slate-300 rounded-full" />
         </div>
         
-        {/* Drawer Header */}
+        {/* Drawer Header (Fix 2: Simple Room Code + Branch Location without Jargon) */}
         <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#E5DFD5] flex items-center justify-between bg-[#FAF8F5] shrink-0">
           <div>
-            <span className="text-[11px] font-mono tracking-[0.2em] font-bold text-emerald-900 uppercase">
-              ROOM DETAILS &bull; SUITE {residence.roomNumber}
+            <span className="text-[11px] font-mono tracking-[0.18em] font-bold text-emerald-900 uppercase">
+              SUITE {residence.roomNumber} &bull; {branchLabel}
             </span>
             <h2 id="suite-specs-title" className="font-serif-grand text-xl sm:text-2xl text-slate-900 mt-0.5">
               {residence.name}
             </h2>
+            <p className="text-xs font-mono text-slate-600 mt-0.5">
+              Location: <span className="text-slate-900 font-semibold">{locationAddress}</span>
+            </p>
           </div>
 
           <button
@@ -206,8 +218,8 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
               decoding="async"
               className="w-full h-full object-cover filter brightness-[0.95]"
             />
-            <div className="absolute bottom-2.5 left-2.5 px-3 py-1 bg-black/75 rounded-[2px] text-[10px] font-mono text-[#FFF0CA] uppercase tracking-wider">
-              {residence.tier || 'PRESIDENTIAL RESIDENCE'}
+            <div className="absolute bottom-2.5 left-2.5 px-3 py-1 bg-black/80 backdrop-blur-xs rounded-[2px] text-[10px] font-mono text-[#FFF0CA] uppercase tracking-wider">
+              SUITE {residence.roomNumber} &bull; {branchLabel}
             </div>
           </div>
 
