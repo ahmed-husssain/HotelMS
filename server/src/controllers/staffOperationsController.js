@@ -166,19 +166,23 @@ async function checkInGuest(req, res) {
         pricingSnapshot: {
           nightlyRate: targetRoom.baseNightlyRate,
           subtotal: targetRoom.baseNightlyRate,
-          taxPercent: 13,
-          taxAmount: Math.round(targetRoom.baseNightlyRate * 0.13),
-          totalAmount: Math.round(targetRoom.baseNightlyRate * 1.13),
+          taxPercent: 0,
+          taxAmount: 0,
+          totalAmount: targetRoom.baseNightlyRate,
           advancePercent: 30,
-          advanceAmount: Math.round(targetRoom.baseNightlyRate * 1.13 * 0.3),
-          advancePaid: Math.round(targetRoom.baseNightlyRate * 1.13 * 0.3),
-          balanceDue: Math.round(targetRoom.baseNightlyRate * 1.13 * 0.7),
+          advanceAmount: Math.round(targetRoom.baseNightlyRate * 0.3),
+          advancePaid: Math.round(targetRoom.baseNightlyRate * 0.3),
+          balanceDue: Math.round(targetRoom.baseNightlyRate * 0.7),
           currency: 'PKR',
         },
         status: 'CHECKED_IN',
         checkedInAt: new Date(),
         incidentals: [],
       })
+
+      // Lock target room status to OCCUPIED in database
+      targetRoom.status = 'OCCUPIED'
+      await targetRoom.save()
     } else {
       // Room Reassignment check & Dirty room guard
       let targetRoom = null
@@ -325,9 +329,9 @@ async function addFolioCharge(req, res) {
 
     booking.incidentals.push(newIncidental)
 
-    // Recalculate balance due with 13% tax on new charge
-    const taxAddition = Math.round(chargeAmount * 0.13)
-    const totalAddition = chargeAmount + taxAddition
+    // Recalculate balance due (0% transparent all-inclusive luxury pricing)
+    const taxAddition = 0
+    const totalAddition = chargeAmount
     booking.pricingSnapshot.totalAmount += totalAddition
     booking.pricingSnapshot.taxAmount += taxAddition
     booking.pricingSnapshot.balanceDue += totalAddition

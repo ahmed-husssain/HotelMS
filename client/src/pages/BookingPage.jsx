@@ -214,10 +214,11 @@ export default function BookingPage() {
 
   const suiteSubtotal = selectedResidence.nightlyRate * nights
   const netSubtotal = suiteSubtotal + addonTotal
-  const taxRate = systemSettings?.taxRate || 13
+  // Transparent All-Inclusive Luxury Pricing: 0% Tax (Issue 15)
+  const taxRate = 0
   const depositRate = systemSettings?.depositRate || 30
-  const sindhTax = Math.round(netSubtotal * (taxRate / 100))
-  const totalValuation = netSubtotal + sindhTax
+  const sindhTax = 0
+  const totalValuation = netSubtotal
   const advanceDeposit = Math.round(totalValuation * (depositRate / 100))
   const remainingBalance = totalValuation - advanceDeposit
 

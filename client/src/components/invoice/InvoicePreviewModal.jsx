@@ -72,8 +72,9 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
   const addonsTotal = (booking.selectedAddons || []).reduce((sum, item) => sum + (item.price || 0), 0)
   const diningTotal = (booking.diningOrders || []).reduce((sum, item) => sum + (item.price || 0), 0)
   const netSubtotal = suiteSubtotal + addonsTotal + diningTotal
-  const sindhTax = Math.round(netSubtotal * 0.13)
-  const totalAmount = netSubtotal + sindhTax
+  // Transparent All-Inclusive Luxury Tariff: 0% Tax (Issue 15)
+  const sindhTax = 0
+  const totalAmount = netSubtotal
   const advancePaid = booking.advance || Math.round(totalAmount * 0.3)
   const balanceDue = isFinal ? 0 : Math.max(0, totalAmount - advancePaid)
 
@@ -123,13 +124,47 @@ Balance: PKR ${(balanceDue || 0).toLocaleString()}`
         if (e.target === e.currentTarget) onClose()
       }}
     >
+      <style>{`
+        @media print {
+          /* Issue 12: Clean single A4 page print without website background or screenshot look */
+          body * {
+            visibility: hidden !important;
+          }
+          #invoice-preview-printable,
+          #invoice-preview-printable * {
+            visibility: visible !important;
+          }
+          #invoice-preview-printable {
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 10mm 12mm !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+            box-shadow: none !important;
+            border: none !important;
+            page-break-inside: avoid !important;
+          }
+          .no-print,
+          button {
+            display: none !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 10mm;
+          }
+        }
+      `}</style>
       {/* Modal Container: Full-width on mobile (no cramped side margins), centered card on desktop */}
       <div
         className="relative w-full max-w-2xl bg-white border-0 sm:border sm:border-slate-200 rounded-none sm:rounded-lg shadow-2xl my-0 sm:my-8 flex flex-col min-h-screen sm:min-h-0 overflow-hidden print:border-none print:shadow-none print:w-full print:m-0 scale-100"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Bar: Clean, compact on mobile with touch-friendly 44px close button */}
-        <div className="bg-[#0F172A] text-white px-4 sm:px-6 py-3 flex items-center justify-between border-b border-slate-800 print:hidden shrink-0">
+        <div className="no-print bg-[#0F172A] text-white px-4 sm:px-6 py-3 flex items-center justify-between border-b border-slate-800 print:hidden shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
             <span className="text-xs font-semibold tracking-wider uppercase text-slate-200 truncate">
@@ -176,7 +211,7 @@ Balance: PKR ${(balanceDue || 0).toLocaleString()}`
         </div>
 
         {/* Invoice Document Body */}
-        <div ref={invoiceRef} className="p-4 sm:p-8 bg-white text-slate-900 space-y-4 sm:space-y-5 print:p-6">
+        <div ref={invoiceRef} id="invoice-preview-printable" className="p-4 sm:p-8 bg-white text-slate-900 space-y-4 sm:space-y-5 print:p-6">
           {/* Letterhead */}
           <div className="border-b border-slate-200 pb-4 sm:pb-5 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3">
             <div>
@@ -294,10 +329,6 @@ Balance: PKR ${(balanceDue || 0).toLocaleString()}`
               <div className="flex justify-between text-slate-600">
                 <span>Services Subtotal:</span>
                 <span className="font-mono text-slate-900 font-medium">PKR {(netSubtotal || 0).toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between text-slate-600">
-                <span>Sindh Sales Tax (13%):</span>
-                <span className="font-mono text-slate-900 font-medium">PKR {(sindhTax || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-slate-900 font-bold border-t border-slate-200 pt-2 text-sm">
                 <span>Total Amount:</span>

@@ -22,7 +22,7 @@ export default function BookingSummary({
   isAvailable = true,
   checkInDate,
   checkOutDate,
-  taxRate = 13,
+  taxRate = 0,
   depositRate = 30,
 }) {
   const heroImage =
@@ -83,10 +83,12 @@ export default function BookingSummary({
           </div>
         )}
 
-        <div className="flex justify-between text-slate-600">
-          <span>Sindh Sales Tax ({taxRate}% SRB)</span>
-          <span className="font-mono text-slate-900 font-semibold">PKR {sindhTax.toLocaleString()}</span>
-        </div>
+        {taxRate > 0 && sindhTax > 0 && (
+          <div className="flex justify-between text-slate-600">
+            <span>Sindh Sales Tax ({taxRate}% SRB)</span>
+            <span className="font-mono text-slate-900 font-semibold">PKR {sindhTax.toLocaleString()}</span>
+          </div>
+        )}
 
         <div className="flex justify-between text-sm font-bold text-slate-900 pt-2.5 border-t border-slate-200">
           <span>Total Stay Charges</span>

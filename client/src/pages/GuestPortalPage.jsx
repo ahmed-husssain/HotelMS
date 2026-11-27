@@ -630,10 +630,11 @@ export default function GuestPortalPage() {
     const roomSubtotal = roomRate * currentBooking.nights
     const servicesTotal = orderedServices.reduce((sum, item) => sum + item.price, 0)
     const netSubtotal = roomSubtotal + servicesTotal
-    const sindhTax = Math.round(netSubtotal * 0.13)
-    const totalStayAmount = netSubtotal + sindhTax
-    const advancePaid = Math.round((roomSubtotal + currentBooking.initialServices.reduce((s, i) => s + i.price, 0) * 1.13) * 0.3)
-    const balanceDue = totalStayAmount - advancePaid
+    // Transparent All-Inclusive Luxury Tariff: 0% Tax (Issue 15)
+    const sindhTax = 0
+    const totalStayAmount = netSubtotal
+    const advancePaid = Math.round((roomSubtotal + currentBooking.initialServices.reduce((s, i) => s + i.price, 0)) * 0.3)
+    const balanceDue = Math.max(0, totalStayAmount - advancePaid)
 
     return {
       roomSubtotal,
@@ -3053,13 +3054,6 @@ export default function GuestPortalPage() {
                       </span>
                     </div>
                   ))}
-
-                  <div className="flex justify-between py-2 text-slate-600 text-xs">
-                    <span>Sindh Sales Tax (13%)</span>
-                    <span className="font-mono font-medium text-slate-900">
-                      PKR {financials.sindhTax.toLocaleString()}
-                    </span>
-                  </div>
 
                   <div className="flex justify-between py-2.5 border-t-2 border-slate-900 text-slate-900 font-bold text-sm sm:text-base">
                     <span>Total Stay Amount</span>

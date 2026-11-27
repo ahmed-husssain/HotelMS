@@ -23,6 +23,8 @@ export default function FrontDeskPage() {
     systemSettings,
     guestRequests = [],
     markServiceDelivered,
+    shiftSession,
+    openCashierShift,
   } = useHotelData()
 
   // Filter rooms & arrivals based on active branch selection
@@ -177,9 +179,13 @@ export default function FrontDeskPage() {
             <button
               type="button"
               onClick={() => setIsZReportOpen(true)}
-              className="px-3 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs min-h-[38px] flex items-center shrink-0"
+              className={`px-3 py-1.5 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs min-h-[38px] flex items-center shrink-0 ${
+                shiftSession?.status === 'CLOSED'
+                  ? 'bg-amber-800 hover:bg-amber-900 text-white'
+                  : 'bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA]'
+              }`}
             >
-              Shift Closing &rarr;
+              {shiftSession?.status === 'CLOSED' ? 'Handover Shift →' : 'Shift Closing →'}
             </button>
           </div>
         </div>
@@ -216,14 +222,26 @@ export default function FrontDeskPage() {
           </div>
 
           <div className="flex items-center gap-4 text-xs font-mono">
-            <span className="text-slate-500 hidden md:inline">Shift: {currentUser?.name || 'Sara Ahmed'}</span>
+            {shiftSession?.status === 'CLOSED' ? (
+              <span className="text-amber-800 bg-amber-50 px-2.5 py-1 rounded-[2px] border border-amber-200 text-[11px] font-bold">
+                Shift: Closed ({shiftSession.staffName || 'Staff'})
+              </span>
+            ) : (
+              <span className="text-slate-500 hidden md:inline">
+                Shift: {shiftSession?.staffName || currentUser?.name || 'Sara Ahmed'}
+              </span>
+            )}
             <span className="text-slate-300 hidden md:inline">/</span>
             <button
               type="button"
               onClick={() => setIsZReportOpen(true)}
-              className="px-3.5 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs min-h-[44px] flex items-center"
+              className={`px-3.5 py-1.5 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer shadow-2xs min-h-[44px] flex items-center ${
+                shiftSession?.status === 'CLOSED'
+                  ? 'bg-amber-800 hover:bg-amber-900 text-white'
+                  : 'bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA]'
+              }`}
             >
-              Shift Closing &rarr;
+              {shiftSession?.status === 'CLOSED' ? 'Handover / Open Shift →' : 'Shift Closing →'}
             </button>
             <button
               type="button"
@@ -495,6 +513,12 @@ export default function FrontDeskPage() {
         onConfirmCheckIn={(arrivalId, targetRoom, options) =>
           checkInGuest(arrivalId, targetRoom, {
             ...options,
+            guest: selectedArrival?.guest,
+            guestName: selectedArrival?.guest,
+            guestPhone: selectedArrival?.phone,
+            nights: selectedArrival?.nights,
+            totalValuation: selectedArrival?.totalValuation,
+            advancePaid: selectedArrival?.advancePaid,
             actorName: currentUser?.name || 'Sara Ahmed (Front Desk)',
           })
         }
@@ -524,6 +548,8 @@ export default function FrontDeskPage() {
         isOpen={isZReportOpen}
         onClose={() => setIsZReportOpen(false)}
         currentUser={currentUser}
+        shiftSession={shiftSession}
+        openCashierShift={openCashierShift}
       />
 
       {/* In-App Confirmation Modal for No-Show & Room Release (Fix 5: Clean redesign & trap-free) */}

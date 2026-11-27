@@ -240,12 +240,16 @@ export function HotelDataProvider({ children }) {
     }
   })
 
-  // 5. System Settings
+  // 5. System Settings (Zero-Trust Transparent Luxury: 0% Tax Rate)
   const [systemSettings, setHotelSettings] = useState(() => {
     try {
       const saved = localStorage.getItem('stayza_hotel_settings') || localStorage.getItem('habitas_hotel_settings')
-      return saved ? JSON.parse(saved) : {
-        taxRate: 13,
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        return { ...parsed, taxRate: 0 }
+      }
+      return {
+        taxRate: 0,
         depositRate: 30,
         currency: 'PKR',
         checkInTime: '14:00',
@@ -254,7 +258,7 @@ export function HotelDataProvider({ children }) {
       }
     } catch {
       return {
-        taxRate: 13,
+        taxRate: 0,
         depositRate: 30,
         currency: 'PKR',
         checkInTime: '14:00',
@@ -352,6 +356,24 @@ export function HotelDataProvider({ children }) {
     .reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
 
   const expectedCashTotal = openingFloat + cashCollected
+
+  // Front Desk Shift Lifecycle State (Issue 13: Accurate Shift Closing & Staff Handover)
+  const [shiftSession, setShiftSession] = useState(() => {
+    try {
+      const saved = localStorage.getItem('stayza_shift_session')
+      if (saved) return JSON.parse(saved)
+    } catch {}
+    return {
+      status: 'OPEN',
+      staffName: 'Sara Ahmed',
+      openedAt: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      closedAt: null,
+    }
+  })
+
+  useEffect(() => {
+    localStorage.setItem('stayza_shift_session', JSON.stringify(shiftSession))
+  }, [shiftSession])
 
   const addDeskPayment = (paymentData) => {
     const record = {
@@ -752,11 +774,14 @@ export function HotelDataProvider({ children }) {
       return false
     }
 
-    const totalVal = arrival?.totalValuation || 0
-    const advPaid = arrival?.advancePaid || 0
+    const guestName = options.guestName || options.guest || arrival?.guest || 'Walk-In Guest'
+    const guestPhone = options.guestPhone || options.phone || arrival?.phone || '+92 300 0000000'
+    const nights = options.nights || arrival?.nights || 1
+    const totalVal = options.totalValuation ?? arrival?.totalValuation ?? (targetRoomObj?.nightlyRate ? targetRoomObj.nightlyRate * nights : 45000)
+    const advPaid = options.advancePaid ?? arrival?.advancePaid ?? 0
     const balanceDue = Math.max(0, totalVal - advPaid)
 
-    // Room state update
+    // Room state update: strictly enforce OCCUPIED status and guest assignment
     setRooms((prev) =>
       prev.map((r) => {
         // If room was reassigned, release previous room if occupied
@@ -771,11 +796,11 @@ export function HotelDataProvider({ children }) {
           return {
             ...r,
             status: 'OCCUPIED',
-            guest: arrival?.guest || 'In-House Guest',
-            phone: arrival?.phone || '+92 300 0000000',
+            guest: guestName,
+            phone: guestPhone,
             checkIn: new Date().toLocaleDateString('en-GB'),
             checkOut: 'In-House',
-            nights: arrival?.nights || 1,
+            nights,
             advancePaid: advPaid,
             balanceDue: settleBalanceNow ? 0 : balanceDue,
             folioNumber: `FOL-${targetRoomNumber.replace(/\D/g, '')}-${Math.floor(10 + Math.random() * 90)}`,
@@ -793,7 +818,7 @@ export function HotelDataProvider({ children }) {
         method: paymentMethod,
         amount: balanceDue,
         roomNumber: targetRoomNumber,
-        guest: arrival?.guest || 'Guest',
+        guest: guestName,
         bookingRef,
         notes: `Check-in 70% balance settlement via ${paymentMethod}`,
       })
@@ -803,15 +828,15 @@ export function HotelDataProvider({ children }) {
     addAuditLog(
       'CHECKIN_COMPLETED',
       'PMS',
-      `Checked in ${arrival?.guest || 'Guest'} into ${targetRoomNumber}.${settleBalanceNow ? ` Settled balance PKR ${balanceDue.toLocaleString()} via ${paymentMethod}.` : ''}`,
+      `Checked in ${guestName} into ${targetRoomNumber}.${settleBalanceNow ? ` Settled balance PKR ${balanceDue.toLocaleString()} via ${paymentMethod}.` : ''}`,
       actorName
     )
 
     try {
       const res = await checkInStaffGuest(bookingRef, {
         roomNumber: targetRoomNumber,
-        guestName: arrival?.guest,
-        guestPhone: arrival?.phone,
+        guestName,
+        guestPhone,
         paymentMethod,
         settleBalanceNow,
         actorName,
@@ -821,7 +846,7 @@ export function HotelDataProvider({ children }) {
         setRooms((prev) =>
           prev.map((r) =>
             r.roomNumber === targetRoomNumber
-              ? { ...r, bookingRef: realRef, status: 'OCCUPIED' }
+              ? { ...r, bookingRef: realRef, status: 'OCCUPIED', guest: guestName }
               : r
           )
         )
@@ -955,10 +980,21 @@ export function HotelDataProvider({ children }) {
 
   /**
    * Action C3: Close Cashier Shift (Z-Report Certification)
+   * Updates shift lifecycle to CLOSED and certifies drawer balance
    */
   const closeCashierShift = ({ countedCash, shiftNotes, actorName = 'Sara Ahmed (Front Desk)' }) => {
     const expected = openingFloat + cashCollected
     const variance = Number(countedCash || 0) - expected
+
+    setShiftSession({
+      status: 'CLOSED',
+      staffName: actorName.replace(/\s*\(Front Desk\)/i, '').trim(),
+      closedAt: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      variance,
+      countedCash: Number(countedCash || 0),
+      expectedCash: expected,
+      shiftNotes,
+    })
 
     addAuditLog(
       'SHIFT_CLOSED',
@@ -967,13 +1003,32 @@ export function HotelDataProvider({ children }) {
       actorName
     )
 
-    toast?.success?.('Cashier shift certified and closed successfully', 'SHIFT RECONCILIATION')
+    toast?.success?.('Cashier shift certified and closed. Awaiting shift handover.', 'SHIFT RECONCILIATION')
     return { expected, countedCash: Number(countedCash || 0), variance }
   }
 
   /**
+   * Action C4: Open / Handover Cashier Shift (Invoked when next receptionist arrives)
+   */
+  const openCashierShift = (newStaffName = 'Sara Ahmed') => {
+    setShiftSession({
+      status: 'OPEN',
+      staffName: newStaffName,
+      openedAt: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      closedAt: null,
+    })
+    addAuditLog(
+      'SHIFT_OPENED',
+      'PMS',
+      `New cashier shift opened by ${newStaffName}. Float: PKR ${openingFloat.toLocaleString()}`,
+      newStaffName
+    )
+    toast?.success?.(`Cashier shift opened for ${newStaffName}`, 'SHIFT ACTIVE')
+  }
+
+  /**
    * Action D: Add Incidental to Room Folio (Invoked on /pms)
-   * Posts extra charge and syncs with MongoDB Atlas
+   * Posts extra charge with 0% tax (Transparent all-inclusive luxury pricing)
    */
   const addIncidental = async (roomNumber, itemTitle, amount, actorName = 'Front Desk') => {
     const currentRoom = rooms.find((r) => r.roomNumber === roomNumber)
@@ -991,7 +1046,7 @@ export function HotelDataProvider({ children }) {
               time: 'Just Now',
             },
           ]
-          const tax = Math.round(amount * (systemSettings.taxRate / 100))
+          const tax = 0
           return {
             ...r,
             status: 'OCCUPIED',
@@ -1335,6 +1390,8 @@ export function HotelDataProvider({ children }) {
     cardPOS,
     openingFloat,
     expectedCashTotal,
+    shiftSession,
+    openCashierShift,
     addDeskPayment,
     createReservation,
     checkInGuest,

@@ -251,8 +251,20 @@ export default function RoomRack({
                             </button>
                           )}
                           {!isOccupied && !isAvailable && (
-                            <span className="text-[11px] font-mono uppercase text-slate-400 font-bold tracking-wider">
-                              {room.status === 'CLEANING' ? 'In Cleaning' : room.status === 'DIRTY' ? 'Needs Cleaning' : 'Locked'}
+                            <span
+                              className={`inline-block px-2.5 py-1 text-[11px] font-mono uppercase font-bold tracking-wider rounded-[2px] ${
+                                room.status === 'CLEANING'
+                                  ? 'bg-blue-50 text-blue-900 border border-blue-200'
+                                  : room.status === 'DIRTY'
+                                  ? 'bg-rose-50 text-rose-900 border border-rose-200'
+                                  : 'bg-slate-100 text-slate-500 border border-slate-200'
+                              }`}
+                            >
+                              {room.status === 'CLEANING'
+                                ? 'In Cleaning'
+                                : room.status === 'DIRTY'
+                                ? 'Needs Cleaning'
+                                : 'Maintenance'}
                             </span>
                           )}
                         </td>

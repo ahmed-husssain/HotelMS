@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useHotelData } from '../../context/HotelDataContext'
 
-export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
+export default function ShiftClosingModal({
+  isOpen,
+  onClose,
+  currentUser,
+  shiftSession,
+  openCashierShift,
+}) {
   const {
     openingFloat,
     cashCollected,
@@ -13,16 +19,20 @@ export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
 
   const [countedCash, setCountedCash] = useState('')
   const [shiftNotes, setShiftNotes] = useState('All front desk check-outs verified. Drawer balanced.')
+  const [nextStaffName, setNextStaffName] = useState(currentUser?.name || 'Sara Ahmed')
   const [isClosed, setIsClosed] = useState(false)
   const [isRendered, setIsRendered] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+
+  const isShiftCurrentlyClosed = shiftSession?.status === 'CLOSED'
 
   // Initialize counted cash to expected drawer total when opened
   useEffect(() => {
     if (isOpen) {
       setCountedCash(String(expectedCashTotal))
+      if (currentUser?.name) setNextStaffName(currentUser.name)
     }
-  }, [isOpen, expectedCashTotal])
+  }, [isOpen, expectedCashTotal, currentUser])
 
   // Fluid Hardware-Accelerated Mount/Unmount lifecycle
   useEffect(() => {
@@ -182,99 +192,159 @@ export default function ShiftClosingModal({ isOpen, onClose, currentUser }) {
           </div>
         )}
 
-        <form onSubmit={handleCloseShift} className="space-y-4">
-          <div>
-            <label className="text-[10px] font-mono uppercase tracking-wider font-semibold text-slate-600 block mb-1">
-              Physically Counted Cash in Drawer (PKR):
-            </label>
-            <input
-              type="number"
-              required
-              min="0"
-              step="1"
-              value={countedCash}
-              onChange={(e) => setCountedCash(e.target.value)}
-              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none focus:border-slate-900"
-            />
-          </div>
-
-          {/* Variance Badge */}
-          <div
-            className={`p-3 rounded-[2px] text-xs font-mono flex justify-between items-center ${
-              discrepancy === 0
-                ? 'bg-emerald-50 text-emerald-900 border border-emerald-200'
-                : discrepancy < 0
-                ? 'bg-red-50 text-red-900 border border-red-200'
-                : 'bg-amber-50 text-amber-900 border border-amber-200'
-            }`}
-          >
-            <span className="font-semibold">
-              {discrepancy === 0
-                ? 'Drawer Status:'
-                : discrepancy < 0
-                ? 'Cash Shortage Detected:'
-                : 'Cash Overage Detected:'}
-            </span>
-            <strong className="font-bold text-sm">
-              {discrepancy === 0
-                ? 'PKR 0 (BALANCED)'
-                : `${discrepancy < 0 ? '-' : '+'}PKR ${Math.abs(discrepancy).toLocaleString()}`}
-            </strong>
-          </div>
-
-          {/* Handover remarks */}
-          <div>
-            <label className="text-[10px] font-mono uppercase tracking-wider font-semibold text-slate-600 block mb-1">
-              Handover Remarks / Discrepancy Explanation:
-              {hasDiscrepancy && (
-                <span className="text-red-700 font-bold ml-1">* Mandatory for variance</span>
-              )}
-            </label>
-            <textarea
-              rows="2"
-              required={hasDiscrepancy}
-              maxLength={1000}
-              value={shiftNotes}
-              onChange={(e) => setShiftNotes(e.target.value)}
-              placeholder={
-                hasDiscrepancy
-                  ? 'Required: Explain drawer shortage/overage reason before closing...'
-                  : 'Enter handover notes for incoming cashier...'
-              }
-              className={`w-full px-3 py-2 bg-white border rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none ${
-                isNotesMissing
-                  ? 'border-red-400 focus:border-red-700 bg-red-50/20'
-                  : 'border-slate-300 focus:border-slate-900'
-              }`}
-            />
-            {isNotesMissing && (
-              <p className="text-[11px] font-mono text-red-700 mt-1">
-                Please enter a brief note explaining the PKR {Math.abs(discrepancy).toLocaleString()} variance before closing.
+        {isShiftCurrentlyClosed ? (
+          <div className="space-y-4">
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-[2px] text-xs font-mono space-y-2">
+              <div className="flex items-center gap-2 text-amber-900 font-bold">
+                <span>●</span>
+                <span>Front Desk Shift Currently Closed</span>
+              </div>
+              <p className="text-slate-600 text-[11px] leading-relaxed">
+                The previous cashier session was balanced and certified by{' '}
+                <strong className="text-slate-900">{shiftSession?.staffName || 'Cashier'}</strong> at{' '}
+                <strong className="text-slate-900">{shiftSession?.closedAt || 'Handover'}</strong>.
               </p>
-            )}
-          </div>
+              <div className="text-[11px] text-slate-500 pt-1 border-t border-amber-200/60">
+                Opening Cash Float: <strong>PKR {openingFloat.toLocaleString()}</strong> ready for drawer startup.
+              </div>
+            </div>
 
-          <div className="flex justify-end gap-3 pt-3 border-t border-slate-200">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-xs font-mono uppercase text-slate-600 hover:text-slate-900 cursor-pointer"
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                if (openCashierShift) {
+                  openCashierShift(nextStaffName || currentUser?.name || 'Sara Ahmed')
+                }
+                onClose()
+              }}
+              className="space-y-3"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isClosed || isNotesMissing}
-              className={`px-5 py-2.5 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors ${
-                isNotesMissing
-                  ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                  : 'bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] cursor-pointer shadow-md'
+              <div>
+                <label className="text-[10px] font-mono uppercase tracking-wider font-semibold text-slate-600 block mb-1">
+                  Incoming Staff / Cashier on Duty:
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={nextStaffName}
+                  onChange={(e) => setNextStaffName(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none focus:border-slate-900"
+                  placeholder="e.g. Sara Ahmed, Bilal Khan"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-3 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 text-xs font-mono uppercase text-slate-600 hover:text-slate-900 cursor-pointer"
+                >
+                  Dismiss
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-emerald-900 hover:bg-emerald-950 text-white text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] cursor-pointer shadow-md"
+                >
+                  Open Shift &amp; Takeover Desk &rarr;
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          <form onSubmit={handleCloseShift} className="space-y-4">
+            <div>
+              <label className="text-[10px] font-mono uppercase tracking-wider font-semibold text-slate-600 block mb-1">
+                Physically Counted Cash in Drawer (PKR):
+              </label>
+              <input
+                type="number"
+                required
+                min="0"
+                step="1"
+                value={countedCash}
+                onChange={(e) => setCountedCash(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none focus:border-slate-900"
+              />
+            </div>
+
+            {/* Variance Badge */}
+            <div
+              className={`p-3 rounded-[2px] text-xs font-mono flex justify-between items-center ${
+                discrepancy === 0
+                  ? 'bg-emerald-50 text-emerald-900 border border-emerald-200'
+                  : discrepancy < 0
+                  ? 'bg-red-50 text-red-900 border border-red-200'
+                  : 'bg-amber-50 text-amber-900 border border-amber-200'
               }`}
             >
-              {isClosed ? 'Shift Handover Certified!' : 'Certify & Close Shift →'}
-            </button>
-          </div>
-        </form>
+              <span className="font-semibold">
+                {discrepancy === 0
+                  ? 'Drawer Status:'
+                  : discrepancy < 0
+                  ? 'Cash Shortage Detected:'
+                  : 'Cash Overage Detected:'}
+              </span>
+              <strong className="font-bold text-sm">
+                {discrepancy === 0
+                  ? 'PKR 0 (BALANCED)'
+                  : `${discrepancy < 0 ? '-' : '+'}PKR ${Math.abs(discrepancy).toLocaleString()}`}
+              </strong>
+            </div>
+
+            {/* Handover remarks */}
+            <div>
+              <label className="text-[10px] font-mono uppercase tracking-wider font-semibold text-slate-600 block mb-1">
+                Handover Remarks / Discrepancy Explanation:
+                {hasDiscrepancy && (
+                  <span className="text-red-700 font-bold ml-1">* Mandatory for variance</span>
+                )}
+              </label>
+              <textarea
+                rows="2"
+                required={hasDiscrepancy}
+                maxLength={1000}
+                value={shiftNotes}
+                onChange={(e) => setShiftNotes(e.target.value)}
+                placeholder={
+                  hasDiscrepancy
+                    ? 'Required: Explain drawer shortage/overage reason before closing...'
+                    : 'Enter handover notes for incoming cashier...'
+                }
+                className={`w-full px-3 py-2 bg-white border rounded-[2px] text-xs font-mono text-slate-900 focus:outline-none ${
+                  isNotesMissing
+                    ? 'border-red-400 focus:border-red-700 bg-red-50/20'
+                    : 'border-slate-300 focus:border-slate-900'
+                }`}
+              />
+              {isNotesMissing && (
+                <p className="text-[11px] font-mono text-red-700 mt-1">
+                  Please enter a brief note explaining the PKR {Math.abs(discrepancy).toLocaleString()} variance before closing.
+                </p>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-3 border-t border-slate-200">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-xs font-mono uppercase text-slate-600 hover:text-slate-900 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isClosed || isNotesMissing}
+                className={`px-5 py-2.5 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors ${
+                  isNotesMissing
+                    ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                    : 'bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] cursor-pointer shadow-md'
+                }`}
+              >
+                {isClosed ? 'Shift Handover Certified!' : 'Certify & Close Shift →'}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   )

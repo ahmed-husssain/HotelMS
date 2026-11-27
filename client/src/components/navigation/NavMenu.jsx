@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useHotelData } from '../../context/HotelDataContext'
 
 /**
  * NavMenu — Expanding Circular Aperture Overlay Sheet
@@ -16,6 +17,13 @@ export default function NavMenu({
   currentUser,
   logout,
 }) {
+  let availableSuitesCount = null
+  try {
+    const hotelData = useHotelData()
+    if (hotelData?.rooms) {
+      availableSuitesCount = hotelData.rooms.filter((r) => r.status === 'AVAILABLE').length
+    }
+  } catch (e) {}
   return (
     <>
       {/* Dimmed Dark Luxury Backdrop */}
@@ -51,7 +59,7 @@ export default function NavMenu({
             className="w-full h-full object-cover transition-all duration-700 filter brightness-[0.88] scale-100"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-10 lg:p-14 text-white">
-            <span className="font-mono text-[10px] tracking-[0.28em] text-emerald-400 uppercase">
+            <span className="font-mono text-[10px] tracking-[0.28em] text-slate-300 font-medium uppercase">
               {activePreview.tag}
             </span>
             <h3 className="font-serif-grand text-3xl font-light mt-1.5 text-white">
@@ -206,7 +214,9 @@ export default function NavMenu({
               <span className="font-semibold">{fullDateLabel}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-emerald-700 font-semibold uppercase">● 3 Suites Available</span>
+              <span className="text-slate-600 font-mono text-[10px] uppercase tracking-wider">
+                {availableSuitesCount !== null ? `${availableSuitesCount} Available Suites` : 'Coastal Suites Ready'}
+              </span>
               <span className="text-slate-400 text-[9px] uppercase tracking-wider">
                 Stayza Resorts &middot; Sindh Coast
               </span>

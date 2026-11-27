@@ -75,8 +75,9 @@ export default function CheckoutInvoiceModal({
   const roomSubtotal = (selectedRoom.nightlyRate || 0) * (selectedRoom.nights || 1)
   const incidentalsTotal = (selectedRoom.incidentals || []).reduce((s, i) => s + (i.amount || i.price || 0), 0)
   const subtotal = roomSubtotal + incidentalsTotal
-  const tax = Math.round(subtotal * (taxRate / 100))
-  const grandTotal = subtotal + tax
+  // Transparent All-Inclusive Luxury Tariff: 0% Tax (Issue 15)
+  const tax = 0
+  const grandTotal = subtotal
   const paidAdvance = selectedRoom.advancePaid || 0
   const balanceDue = Math.max(0, grandTotal - paidAdvance)
 
@@ -102,6 +103,41 @@ export default function CheckoutInvoiceModal({
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
+      <style>{`
+        @media print {
+          /* Issue 12: Clean single A4 page print without website background or screenshot look */
+          body * {
+            visibility: hidden !important;
+          }
+          #checkout-receipt-printable,
+          #checkout-receipt-printable * {
+            visibility: visible !important;
+          }
+          #checkout-receipt-printable {
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 12mm 15mm !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+            box-shadow: none !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 0 !important;
+            page-break-inside: avoid !important;
+          }
+          .no-print,
+          button {
+            display: none !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 10mm;
+          }
+        }
+      `}</style>
       <div
         data-lenis-prevent="true"
         onClick={(e) => e.stopPropagation()}
@@ -110,80 +146,79 @@ export default function CheckoutInvoiceModal({
         }`}
       >
         {/* Mobile Sheet Grab Handle */}
-        <div className="sm:hidden flex justify-center -mt-1 mb-2">
+        <div className="sm:hidden flex justify-center -mt-1 mb-2 no-print">
           <div className="w-10 h-1 bg-slate-300 rounded-full" />
         </div>
-        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-          <div>
-            <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
-              OFFICIAL TAX INVOICE &bull; STAYZA RESORTS &amp; SUITES
-            </span>
-            <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
-              Settlement &amp; Check-Out
-            </h3>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close checkout invoice modal"
-            className="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold transition-colors"
-          >
-            &times;
-          </button>
-        </div>
 
-        {/* Invoice Header Details */}
-        <div className="grid grid-cols-2 gap-4 text-xs font-mono p-4 bg-white border border-slate-200/80 rounded-[2px]">
-          <div>
-            <span className="text-slate-400 uppercase text-[9px] block">Guest Details:</span>
-            <strong className="text-slate-900">{selectedRoom.guest || 'In-House Guest'}</strong>
-            <div className="text-[11px] text-slate-500">{selectedRoom.phone || 'Phone verified'}</div>
-          </div>
-          <div className="text-right">
-            <span className="text-slate-400 uppercase text-[9px] block">Invoice / Bill:</span>
-            <strong className="text-slate-900">{selectedRoom.folioNumber || `INV-${selectedRoom.roomNumber?.replace(/\D/g, '')}-9041`}</strong>
-            <div className="text-[11px] text-slate-500">SRB NTN: 8941203-9</div>
-          </div>
-        </div>
-
-        {/* Itemized Line Items */}
-        <div className="space-y-2 text-xs font-mono">
-          <div className="flex justify-between py-1 border-b border-slate-100">
-            <span>Accommodation ({selectedRoom.nights || 1} Nights &times; PKR {selectedRoom.nightlyRate?.toLocaleString()})</span>
-            <span className="font-bold text-slate-900">PKR {roomSubtotal.toLocaleString()}</span>
-          </div>
-
-          {(selectedRoom.incidentals || []).map((inc) => (
-            <div key={inc.id} className="flex justify-between py-1 border-b border-slate-100 text-slate-700">
-              <span>{inc.item || inc.title}</span>
-              <span>+ PKR {(inc.amount || inc.price || 0).toLocaleString()}</span>
+        {/* Printable Receipt Container (Issue 12) */}
+        <div id="checkout-receipt-printable" className="space-y-5 bg-[#FAF8F5] p-2 sm:p-0">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+            <div>
+              <span className="text-[10px] font-mono tracking-widest text-emerald-900 font-extrabold uppercase">
+                RESIDENCE FOLIO &amp; RECEIPT &bull; STAYZA RESORTS
+              </span>
+              <h3 className="font-serif-grand text-2xl text-slate-900 mt-0.5">
+                Settlement &amp; Check-Out
+              </h3>
             </div>
-          ))}
-
-          <div className="flex justify-between py-1 border-b border-slate-100 text-slate-700">
-            <span>Sindh Hospitality Sales Tax ({taxRate}%)</span>
-            <span>+ PKR {tax.toLocaleString()}</span>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close checkout invoice modal"
+              className="no-print w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer font-bold transition-colors"
+            >
+              &times;
+            </button>
           </div>
 
-          <div className="flex justify-between py-2 text-sm font-bold text-slate-900 border-t border-slate-200">
-            <span>Total Amount:</span>
-            <span>PKR {grandTotal.toLocaleString()}</span>
+          {/* Invoice Header Details */}
+          <div className="grid grid-cols-2 gap-4 text-xs font-mono p-4 bg-white border border-slate-200/80 rounded-[2px]">
+            <div>
+              <span className="text-slate-400 uppercase text-[9px] block">Guest Details:</span>
+              <strong className="text-slate-900">{selectedRoom.guest || 'In-House Guest'}</strong>
+              <div className="text-[11px] text-slate-500">{selectedRoom.phone || 'Phone verified'}</div>
+            </div>
+            <div className="text-right">
+              <span className="text-slate-400 uppercase text-[9px] block">Invoice / Bill:</span>
+              <strong className="text-slate-900">{selectedRoom.folioNumber || `INV-${selectedRoom.roomNumber?.replace(/\D/g, '')}-9041`}</strong>
+              <div className="text-[11px] text-slate-500">Suite {selectedRoom.roomNumber} &bull; All-Inclusive</div>
+            </div>
           </div>
 
-          <div className="flex justify-between py-1 text-emerald-900 font-bold">
-            <span>Less: 30% Safepay Online Deposit:</span>
-            <span>- PKR {paidAdvance.toLocaleString()}</span>
-          </div>
+          {/* Itemized Line Items */}
+          <div className="space-y-2 text-xs font-mono">
+            <div className="flex justify-between py-1 border-b border-slate-100">
+              <span>Accommodation ({selectedRoom.nights || 1} Nights &times; PKR {selectedRoom.nightlyRate?.toLocaleString()})</span>
+              <span className="font-bold text-slate-900">PKR {roomSubtotal.toLocaleString()}</span>
+            </div>
 
-          <div className="flex justify-between py-2 text-base font-extrabold text-amber-950 bg-amber-50 px-3 rounded-[2px] border border-amber-200">
-            <span>Balance Due at Front Desk:</span>
-            <span>PKR {balanceDue.toLocaleString()}</span>
+            {(selectedRoom.incidentals || []).map((inc) => (
+              <div key={inc.id} className="flex justify-between py-1 border-b border-slate-100 text-slate-700">
+                <span>{inc.item || inc.title}</span>
+                <span>+ PKR {(inc.amount || inc.price || 0).toLocaleString()}</span>
+              </div>
+            ))}
+
+            <div className="flex justify-between py-2 text-sm font-bold text-slate-900 border-t border-slate-200">
+              <span>Total Stay Amount:</span>
+              <span>PKR {grandTotal.toLocaleString()}</span>
+            </div>
+
+            <div className="flex justify-between py-1 text-emerald-900 font-bold">
+              <span>Less: 30% Safepay Online Deposit:</span>
+              <span>- PKR {paidAdvance.toLocaleString()}</span>
+            </div>
+
+            <div className="flex justify-between py-2 text-base font-extrabold text-amber-950 bg-amber-50 px-3 rounded-[2px] border border-amber-200">
+              <span>Balance Due at Front Desk:</span>
+              <span>PKR {balanceDue.toLocaleString()}</span>
+            </div>
           </div>
         </div>
 
         {/* Payment Method Selector if Balance is Due (Flaw 2: The Unpaid Incidentals Checkout Leak) */}
         {balanceDue > 0 ? (
-          <div className="p-4 bg-slate-50 border border-slate-200/90 rounded-[2px] space-y-3">
+          <div className="no-print p-4 bg-slate-50 border border-slate-200/90 rounded-[2px] space-y-3">
             <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-slate-700 block">
               Required: Select Settlement Mode for PKR {balanceDue.toLocaleString()}
             </span>
@@ -219,13 +254,13 @@ export default function CheckoutInvoiceModal({
             </p>
           </div>
         ) : (
-          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-[2px] text-xs font-mono text-emerald-900">
+          <div className="no-print p-3 bg-emerald-50 border border-emerald-200 rounded-[2px] text-xs font-mono text-emerald-900">
             Folio is fully settled. No remaining balance due at front desk.
           </div>
         )}
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200">
+        <div className="no-print flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200">
           <div className="flex items-center gap-2">
             <button
               type="button"

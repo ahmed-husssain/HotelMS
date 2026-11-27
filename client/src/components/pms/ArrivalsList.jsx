@@ -240,7 +240,7 @@ export default function ArrivalsList({
         <div className="p-4 sm:p-5 border-b border-slate-200/80 bg-[#FAF8F5]/60 flex items-center justify-between">
           <div>
             <h3 className="font-serif-grand text-base font-bold text-slate-900">
-              Departing Today &bull; Tax Invoice Settlement
+              Departing Today &bull; Residence Folio Settlement
             </h3>
             <p className="text-xs font-mono text-slate-500 mt-0.5">
               Collect remaining stay balance, post incidentals, and finalize checkout.
@@ -315,7 +315,7 @@ export default function ArrivalsList({
                           <span className="font-bold text-amber-950 text-base block">
                             PKR {room.balanceDue ? room.balanceDue.toLocaleString() : '0'}
                           </span>
-                          <span className="text-[10px] text-slate-400">Includes 13% Sindh Tax</span>
+                          <span className="text-[10px] text-slate-400">All-Inclusive Luxury Tariff</span>
                         </td>
                         <td className="py-4 px-5 text-right">
                           <div className="inline-flex gap-2">
@@ -394,7 +394,7 @@ export default function ArrivalsList({
                         <strong className="text-amber-950 font-bold text-sm block">
                           PKR {room.balanceDue ? room.balanceDue.toLocaleString() : '0'}
                         </strong>
-                        <span className="text-[9px] text-slate-400 block">incl. 13% Sindh tax</span>
+                        <span className="text-[9px] text-slate-400 block">All-Inclusive</span>
                       </div>
                     </div>
 
