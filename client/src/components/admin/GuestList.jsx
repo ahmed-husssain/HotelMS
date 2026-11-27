@@ -75,7 +75,7 @@ export default function GuestList() {
   const [searchQuery, setSearchQuery] = useState('')
   const [tierFilter, setTierFilter] = useState('ALL')
   const [selectedGuest, setSelectedGuest] = useState(null)
-  const [isDossierOpen, setIsDossierOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
 
   const loadGuests = async () => {
     try {
@@ -95,26 +95,26 @@ export default function GuestList() {
     loadGuests()
   }, [])
 
-  // Lock body scroll when dossier modal is open
+  // Lock body scroll when profile modal is open
   useEffect(() => {
-    document.body.style.overflow = isDossierOpen ? 'hidden' : ''
+    document.body.style.overflow = isProfileOpen ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
-  }, [isDossierOpen])
+  }, [isProfileOpen])
 
   // ESC key listener
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setIsDossierOpen(false)
+      if (e.key === 'Escape') setIsProfileOpen(false)
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const handleOpenDossier = (guest) => {
+  const handleOpenProfile = (guest) => {
     setSelectedGuest(guest)
-    setIsDossierOpen(true)
+    setIsProfileOpen(true)
   }
 
   const handleCopyCode = (code) => {
@@ -234,7 +234,7 @@ export default function GuestList() {
                 <td className="py-3.5 px-5 text-right">
                   <button
                     type="button"
-                    onClick={() => handleOpenDossier(g)}
+                    onClick={() => handleOpenProfile(g)}
                     className="px-3 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-[10px] font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer"
                   >
                     View Details &rarr;
@@ -254,18 +254,18 @@ export default function GuestList() {
       </div>
 
       {/* 3. RICH GUEST PROFILE MODAL */}
-      {isDossierOpen && selectedGuest && (
+      {isProfileOpen && selectedGuest && (
         <div
           data-lenis-prevent="true"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setIsDossierOpen(false)
+            if (e.target === e.currentTarget) setIsProfileOpen(false)
           }}
-          className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 transition-opacity duration-150 cursor-pointer"
         >
           <div
             data-lenis-prevent="true"
             onClick={(e) => e.stopPropagation()}
-            className="bg-[#FAF8F5] border border-slate-300 rounded-[3px] shadow-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 space-y-6"
+            className="bg-[#FAF8F5] border border-slate-300 rounded-[3px] shadow-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 space-y-6 cursor-default"
           >
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-slate-200 pb-4">
@@ -288,7 +288,8 @@ export default function GuestList() {
 
               <button
                 type="button"
-                onClick={() => setIsDossierOpen(false)}
+                onClick={() => setIsProfileOpen(false)}
+                aria-label="Close guest profile"
                 className="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-900 text-lg cursor-pointer"
               >
                 &times;
@@ -375,7 +376,7 @@ export default function GuestList() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
               <div className="p-4 bg-white border border-slate-200 rounded-[2px] space-y-2">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block border-b border-slate-100 pb-1.5">
-                  Hospitality History
+                  Past Stays &amp; Visits
                 </span>
                 <div className="flex justify-between py-1 border-b border-slate-50">
                   <span className="text-slate-600">Total Stays Completed:</span>
@@ -388,7 +389,7 @@ export default function GuestList() {
                   </strong>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-slate-600">Loyalty Status:</span>
+                  <span className="text-slate-600">Guest Tier:</span>
                   <strong className="text-amber-900 font-bold">{selectedGuest.tier || 'STANDARD'}</strong>
                 </div>
               </div>
@@ -421,14 +422,14 @@ export default function GuestList() {
             {/* Modal Actions */}
             <div className="flex justify-between items-center pt-2 border-t border-slate-200">
               <span className="text-[10px] font-mono text-slate-400">
-                Data verified from Stayza Guest Directory
+                Stayza Hotel Guest Directory
               </span>
               <button
                 type="button"
-                onClick={() => setIsDossierOpen(false)}
+                onClick={() => setIsProfileOpen(false)}
                 className="px-5 py-2 bg-slate-900 hover:bg-slate-950 text-[#FFF0CA] font-mono text-xs font-bold uppercase tracking-wider rounded-[2px] cursor-pointer"
               >
-                Close Dossier
+                Close Profile
               </button>
             </div>
           </div>

@@ -187,7 +187,7 @@ export default function AnalyticsReport({ rooms = [] }) {
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            All 4 Branches &bull; {rooms.length || 18} Suites
+            All Branches ({rooms.length || 18} Rooms)
           </button>
           {LOCATIONS.map((loc) => {
             const count = (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === loc.id).length || loc.suitesCount
@@ -222,7 +222,7 @@ export default function AnalyticsReport({ rooms = [] }) {
                   : 'bg-slate-50 text-slate-700 border border-slate-200'
               }`}
             >
-              All (18 Suites)
+              All ({rooms.length || 18} Rooms)
             </button>
             {LOCATIONS.map((loc) => {
               const count = (rooms || []).filter((r) => (r.locationId || 'sindh-coast') === loc.id).length || loc.suitesCount

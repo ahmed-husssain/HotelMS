@@ -808,7 +808,7 @@ export function HotelDataProvider({ children }) {
     )
 
     try {
-      await checkInStaffGuest(bookingRef, {
+      const res = await checkInStaffGuest(bookingRef, {
         roomNumber: targetRoomNumber,
         guestName: arrival?.guest,
         guestPhone: arrival?.phone,
@@ -816,6 +816,16 @@ export function HotelDataProvider({ children }) {
         settleBalanceNow,
         actorName,
       })
+      if (res?.data?.bookingReference) {
+        const realRef = res.data.bookingReference
+        setRooms((prev) =>
+          prev.map((r) =>
+            r.roomNumber === targetRoomNumber
+              ? { ...r, bookingRef: realRef, status: 'OCCUPIED' }
+              : r
+          )
+        )
+      }
     } catch (err) {
       console.warn('[PMS CheckIn] Remote Atlas sync warning:', err.message)
     }
@@ -967,7 +977,7 @@ export function HotelDataProvider({ children }) {
    */
   const addIncidental = async (roomNumber, itemTitle, amount, actorName = 'Front Desk') => {
     const currentRoom = rooms.find((r) => r.roomNumber === roomNumber)
-    const bookingRef = currentRoom?.bookingRef || `TH-${roomNumber.replace(/\D/g, '')}-9041`
+    const bookingRef = currentRoom?.bookingRef || roomNumber
 
     setRooms((prev) =>
       prev.map((r) => {
@@ -984,8 +994,9 @@ export function HotelDataProvider({ children }) {
           const tax = Math.round(amount * (systemSettings.taxRate / 100))
           return {
             ...r,
+            status: 'OCCUPIED',
             incidentals: updatedIncidentals,
-            balanceDue: r.balanceDue + amount + tax,
+            balanceDue: (r.balanceDue || 0) + amount + tax,
           }
         }
         return r

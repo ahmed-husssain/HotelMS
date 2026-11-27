@@ -21,6 +21,8 @@ export default function FrontDeskPage() {
     markNoShow,
     addIncidental,
     systemSettings,
+    guestRequests = [],
+    markServiceDelivered,
   } = useHotelData()
 
   // Filter rooms & arrivals based on active branch selection
@@ -33,6 +35,10 @@ export default function FrontDeskPage() {
     if (!selectedLocation || selectedLocation === 'all') return allArrivals
     return allArrivals.filter((a) => (a.locationId || 'sindh-coast') === selectedLocation)
   }, [allArrivals, selectedLocation])
+
+  const pendingOrdersCount = useMemo(() => {
+    return (guestRequests || []).filter((r) => r.status === 'PENDING').length
+  }, [guestRequests])
 
   // Terminal Navigation Tab: 'QUEUE' | 'RACK'
   const [activeTab, setActiveTab] = useState('QUEUE')
@@ -200,11 +206,11 @@ export default function FrontDeskPage() {
                 className="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-mono font-bold text-slate-900 cursor-pointer min-h-[36px] hover:border-slate-900 transition-colors"
                 aria-label="Filter by Property"
               >
-                <option value="all">📍 All Properties (18 Keys)</option>
-                <option value="sindh-coast">🌊 Sindh Coast (5 Keys)</option>
-                <option value="hunza">🏔️ Hunza Valley (5 Keys)</option>
-                <option value="lahore">🏛️ Lahore Estate (4 Keys)</option>
-                <option value="murree">🌲 Murree Pines (4 Keys)</option>
+                <option value="all">All Branches (18 Rooms)</option>
+                <option value="sindh-coast">Sindh Coast (5 Rooms)</option>
+                <option value="hunza">Hunza Valley (5 Rooms)</option>
+                <option value="lahore">Lahore Estate (4 Rooms)</option>
+                <option value="murree">Murree Pines (4 Rooms)</option>
               </select>
             </div>
           </div>
@@ -300,10 +306,28 @@ export default function FrontDeskPage() {
           >
             All {rooms.length} Suites Status
           </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('ORDERS')}
+            className={`px-3.5 sm:px-4 py-2.5 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] cursor-pointer transition-colors whitespace-nowrap min-h-[44px] flex items-center gap-2 ${
+              activeTab === 'ORDERS'
+                ? 'bg-[#0E1201] text-[#FFF0CA]'
+                : 'bg-white hover:bg-slate-50 border border-slate-200 text-slate-700'
+            }`}
+          >
+            <span>Guest Orders &amp; Room Service</span>
+            {pendingOrdersCount > 0 ? (
+              <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 text-[10px] flex items-center justify-center font-bold">
+                {pendingOrdersCount}
+              </span>
+            ) : (
+              <span className="text-[10px] text-slate-400 font-mono">({guestRequests.length})</span>
+            )}
+          </button>
         </div>
 
         {/* Views */}
-        {activeTab === 'QUEUE' ? (
+        {activeTab === 'QUEUE' && (
           <ArrivalsList
             arrivals={arrivals}
             rooms={rooms}
@@ -313,7 +337,8 @@ export default function FrontDeskPage() {
             onMarkNoShow={handleMarkNoShow}
             searchQuery={searchQuery}
           />
-        ) : (
+        )}
+        {activeTab === 'RACK' && (
           <RoomRack
             rooms={rooms}
             activeFilter={roomFilter}
@@ -323,6 +348,141 @@ export default function FrontDeskPage() {
             onOpenInvoice={handleOpenInvoice}
             searchQuery={searchQuery}
           />
+        )}
+        {activeTab === 'ORDERS' && (
+          <div className="bg-white border border-slate-200/90 rounded-[2px] p-4 sm:p-6 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-bold text-slate-400 block">
+                  IN-STAY DINING &amp; CONCIERGE DISPATCH
+                </span>
+                <h3 className="font-serif-grand text-xl sm:text-2xl text-slate-900 mt-0.5">
+                  Guest Room Service &amp; Orders Queue
+                </h3>
+              </div>
+              <span className="text-xs font-mono text-slate-500 self-start sm:self-auto">
+                {pendingOrdersCount} Pending &bull; {guestRequests.length} Total Today
+              </span>
+            </div>
+
+            {guestRequests.length === 0 ? (
+              <div className="py-12 text-center text-slate-500 font-mono text-xs space-y-1">
+                <p className="font-bold text-slate-700">No active room service orders</p>
+                <p className="text-[11px] text-slate-400">
+                  Guest dining and concierge requests ordered via the digital guest portal will appear here in real time.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {/* Mobile View: Vertical Cards */}
+                <div className="sm:hidden space-y-3">
+                  {guestRequests.map((req) => (
+                    <div
+                      key={req.id}
+                      className="p-4 bg-[#FAF8F5] border border-slate-200 rounded-[2px] space-y-2.5 text-xs font-mono"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <strong className="text-slate-900 font-bold block text-sm">
+                            {req.roomNumber}
+                          </strong>
+                          <span className="text-slate-500 text-[11px]">{req.guestName}</span>
+                        </div>
+                        <span
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                            req.status === 'DELIVERED'
+                              ? 'bg-emerald-100 text-emerald-900 border border-emerald-200'
+                              : 'bg-amber-100 text-amber-900 border border-amber-200 animate-pulse'
+                          }`}
+                        >
+                          {req.status}
+                        </span>
+                      </div>
+
+                      <div className="border-t border-slate-200/60 pt-2 flex justify-between items-center text-slate-700">
+                        <span>{req.request || req.title}</span>
+                        <strong className="text-slate-900">PKR {(req.price || 0).toLocaleString()}</strong>
+                      </div>
+
+                      <div className="flex justify-between items-center text-[10px] text-slate-400 pt-1">
+                        <span>Time: {req.requestedAt || 'Just Now'}</span>
+                        {req.status !== 'DELIVERED' ? (
+                          <button
+                            type="button"
+                            onClick={() => markServiceDelivered(req.id, currentUser?.name || 'Sara Ahmed')}
+                            className="px-3 py-1.5 bg-[#0E1201] text-[#FFF0CA] font-bold uppercase tracking-wider rounded-[2px] cursor-pointer min-h-[36px]"
+                          >
+                            Mark Delivered &rarr;
+                          </button>
+                        ) : (
+                          <span className="text-emerald-700 font-bold">✓ Delivered to Room</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop View: Full Clean Ledger */}
+                <div className="hidden sm:block overflow-x-auto">
+                  <table className="w-full text-xs font-mono border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-y border-slate-200">
+                        <th className="py-2.5 px-4 text-left">Room / Suite</th>
+                        <th className="py-2.5 px-4 text-left">Guest</th>
+                        <th className="py-2.5 px-4 text-left">Requested Service / Order</th>
+                        <th className="py-2.5 px-4 text-right">Amount (PKR)</th>
+                        <th className="py-2.5 px-4 text-center">Time</th>
+                        <th className="py-2.5 px-4 text-center">Status</th>
+                        <th className="py-2.5 px-4 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {guestRequests.map((req) => (
+                        <tr key={req.id} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="py-3 px-4 font-bold text-slate-900">{req.roomNumber}</td>
+                          <td className="py-3 px-4 text-slate-700">{req.guestName}</td>
+                          <td className="py-3 px-4 text-slate-900 font-medium">
+                            <span className="block">{req.request || req.title}</span>
+                            <span className="text-[10px] text-slate-400 uppercase">{req.category || 'Dining'}</span>
+                          </td>
+                          <td className="py-3 px-4 text-right font-bold text-slate-900">
+                            {(req.price || 0).toLocaleString()}
+                          </td>
+                          <td className="py-3 px-4 text-center text-slate-500 text-[11px]">
+                            {req.requestedAt || 'Just Now'}
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <span
+                              className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                req.status === 'DELIVERED'
+                                  ? 'bg-emerald-100 text-emerald-900 border border-emerald-200'
+                                  : 'bg-amber-100 text-amber-900 border border-amber-200'
+                              }`}
+                            >
+                              {req.status}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-right">
+                            {req.status !== 'DELIVERED' ? (
+                              <button
+                                type="button"
+                                onClick={() => markServiceDelivered(req.id, currentUser?.name || 'Sara Ahmed')}
+                                className="px-3 py-1.5 bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] text-[10px] font-bold uppercase tracking-wider rounded-[2px] transition-colors cursor-pointer"
+                              >
+                                Mark Delivered
+                              </button>
+                            ) : (
+                              <span className="text-[11px] text-emerald-700 font-bold">✓ Delivered</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </main>
 

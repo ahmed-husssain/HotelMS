@@ -45,9 +45,9 @@ export default function AdminPage() {
             <span className="hidden sm:inline">Hotel Overview</span>
           </Link>
           <span className="text-slate-300">|</span>
-          <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-900 font-bold uppercase tracking-wider">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            <span>GENERAL MANAGER &bull; MULTI-PROPERTY HOTEL CHAIN (4 BRANCHES &bull; 18 SUITES)</span>
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-800 font-bold uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-emerald-600" />
+            <span>General Manager &bull; Executive Operations</span>
           </div>
         </div>
 

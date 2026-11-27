@@ -84,11 +84,11 @@ export default function RoomPricing({
         {/* Branch Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono shrink-0">
           {[
-            { id: 'all', label: `All (${rooms.length || 18})` },
+            { id: 'all', label: `All Branches (${rooms.length || 18})` },
             { id: 'sindh-coast', label: 'Sindh Coast' },
-            { id: 'hunza', label: 'Hunza' },
-            { id: 'lahore', label: 'Lahore' },
-            { id: 'murree', label: 'Murree' },
+            { id: 'hunza', label: 'Hunza Valley' },
+            { id: 'lahore', label: 'Lahore Estate' },
+            { id: 'murree', label: 'Murree Pines' },
           ].map((loc) => (
             <button
               key={loc.id}

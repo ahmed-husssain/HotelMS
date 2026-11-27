@@ -47,7 +47,7 @@ async function getDashboard(req, res) {
     // 4. Map rooms to include live in-house guest data if occupied
     const mappedRooms = rooms.map((room) => {
       const activeBooking = inHouseBookings.find(
-        (b) => String(b.room?._id || b.room) === String(room._id)
+        (b) => String(b.room?._id || b.room) === String(room._id) || b.roomNumber === room.roomNumber
       )
 
       return {
@@ -300,6 +300,17 @@ async function addFolioCharge(req, res) {
     }
 
     let booking = await Booking.findOne({ bookingReference: bookingRef })
+    if (!booking) {
+      // Fallback: Lookup active in-house booking by room number
+      const cleanRoom = bookingRef.replace(/\D/g, '')
+      booking = await Booking.findOne({
+        status: 'CHECKED_IN',
+        $or: [
+          { roomNumber: bookingRef },
+          ...(cleanRoom ? [{ roomNumber: new RegExp(cleanRoom, 'i') }] : []),
+        ],
+      })
+    }
     if (!booking) {
       return res.status(404).json({ success: false, message: 'Active reservation not found' })
     }

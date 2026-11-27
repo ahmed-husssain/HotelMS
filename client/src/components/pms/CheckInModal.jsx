@@ -14,6 +14,7 @@ export default function CheckInModal({
   const [isCalibrating, setIsCalibrating] = useState(false)
   const [isRendered, setIsRendered] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [rushRequested, setRushRequested] = useState(false)
 
   // Sync selected room when arrival opens
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function CheckInModal({
       setSelectedRoomNumber(selectedArrival.roomNumber || '')
       setSettleBalanceNow(false)
       setPaymentMethod('CASH')
+      setRushRequested(false)
     }
   }, [selectedArrival])
 
@@ -188,14 +190,32 @@ export default function CheckInModal({
 
             {/* Dirty Room Alert Barrier */}
             {isDirty && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs font-mono text-red-900 space-y-1">
+              <div className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs font-mono text-red-900 space-y-2">
                 <div className="font-bold flex items-center gap-1.5">
                   <span>&bull;</span>
                   <span>SUITE NOT READY: {selectedRoomNumber} is currently {currentRoom.status}</span>
                 </div>
-                <p className="text-[11px] text-red-700">
-                  Housekeeping has not certified this suite. You cannot check in a guest to an uncleaned room. Reassign to an available clean suite above or wait for turnover.
+                <p className="text-[11px] text-red-700 leading-relaxed">
+                  Housekeeping has not certified this suite yet. You can alert Housekeeping for rush cleaning or quickly switch to an available clean suite.
                 </p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {cleanSuites.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRoomNumber(cleanSuites[0].roomNumber)}
+                      className="px-2.5 py-1.5 bg-[#0E1201] text-[#FFF0CA] text-[10px] uppercase font-bold tracking-wider rounded-[2px] cursor-pointer hover:bg-slate-900 transition-colors"
+                    >
+                      Assign Clean {cleanSuites[0].roomNumber} &rarr;
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setRushRequested(true)}
+                    className="px-2.5 py-1.5 bg-amber-700 text-white text-[10px] uppercase font-bold tracking-wider rounded-[2px] cursor-pointer hover:bg-amber-800 transition-colors"
+                  >
+                    {rushRequested ? '✓ Priority Alert Sent to Housekeeping' : 'Request Rush Cleaning'}
+                  </button>
+                </div>
               </div>
             )}
 
@@ -323,18 +343,29 @@ export default function CheckInModal({
               Cancel
             </button>
             <button
-              type="submit"
-              disabled={isCalibrating || isBlocked}
-              className={`px-5 py-2.5 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors ${
-                isBlocked
-                  ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                  : 'bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] cursor-pointer shadow-md'
+              type={isBlocked && cleanSuites.length > 0 ? 'button' : 'submit'}
+              disabled={isCalibrating || (isBlocked && cleanSuites.length === 0)}
+              onClick={() => {
+                if (isBlocked && cleanSuites.length > 0) {
+                  setSelectedRoomNumber(cleanSuites[0].roomNumber)
+                }
+              }}
+              className={`px-5 py-2.5 text-xs font-mono uppercase font-bold tracking-wider rounded-[2px] transition-colors cursor-pointer ${
+                isCalibrating
+                  ? 'bg-slate-400 text-white cursor-wait'
+                  : isBlocked
+                  ? cleanSuites.length > 0
+                    ? 'bg-amber-800 hover:bg-amber-900 text-white shadow-md'
+                    : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                  : 'bg-[#0E1201] hover:bg-slate-900 text-[#FFF0CA] shadow-md'
               }`}
             >
               {isCalibrating
                 ? 'Encoding Keycard...'
                 : isBlocked
-                ? 'Suite Not Ready (Blocked)'
+                ? cleanSuites.length > 0
+                  ? `Switch to Clean Suite (${cleanSuites[0].roomNumber}) →`
+                  : 'Suite Not Ready (No Clean Suites)'
                 : 'Complete Check-In →'}
             </button>
           </div>
