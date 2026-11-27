@@ -61,8 +61,8 @@ export default function SuiteSpecsDrawer({ residence, isOpen, onClose }) {
     lahore: 'Lahore Estate',
     murree: 'Murree Pines',
   }
-  const branchLabel = locMap[residence.locationId] || residence.locationName || 'Stayza Sanctuary'
-  const locationAddress = residence.city || (residence.locationId === 'hunza' ? 'Karimabad, Hunza Valley, Gilgit-Baltistan' : 'Sindh Coast, Pakistan')
+  const branchLabel = locMap[residence?.locationId] || residence?.locationName || 'Stayza Sanctuary'
+  const locationAddress = residence?.city || (residence?.locationId === 'hunza' ? 'Karimabad, Hunza Valley, Gilgit-Baltistan' : 'Sindh Coast, Pakistan')
 
   // Architectural specifications mapped by suite tier for all 7 keys
   const specs = {

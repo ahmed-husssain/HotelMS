@@ -229,8 +229,8 @@ export default function RoomsCarousel({ residence, index, onReserve, onOpenSpecs
       lahore: 'Lahore Estate',
       murree: 'Murree Pines',
     }
-    return locMap[residence.locationId] || residence.city?.split(',')[0] || 'Sanctuary'
-  }, [residence.locationId, residence.city])
+    return locMap[residence?.locationId] || residence?.city?.split(',')[0] || 'Sanctuary'
+  }, [residence?.locationId, residence?.city])
 
   const gallery = residence.gallery && residence.gallery.length > 0
     ? residence.gallery

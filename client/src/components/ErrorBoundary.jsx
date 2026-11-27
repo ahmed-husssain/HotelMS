@@ -50,7 +50,7 @@ export default class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      const isDev = process.env.NODE_ENV !== 'production'
+      const isDev = import.meta.env?.DEV ?? false
 
       return (
         <div className="min-h-screen min-h-dvh bg-[#0E1201] text-[#FAF8F5] p-6 sm:p-12 flex flex-col justify-between selection:bg-[#D4AF37] selection:text-slate-900">

@@ -90,7 +90,7 @@ export default function InvoicePreviewModal({ isOpen, onClose, booking, isFinalI
   const advancePaid = booking.advance || Math.round(totalAmount * 0.3)
   const balanceDue = isFinalInvoice ? 0 : Math.max(0, totalAmount - advancePaid)
 
-  const bookingRef = booking.bookingRef || 'ST-301-6077'
+  const bookingRef = String(booking.bookingRef || 'ST-301-6077')
   const invoiceNum = isFinalInvoice ? `INV-2026-${bookingRef.slice(-4)}` : `RCP-2026-${bookingRef.slice(-4)}`
   const docTitle = isFinalInvoice ? 'Official Tax Invoice' : 'Advance Deposit Receipt'
 
