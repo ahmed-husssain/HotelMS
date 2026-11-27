@@ -18,9 +18,9 @@ export default function ConfirmationPage() {
       nightlyRate: 110000,
     },
     nights: 4,
-    total: 497200,
-    advance: 149160,
-    balance: 348040,
+    total: 440000,
+    advance: 132000,
+    balance: 308000,
     safepayRef: 'SPF-829104',
   }
 

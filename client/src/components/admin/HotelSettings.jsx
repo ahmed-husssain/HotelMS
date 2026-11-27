@@ -6,7 +6,7 @@ export default function HotelSettings({
   onSaveSettings,
 }) {
   const { showToast } = useToast()
-  const [taxRate, setTaxRate] = useState(systemSettings?.taxRate || 13)
+  const [taxRate, setTaxRate] = useState(systemSettings?.taxRate ?? 0)
   const [depositRate, setDepositRate] = useState(systemSettings?.depositRate || 30)
   const [checkInTime, setCheckInTime] = useState(systemSettings?.checkInTime || '14:00')
   const [checkOutTime, setCheckOutTime] = useState(systemSettings?.checkOutTime || '11:00')
@@ -18,7 +18,7 @@ export default function HotelSettings({
 
   // Handle Restore Defaults
   const handleRestoreDefaults = () => {
-    setTaxRate(13)
+    setTaxRate(0)
     setDepositRate(30)
     setCheckInTime('14:00')
     setCheckOutTime('11:00')
@@ -28,7 +28,7 @@ export default function HotelSettings({
     showToast({
       type: 'info',
       title: 'Defaults Restored',
-      message: 'Recommended hotel tax & policy presets loaded.',
+      message: 'Transparent luxury pricing (0% tax) & policy presets loaded.',
     })
   }
 
@@ -45,7 +45,7 @@ export default function HotelSettings({
     showToast({
       type: 'success',
       title: 'Hotel Policies Saved',
-      message: `Sindh GST set to ${taxRate}% and online deposit split set to ${depositRate}%.`,
+      message: `Tax rate set to ${taxRate}% and online deposit split set to ${depositRate}%.`,
     })
     setTimeout(() => setSavedNotice(false), 3000)
   }
@@ -102,16 +102,16 @@ export default function HotelSettings({
                 Provincial Taxation
               </span>
               <span className="px-2 py-0.5 bg-emerald-100 text-emerald-950 text-[10px] font-bold rounded">
-                SRB Standard: 13%
+                All-Inclusive Standard: 0%
               </span>
             </div>
 
             <h4 className="font-serif-grand text-lg text-slate-900">
-              Sindh Sales Tax Rate (SRB GST)
+              Provincial Tax Rate (Transparent Tariff)
             </h4>
 
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              Mandatory government sales tax applied automatically to all suite nights, food &amp; beverage folios, and concierge add-ons.
+              Transparent luxury pricing default is 0% (taxes absorbed in room tariff), or configure custom provincial sales tax percentage.
             </p>
 
             <div className="pt-2">
@@ -139,7 +139,7 @@ export default function HotelSettings({
                 Live Calculation Example:
               </strong>
               <div>Base Suite Rate: PKR {sampleSuitePrice.toLocaleString()}</div>
-              <div>+ {taxRate}% Sindh GST: <strong className="text-emerald-900">PKR {sampleTaxAmount.toLocaleString()}</strong></div>
+              <div>+ {taxRate}% Tax: <strong className="text-emerald-900">PKR {sampleTaxAmount.toLocaleString()}</strong></div>
               <div className="font-bold text-slate-900 pt-0.5 border-t border-slate-100">
                 Total Billed to Guest: PKR {sampleTotal.toLocaleString()}
               </div>

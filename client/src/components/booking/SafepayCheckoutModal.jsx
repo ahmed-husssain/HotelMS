@@ -139,7 +139,7 @@ export default function SafepayCheckoutModal({
           {/* Pricing Box */}
           <div className="bg-[#F8FAFC] border border-slate-200 rounded-md p-4 space-y-2 text-sm">
             <div className="flex justify-between text-slate-600">
-              <span>Total Stay (inc. 13% Sindh Tax):</span>
+              <span>Total Stay (All-Inclusive):</span>
               <span className="font-semibold text-slate-900">
                 PKR {session.totalAmount?.toLocaleString()}
               </span>

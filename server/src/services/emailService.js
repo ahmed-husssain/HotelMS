@@ -183,7 +183,7 @@ async function sendBookingConfirmationEmail(booking, payment) {
       <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
         <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 13px; color: #475569;">
           <tr>
-            <td>Total Reservation (inc. 13% Sindh Tax):</td>
+            <td>Total Reservation (All-Inclusive Tariff):</td>
             <td style="text-align: right; font-weight: 700; color: #0F172A;">PKR ${totalAmount.toLocaleString()}</td>
           </tr>
           <tr>
@@ -327,7 +327,7 @@ async function sendCheckoutInvoiceEmail(booking, payments = []) {
       <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
         <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 13px; color: #475569;">
           <tr>
-            <td>Total Folio (inc. 13% Sindh Tax):</td>
+            <td>Total Folio (All-Inclusive Tariff):</td>
             <td style="text-align: right; font-weight: 700; color: #0F172A;">PKR ${totalAmount.toLocaleString()}</td>
           </tr>
           <tr>

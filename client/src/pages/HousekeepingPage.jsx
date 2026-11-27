@@ -103,7 +103,7 @@ export default function HousekeepingPage() {
           )}
 
           <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="text-slate-500 hidden sm:inline">Staff: {currentUser?.name || 'Sara Ahmed'}</span>
+            <span className="text-slate-500 hidden sm:inline">Staff: {currentUser?.name || 'Housekeeping Lead'}</span>
             <span className="text-slate-300 hidden sm:inline">/</span>
             <button
               type="button"

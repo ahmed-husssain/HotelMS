@@ -125,7 +125,7 @@ function buildPDFDocument(booking, payments = []) {
   const sumW = 215
 
   const subtotal = booking.pricingSnapshot?.subtotal || roomTotal
-  const taxAmount = booking.pricingSnapshot?.taxAmount || Math.round(subtotal * 0.13)
+  const taxAmount = booking.pricingSnapshot?.taxAmount || 0
   const totalAmount = booking.pricingSnapshot?.totalAmount || (subtotal + taxAmount)
   const advanceAmount = booking.pricingSnapshot?.advancePaid || booking.pricingSnapshot?.advanceAmount || Math.round(totalAmount * 0.3)
   const balanceDue = isFullySettled ? 0 : Math.max(0, totalAmount - advanceAmount)
@@ -134,9 +134,9 @@ function buildPDFDocument(booking, payments = []) {
   doc.fontSize(9).font('Helvetica').fillColor(mutedColor).text('Services Subtotal:', sumX, currentY)
   doc.font('Helvetica-Bold').fillColor(primaryColor).text(`PKR ${subtotal.toLocaleString()}`, sumX, currentY, { align: 'right', width: sumW })
 
-  // Sindh Sales Tax
+  // All-Inclusive Transparent Tax Line
   currentY += 16
-  doc.font('Helvetica').fillColor(mutedColor).text('Sindh Sales Tax (13%):', sumX, currentY)
+  doc.font('Helvetica').fillColor(mutedColor).text(taxAmount > 0 ? 'Provincial Sales Tax:' : 'Provincial Tax (0% Inclusive):', sumX, currentY)
   doc.font('Helvetica-Bold').fillColor(primaryColor).text(`PKR ${taxAmount.toLocaleString()}`, sumX, currentY, { align: 'right', width: sumW })
 
   // Total Amount Box
@@ -172,14 +172,14 @@ function buildPDFDocument(booking, payments = []) {
     doc.fontSize(9).font('Helvetica-Bold').fillColor(accentGreen)
       .text('[ OFFICIAL TAX INVOICE ]  All Charges Settled & Account Closed', 55, noticeY + 12)
     doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
-      .text('This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.', 55, noticeY + 26)
+      .text('This official folio invoice is system-generated for Stayza Luxury Hotel & Sanctuary.', 55, noticeY + 26)
       .text(`Booking Reference: ${booking.bookingReference} • Departure Date: ${new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}`, 55, noticeY + 38)
       .text('Thank you for choosing Stayza Hotel & Resort. For accounting inquiries, email hello@stayza.com', 55, noticeY + 50)
   } else {
     doc.fontSize(9).font('Helvetica-Bold').fillColor(accentGreen)
       .text('[ VERIFIED RESERVATION ]  30% Online Advance Deposit Confirmed', 55, noticeY + 12)
     doc.fontSize(8).font('Helvetica').fillColor(mutedColor)
-      .text('This official tax invoice is system-generated in accordance with Sindh Revenue Board (SRB) rules.', 55, noticeY + 26)
+      .text('This official folio invoice is system-generated for Stayza Luxury Hotel & Sanctuary.', 55, noticeY + 26)
       .text(`Please present this document or booking code ${booking.bookingReference} upon arrival at the Front Desk.`, 55, noticeY + 38)
       .text('Thank you for choosing Stayza Hotel & Resort. For assistance, email hello@stayza.com', 55, noticeY + 50)
   }

@@ -5,7 +5,7 @@ export default function CheckoutInvoiceModal({
   isOpen,
   onClose,
   selectedRoom,
-  taxRate = 13,
+  taxRate = 0,
   onConfirmCheckout,
 }) {
   const [paymentMethod, setPaymentMethod] = useState('CASH')

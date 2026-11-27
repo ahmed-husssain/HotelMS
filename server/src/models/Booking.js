@@ -90,7 +90,7 @@ const bookingSchema = new mongoose.Schema(
     pricingSnapshot: {
       nightlyRate: { type: Number, required: true },
       subtotal: { type: Number, required: true },
-      taxPercent: { type: Number, default: 13 }, // 13% Sindh Sales Tax
+      taxPercent: { type: Number, default: 0 }, // 0% All-Inclusive Tariff
       taxAmount: { type: Number, required: true },
       totalAmount: { type: Number, required: true },
       advancePercent: { type: Number, default: 30 }, // 30% online deposit
